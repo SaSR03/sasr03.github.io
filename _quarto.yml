@@ -13,6 +13,8 @@ website:
         contents: 
           - text: "Get to know and summarise data"
             href: data_handling\dh_summary.qmd
+          - text: "Data handling"
+            href: data_handling\dh_doc.qmd"   
       - section: "Modelling (Assignments)"
         contents: 
           - text: "Linear regression"
