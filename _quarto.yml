@@ -1,24 +1,23 @@
 project:
   type: website
-
 website:
   title: "SaSR03"
   navbar:
     left:
       - href: index.qmd
         text: Home
-  sidebar: 
-    contents: 
+  sidebar:
+    contents:
       - section: "Data Handling"
-        contents: 
+        contents:
           - text: "Get to know and summarise data"
-            href: data_handling\dh_summary.qmd
-          - text: "Data handling"
-            href: data_handling\dh_doc.qmd"   
+            href: data_handling/dh_summary.qmd
+          - text: "Documenting data"
+            href: data_handling/dh_doc.qmd
       - section: "Modelling (Assignments)"
-        contents: 
+        contents:
           - text: "Linear regression"
-
+            href: modelling/simple_linear_regression.qmd
 
 format:
   html:
