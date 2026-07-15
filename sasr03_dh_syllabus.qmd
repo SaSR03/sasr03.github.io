@@ -18,6 +18,8 @@ format:
 
 {{< include data_handling/dh_summary.qmd >}}
 
+{{< include data_handling/dh_doc.qmd >}}
+
 
 
 
