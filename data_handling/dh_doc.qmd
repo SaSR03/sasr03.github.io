@@ -1,5 +1,105 @@
 ---
-title: "dh_doc"
-format: html
+title: Documenting data
 ---
 
+In this short section you will learn about the following basic tasks:
+
+- Rename variables and give them clear names.
+
+- Use meaningful names for categorical values.
+
+- Convert categorical variables to factors.
+
+- Code missing values as `NA`.
+
+- Change the order of variables in a dataset.
+
+## R
+
+Learn the following R commands to document the data, variables, and values:
+
+| Function       | Description                        |
+|----------------|------------------------------------|
+| `rename()`     | Rename variables                   |
+| `mutate()`     | Modify or create variables         |
+| `factor()`     | Convert a variable to a factor     |
+| `na_if()`      | Change a specific value to `NA`    |
+| `replace_na()` | Replace `NA` with a specific value |
+| `relocate()`   | Change the order of variables      |
+
+Rename variables:
+
+```{r, eval=FALSE}
+data <- data |> 
+  rename(educ = v101) 
+# rename v101 to educ
+
+data <- data |> 
+  rename(sex = v1, edu = v2) 
+# rename multiple variables
+```
+
+Convert a categorical variable to a factor:
+
+```{r, eval=FALSE}
+data <- data |>
+  mutate(
+    sex = factor(
+      sex,
+      levels = c(1, 2),
+      labels = c("male", "female")
+    )
+  )
+# assign meaningful labels to categories
+```
+
+Code missing values:
+
+```{r, eval=FALSE}
+data <- data |> 
+  mutate(educ = na_if(educ, 99)) 
+# change the value 99 to NA 
+
+data <- data |> mutate(across(c(educ, feduc), ~ na_if(.x, 9))) 
+# change the value 9 to NA in educ and feduc
+```
+
+Replace missing values with a numeric code:
+
+```{r, eval=FALSE}
+data <- data |> 
+  mutate(educ = replace_na(educ, 99)) 
+# change NA to 99
+```
+
+Change the order of variables:
+
+```{r, eval=FALSE}
+data <- data |> 
+  relocate(hrespnr, sex, age, edu) 
+# put these variables first 
+```
+
+Be careful when replacing missing values with numeric codes such as 99. In R, missing values should usually be coded as `NA`. Numeric missing-value codes can easily be treated as real values in analyses if they are not recoded properly.
+
+## Assignments
+
+See `dh_doc.Rmd` for solutions.
+
+In these assignments we use the dataset `sbs399_unlabeled.dta`.
+
+1.  Rename the variable `hrespnr` to `hid` and the variable `hrinc` to `hinc` in one command.
+
+2.  The variable `sex` is coded numerically. Convert `sex` into a factor with meaningful labels. Use `male` and `female` as category labels.
+
+3.  The variables `sexrol1` and `sexrol2` measure family attitudes. Convert both variables into factors with the following category labels:
+
+    1.  fully disagree
+
+    2.  slightly disagree
+
+    3.  indifferent
+
+    4.  slightly agree
+
+    5.  fully agree
