@@ -7,6 +7,16 @@ website:
     left:
       - href: index.qmd
         text: Home
+  sidebar: 
+    contents: 
+      - section: "Data Handling"
+        contents: 
+          - text: "Get to know and summarise data"
+            href: data_handling\dh_summary.qmd
+      - section: "Modelling (Assignments)"
+        contents: 
+          - text: "Linear regression"
+
 
 format:
   html:

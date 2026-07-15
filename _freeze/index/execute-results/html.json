@@ -1,0 +1,15 @@
+{
+  "hash": "d316bc1cb7e891205b05c94140f4176a",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"SaSR03\"\nsubtitle: \"Methods and Statistics 1: Regression Analysis and its Generalizations\"\nlanguage:\n  title-block-published: \"Last update\"\ndate: 2026-07-15\n---\n\n\n::: {.cell}\n::: {.cell-output .cell-output-stdout}\n\n```\n\n\nprocessing file: dh_syllabus.qmd\n1/31                   \n2/31 [unnamed-chunk-1] \n3/31                   \n4/31 [unnamed-chunk-2] \n5/31                   \n6/31 [unnamed-chunk-3] \n7/31                   \n8/31 [unnamed-chunk-4] \n9/31                   \n10/31 [unnamed-chunk-5] \n11/31                   \n12/31 [unnamed-chunk-6] \n13/31                   \n14/31 [unnamed-chunk-7] \n15/31                   \n16/31 [unnamed-chunk-8] \n17/31                   \n18/31 [unnamed-chunk-9] \n19/31                   \n20/31 [unnamed-chunk-10]\n21/31                   \n22/31 [unnamed-chunk-11]\n23/31                   \n24/31 [unnamed-chunk-12]\n25/31                   \n26/31 [unnamed-chunk-13]\n27/31                   \n28/31 [unnamed-chunk-14]\n29/31                   \n30/31 [unnamed-chunk-15]\n31/31                   \noutput file: dh_syllabus.knit.md\n\npandoc --metadata title=Data Handling in R\n  to: typst\n  output-file: dh_syllabus.typ\n  standalone: true\n  default-image-extension: svg\n  wrap: none\n  citeproc: false\n  toc: true\n  number-sections: true\n  variables: {}\n  \nmetadata\n  section-numbering: 1.1.a\n  engines:\n    - path: C:\\Users\\Macha010\\AppData\\Local\\Programs\\Quarto\\share\\extension-subtrees\\julia-engine\\_extensions\\julia-engine\\julia-engine.js\n  title: Getting to know and summarizing data\n  date: '2026'\n  abstract: Corrections of and comments on the syllabus text, the example scripts, and answers to selected assignments are solicited. Requests for additions are welcome as well. Future students will appreciate your input! We acknowledge valuable contributions by former teachers Ozan Aksoy, Jos Dessens, Wim Jansen, Peter van de Heijden, Peter Ligtig, David Macro, Vardan Barsegyan, and Weverthon Machado as well as by numerous students.\n  \n[typst]: Compiling dh_syllabus.typ to dh_syllabus.pdf...DONE\n\nOutput created: _site\\dh_syllabus.pdf\n```\n\n\n:::\n:::\n\n\nThis site contains the syllabus for the first part of the course (data handling), as well as the assignments for the second part (modelling). You can also download the contents as a [PDF file](dh_syllabus.pdf). The site and the PDF link will always have the most up-to-date contents. If you have downloaded the PDF before, make sure you have the latest version by checking the \"Last update\" field. \n\nYou can find the entire course manual, the course package (with datasets and assignment answers), and slides (posted weekly) in Brightspace. \n\n\n#### Acknowledgements\n\n\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

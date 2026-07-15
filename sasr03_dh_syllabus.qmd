@@ -1,0 +1,29 @@
+---
+title: "Data Handling in R"
+date: today
+abstract: Corrections of and comments on the syllabus text, the example scripts, and answers to selected assignments are solicited. Requests for additions are welcome as well. Future students will appreciate your input! We acknowledge valuable contributions by former teachers Ozan Aksoy, Jos Dessens, Wim Jansen, Peter van de Heijden, Peter Ligtig, David Macro, Vardan Barsegyan, and Weverthon Machado as well as by numerous students.
+format:
+  typst:
+    toc: true
+    number-sections: true
+---
+
+
+# Introduction
+
+- Contents via shortcode (see below)
+
+
+# Getting to know and summarizing data
+
+{{< include data_handling/dh_summary.qmd >}}
+
+
+
+
+<!-- Repeat title in the end, otherwise it picks th title from one of the included files.
+Mayeb there's a more elegenat solution  -->
+
+---
+title: "Data Handling in R"
+---

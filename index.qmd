@@ -1,5 +1,13 @@
 ---
 title: "SaSR03"
 subtitle: "Methods and Statistics 1: Regression Analysis and its Generalizations"
+language:
+  title-block-published: "Last update"
+date: today
 ---
+
+This site contains the syllabus for the first part of the course (data handling), as well as the assignments for the second part (modelling). You can also download the contents as a [PDF file](sasr03_dh_syllabus.pdf). The site and the PDF link will always have the most up-to-date contents. If you have downloaded the PDF before, make sure you have the latest version by checking the date. 
+
+You can find the entire course manual, the course package (with datasets and assignment answers), and slides (posted weekly) in Brightspace. 
+
 
