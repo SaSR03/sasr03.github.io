@@ -22,6 +22,9 @@ format:
 
 {{< include data_handling/dh_doc.qmd >}}
 
+# Creating new variables
+
+{{< include data_handling/dh_variables.qmd >}}
 
 
 

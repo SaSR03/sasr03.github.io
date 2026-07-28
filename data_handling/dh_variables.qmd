@@ -1,0 +1,260 @@
+---
+title: Creating new variables
+---
+
+In this part you will learn about the following basic tasks:
+
+- Creating a dummy (0/1) variable.
+
+- Recoding a continuous variable.
+
+- Recoding a continuous variable into groups.
+
+- Centering and standardizing variables.
+
+- Reverse coding of variables.
+
+- Creating additive scales.
+
+## R
+
+Learn the following R commands to create new or modify existing variables.
+
+table
+
+Examples:
+
+Create a variable as a mathematical expression of existing variables:
+
+```{r, eval=FALSE}
+data <- data |>
+  mutate(
+    hhinc = h_inc + w_inc,
+    minc = (h_inc + w_inc) / 2,
+    adiff = abs(age - page),
+    inc2 = inc^2
+  )
+# sum, mean, absolute difference, and squared income
+```
+
+Change negative values of an existing variable:
+
+```{r, eval=FALSE}
+data <- data |>
+  mutate(
+    inc = if_else(inc < 0, 0, inc)
+  )
+# replace negative values by 0
+```
+
+Create a dummy variable:
+
+```{r, eval=FALSE}
+data <- data |>
+  mutate(
+    male = if_else(sex == 2, 1, 0)
+  )
+# create dummy variable male
+```
+
+Preserve missing values:
+
+```{r, eval=FALSE}
+data <- data |>
+  mutate(
+    male = if_else(
+      is.na(sex),
+      NA_real_,
+      if_else(sex == 2, 1, 0)
+    )
+  )
+# sex = NA implies male = NA
+```
+
+Recode a dummy variable:
+
+```{r, eval=FALSE}
+data <- data |>
+  mutate(
+    female = if_else(is.na(male), NA_real_, 1 - male)
+  )
+# male = 1 becomes female = 0 and vice versa
+```
+
+Recode values into categories:
+
+```{r, eval=FALSE}
+data <- data |>
+  mutate(
+    region = case_when(
+      country %in% c(71, 72, 79) ~ 1,
+      between(country, 73, 78) ~ 2,
+      !is.na(country) ~ 3,
+      TRUE ~ NA_real_
+    )
+  )
+# create region variable
+```
+
+Count the number of variables equal to a specific value:
+
+```{r, eval=FALSE}
+data <- data |>
+  mutate(
+    ngood = rowSums(
+      across(good01:good05, ~ .x == 2),
+      na.rm = TRUE
+    )
+  )
+# count how many variables equal 2
+```
+
+Create a standardized variable:
+
+```{r, eval=FALSE}
+data <- data |>
+  mutate(
+    zedu = (edu - mean(edu, na.rm = TRUE)) /
+      sd(edu, na.rm = TRUE)
+  )
+# standardize edu
+```
+
+Create a rank variable:
+
+```{r, eval=FALSE}
+data <- data |>
+  mutate(
+    rinc = rank(inc)
+  )
+# rank order statistics of income
+```
+
+## Assignments
+
+See `dh_variables_assignments.Rmd` for solutions.
+
+### Create dummy variables.
+
+In the dataset `sbs399` the variable `class` marks the respondent's social class. How often is this variable non-missing?
+
+We want to create a dummy variable for being of white collar. This variable, which we will call `white`, is 1 for subjects belonging to the white-collar class and 0 otherwise. We interpret missing values in `class` to denote "unknown". Thus, the dummy `white` should also be missing if `class` is missing.
+
+- Create this dummy variable using `if_else()`. Make sure that missing values are handled correctly.
+- Create the same dummy variable using `case_when()`.
+- Produce a cross-tabulation of the two newly created variables and verify that they are identical.
+
+### Recoding a categorical variable.
+
+In the dataset `sbs399` the variable `polit` marks the political party the respondent intended to vote for in a national election.
+
+(a) Generate a new variable `P` in which political preference is expressed on a left-to-right scale:
+
+1 = SP
+
+2 = GroenLinks
+
+3 = PvdA
+
+4 = D66
+
+5 = CDA
+
+6 = VVD
+
+7 = GPV
+
+8 = RPF
+
+9 = SGP
+
+10 = Unie 55+
+
+11 = AOV
+
+12 = CD
+
+Use `case_when()` to construct the variable.
+
+(b) Recode `P` into a new variable `P3` in which political preference is expressed in three categories:
+
+1 = Left (SP, GroenLinks, PvdA, D66)
+
+2 = Center (CDA)
+
+3 = Right (all remaining parties)
+
+3.  Recode a continuous variable into groups.
+
+We consider the hourly wage variable `hrinc`.
+
+Generate a new variable `Q` for the four quartiles of `hrinc`:
+
+- Q = 1 for the lowest 25%
+- Q = 2 for the next 25%
+- Q = 3 for the next 25%
+- Q = 4 for the highest 25%
+
+Verify that the groups contain approximately equal numbers of observations.
+
+### Centering and standardizing variables.
+
+Use the dataset `sbs399`. We focus on `hrinc`.
+
+(a) Create a variable `c_hrinc` that contains the centered hourly wage rate by subtracting the sample mean of `hrinc`.
+
+Check that:
+
+- the mean of `c_hrinc` is approximately 0;
+- the standard deviations of `c_hrinc` and `hrinc` are the same.
+
+(b) Create a variable `z_hrinc` that contains the standardized hourly wage rate by subtracting the mean of `hrinc` and dividing by its standard deviation.
+
+Check that:
+
+- the mean of `z_hrinc` is approximately 0;
+- the standard deviation of `z_hrinc` is approximately 1.
+
+(c) Create a variable `z2_hrinc` that standardizes hourly income separately for men and women.
+
+Ensure that:
+
+- you obtain one variable, not two;
+- the variable is not missing unless `hrinc` itself is missing.
+
+(d) Apply a unit-range transformation to `hrinc`:
+
+$$U(x) = \frac{x - \min(x)}{\max(x) - \min(x)}$$
+
+Verify that the transformed minimum equals 0 and the transformed maximum equals 1.
+
+Which method do you prefer for income? And for number of hours worked per week?
+
+### Creating additive scales.
+
+We consider the five items `sexrol1` to `sexrol5` in the dataset `sbs399`.
+
+(a) Explain why it is not sensible to simply add the five items.
+
+(b) One of the items should be reverse coded. Which one?
+
+Construct a new variable for this reversed item using:
+
+- a recoding approach with `case_when()`;
+- a mathematical expression.
+
+Verify that both constructed variables are identical.
+
+(c) Create the attitude measure from the five items.
+
+Hint: use `rowMeans()`.
+
+What is the mean of the measure? Can you interpret this mean substantively?
+
+(d) The data used so far are complete, meaning that respondents answered all items. In many surveys, however, respondents do not answer every question. This situation is illustrated by the dataset `sbs399_sexroles`.
+
+We will now discuss a simple ad hoc method for dealing with missing values when constructing a scale. Although more advanced methods are available and will be discussed later in the course, this approach remains useful for understanding the basic idea.
+
+We simply take the mean of all valid item responses for each respondent. Thus, if a respondent answered items 1, 2, and 3, but not items 4 and 5, we calculate the scale score as the mean of items 1, 2, and 3. If a respondent answered all items, we take the mean across all items. If a respondent did not answer any of the items, the scale score should be missing as well.
+
+In R, this can be accomplished using `rowMeans()` together with the argument `na.rm = TRUE`, which computes the mean using all available values while ignoring missing values.

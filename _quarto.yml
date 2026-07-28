@@ -14,6 +14,8 @@ website:
             href: data_handling/dh_summary.qmd
           - text: "Documenting data"
             href: data_handling/dh_doc.qmd
+          - text: "Creating new variables"
+            href: data_handling/dh_variables.qmd
       - section: "Modelling (Assignments)"
         contents:
           - text: "Linear regression"
