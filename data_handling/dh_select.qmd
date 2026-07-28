@@ -182,7 +182,10 @@ Make sure this file is in the same R Project as the `data` folder. Use relative 
 ```{r setup-select}
 library(tidyverse)
 library(haven)
+library(janitor)
+library(skimr)
 
+# The file sbs399.dta should be available in your working directory.
 sbs399 <- read_dta("data/sbs399.dta")
 ```
 
@@ -190,8 +193,14 @@ Check the coding of `sex` before using it in any condition.
 
 ```{r}
 table(sbs399$sex, useNA = "ifany")
-# the answers below assume sex = 1 for women and sex = 2 for men
-# swap the codes if your frequency table shows the opposite
+# sex = 0 for men and sex = 1 for women
+```
+
+The dataset comes from Stata, so the variable carries value labels. `as_factor()` makes them visible.
+
+```{r}
+table(as_factor(sbs399$sex), useNA = "ifany")
+# the same table, now showing the labels instead of the codes
 ```
 
 ### 1. Counting observations with `filter()` and `nrow()`
@@ -237,7 +246,7 @@ Males over 25.
 
 ```{r}
 sbs399 |>
-  filter(sex == 2, age > 25) |>
+  filter(sex == 0, age > 25) |>
   nrow()
 # men older than 25
 ```
@@ -251,13 +260,7 @@ sbs399 |>
 # the vertical bar means OR, so respondents satisfying either condition are counted
 ```
 
-Note that `filter()` drops rows for which the condition evaluates to `NA`. A respondent with a missing age is therefore never counted, not even in the `OR` condition above.
-
-```{r}
-sum(is.na(sbs399$age))
-sum(is.na(sbs399$sex))
-# check how many observations are lost for this reason
-```
+Note that `filter()` drops rows for which the condition evaluates to `NA`. In this dataset `age` and `sex` are complete, so nothing is lost here, but with incomplete data the counts above would exclude those respondents.
 
 ### 2. Working with a subset
 
@@ -314,10 +317,9 @@ Create the selection variable `touse`.
 ```{r}
 sbs399 <- sbs399 |>
   mutate(
-    touse = if_else(sex == 2 & age > 30, 1, 0)
+    touse = if_else(sex == 0 & age > 30, 1, 0)
   )
 # touse = 1 for men older than 30, 0 otherwise
-# touse is missing if sex or age is missing
 ```
 
 Check the selection variable.
@@ -330,36 +332,31 @@ table(sbs399$touse, useNA = "ifany")
 Create the two-way table of education and father's education for the selected sample.
 
 ```{r}
-sbs399 |>
-  filter(touse == 1) |>
-  count(educ, feduc) |>
-  pivot_wider(
-    names_from = feduc,
-    values_from = n,
-    values_fill = 0
-  )
-# cross-tabulation of educ and feduc within the selected sample
-```
-
-The base R equivalent.
-
-```{r}
 sbs399_selected <- sbs399 |>
   filter(touse == 1)
 
 table(sbs399_selected$educ, sbs399_selected$feduc, useNA = "ifany")
-# same two-way table using table()
+# cross-tabulation of educ and feduc within the selected sample
+```
+
+The same table with `janitor::tabyl()`, which adds the variable names and totals.
+
+```{r}
+sbs399_selected |>
+  tabyl(educ, feduc) |>
+  adorn_totals(c("row", "col"))
+# a more readable version of the same cross-tabulation
 ```
 
 Compute the correlation between `educ` and `feduc` in the selected sample.
 
 ```{r}
-sbs399 |>
-  filter(touse == 1) |>
+sbs399_selected |>
   summarise(
     r = cor(educ, feduc, use = "complete.obs")
   )
 # use = "complete.obs" drops respondents with a missing value on either variable
+# both variables are complete here, so this argument makes no difference
 ```
 
 ### 4. Comparing three commands
@@ -369,9 +366,9 @@ sbs399 |>
 # filter(sex != 1) removes ROWS for which sex equals 1; the column stays.
 # filter(sex == 1) keeps only the rows for which sex equals 1.
 #
-# The two filter() commands are not exact complements: rows with a missing
-# value on sex are dropped by both, because NA != 1 and NA == 1 both
-# evaluate to NA rather than to TRUE.
+# The two filter() commands look like opposites, but they are not exact
+# complements in general: rows with a missing value on sex are dropped by
+# both, because NA != 1 and NA == 1 both evaluate to NA rather than TRUE.
 ```
 
 Demonstrate this with the number of rows and columns.
