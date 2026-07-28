@@ -19,6 +19,8 @@ website:
             href: data_handling/dh_variables.qmd
           - text: "Selecting cases and repeating analyses for groups"
             href: data_handling/dh_select.qmd
+          - text: "Using fuctions"
+            href: data_handling/dh_functions.qmd
       - section: "Modelling (Assignments)"
         contents:
           - text: "Linear regression"
