@@ -103,3 +103,72 @@ In these assignments we use the dataset `sbs399_unlabeled.dta`.
     4.  slightly agree
 
     5.  fully agree
+    
+## Answers
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(haven)
+library(skimr)
+
+# Make sure this R Markdown file is saved in the same working directory as the data file.
+# The file sbs399_unlabeled.dta should be available in your data folder.
+
+data <- read_dta("data/sbs399_unlabeled.dta")
+```
+
+### 1. Rename the variable `hrespnr` to `hid` and the variable `hrinc` to `hinc` in one command.
+
+```{r}
+data <- data |>
+  rename(
+    hid = hrespnr,
+    hinc = hrinc
+  )
+
+```
+
+### 2. The variable `sex` is coded numerically. Convert `sex` into a factor with meaningful labels. Use `male` and `female` as category labels.
+
+```{r}
+data <- data |>
+  mutate(
+    sex = factor(
+      sex,
+      levels = c(1, 2),
+      labels = c("male", "female")
+    )
+  )
+
+```
+
+### 3. The variables `sexrol1` and `sexrol2` measure family attitudes. Convert both variables into factors with the following category labels: fully disagree, slightly disagree, indifferent, slightly agree, fully agree.
+
+```{r}
+data <- data |>
+  mutate(
+    sexrol1 = factor(
+      sexrol1,
+      levels = c(1, 2, 3, 4, 5),
+      labels = c(
+        "fully disagree",
+        "slightly disagree",
+        "indifferent",
+        "slightly agree",
+        "fully agree"
+      )
+    ),
+    sexrol2 = factor(
+      sexrol2,
+      levels = c(1, 2, 3, 4, 5),
+      labels = c(
+        "fully disagree",
+        "slightly disagree",
+        "indifferent",
+        "slightly agree",
+        "fully agree"
+      )
+    )
+  )
+
+```
