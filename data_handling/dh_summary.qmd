@@ -282,7 +282,7 @@ In these assignments we use the dataset `sbs399.dta`. Solutions can be found in 
 
 11. Is `hrespnr` a key, meaning that it is never missing and all values are unique? Why? Do not rely on the data viewer. Write syntax to obtain the information on which you base your answer. What about the pair of variables `hrespnr` and `sex`? Why? What about `hrespnr`, `sex`, and `age`, and `hrespnr`, `sex`, and `fage`?
 
-##Answers
+## Answers
 
 ```{r setup, include=FALSE}
 library(tidyverse)
