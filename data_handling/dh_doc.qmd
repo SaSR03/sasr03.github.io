@@ -111,7 +111,6 @@ library(tidyverse)
 library(haven)
 library(skimr)
 
-# Make sure this R Markdown file is saved in the same working directory as the data file.
 # The file sbs399_unlabeled.dta should be available in your data folder.
 
 data <- read_dta("data/sbs399_unlabeled.dta")

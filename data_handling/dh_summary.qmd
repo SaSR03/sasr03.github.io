@@ -284,13 +284,12 @@ In these assignments we use the dataset `sbs399.dta`. Solutions can be found in 
 
 ## Answers
 
-```{r setup, include=FALSE}
+```{r setup}
 library(tidyverse)
 library(haven)
 library(janitor)
 library(skimr)
 
-# Make sure this R Markdown file is saved in the same working directory as the data file.
 # The file sbs399.dta should be available in your working directory.
 
 sbs399 <- read_dta("data/sbs399.dta")
