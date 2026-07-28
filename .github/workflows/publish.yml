@@ -23,6 +23,7 @@ jobs:
         with:
           packages: |
             any::tidyverse
+            any::janitor
             any::haven
             any::nnet
             any::MASS
