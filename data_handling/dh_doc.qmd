@@ -106,7 +106,7 @@ In these assignments we use the dataset `sbs399_unlabeled.dta`.
     
 ## Answers
 
-```{r setup, include=FALSE}
+```{r setup-doc, include=FALSE}
 library(tidyverse)
 library(haven)
 library(skimr)

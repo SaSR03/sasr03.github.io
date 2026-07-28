@@ -179,7 +179,7 @@ data |>
 
 Make sure this file is in the same R Project as the `data` folder. Use relative file paths, not full paths to your computer.
 
-```{r setup}
+```{r setup-select}
 library(tidyverse)
 library(haven)
 

@@ -284,7 +284,7 @@ In these assignments we use the dataset `sbs399.dta`. Solutions can be found in 
 
 ## Answers
 
-```{r setup}
+```{r setup-summary}
 library(tidyverse)
 library(haven)
 library(janitor)
