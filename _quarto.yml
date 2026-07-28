@@ -17,6 +17,8 @@ website:
             href: data_handling/dh_doc.qmd
           - text: "Creating new variables"
             href: data_handling/dh_variables.qmd
+          - text: "Selecting cases and repeating analyses for groups"
+            href: data_handling/dh_select.qmd
       - section: "Modelling (Assignments)"
         contents:
           - text: "Linear regression"
