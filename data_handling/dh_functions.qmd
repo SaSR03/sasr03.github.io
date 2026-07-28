@@ -66,7 +66,7 @@ Embellish unrounded output.
 paste("number of full weeks in year =", round(365 / 7, 2)) 
 ```
 
-## Numeric functions
+### Numeric functions
 
 1.  The following **functions** in R are important for the creation of new variables or the modification of existing variables. Make sure that you understand the functions. If you are uncertain, think of examples, and verify. In particular, check how to access the help pages for their definitions. Be sure to understand that these functions exist, roughly what they are good for, and how to find the details at the moment you really want to use them.
 
