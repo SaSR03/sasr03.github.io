@@ -26,6 +26,9 @@ format:
 
 {{< include data_handling/dh_variables.qmd >}}
 
+# Selecting cases and repeating analyses for groups
+
+{{< include data_handling/dh_select.qmd >}}
 
 
 <!-- Repeat title in the end, otherwise it picks th title from one of the included files.
