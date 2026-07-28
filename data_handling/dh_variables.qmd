@@ -258,3 +258,278 @@ We will now discuss a simple ad hoc method for dealing with missing values when 
 We simply take the mean of all valid item responses for each respondent. Thus, if a respondent answered items 1, 2, and 3, but not items 4 and 5, we calculate the scale score as the mean of items 1, 2, and 3. If a respondent answered all items, we take the mean across all items. If a respondent did not answer any of the items, the scale score should be missing as well.
 
 In R, this can be accomplished using `rowMeans()` together with the argument `na.rm = TRUE`, which computes the mean using all available values while ignoring missing values.
+
+# Answers
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(haven)
+library(janitor)
+library(skimr)
+
+# Make sure this R Markdown file is saved in the same working directory as the data file.
+# The file sbs399.dta should be available in your working directory.
+
+sbs399 <- read_dta("data/sbs399.dta")
+```
+
+## 1. What is the variable label of `feduc?`
+
+```{r}
+glimpse(sbs399$feduc)
+#fathers highest education
+```
+
+## 2. Create an overview of the variables `feduc`and `meduc`.
+
+```{r}
+sbs399 |>
+  select(feduc, meduc) |>
+  glimpse()
+# compact overview of feduc and meduc
+
+skim(sbs399 |> select(feduc, meduc))
+# extended summary statistics for feduc and meduc
+```
+
+## 3. Display a frequency distribution of `educ`. What is the percentage of subjects with aneducation up to category 4? How many missing values are there in `educ`?
+
+```{r}
+table(sbs399$educ, useNA = "ifany")
+# frequency distribution of educ, including missing values
+
+sbs399 |>
+  tabyl(educ)
+# frequency table with percentages
+
+# There are (0.07373134 + 0.18208955 + 0.15044776 + 0.06686567) = 0.4731343 = 47.31% of subjects with education up to category 4.
+# Missings = 0
+
+```
+
+## 4. List the values of the variables `hrinc`and `pres . Adjust the syntax to list only the males among the initial 40 observations. Further adjust the syntax to restrict the sample tomales with below average education among the initial 40 observations. Finally, adjust the syntax to list males and females separately among the initial 5 observations.
+
+```{r}
+sbs399 |>
+  select(hrinc, pres)
+```
+
+Only males among the initial 40 observations:
+
+```{r}
+sbs399 |>
+  slice(1:40) |>
+  filter(sex == 1) |>
+  select(hrinc, pres)
+```
+
+Males with below average education among the initial 40 observations:
+
+```{r}
+sbs399 |>
+  slice(1:40) |>
+  filter(
+    sex == 1,
+    educ < mean(educ, na.rm = TRUE)
+  ) |>
+  select(hrinc, pres, educ, sex)
+```
+
+Males and females separately among the initial 5 observations:
+
+```{r}
+sbs399 |>
+  slice(1:5) |>
+  arrange(sex) |>
+  select(sex, hrinc, pres)
+```
+
+## 5. List values of `age in increasing order. Next, list just the five smallest values, and list justthe five largest values. Do not read these values from the data viewer. Give syntax todisplay the requested cases. Then list all observations except the observations between 6and 3345, both numbers included.
+
+Values of `age` in increasing order:
+
+```{r}
+sbs399 |>
+  arrange(age) |>
+  select(age)
+```
+
+Five smallest values:
+
+```{r}
+sbs399 |>
+  arrange(age) |>
+  slice(1:5) |>
+  select(age)
+```
+
+Five largest values:
+
+```{r}
+sbs399 |>
+  arrange(desc(age)) |>
+  slice(1:5) |>
+  select(age)
+```
+
+All observations except observations 6 to 3345:
+
+```{r}
+sbs399 |>
+  slice(-c(6:3345))
+```
+
+## 6. Create a two-way table of `feduc` rows and `meduc` columns. Add row and column percent-ages. Test for independence of `feduc`and `meduc` using Pearson’s chi-square test.
+
+Frequency table:
+
+```{r}
+tab_feduc_meduc <- table(sbs399$feduc, sbs399$meduc)
+tab_feduc_meduc
+```
+
+Row percentages:
+
+```{r}
+prop.table(tab_feduc_meduc, margin = 1) * 100
+```
+
+Column percentages:
+
+```{r}
+prop.table(tab_feduc_meduc, margin = 2) * 100
+```
+
+Pearson's chi-square test:
+
+```{r}
+chisq.test(tab_feduc_meduc)
+```
+
+## 7. What are the mean, standard deviation, minimum, and maximum value of `feduc`? And what is the median?
+
+```{r}
+sbs399 |>
+  summarise(
+    mean = mean(feduc, na.rm = TRUE),
+    sd = sd(feduc, na.rm = TRUE),
+    min = min(feduc, na.rm = TRUE),
+    median = median(feduc, na.rm = TRUE),
+    max = max(feduc, na.rm = TRUE)
+  )
+
+# Mean = 3.04
+# Standard deviation = 2.20
+# Minimum = 1 (elementary [lower])
+# Median = 2
+# Maximum = 8 (university [wo])
+```
+
+## 8. Verify that the number of subjects for whom the mother is higher educated than the father is 543. What is the count if you restrict to female subjects?
+
+```{r}
+sbs399 |>
+  filter(meduc > feduc) |>
+  nrow()
+```
+
+Restricted to female subjects:
+
+```{r}
+sbs399 |>
+  filter(
+    meduc > feduc,
+    sex == 1
+  ) |>
+  nrow()
+
+# Count restricted to female subjects = 262
+```
+
+## 9. What are the Pearson correlations of `educ`, `feduc`, and `meduc`? Use the help system to
+find out how to compute Spearman’s rank correlations.
+
+Pearson correlations:
+
+```{r}
+sbs399 |>
+  select(educ, feduc, meduc) |>
+  cor(use = "complete.obs", method = "pearson")
+```
+
+Spearman rank correlations:
+
+```{r}
+sbs399 |>
+  select(educ, feduc, meduc) |>
+  cor(use = "complete.obs", method = "spearman")
+```
+
+## 10. Is it true that for any variable the values are above average for 50% of cases? If you are uncertain, check this with some variables. For an explanation, think about this example: what percentage of people have more than the average number of legs? 50%? Who are these people?
+
+No, this is not necessarily true. The mean is not the same as the median. A variable can be skewed, and then the percentage of cases above the mean can be much lower or much higher than 50%.
+
+Check with some variables:
+
+```{r}
+sbs399 |>
+  summarise(
+    pct_age_above_mean = mean(age > mean(age, na.rm = TRUE), na.rm = TRUE) * 100,
+    pct_educ_above_mean = mean(educ > mean(educ, na.rm = TRUE), na.rm = TRUE) * 100,
+    pct_hrinc_above_mean = mean(hrinc > mean(hrinc, na.rm = TRUE), na.rm = TRUE) * 100
+  )
+```
+
+## 11. Is `hrespnr` a key, meaning that it is never missing and all values are unique? Why? Do not rely on the data viewer. Write syntax to obtain the information on which you base your answer. What about the pair of variables `hrespnr` and `sex`? Why? What about`hrespnr`, `sex`, and `age`, and `hrespnr`, `sex`, and `fage`?
+
+Check whether `hrespnr` is never missing:
+
+```{r}
+sbs399 |>
+  summarise(no_missing_hrespnr = all(!is.na(hrespnr)))
+```
+
+Check whether `hrespnr` is unique:
+
+```{r}
+sbs399 |>
+  count(hrespnr) |>
+  filter(n > 1)
+```
+
+If this returns rows, `hrespnr` is not a key.
+
+Check whether `hrespnr` and `sex` form a composite key:
+
+```{r}
+sbs399 |>
+  summarise(no_missing = all(!is.na(hrespnr), !is.na(sex)))
+
+sbs399 |>
+  count(hrespnr, sex) |>
+  filter(n > 1)
+```
+
+Check whether `hrespnr`, `sex`, and `age` form a composite key:
+
+```{r}
+sbs399 |>
+  summarise(no_missing = all(!is.na(hrespnr), !is.na(sex), !is.na(age)))
+
+sbs399 |>
+  count(hrespnr, sex, age) |>
+  filter(n > 1)
+```
+
+Check whether `hrespnr`, `sex`, and `fage` form a composite key:
+
+```{r}
+sbs399 |>
+  summarise(no_missing = all(!is.na(hrespnr), !is.na(sex), !is.na(fage)))
+
+sbs399 |>
+  count(hrespnr, sex, fage) |>
+  filter(n > 1)
+```
+
+A set of variables is a key if it is never missing and if there are no duplicate combinations.
