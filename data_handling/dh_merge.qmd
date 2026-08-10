@@ -271,13 +271,13 @@ To reconstruct the full dataset `sbs399` from these two partial datasets on wome
 
 In this assignment, we consider how to combine multiple files that comprise different variables for the same subjects. In real life, this may for instance occur in a panel study, in which data from different waves are stored in separate files. We require you create such datasets for training purposes.
 
-- Use `isbs399`. This is a variant of `sbs399` in which we excluded same-sex households. If you want to, you may consider constructing `isbs399` from `sbs399` yourself. This dataset comprises couples nested in households and singles. Respondents are identified with `irespnr`. Save two subsets of `isbs399`, one with the variables `irespnr`, `hrespnr`, `sex`, `ybirth`, and `age`; the other with `irespnr`, `hrespnr`, `sex`, `fage`, and `fpres`.
+- Use `isbs399`. This is a variant of `sbs399` in which we excluded same-sex households. If you want to, you may consider constructing `isbs399` from `sbs399` yourself. This dataset comprises couples nested in households and singles. Respondents are identified with `hrespnr`. Save two subsets of `isbs399`, one with the variables `hrespnr`, `hrespnr`, `sex`, `ybirth`, and `age`; the other with `hrespnr`, `hrespnr`, `sex`, `fage`, and `fpres`.
 
-- Match the two files you just created, using `irespnr` as the key and `left_join()`. Ascertain that the merged file is correct.
+- Match the two files you just created, using `hrespnr` as the key and `left_join()`. Ascertain that the merged file is correct.
 
-- Now create the two subsets of `isbs399` again, excluding the first observation in the first file, and the second observation in the second file. Merge again on `irespnr` using `left_join()`. Inspect the first two observations. What do you conclude?
+- Now create the two subsets of `isbs399` again, excluding the first observation in the first file, and the second observation in the second file. Merge again on `hrespnr` using `left_join()`. Inspect the first two observations. What do you conclude?
 
-- Merge the two datasets once more, this time matching on `hrespnr`. Why does it not work? Yes, `hrespnr` does not uniquely identify observations. The pair `hrespnr` and `sex` does uniquely identify subjects, and so they make a valid composite key. Merge on the pair `hrespnr` and `sex`, and convince yourself that this leads to the same result as merging on `irespnr`.
+- Merge the two datasets once more, this time matching on `hrespnr`. Why does it not work? Yes, `hrespnr` does not uniquely identify observations. The pair `hrespnr` and `sex` does uniquely identify subjects, and so they make a valid composite key. Merge on the pair `hrespnr` and `sex`, and convince yourself that this leads to the same result as merging on `hrespnr`.
 
 ### 4. n:1 merge: contextual enrichment
 
@@ -403,7 +403,8 @@ eurobaro2000_uk <- read_dta("data/eurobaro2000_uk.dta")
 eurobaro2002 <- read_dta("data/eurobaro2002.dta")
 eurobaro2004 <- read_dta("data/eurobaro2004.dta")
 eudata <- read_dta("data/eudata.dta")
-euydata <- read_dta("data/euydata.dta")
+euydata <- read_dta("data/euydata.dta") |>
+  rename(year = yr)
 
 sbs399 <- read_dta("data/sbs399.dta")
 isbs399 <- read_dta("data/isbs399.dta")
@@ -435,8 +436,8 @@ Append the three country files and add `country` and `year`.
 
 ```{r}
 eb2000 <- bind_rows(
-  eurobaro2000_ge |> mutate(country = "ge"),
-  eurobaro2000_nl |> mutate(country = "nl"),
+  eurobaro2000_ge |> mutate(country = "germany"),
+  eurobaro2000_nl |> mutate(country = "netherlands"),
   eurobaro2000_uk |> mutate(country = "uk")
 ) |>
   mutate(year = 2000)
@@ -450,8 +451,8 @@ The same result with the `.id` argument, which is shorter and less error-prone.
 
 ```{r}
 eb2000_alt <- bind_rows(
-  ge = eurobaro2000_ge,
-  nl = eurobaro2000_nl,
+  germany = eurobaro2000_ge,
+  netherlands = eurobaro2000_nl,
   uk = eurobaro2000_uk,
   .id = "country"
 ) |>
@@ -468,7 +469,7 @@ glimpse(eurobaro2002)
 ```
 
 ```{r}
-table(eurobaro2002$country, useNA = "ifany")
+table(eurobaro2002$Country, useNA = "ifany")
 table(eurobaro2002$sex, useNA = "ifany")
 # the country label for the UK and the coding of sex both need attention
 ```
@@ -492,17 +493,20 @@ Harmonise 2002.
 
 ```{r}
 eb2002 <- eurobaro2002 |>
+  rename(country = Country) |>
   mutate(
-    country = case_when(
-      str_to_lower(country) %in% c("uk", "united kingdom", "gb") ~ "uk",
-      str_to_lower(country) %in% c("nl", "netherlands") ~ "nl",
-      str_to_lower(country) %in% c("ge", "germany", "de") ~ "ge",
-      TRUE ~ NA_character_
+    country = case_match(
+      country,
+      "Germany" ~ "germany",
+      "Netherlands" ~ "netherlands",
+      "United Kingdom" ~ "uk"
     ),
     sex = 3 - sex,
     year = 2002
   )
-# recode the UK label to match the 2000 file
+# the country variable is called Country here, with a capital letter
+# the names are spelled out; recode them to the lowercase form used in
+# eudata and euydata, so the joins later on will match
 # sex is reversed: 3 - sex maps 1 to 2 and 2 to 1
 # check the table below before trusting this recode
 ```
@@ -520,12 +524,6 @@ Harmonise 2004.
 eb2004 <- eurobaro2004 |>
   mutate(
     country = as.character(as_factor(country)),
-    country = case_when(
-      str_detect(str_to_lower(country), "united kingdom|^uk$|great britain") ~ "uk",
-      str_detect(str_to_lower(country), "netherlands|^nl$") ~ "nl",
-      str_detect(str_to_lower(country), "germany|^ge$|^de$") ~ "ge",
-      TRUE ~ NA_character_
-    ),
     year = 2004
   )
 # as_factor() turns the labelled number into its label, which is then
@@ -681,12 +679,12 @@ nrow(sbs399)
 
 ```{r}
 all.equal(
-  sbs399 |> arrange(irespnr),
-  sbs399_reconstructed |> arrange(irespnr)
+  sbs399 |> arrange(hrespnr),
+  sbs399_reconstructed |> arrange(hrespnr)
 )
 # after sorting on the identifier the two datasets are identical
 # the row ORDER differs: appending puts all men before all women
-# replace irespnr by whatever identifier your version of sbs399 uses
+# replace hrespnr by whatever identifier your version of sbs399 uses
 ```
 
 Now drop different variables from each file.
@@ -746,24 +744,24 @@ Create two subsets with different variables for the same respondents.
 
 ```{r}
 part_a <- isbs399 |>
-  select(irespnr, hrespnr, sex, ybirth, age)
+  select(hrespnr, sex, ybirth, age)
 
 part_b <- isbs399 |>
-  select(irespnr, hrespnr, sex, fage, fpres)
+  select(hrespnr, hrespnr, sex, fage, fpres)
 
 nrow(part_a)
 nrow(part_b)
-n_distinct(isbs399$irespnr) == nrow(isbs399)
-# irespnr should uniquely identify a respondent
+n_distinct(isbs399$hrespnr) == nrow(isbs399)
+# hrespnr should uniquely identify a respondent
 ```
 
-Merge on `irespnr`.
+Merge on `hrespnr`.
 
 ```{r}
 merged <- part_a |>
   left_join(
-    part_b |> select(irespnr, fage, fpres),
-    by = "irespnr"
+    part_b |> select(hrespnr, fage, fpres),
+    by = "hrespnr"
   )
 
 nrow(merged)
@@ -786,8 +784,8 @@ merged |>
 
 ```{r}
 all.equal(
-  merged |> arrange(irespnr) |> select(irespnr, ybirth, fage),
-  isbs399 |> arrange(irespnr) |> select(irespnr, ybirth, fage)
+  merged |> arrange(hrespnr) |> select(hrespnr, ybirth, fage),
+  isbs399 |> arrange(hrespnr) |> select(hrespnr, ybirth, fage)
 )
 # the merged file reproduces the original variables exactly
 ```
@@ -800,8 +798,8 @@ part_b2 <- part_b |> slice(-2)
 
 merged2 <- part_a2 |>
   left_join(
-    part_b2 |> select(irespnr, fage, fpres),
-    by = "irespnr"
+    part_b2 |> select(hrespnr, fage, fpres),
+    by = "hrespnr"
   )
 
 merged2 |>
@@ -837,8 +835,8 @@ sum(is.na(merged2$fage))
 
 full_join(
   part_a2,
-  part_b2 |> select(irespnr, fage, fpres),
-  by = "irespnr"
+  part_b2 |> select(hrespnr, fage, fpres),
+  by = "hrespnr"
 ) |>
   summarise(
     n = n(),
@@ -892,10 +890,10 @@ nrow(merged)
 
 ```{r}
 all.equal(
-  merged |> arrange(irespnr) |> select(irespnr, fage, fpres),
-  merged_composite |> arrange(irespnr) |> select(irespnr, fage, fpres)
+  merged |> arrange(hrespnr) |> select(hrespnr, fage, fpres),
+  merged_composite |> arrange(hrespnr) |> select(hrespnr, fage, fpres)
 )
-# merging on hrespnr + sex gives the same result as merging on irespnr
+# merging on hrespnr + sex gives the same result as merging on hrespnr
 # this works only because isbs399 excludes same-sex households: in a same-sex
 # couple both partners share hrespnr AND sex, and the key would fail again
 ```
@@ -922,10 +920,10 @@ nrow(sbs399_house)
 sbs399_house |>
   summarise(
     n = n(),
-    matched = sum(!is.na(nrooms)),
-    unmatched = sum(is.na(nrooms))
+    matched = sum(!is.na(rooms)),
+    unmatched = sum(is.na(rooms))
   )
-# replace nrooms by any variable that comes from hin95_house
+# replace rooms by any variable that comes from hin95_house
 # unmatched households are those present in sbs399 but absent from hin95_house
 ```
 
@@ -939,7 +937,7 @@ setdiff(unique(hin95_house$hrespnr), unique(sbs399$hrespnr)) |> length()
 
 ```{r}
 sbs399_house |>
-  select(hrespnr, sex, age, nrooms) |>
+  select(hrespnr, sex, age, rooms) |>
   arrange(hrespnr) |>
   slice(1:6)
 # both partners of a household receive the same house characteristics

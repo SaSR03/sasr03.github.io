@@ -373,7 +373,7 @@ avg_slopes(fit_me2, variables = "rel4")
 #### 8. Pairwise comparisons between response categories
 
 ```{r}
-avg_slopes(fit_me2, variables = "rel4", hypothesis = "pairwise")
+avg_slopes(fit_me2, variables = "rel4", by = "group")
 
 # One of the pairwise comparisons of the marginal effect of rel4 between
 # two response categories is about -0.257: the predicted probability of

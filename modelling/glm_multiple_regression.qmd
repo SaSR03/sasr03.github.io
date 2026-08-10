@@ -346,7 +346,12 @@ Note that `emmeans()` adjusts for multiple testing by default (Tukey), while rel
 
 ```{r}
 donations <- donations |>
-  mutate(propdon = ((donation * 1000) / 12) / (inc * 1000))
+  mutate(
+    propdon = ((donation * 1000) / 12) / (inc * 1000),
+    percdon = propdon * 100
+  )
+# propdon is the proportion of monthly income donated
+# percdon is the same quantity expressed as a percentage
 
 donations |>
   summarise(

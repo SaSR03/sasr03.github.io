@@ -135,8 +135,6 @@ vis_miss(
 
 ## Assignments
 
-See `dh_missing_assignments.Rmd` for solutions.
-
 ### 1.  Use the dataset `hin95_educ`.
 
 How many missing values are there in the variable `educ`?
@@ -153,7 +151,7 @@ Create another new imputed variable, replacing the missing values in `educ` by t
 
 You may also replace the missing values in a variable `y` by the predicted values of `y` on some appropriate explanatory variables.
 
-As an example, perform a regression of a respondent's `educ` on the education of the respondent's father, `fedu`, the education of the respondent's mother, `medu`, and gender, `sex`.
+As an example, perform a regression of a respondent's `educ` on the education of the respondent's father, `feduc`, the education of the respondent's mother, `meduc`, and gender, `sex`.
 
 Replace missing values in `educ` by the predicted values of this regression.
 
@@ -169,7 +167,7 @@ Explain why `educ` still has missing values. Any suggestions how to proceed?
 
 - Also create a variable with the mean over the available values. Thus, if for an observation the variables `v1`, `v3`, and `v8` are observed and the other variables are missing, for this observation you should return `(v1 + v3 + v8) / 3`. Use `rowMeans()` with care.
 
-### 4.  In a dataset you have variables `male`, respondent's gender, 0 = female and 1 = male, `fedu`, father's education, and `medu`, mother's education.
+### 4.  In a dataset you have variables `male`, respondent's gender, 0 = female and 1 = male, `feduc`, father's education, and `meduc`, mother's education.
 
 You want to create a variable `ssedu` that represents the level of education of the same-sex parent, i.e., for men the father and for women the mother.
 
@@ -182,9 +180,10 @@ Make sure this file is in the same R Project as the `data` folder. Use relative 
 library(tidyverse)
 library(haven)
 library(visdat)
+library(readstata13)
 
 hin95_educ <- read_dta("data/hin95_educ.dta")
-hin95 <- read_dta("data/hin95.dta")
+hin95 <- read.dta13("data/hin95.dta", convert.factors = FALSE)
 ```
 
 ### 1. Describing and imputing a single variable
@@ -271,7 +270,7 @@ hin95_educ |>
 Fit the regression on the complete cases.
 
 ```{r}
-m_educ <- lm(educ ~ fedu + medu + sex, data = hin95_educ)
+m_educ <- lm(educ ~ feduc + meduc + sex, data = hin95_educ)
 summary(m_educ)
 # lm() applies listwise deletion by default
 ```
@@ -295,7 +294,7 @@ hin95_educ |>
   summarise(
     still_missing = sum(is.na(educ_imp3)),
     of_which_missing_predictor = sum(
-      is.na(educ) & (is.na(fedu) | is.na(medu) | is.na(sex))
+      is.na(educ) & (is.na(feduc) | is.na(meduc) | is.na(sex))
     )
   )
 # the two numbers should be equal
@@ -305,7 +304,7 @@ hin95_educ |>
 # Why does educ still have missing values?
 #
 # A prediction requires all three predictors. Respondents who are missing on
-# educ AND on fedu, medu, or sex cannot be given a predicted value, so their
+# educ AND on feduc, meduc, or sex cannot be given a predicted value, so their
 # missing value survives the imputation. Missingness in surveys tends to
 # cluster: someone who skips questions about their own education often skips
 # the parental questions as well, so this overlap is usually substantial.
@@ -485,11 +484,11 @@ hin95 |>
 # There are three sources of missingness, and they are not equivalent.
 #
 # 1. male is missing. We do not know which parent to look at, so ssedu must
-#    be missing, even if both fedu and medu are observed.
+#    be missing, even if both feduc and meduc are observed.
 # 2. The same-sex parent's education is missing. Then ssedu is missing:
 #    that is precisely the value we wanted.
 # 3. The OTHER parent's education is missing. This is irrelevant. A woman
-#    with an observed medu should get a value for ssedu even if fedu is
+#    with an observed meduc should get a value for ssedu even if feduc is
 #    missing. Code that is careless about this throws away usable cases.
 #
 # if_else() handles all three correctly: it propagates NA from the condition,
@@ -499,7 +498,7 @@ hin95 |>
 ```{r, eval=FALSE}
 data <- data |>
   mutate(
-    ssedu = if_else(male == 1, fedu, medu)
+    ssedu = if_else(male == 1, feduc, meduc)
   )
 # male == 1 gives NA when male is missing, so ssedu becomes NA
 # for men the father's education is taken, for women the mother's

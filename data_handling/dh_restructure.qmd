@@ -357,7 +357,7 @@ world95_renamed <- world95 |>
     lifeexp_male = lifeexpm,
     lifeexp_female = lifeexpf,
     lit_male = lit_male,
-    lit_female = lit_female,
+    lit_female = lit_fema,
     population = populatn
   )
 # all sex-specific variables now have the form stub_sex

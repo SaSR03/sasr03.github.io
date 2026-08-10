@@ -371,6 +371,7 @@ An alternative that states the intention more directly.
 
 ```{r}
 hin95_ext |>
+  filter(n() == 2, .by = hrespnr) |>
   mutate(
     diff_educ_alt = abs(diff(educ)),
     .by = hrespnr
@@ -378,9 +379,8 @@ hin95_ext |>
   summarise(
     n_different = sum(diff_educ_alt != diff_educ, na.rm = TRUE)
   )
-# diff() returns the difference between the two rows of a household
-# this only works because every household has exactly two members; with three
-# or more it would return several values and the code would fail
+# diff() only works for households with exactly two members: with one
+# member it returns nothing, with three or more it returns several values
 ```
 
 A note on missing values: `min()` and `max()` with `na.rm = TRUE` return `Inf` and `-Inf` for a household in which every value is missing, rather than `NA`.

@@ -365,7 +365,7 @@ lrtest(fit_hc, fit_hsc)
 ### 10. Are the three forms of social capital equal?
 
 ```{r}
-linearHypothesis(fit_hsc, "scweak = scmedium = scstrong")
+linearHypothesis(fit_hsc, c("scweak = scmedium", "scmedium = scstrong"))
 
 # We can reject the null hypothesis that, controlling for human capital,
 # the three forms of social capital affect re-employment to the same
