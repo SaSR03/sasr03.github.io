@@ -39,12 +39,12 @@ website:
             href: modelling/glm_ordinal_regression.qmd
           - text: "Event history analysis"
             href: modelling/glm_eha.qmd
-        - section: "GGPlot"
-          contents:
+      - section: "GGPlot"
+        contents:
           - text: "GPlot"
             href: ggplot/ggplot.qmd
-        - section: "Miscellaneous"
-          contents:
+      - section: "Miscellaneous"
+        contents:
           - text: "Miscellaneous"
             href: miscellaneous/miscellaneous.qmd
 
