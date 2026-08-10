@@ -323,21 +323,29 @@ avg_slopes(fit)
 ```{r}
 pred_probs <- predict(fit, type = "probs")
 
-hin95_voting <- hin95_voting |>
+nrow(hin95_voting)
+nrow(pred_probs)
+
+# polr() drops every case with a missing value on one of the predictors,
+# so there are fewer predictions than rows in the dataset. The row names
+# of the prediction matrix tell us which rows the model actually used.
+
+hin95_voting_pred <- hin95_voting |>
+  slice(as.integer(rownames(pred_probs))) |>
   bind_cols(as_tibble(pred_probs) |> rename_with(~ paste0("pr", seq_along(.))))
 
-hin95_voting |>
+hin95_voting_pred |>
   filter(irespnr == 1000) |>
   dplyr::select(starts_with("pr"))
 
-hin95_voting |>
+hin95_voting_pred |>
   filter(irespnr == 1000) |>
   dplyr::select(starts_with("pr")) |>
   rowSums()
 
 # The predicted probabilities sum to 1 for each subject (within
-# rounding error). We only consider cases without missing values on any
-# of the predictors in the test above.
+# rounding error). Only cases without missing values on any of the
+# predictors receive a prediction.
 ```
 
 ### Testing a hypothesis on religion
