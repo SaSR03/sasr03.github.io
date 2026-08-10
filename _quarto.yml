@@ -38,15 +38,15 @@ website:
           - text: "Ordinal Logistic Regression"
             href: modelling/glm_ordinal_regression.qmd
           - text: "Event history analysis"
-            href: modelling/glm_eha.qmd"
-        - section: "GGPlot2"
+            href: modelling/glm_eha.qmd
+        - section: "GGPlot"
           contents:
-            - text: 
-              href: 
+            - text: "GPlot"
+              href: ggplot/ggplot.qmd
         - section: "Miscellaneous"
           contents:
-            - text:               
-              href: 
+            - text: "Miscellaneous"              
+              href: miscellaneous/miscellaneous.qmd
 
 format:
   html:
