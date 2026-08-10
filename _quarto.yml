@@ -41,12 +41,12 @@ website:
             href: modelling/glm_eha.qmd
         - section: "GGPlot"
           contents:
-            - text: "GPlot"
-              href: ggplot/ggplot.qmd
+          - text: "GPlot"
+            href: ggplot/ggplot.qmd
         - section: "Miscellaneous"
           contents:
-            - text: "Miscellaneous"              
-              href: miscellaneous/miscellaneous.qmd
+          - text: "Miscellaneous"
+            href: miscellaneous/miscellaneous.qmd
 
 format:
   html:
