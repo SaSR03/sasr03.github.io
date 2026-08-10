@@ -1,0 +1,1126 @@
+---
+title: Adding cases and variables
+---
+
+In this chapter, you will learn about how to combine different datasets:
+
+- Add cases to a dataset ("append files").
+
+- Add variables on the same cases from another dataset (“1:1 merge”).
+
+- Add contextual information to a dataset (“n:1 merge”).
+
+- \*Form all possible combinations of observations in two datasets.
+
+We will elaborate on and illustrate these tasks with simple examples. As a first example, you organize an international data collection, where all countries use the same questionnaire. You obtain datasets from the Netherlands, from the UK, etc. The datasets contain (largely) the same variables. You want to make one dataset of these country datasets, with an additional variable country recording the data source. As a second example, we consider that the two files to be combined contain different variables. We need to distinguish two cases:
+
+- **1-1 merge:** Both datasets contain variables about the same subjects. For example, you have two datasets on countries, one with economic variables, and one with demographic variables. You want to make one dataset in which the observations are countries; the dataset should contain both the economic and the demographic variables.
+
+- **n-1 merge / matched merge / table lookup:** The datasets describe different subjects. Example: One dataset describes households, and contains a variable containing the city of residence. The second dataset describes cities, with variables for the number of inhabitants, the political composition of the city council etc. We want to form a dataset on household, in which properties of the city of residence are included. Each household is located in one city, but one city may contain more than one household in the data. This is known as a n-1 link, table lookup or n-1 merge.
+
+A crucial concept in merging is a key. A key comprises one or more variables used to match observations from the two datasets. In the example of 1:1 merging, the key is likely a subject identifier. In the example on n:1 merging, the key is the city identifier. The key variable or variables should occur in both datasets. In R, key variables do not necessarily need to have the same name in both datasets, but using the same name is usually clearer and less error-prone.
+
+PS: The first type of merge is also possible without a key variable or key variables, and strictly on sequential order of the files: the first record of file A with the first record of file B, the second record of file A with the second record of file B, etc. This type of merging is very error prone. We urge you never to merge without keys.
+
+**Task 1.** As a pet example of adding cases, we consider two datasets. The dataset `world95_oecd_eu` describes the population size of a selection of 4 European OECD members:
+
+| country     |   pop |
+|-------------|------:|
+| Austria     |  8000 |
+| Belgium     | 10100 |
+| Denmark     |  5200 |
+| Netherlands | 15400 |
+
+while `world95_oecd_extra` describes a selection of 3 non-European OECD members:
+
+| country   |    pop |
+|-----------|-------:|
+| Australia |  17800 |
+| Canada    |  29100 |
+| USA       | 260800 |
+
+The first task that we want you to master is to create a new dataset that contains all 7 OECD countries:
+
+| country     |    pop |
+|-------------|-------:|
+| Austria     |   8000 |
+| Belgium     |  10100 |
+| Denmark     |   5200 |
+| Netherlands |  15400 |
+| Australia   |  17800 |
+| Canada      |  29100 |
+| USA         | 260800 |
+
+**Task 2.** As a pet example of 1:1 merging, we consider two datasets with characteristics of a collection of countries, namely the population size, dataset `world95_3_pop`:
+
+| country     |   pop |
+|-------------|------:|
+| Afghanistan | 20500 |
+| Argentina   | 33900 |
+| Armenia     |  3700 |
+
+and religion in dataset `world95_3_rel`:
+
+| country     | religion |
+|-------------|----------|
+| Afghanistan | Muslim   |
+| Argentina   | Catholic |
+
+Note that the second dataset does not contain Armenia; Armenia is missing in the second dataset. As a second task we will address the creation of the 1:1 merged combined dataset that contains two characteristics of all countries involved:
+
+| country     |   pop | religion |
+|-------------|------:|----------|
+| Afghanistan | 20500 | Muslim   |
+| Argentina   | 33900 | Catholic |
+| Armenia     |  3700 | NA       |
+
+Note that in the combined dataset, Armenia is included, but the religion of Armenia is missing.
+
+**Task 3.** A paradigmatic example of n:1 merging involves adding contextual data to information on individual subjects. We consider a pet example with 4 individuals from various countries:
+
+|  id | male | age | country     |
+|----:|-----:|----:|-------------|
+|   1 |    0 |  24 | Afghanistan |
+|   2 |    1 |  41 | Afghanistan |
+|   3 |    0 |  58 | Armenia     |
+|   4 |    0 |  35 | Netherlands |
+
+A separate file contains characteristics of various countries:
+
+| country     |   pop |
+|-------------|------:|
+| Afghanistan | 20500 |
+| Argentina   | 33900 |
+| Armenia     |  3700 |
+
+Note that the individual dataset contains a subject from the Netherlands, but the population size of the Netherlands is not available. Moreover, we have contextual information about Argentina, but no subject from Argentina. As your third task, you have to learn how to create the n:1 merge of the datasets, adding country properties to the individual data:
+
+|  id | male | age | country     |   pop |
+|----:|-----:|----:|-------------|------:|
+|   1 |    0 |  24 | Afghanistan | 20500 |
+|   2 |    1 |  41 | Afghanistan | 20500 |
+|   3 |    0 |  58 | Armenia     |  3700 |
+|   4 |    0 |  35 | Netherlands |    NA |
+
+**Task 4.** We want to analyze school choice by parents. In the pet example we have 4 parents each of whom can choose between 3 schools. We want to construct a dataset that consists of combinations of parents and schools.
+
+parents:
+
+| parentid | status | neighb | choice |
+|---------:|-------:|-------:|-------:|
+|        1 |      3 |      1 |      2 |
+|        2 |      1 |      1 |      3 |
+|        3 |      2 |      2 |      1 |
+|        4 |      1 |      2 |      1 |
+
+schools:
+
+| schoolid | public |
+|---------:|-------:|
+|        1 |      1 |
+|        2 |      1 |
+|        3 |      0 |
+
+pairs:
+
+| parentid | pstatus | pneigh | pchoice | schoolid | school_public |
+|---------:|--------:|-------:|--------:|---------:|--------------:|
+|        1 |       3 |      1 |       2 |        1 |             1 |
+|        1 |       3 |      1 |       2 |        2 |             1 |
+|        1 |       3 |      1 |       2 |        3 |             0 |
+|        2 |       1 |      1 |       3 |        1 |             1 |
+|        2 |       1 |      1 |       3 |        2 |             1 |
+|        2 |       1 |      1 |       3 |        3 |             0 |
+|        3 |       2 |      2 |       1 |        1 |             1 |
+|        3 |       2 |      2 |       1 |        2 |             1 |
+|        3 |       2 |      2 |       1 |        3 |             0 |
+|        4 |       1 |      2 |       1 |        1 |             1 |
+|        4 |       1 |      2 |       1 |        2 |             1 |
+|        4 |       1 |      2 |       1 |        3 |             0 |
+
+## R
+
+You should read about the following R functions:
+
+| Function      | Description                   |
+|---------------|-------------------------------|
+| `bind_rows()` | Append datasets, add cases    |
+| `left_join()` | Merge datasets, add variables |
+
+We present an R snippet for the four tasks:
+
+### Add cases
+
+```{r, eval=FALSE}
+world95_oecd_eu
+world95_oecd_extra
+
+oecd <- bind_rows(
+  world95_oecd_eu,
+  world95_oecd_extra
+)
+
+oecd
+```
+
+### 1:1 merge
+
+```{r, eval=FALSE}
+world95_3_pop
+world95_3_rel
+
+countries <- world95_3_pop |>
+  left_join(
+    world95_3_rel,
+    by = "country"
+  )
+
+countries
+```
+
+### n:1 merge
+
+```{r, eval=FALSE}
+merge_indiv
+world95_3_pop
+
+individuals <- merge_indiv |>
+  left_join(
+    world95_3_pop,
+    by = "country"
+  )
+
+individuals
+```
+
+### All combinations of parents and schools
+
+```{r, eval=FALSE}
+schools <- schools |>
+  rename(
+    school_public = public
+  ) |>
+  mutate(join_key = 1)
+
+parents <- parents |>
+  rename(
+    pstatus = status,
+    pneigh = neighb,
+    pchoice = choice
+  ) |>
+  mutate(join_key = 1)
+
+pairs <- parents |>
+  left_join(
+    schools,
+    by = "join_key"
+  ) |>
+  select(-join_key)
+
+pairs
+```
+
+Some notes on combining datasets
+
+-  To append datasets, make sure that corresponding variables in both datasets have the same names, and are coded in the same way. For example, you do not want `sex` to be coded 0 = male and 1 = female in one dataset, and 0 = female and 1 = male in the other.
+
+-  Issues to consider with key variables for merging:
+
+  -  Make sure that the keys are coded identically in both datasets. If you merge on `country`, the country code should obviously refer to the same country in both datasets.
+
+  -  In a 1:1 merge, make sure to always use a key, e.g., the respondent number. Do not rely on the assumption that the first observation in one dataset corresponds with the first observation in the other dataset.
+
+  -  R allows composite keys for merging, i.e., the key may consist of multiple variables, e.g., `country` and `year`.
+  
+  - Do not merge on keys with missing values, unless you really know what you are doing.
+  
+  - `left_join()` keeps all observations from the first dataset and adds matching information from the second dataset. Observations in the first dataset without a match receive NA on the variables from the second dataset.
+  
+  - As always: Do not assume that combining files was successful if R does not complain. Check the number of observations. Check the variables. Check values. Check everything.
+  
+  
+## Assignments
+
+### 1. Synthetic Eurobarometer data
+
+The datasets `eurobaro2000_ge`, `eurobaro2000_nl`, and `eurobaro2000_uk` contain subsets of the Eurobarometer 2000 data, with small selections of respondents from Germany, the Netherlands, and the United Kingdom. These datasets comprise demographic information of respondents, `sex` and `age`, and their trust in two institutions of the European Union, the EU commission, `tcomm`, and the EU parliament, `tparl`, recorded using 5 point scales. Use `bind_rows()` to append these three datasets to create one dataset `eb2000` for the three countries, adding a string variable `country` recording the data source. Add a `year` variable that includes the value 2000.
+
+The datasets `eurobaro2002` and `eurobaro2004` similarly contain Eurobarometer data for the same three countries for the years 2002 and 2004. We want you to combine these two datasets with `eb2000`. However, there are some complications that you have to deal with.
+
+- the variable `country` in 2002: The United Kingdom is not abbreviated to `uk` as in 2000.
+- the variable `country` in 2004: It is a labelled numeric variable, not a string variable.
+- the variable `sex` in 2002: The meaning of 1 and 2 are reversed.
+- in 2002 and 2004, trust was also measured for the European Court of Law.
+- in 2004, trust was measured on a binary scale, 0 = no and 1 = yes, rather than on the 5 point scale used in 2000 and 2002.
+
+We also have two contextual datasets. `eudata` contains the population size, in September 2012, ignore the mismatch, of these EU countries. The dataset `euydata` describes the GDP in some EU countries in the years 2000 to 2004, rounded in 1000 EUR units. Enrich the individual data with these two contextual datasets using `left_join()`.
+
+### 2. Add cases: appending datasets
+
+In this assignment we consider how to combine observations from multiple files. For instance, data entry from paper questionnaires is performed by different people, yielding different datasets with the same variables for different subjects.
+
+- As this exercise is meant to develop your computer skills, we are going to generate two disjoint sets of records ourselves.
+  - Load `sbs399`. Select the men. Save the data as `sbs399m`.
+  - Reload `sbs399`. This time select the women. Save the data as `sbs399f`.
+
+To reconstruct the full dataset `sbs399` from these two partial datasets on women and men respectively, append the files using `bind_rows()`.
+
+- Now do a more complicated append of the files involving different subjects and partially different variables. To simulate this, repeat steps 1 and 2, but now you delete some variables from the male file and some other variables from the female file. Append the files using `bind_rows()`. How does R deal with the variables that appear in one dataset, but not in the other?
+
+### 3. 1:1 merge: adding variables
+
+In this assignment, we consider how to combine multiple files that comprise different variables for the same subjects. In real life, this may for instance occur in a panel study, in which data from different waves are stored in separate files. We require you create such datasets for training purposes.
+
+- Use `isbs399`. This is a variant of `sbs399` in which we excluded same-sex households. If you want to, you may consider constructing `isbs399` from `sbs399` yourself. This dataset comprises couples nested in households and singles. Respondents are identified with `irespnr`. Save two subsets of `isbs399`, one with the variables `irespnr`, `hrespnr`, `sex`, `ybirth`, and `age`; the other with `irespnr`, `hrespnr`, `sex`, `fage`, and `fpres`.
+
+- Match the two files you just created, using `irespnr` as the key and `left_join()`. Ascertain that the merged file is correct.
+
+- Now create the two subsets of `isbs399` again, excluding the first observation in the first file, and the second observation in the second file. Merge again on `irespnr` using `left_join()`. Inspect the first two observations. What do you conclude?
+
+- Merge the two datasets once more, this time matching on `hrespnr`. Why does it not work? Yes, `hrespnr` does not uniquely identify observations. The pair `hrespnr` and `sex` does uniquely identify subjects, and so they make a valid composite key. Merge on the pair `hrespnr` and `sex`, and convince yourself that this leads to the same result as merging on `irespnr`.
+
+### 4. n:1 merge: contextual enrichment
+
+In this assignment we consider how to enrich an individual level dataset with contextual data. The dataset `sbs399` contains information on individuals nested in couples or households, identified by the household identifier `hrespnr`. The dataset `hin95_house` provides properties of the couple's house, ownership, number of rooms, etc. Thus, `hin95_house` also contains the household identifier.
+
+Merge `sbs399` and `hin95_house` on `hrespnr` using `left_join()`.
+
+### 5. Cities and regions
+
+We consider a partially synthetic example with three datasets. The dataset `mm_hn95data` contains information about households, including the city of residence, and the cities in which the husband and wife work. The second dataset `mm_cities` contains information about cities, including the region to which the city belongs. The third dataset `mm_regions` contains information about regions. For your convenience, we list the variables in the three datasets.
+
+`mm_hn95data`
+
+`hhid` household id
+
+`city` city of residence
+
+`hhinc` household income
+
+`nkids` number of kids
+
+`hrace` husband: race
+
+`hwcity` work husband: city
+
+`wrace` wife: race
+
+`wwcity` work wife: city
+
+`religion` religion of couple
+
+`vchurch` frequency church visit couple
+
+`mm_cities`
+
+`cityid` city identifier
+
+`inhabit` number of inhabitants
+
+`region` region
+
+`jobs` number of jobs
+
+`vacant` number of vacancies
+
+`mm_regions`
+
+`regid` region identifier
+
+`growth` economic growth in 1990
+
+- Start with the dataset on households `mm_hn95data` as the active file. Merge in properties of the city in which the households live from the file `mm_cities` using `left_join()`. Thus, we want you to create a dataset with the following variables:
+
+`hhid` household id
+
+`city` city of residence
+
+`hhinc` household income
+
+`nkids` number of kids
+
+`hrace` husband: race
+
+`hwcity` work husband: city
+
+`wrace` wife: race
+
+`wwcity` work wife: city
+
+`religion` religion of couple
+
+`vchurch` frequency church visit couple
+
+`inhabit` number of inhabitants in city of residence
+
+`region` region in city of residence
+
+`jobs` number of jobs in city of residence
+
+`vacant` number of vacancies in city of residence
+
+- Continuing with this merged dataset, now add the economic growth in the region of residence from the dataset `mm_regions` using `left_join()`.
+
+- We start again with the unmodified dataset `mm_hn95data`. This dataset contains the ids of three cities relevant to the households: the city in which they live, `city`, the city in which the husband works, `hwcity`, and the city in which the wife works, `wwcity`. We want you to merge in information about each of the cities, adding three variables, e.g., named `res_inhabit`, `hwcity_inhabit`, and `wwcity_inhabit`, for the number of inhabitants in each of the cities. Use `left_join()` multiple times.
+
+### 6. Distance between home and work
+
+In the chapter on functions, we computed the straight line distance between a subject's home and work address. In this stylized example, we consider two small datasets. The first dataset involves 5 subjects and records the cities of residence and work. The second dataset contains the coordinates, x and y, of cities, relative to a central location, in 1 km units.
+
+subjects:
+
+| id | edu | hcity | wcity |
+|---:|---:|---:|---:|
+| 101 | 2 | 2 | 4 |
+| 102 | 4 | 3 | 3 |
+| 109 | 3 | 1 | 3 |
+| 115 | 2 | 4 | 2 |
+| 121 | 1 | 3 | NA |
+
+cities:
+
+| city | x | y |
+|---:|---:|---:|
+| 1 | 5 | -5 |
+| 2 | 30 | 19 |
+| 3 | -18 | 50 |
+| 4 | 10 | 0 |
+| 5 | -3 | 1 |
+
+Create the two datasets for subjects and cities, see the chapter on creating a dataset from raw data for details. Merge the coordinates for the cities of residence and work using `left_join()`, and compute the work-home distance, rounded in kilometers.
+
+## Answers
+
+Make sure this file is in the same R Project as the `data` folder. Use relative file paths, not full paths to your computer.
+
+```{r setup-merge}
+library(tidyverse)
+library(haven)
+
+eurobaro2000_ge <- read_dta("data/eurobaro2000_ge.dta")
+eurobaro2000_nl <- read_dta("data/eurobaro2000_nl.dta")
+eurobaro2000_uk <- read_dta("data/eurobaro2000_uk.dta")
+eurobaro2002 <- read_dta("data/eurobaro2002.dta")
+eurobaro2004 <- read_dta("data/eurobaro2004.dta")
+eudata <- read_dta("data/eudata.dta")
+euydata <- read_dta("data/euydata.dta")
+
+sbs399 <- read_dta("data/sbs399.dta")
+isbs399 <- read_dta("data/isbs399.dta")
+hin95_house <- read_dta("data/hin95_house.dta")
+
+mm_hn95data <- read_dta("data/mm_hn95data.dta")
+mm_cities <- read_dta("data/mm_cities.dta")
+mm_regions <- read_dta("data/mm_regions.dta")
+```
+
+### 1. Synthetic Eurobarometer data
+
+Inspect the three 2000 datasets before appending them.
+
+```{r}
+glimpse(eurobaro2000_nl)
+```
+
+```{r}
+map_dfr(
+  list(ge = eurobaro2000_ge, nl = eurobaro2000_nl, uk = eurobaro2000_uk),
+  \(d) tibble(n = nrow(d), vars = paste(names(d), collapse = ", ")),
+  .id = "source"
+)
+# check that the three datasets really contain the same variables
+```
+
+Append the three country files and add `country` and `year`.
+
+```{r}
+eb2000 <- bind_rows(
+  eurobaro2000_ge |> mutate(country = "ge"),
+  eurobaro2000_nl |> mutate(country = "nl"),
+  eurobaro2000_uk |> mutate(country = "uk")
+) |>
+  mutate(year = 2000)
+
+eb2000 |>
+  count(country)
+# adding country inside bind_rows() records where each record came from
+```
+
+The same result with the `.id` argument, which is shorter and less error-prone.
+
+```{r}
+eb2000_alt <- bind_rows(
+  ge = eurobaro2000_ge,
+  nl = eurobaro2000_nl,
+  uk = eurobaro2000_uk,
+  .id = "country"
+) |>
+  mutate(year = 2000)
+
+all.equal(eb2000, eb2000_alt)
+# .id creates the source variable automatically from the names you supply
+```
+
+Now inspect the 2002 and 2004 files. Each complication has to be resolved before appending, because `bind_rows()` stacks variables by name and will happily combine variables that mean different things.
+
+```{r}
+glimpse(eurobaro2002)
+```
+
+```{r}
+table(eurobaro2002$country, useNA = "ifany")
+table(eurobaro2002$sex, useNA = "ifany")
+# the country label for the UK and the coding of sex both need attention
+```
+
+```{r}
+glimpse(eurobaro2004)
+```
+
+```{r}
+table(eurobaro2004$country, useNA = "ifany")
+attr(eurobaro2004$country, "labels")
+# country is a labelled number here, not a string
+```
+
+```{r}
+map(eurobaro2004 |> select(starts_with("t")), \(x) table(x, useNA = "ifany"))
+# the trust items in 2004 are binary, not 5 point
+```
+
+Harmonise 2002.
+
+```{r}
+eb2002 <- eurobaro2002 |>
+  mutate(
+    country = case_when(
+      str_to_lower(country) %in% c("uk", "united kingdom", "gb") ~ "uk",
+      str_to_lower(country) %in% c("nl", "netherlands") ~ "nl",
+      str_to_lower(country) %in% c("ge", "germany", "de") ~ "ge",
+      TRUE ~ NA_character_
+    ),
+    sex = 3 - sex,
+    year = 2002
+  )
+# recode the UK label to match the 2000 file
+# sex is reversed: 3 - sex maps 1 to 2 and 2 to 1
+# check the table below before trusting this recode
+```
+
+```{r}
+table(eb2002$country, useNA = "ifany")
+table(eurobaro2002$sex, eb2002$sex, useNA = "ifany")
+# no missing values should remain in country
+# the sex crosstable should be strictly off-diagonal
+```
+
+Harmonise 2004.
+
+```{r}
+eb2004 <- eurobaro2004 |>
+  mutate(
+    country = as.character(as_factor(country)),
+    country = case_when(
+      str_detect(str_to_lower(country), "united kingdom|^uk$|great britain") ~ "uk",
+      str_detect(str_to_lower(country), "netherlands|^nl$") ~ "nl",
+      str_detect(str_to_lower(country), "germany|^ge$|^de$") ~ "ge",
+      TRUE ~ NA_character_
+    ),
+    year = 2004
+  )
+# as_factor() turns the labelled number into its label, which is then
+# recoded to the two-letter abbreviation used in 2000
+```
+
+```{r}
+table(eb2004$country, useNA = "ifany")
+```
+
+The trust scales are the real problem. Trust measured on a 5 point scale and trust measured as yes/no are not the same variable, and stacking them into one column would produce a variable whose meaning depends on the year.
+
+```{r}
+# Three defensible options:
+#
+# 1. Keep them apart. Rename the 2004 items to tcomm_bin, tparl_bin, tcourt_bin
+#    so that no column ever mixes the two scales. Honest, but you cannot
+#    analyse trust over all three years in one model.
+#
+# 2. Dichotomise 2000 and 2002 to match 2004. Collapse the 5 point scale into
+#    trust yes/no. This throws away detail, but makes all three years
+#    comparable on the coarser scale.
+#
+# 3. Keep both: one column per scale, plus a harmonised binary column that is
+#    filled for every year. This is what we do below, because it preserves the
+#    original data and still allows a pooled analysis.
+#
+# What you should NOT do is put 1-5 and 0-1 values in the same column.
+```
+
+Decide where the 5 point scale is split. This is a substantive choice, so state it explicitly.
+
+```{r}
+table(eb2000$tcomm, useNA = "ifany")
+# inspect the 5 point distribution before choosing a cut point
+# we treat 4 and 5 as "trust", assuming higher values mean more trust
+# reverse this if your codebook says otherwise
+```
+
+```{r}
+eb2000 <- eb2000 |>
+  mutate(across(c(tcomm, tparl), \(x) if_else(x >= 4, 1, 0), .names = "{.col}_bin"))
+
+eb2002 <- eb2002 |>
+  mutate(across(c(tcomm, tparl, tcourt), \(x) if_else(x >= 4, 1, 0), .names = "{.col}_bin"))
+
+eb2004 <- eb2004 |>
+  rename(tcomm_bin = tcomm, tparl_bin = tparl, tcourt_bin = tcourt)
+# after this, tcomm/tparl/tcourt hold the 5 point scale where it exists,
+# and the _bin columns hold a comparable binary measure for every year
+```
+
+Append the three years.
+
+```{r}
+eb <- bind_rows(eb2000, eb2002, eb2004)
+
+eb |>
+  count(year, country)
+# bind_rows() fills variables that are absent in a dataset with NA
+# tcourt is therefore missing for the whole of 2000, which is correct:
+# the question was not asked
+```
+
+```{r}
+eb |>
+  summarise(
+    n = n(),
+    n_tcomm = sum(!is.na(tcomm)),
+    n_tcourt = sum(!is.na(tcourt)),
+    n_tcomm_bin = sum(!is.na(tcomm_bin)),
+    .by = year
+  )
+# tcomm is missing in 2004 (binary only), tcourt is missing in 2000 (not asked),
+# and the harmonised binary version is available in all three years
+```
+
+Add the contextual data. `eudata` varies by country only, so the key is `country`; `euydata` varies by country and year, so the key is the pair.
+
+```{r}
+names(eudata)
+names(euydata)
+# check the key names before joining
+```
+
+```{r}
+eb_enriched <- eb |>
+  left_join(eudata, by = "country") |>
+  left_join(euydata, by = c("country", "year"))
+# a composite key is passed as a vector of variable names
+# if the key variables are named differently, use by = c("country" = "cntry")
+```
+
+Check the joins. This is the step students skip and then regret.
+
+```{r}
+nrow(eb)
+nrow(eb_enriched)
+# the number of rows must not change: left_join() with a unique key on the
+# right adds columns, never rows
+```
+
+```{r}
+eb_enriched |>
+  summarise(
+    n = n(),
+    missing_pop = sum(is.na(pop)),
+    missing_gdp = sum(is.na(gdp)),
+    .by = c(country, year)
+  ) |>
+  arrange(country, year)
+# any non-zero count identifies a country-year for which the contextual
+# dataset had no matching record
+```
+
+```{r}
+euydata |>
+  count(country, year) |>
+  filter(n > 1)
+# a duplicate key on the right-hand side would silently multiply rows
+# an empty result means the key is unique
+```
+
+### 2. Add cases: appending datasets
+
+Split `sbs399` into two disjoint files.
+
+```{r}
+table(sbs399$sex, useNA = "ifany")
+# sex = 0 for men and sex = 1 for women
+```
+
+```{r}
+sbs399m <- sbs399 |> filter(sex == 0)
+sbs399f <- sbs399 |> filter(sex == 1)
+
+write_rds(sbs399m, "data/sbs399m.rds")
+write_rds(sbs399f, "data/sbs399f.rds")
+
+nrow(sbs399m) + nrow(sbs399f) == nrow(sbs399)
+# the two subsets should partition the original dataset
+```
+
+Reconstruct the full dataset.
+
+```{r}
+sbs399_reconstructed <- bind_rows(sbs399m, sbs399f)
+
+nrow(sbs399_reconstructed)
+nrow(sbs399)
+# the same number of cases
+```
+
+```{r}
+all.equal(
+  sbs399 |> arrange(irespnr),
+  sbs399_reconstructed |> arrange(irespnr)
+)
+# after sorting on the identifier the two datasets are identical
+# the row ORDER differs: appending puts all men before all women
+# replace irespnr by whatever identifier your version of sbs399 uses
+```
+
+Now drop different variables from each file.
+
+```{r}
+sbs399m_part <- sbs399m |> select(-age)
+sbs399f_part <- sbs399f |> select(-educ)
+
+names(sbs399m_part) |> setdiff(names(sbs399f_part))
+names(sbs399f_part) |> setdiff(names(sbs399m_part))
+# each file now lacks a variable that the other one has
+```
+
+```{r}
+combined_part <- bind_rows(sbs399m_part, sbs399f_part)
+
+combined_part |>
+  summarise(
+    n = n(),
+    missing_age = sum(is.na(age)),
+    missing_educ = sum(is.na(educ)),
+    .by = sex
+  )
+# bind_rows() keeps the union of the variables and fills the gaps with NA
+# age is missing for every man, educ for every woman
+```
+
+```{r}
+# How does R deal with variables present in only one dataset?
+#
+# bind_rows() takes the union of the column names and inserts NA where a
+# dataset had no such column. It does not warn. The result therefore looks
+# perfectly healthy while containing a missing value pattern that is entirely
+# an artefact of how the files were combined.
+#
+# This is why you check the missing values by source after every append. Note
+# also that the NAs here are structurally different from real non-response:
+# the question was asked, the answer exists, it was simply not in this file.
+```
+
+```{r}
+# A stricter alternative that refuses to guess:
+#
+#   bind_rows(sbs399m_part, sbs399f_part) works silently,
+#   but if you want the common variables only:
+
+intersect(names(sbs399m_part), names(sbs399f_part)) |>
+  (\(v) bind_rows(select(sbs399m_part, all_of(v)), select(sbs399f_part, all_of(v))))() |>
+  ncol()
+# restricting to shared variables avoids the artificial missing values,
+# at the cost of losing two variables entirely
+```
+
+### 3. 1:1 merge: adding variables
+
+Create two subsets with different variables for the same respondents.
+
+```{r}
+part_a <- isbs399 |>
+  select(irespnr, hrespnr, sex, ybirth, age)
+
+part_b <- isbs399 |>
+  select(irespnr, hrespnr, sex, fage, fpres)
+
+nrow(part_a)
+nrow(part_b)
+n_distinct(isbs399$irespnr) == nrow(isbs399)
+# irespnr should uniquely identify a respondent
+```
+
+Merge on `irespnr`.
+
+```{r}
+merged <- part_a |>
+  left_join(
+    part_b |> select(irespnr, fage, fpres),
+    by = "irespnr"
+  )
+
+nrow(merged)
+names(merged)
+# selecting only the key and the new variables from part_b avoids duplicate
+# columns such as hrespnr.x and hrespnr.y
+```
+
+Verify the merge.
+
+```{r}
+merged |>
+  summarise(
+    n = n(),
+    missing_fage = sum(is.na(fage)),
+    missing_fpres = sum(is.na(fpres))
+  )
+# no rows added, no unexpected missing values
+```
+
+```{r}
+all.equal(
+  merged |> arrange(irespnr) |> select(irespnr, ybirth, fage),
+  isbs399 |> arrange(irespnr) |> select(irespnr, ybirth, fage)
+)
+# the merged file reproduces the original variables exactly
+```
+
+Now drop one observation from each file and merge again.
+
+```{r}
+part_a2 <- part_a |> slice(-1)
+part_b2 <- part_b |> slice(-2)
+
+merged2 <- part_a2 |>
+  left_join(
+    part_b2 |> select(irespnr, fage, fpres),
+    by = "irespnr"
+  )
+
+merged2 |>
+  slice(1:2)
+```
+
+```{r}
+nrow(part_a2)
+nrow(merged2)
+sum(is.na(merged2$fage))
+# left_join() keeps every row of the left dataset
+# the respondent dropped from part_b2 survives, but with NA on fage and fpres
+# the respondent dropped from part_a2 disappears entirely
+```
+
+```{r}
+# What do you conclude?
+#
+# The result depends on which dataset you start from. left_join() is not
+# symmetric: rows unmatched on the left are kept with NA, rows unmatched on
+# the right are silently discarded.
+#
+# Crucially, the merge is still correct: because we joined on a key, every
+# respondent was matched to their own record. Had we merged on position
+# instead, dropping one row from each file by different amounts would have
+# shifted the files against each other and paired the wrong people, without
+# any error message at all. That is the argument for always using a key.
+```
+
+```{r}
+# full_join() keeps unmatched rows from both sides, which makes the
+# asymmetry visible:
+
+full_join(
+  part_a2,
+  part_b2 |> select(irespnr, fage, fpres),
+  by = "irespnr"
+) |>
+  summarise(
+    n = n(),
+    only_in_a = sum(is.na(fage)),
+    only_in_b = sum(is.na(age))
+  )
+```
+
+Merge on `hrespnr` instead.
+
+```{r}
+merged_wrong <- part_a |>
+  left_join(
+    part_b |> select(hrespnr, fage, fpres),
+    by = "hrespnr",
+    relationship = "many-to-many"
+  )
+
+nrow(part_a)
+nrow(merged_wrong)
+# the number of rows explodes
+```
+
+```{r}
+# Why does it not work?
+#
+# hrespnr identifies a household, not a person. A two-person household has
+# two records on each side, so every record on the left matches both records
+# on the right: 2 x 2 = 4 rows instead of 2. Each partner is paired with the
+# other partner's father as well as with their own.
+#
+# Without relationship = "many-to-many", dplyr raises a warning about an
+# unexpected many-to-many relationship. That warning is the single most
+# useful diagnostic in this whole chapter: it means your key is not what you
+# thought it was.
+```
+
+Use the composite key `hrespnr` and `sex`.
+
+```{r}
+merged_composite <- part_a |>
+  left_join(
+    part_b |> select(hrespnr, sex, fage, fpres),
+    by = c("hrespnr", "sex")
+  )
+
+nrow(merged_composite)
+nrow(merged)
+# the composite key restores a one-to-one match
+```
+
+```{r}
+all.equal(
+  merged |> arrange(irespnr) |> select(irespnr, fage, fpres),
+  merged_composite |> arrange(irespnr) |> select(irespnr, fage, fpres)
+)
+# merging on hrespnr + sex gives the same result as merging on irespnr
+# this works only because isbs399 excludes same-sex households: in a same-sex
+# couple both partners share hrespnr AND sex, and the key would fail again
+```
+
+### 4. n:1 merge: contextual enrichment
+
+```{r}
+nrow(sbs399)
+nrow(hin95_house)
+n_distinct(hin95_house$hrespnr) == nrow(hin95_house)
+# the contextual file should have exactly one record per household
+```
+
+```{r}
+sbs399_house <- sbs399 |>
+  left_join(hin95_house, by = "hrespnr")
+
+nrow(sbs399)
+nrow(sbs399_house)
+# an n:1 merge must not change the number of individual-level rows
+```
+
+```{r}
+sbs399_house |>
+  summarise(
+    n = n(),
+    matched = sum(!is.na(nrooms)),
+    unmatched = sum(is.na(nrooms))
+  )
+# replace nrooms by any variable that comes from hin95_house
+# unmatched households are those present in sbs399 but absent from hin95_house
+```
+
+```{r}
+setdiff(unique(sbs399$hrespnr), unique(hin95_house$hrespnr)) |> length()
+setdiff(unique(hin95_house$hrespnr), unique(sbs399$hrespnr)) |> length()
+# households in the individual data without house information, and
+# house records for households that contain no respondents
+# the second group is dropped by left_join(), which is usually what you want
+```
+
+```{r}
+sbs399_house |>
+  select(hrespnr, sex, age, nrooms) |>
+  arrange(hrespnr) |>
+  slice(1:6)
+# both partners of a household receive the same house characteristics
+```
+
+### 5. Cities and regions
+
+Merge the city properties into the household data.
+
+```{r}
+names(mm_hn95data)
+names(mm_cities)
+# the key variables have different names: city on the left, cityid on the right
+```
+
+```{r}
+n_distinct(mm_cities$cityid) == nrow(mm_cities)
+# the city file must be unique on cityid for an n:1 merge
+```
+
+```{r}
+hh_city <- mm_hn95data |>
+  left_join(mm_cities, by = c("city" = "cityid"))
+
+nrow(mm_hn95data)
+nrow(hh_city)
+names(hh_city)
+# by = c("left" = "right") joins variables with different names
+# the left-hand name is kept in the result
+```
+
+```{r}
+hh_city |>
+  summarise(
+    unmatched = sum(is.na(inhabit))
+  )
+# households living in a city that is absent from mm_cities
+```
+
+Add the regional data.
+
+```{r}
+n_distinct(mm_regions$regid) == nrow(mm_regions)
+
+hh_city_region <- hh_city |>
+  left_join(mm_regions, by = c("region" = "regid"))
+
+nrow(hh_city_region)
+names(hh_city_region)
+# region came from mm_cities in the previous step, and is now itself a key
+# this is a chain of n:1 merges: households in cities in regions
+```
+
+```{r}
+hh_city_region |>
+  summarise(
+    unmatched_city = sum(is.na(inhabit)),
+    unmatched_region = sum(is.na(growth))
+  )
+# a household can fail to match at either level
+```
+
+Merge city information three times, for the city of residence and both work cities.
+
+```{r}
+mm_hn95data_3 <- mm_hn95data |>
+  left_join(
+    mm_cities |> select(cityid, res_inhabit = inhabit),
+    by = c("city" = "cityid")
+  ) |>
+  left_join(
+    mm_cities |> select(cityid, hwcity_inhabit = inhabit),
+    by = c("hwcity" = "cityid")
+  ) |>
+  left_join(
+    mm_cities |> select(cityid, wwcity_inhabit = inhabit),
+    by = c("wwcity" = "cityid")
+  )
+
+nrow(mm_hn95data)
+nrow(mm_hn95data_3)
+# three separate joins, each with its own key and its own output name
+# renaming inside select() avoids the suffixes .x, .y and .z
+```
+
+```{r}
+mm_hn95data_3 |>
+  select(hhid, city, hwcity, wwcity, res_inhabit, hwcity_inhabit, wwcity_inhabit) |>
+  slice(1:10)
+# check a few rows by hand against mm_cities
+```
+
+```{r}
+mm_hn95data_3 |>
+  summarise(
+    missing_res = sum(is.na(res_inhabit)),
+    missing_hw = sum(is.na(hwcity_inhabit)),
+    missing_ww = sum(is.na(wwcity_inhabit)),
+    missing_hwcity_key = sum(is.na(hwcity)),
+    missing_wwcity_key = sum(is.na(wwcity))
+  )
+# distinguish two reasons for a missing result: the key was missing, for
+# instance because the partner does not work, or the key had no match
+```
+
+### 6. Distance between home and work
+
+Create the two datasets by hand.
+
+```{r}
+subjects <- tribble(
+  ~id,  ~edu, ~hcity, ~wcity,
+  101,  2,    2,      4,
+  102,  4,    3,      3,
+  109,  3,    1,      3,
+  115,  2,    4,      2,
+  121,  1,    3,      NA
+)
+
+cities <- tribble(
+  ~city, ~x,  ~y,
+  1,     5,   -5,
+  2,     30,  19,
+  3,     -18, 50,
+  4,     10,  0,
+  5,     -3,  1
+)
+
+subjects
+cities
+```
+
+Merge the coordinates twice, once for the home city and once for the work city.
+
+```{r}
+subjects_xy <- subjects |>
+  left_join(
+    cities |> select(city, hx = x, hy = y),
+    by = c("hcity" = "city")
+  ) |>
+  left_join(
+    cities |> select(city, wx = x, wy = y),
+    by = c("wcity" = "city")
+  )
+
+subjects_xy
+# renaming the coordinates inside select() keeps the four columns apart
+```
+
+Compute the distance.
+
+```{r}
+subjects_xy <- subjects_xy |>
+  mutate(
+    d = sqrt((hx - wx)^2 + (hy - wy)^2),
+    d_km = round(d)
+  )
+
+subjects_xy |>
+  select(id, hcity, wcity, hx, hy, wx, wy, d_km)
+# rounding to whole kilometres matches the precision of the coordinates
+```
+
+```{r}
+# Two cases are worth checking by hand:
+#
+# Subject 102 lives and works in city 3, so the distance is exactly 0.
+# Subject 121 has no work city, so wcity is NA, the join produces NA
+#   coordinates, and the distance is NA. That is the correct outcome: we
+#   cannot compute a distance to an unknown location.
+#
+# Note that city 5 appears in no subject's record. left_join() simply
+# ignores it, which is what we want: the city file is a lookup table, not a
+# source of cases.
+```
+
+```{r}
+subjects_xy |>
+  summarise(
+    n = n(),
+    computable = sum(!is.na(d_km)),
+    mean_distance = mean(d_km, na.rm = TRUE)
+  )
+```

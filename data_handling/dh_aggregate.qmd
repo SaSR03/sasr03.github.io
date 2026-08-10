@@ -1,0 +1,394 @@
+---
+title: Aggregating data
+---
+
+In this chapter you learn about the two related tasks:
+
+- Create a new dataset with summary statistics such as group means.
+- Add to a dataset new variables with aggregate statistics such as group means.
+
+To illustrate, consider the following pet dataset with 5 pupils with respondent identifier `id`, from 2 school classes identified by the variable `class`, recording the father's education of the pupil in the variable `fedu`.
+
+| id  | class | fedu |
+|-----|-------|------|
+| 1   | 1     | 3    |
+| 2   | 1     | 4    |
+| 21  | 2     | 2    |
+| 22  | 2     | 3    |
+| 23  | 2     | 3    |
+
+The dataset with class-level summary statistics should contain 2 cases, one for each class, with the mean of `fedu` in the respective classes, new variable `mn_fedu`, and the number of observations, new variable `n`, in each class.
+
+| class | n   | mn_fedu |
+|-------|-----|---------|
+| 1     | 2   | 3.5     |
+| 2     | 3   | 2.6667  |
+
+The original individual-level dataset enriched with class-level summary statistics should read:
+
+| id  | class | fedu | mn_fedu | n   |
+|-----|-------|------|---------|-----|
+| 1   | 1     | 3    | 3.5     | 2   |
+| 2   | 1     | 4    | 3.5     | 2   |
+| 21  | 2     | 2    | 2.6667  | 3   |
+| 22  | 2     | 3    | 2.6667  | 3   |
+| 23  | 2     | 3    | 2.6667  | 3   |
+
+Thus, the variable `mn_fedu` records contextual, class-level, information in de-aggregated form: the mean education of the parents in a pupil's class is treated as an individual attribute.
+
+## R
+
+In this part you need to study the following R functions:
+
+| Function      | Description                                     |
+|---------------|-------------------------------------------------|
+| `summarise()` | Create a dataset with summary statistics        |
+| `mutate()`    | Add new variables to the existing dataset       |
+| `.by`         | Apply `summarise()` or `mutate()` within groups |
+| `n()`         | Count the number of observations in a group     |
+| `mean()`      | Compute group means                             |
+| `min()`       | Compute group minimums                          |
+| `max()`       | Compute group maximums                          |
+
+We present a short code fragment to accomplish the data manipulation described in the preamble.
+
+Add the mean of `fedu` by class as a variable, N = 5:
+
+```{r, eval=FALSE}
+data <- data |>
+  mutate(
+    mn_fedu = mean(fedu, na.rm = TRUE),
+    .by = class
+  )
+```
+
+Add variable `nclass`: number of observations in each class:
+
+```{r, eval=FALSE}
+data <- data |>
+  mutate(
+    nclass = n(),
+    .by = class
+  )
+```
+
+Create a N = 2 contextual dataset with the N and mean of `fedu`, grouped by class:
+
+```{r, eval=FALSE}
+class_data <- data |>
+  summarise(
+    n = n(),
+    mn_fedu = mean(fedu, na.rm = TRUE),
+    .by = class
+  )
+```
+
+## Assignments
+
+See `dh_aggregate_assignments.Rmd` for solutions.
+
+### 1. People nested within neighborhoods within cities
+
+We consider a simple synthetic dataset `ex_aggr.dta` of people nested within neighborhoods nested within cities.
+
+`city` city code
+
+`neighb` neighborhood code
+
+`employ` employment status, 1 = employed, 0 = unemployed
+
+`ethnic` 1 = native Dutch; 2 = western immigrant; 3 = nonwestern immigrant
+
+- Create a separate dataset recording the fractions of unemployed and the ethnic composition of cities, i.e., the fractions of native Dutch, western immigrants, and nonwestern immigrants.
+- Add variables to the original dataset with the fractions, or percentages, of unemployed and the ethnic composition of the neighborhood, i.e., the fractions, or percentages, of Dutch, western, and nonwestern people in the neighborhood. Briefly consider how to also add the information aggregated at the city level.
+- Add a variable representing the fraction, or percentage, of ethnic ingroup in the neighborhood.
+
+### 2. Education within couples
+
+Use `hin95_ext.dta`. The dataset contains data on couples, married or cohabiting, indicated by the household identifier `hrespnr`.
+
+- Add a variable for the mean education of the household. Thus, this variable should have the same value for both partners.
+- Add a variable for the minimum education of the household. Add a variable for the maximum education of the household.
+- Add a variable recording the absolute difference of the levels of education of husband and wife.
+
+## Answers
+
+Make sure this file is in the same R Project as the `data` folder. Use relative file paths, not full paths to your computer.
+
+```{r setup-aggregate}
+library(tidyverse)
+library(haven)
+
+ex_aggr <- read_dta("data/ex_aggr.dta")
+hin95_ext <- read_dta("data/hin95_ext.dta")
+```
+
+### 1. People nested within neighborhoods within cities
+
+Inspect the data before aggregating.
+
+```{r}
+glimpse(ex_aggr)
+```
+
+```{r}
+table(ex_aggr$employ, useNA = "ifany")
+table(ex_aggr$ethnic, useNA = "ifany")
+# check the codes and whether there are missing values
+```
+
+```{r}
+ex_aggr |>
+  summarise(
+    cities = n_distinct(city),
+    neighborhoods = n_distinct(neighb),
+    people = n()
+  )
+# the size of each level of the hierarchy
+```
+
+Check whether neighborhood codes are unique across cities.
+
+```{r}
+ex_aggr |>
+  summarise(n_cities = n_distinct(city), .by = neighb) |>
+  count(n_cities)
+# if some neighborhood codes appear in more than one city, the code is only
+# unique WITHIN a city, and grouping must use c(city, neighb) rather than
+# neighb alone
+```
+
+Create the city-level dataset.
+
+```{r}
+city_data <- ex_aggr |>
+  summarise(
+    n = n(),
+    fr_unemployed = mean(employ == 0),
+    fr_dutch = mean(ethnic == 1),
+    fr_western = mean(ethnic == 2),
+    fr_nonwestern = mean(ethnic == 3),
+    .by = city
+  ) |>
+  arrange(city)
+
+city_data
+# mean() of a logical condition gives the fraction for which it is TRUE,
+# because TRUE counts as 1 and FALSE as 0
+```
+
+```{r}
+city_data |>
+  mutate(
+    total = fr_dutch + fr_western + fr_nonwestern
+  )
+# the three ethnic fractions should sum to 1 in every city
+```
+
+If `employ` or `ethnic` could be missing, the fractions have to say explicitly what the denominator is.
+
+```{r}
+ex_aggr |>
+  summarise(
+    fr_unemployed = mean(employ == 0, na.rm = TRUE),
+    n_valid_employ = sum(!is.na(employ)),
+    .by = city
+  ) |>
+  slice(1:5)
+# na.rm = TRUE computes the fraction among those with a known status
+# without it, a single missing value makes the whole fraction missing
+```
+
+Add neighborhood-level variables to the individual-level dataset.
+
+```{r}
+ex_aggr <- ex_aggr |>
+  mutate(
+    n_neighb = n(),
+    pc_unemployed_n = 100 * mean(employ == 0),
+    pc_dutch_n = 100 * mean(ethnic == 1),
+    pc_western_n = 100 * mean(ethnic == 2),
+    pc_nonwestern_n = 100 * mean(ethnic == 3),
+    .by = c(city, neighb)
+  )
+# mutate() keeps all rows, so every person receives the composition of their
+# own neighborhood
+# grouping by c(city, neighb) is safe even if neighborhood codes repeat
+# across cities
+```
+
+```{r}
+ex_aggr |>
+  select(city, neighb, ethnic, n_neighb, pc_dutch_n, pc_western_n, pc_nonwestern_n) |>
+  slice(1:10)
+# the same neighborhood percentages are repeated for everyone in it
+```
+
+The city-level information is added in exactly the same way, only the grouping changes.
+
+```{r}
+ex_aggr <- ex_aggr |>
+  mutate(
+    n_city = n(),
+    pc_unemployed_c = 100 * mean(employ == 0),
+    pc_dutch_c = 100 * mean(ethnic == 1),
+    pc_western_c = 100 * mean(ethnic == 2),
+    pc_nonwestern_c = 100 * mean(ethnic == 3),
+    .by = city
+  )
+# the alternative is to join city_data back onto the individual data with
+# left_join(ex_aggr, city_data, by = "city"), which gives the same result
+```
+
+```{r}
+ex_aggr |>
+  select(city, neighb, pc_dutch_n, pc_dutch_c) |>
+  slice(1:10)
+# the neighborhood percentage varies within a city, the city percentage does not
+```
+
+Add the percentage of the respondent's own ethnic group in the neighborhood.
+
+```{r}
+ex_aggr <- ex_aggr |>
+  mutate(
+    pc_ingroup = case_when(
+      ethnic == 1 ~ pc_dutch_n,
+      ethnic == 2 ~ pc_western_n,
+      ethnic == 3 ~ pc_nonwestern_n,
+      TRUE ~ NA_real_
+    )
+  )
+# the ingroup percentage depends on who the respondent is: it picks the
+# column matching their own ethnic category
+```
+
+```{r}
+ex_aggr |>
+  select(neighb, ethnic, pc_dutch_n, pc_western_n, pc_nonwestern_n, pc_ingroup) |>
+  slice(1:10)
+# check that pc_ingroup equals the column corresponding to ethnic
+```
+
+```{r}
+ex_aggr |>
+  summarise(
+    mean_ingroup = mean(pc_ingroup, na.rm = TRUE),
+    .by = ethnic
+  ) |>
+  arrange(ethnic)
+# on average, members of the largest group live among more of their own,
+# which is a purely arithmetic consequence of group size rather than
+# evidence of segregation
+```
+
+A shorter route to the same variable, without needing the three separate columns first.
+
+```{r}
+ex_aggr |>
+  mutate(
+    pc_ingroup_alt = 100 * mean(ethnic == first(ethnic)),
+    .by = c(city, neighb, ethnic)
+  ) |>
+  summarise(
+    n_different = sum(abs(pc_ingroup_alt - pc_ingroup) > 1e-8, na.rm = TRUE)
+  )
+# grouping by ethnic as well makes the comparison automatic
+# the count of differences should be zero
+```
+
+### 2. Education within couples
+
+Inspect the household structure.
+
+```{r}
+glimpse(hin95_ext)
+```
+
+```{r}
+hin95_ext |>
+  summarise(n = n(), .by = hrespnr) |>
+  count(n)
+# every household should contain exactly two partners
+# any other household size deserves a second look before aggregating
+```
+
+```{r}
+sum(is.na(hin95_ext$educ))
+# missing values on education would propagate into every statistic below
+```
+
+Add the household mean, minimum, and maximum of education.
+
+```{r}
+hin95_ext <- hin95_ext |>
+  mutate(
+    mn_educ = mean(educ, na.rm = TRUE),
+    min_educ = min(educ, na.rm = TRUE),
+    max_educ = max(educ, na.rm = TRUE),
+    .by = hrespnr
+  )
+# all three variables take the same value for both partners in a household
+```
+
+```{r}
+hin95_ext |>
+  select(hrespnr, educ, mn_educ, min_educ, max_educ) |>
+  arrange(hrespnr) |>
+  slice(1:10)
+# each pair of rows shares the same household statistics
+```
+
+Add the absolute difference in education between the partners.
+
+```{r}
+hin95_ext <- hin95_ext |>
+  mutate(
+    diff_educ = max_educ - min_educ
+  )
+# for a two-person household the range is exactly the absolute difference,
+# so no separate abs() is needed
+```
+
+```{r}
+hin95_ext |>
+  select(hrespnr, educ, min_educ, max_educ, diff_educ) |>
+  arrange(hrespnr) |>
+  slice(1:10)
+# diff_educ is zero for couples with equal education
+```
+
+```{r}
+hin95_ext |>
+  distinct(hrespnr, diff_educ) |>
+  count(diff_educ) |>
+  arrange(diff_educ)
+# the distribution of educational differences, one row per household
+# distinct() prevents counting every couple twice
+```
+
+An alternative that states the intention more directly.
+
+```{r}
+hin95_ext |>
+  mutate(
+    diff_educ_alt = abs(diff(educ)),
+    .by = hrespnr
+  ) |>
+  summarise(
+    n_different = sum(diff_educ_alt != diff_educ, na.rm = TRUE)
+  )
+# diff() returns the difference between the two rows of a household
+# this only works because every household has exactly two members; with three
+# or more it would return several values and the code would fail
+```
+
+A note on missing values: `min()` and `max()` with `na.rm = TRUE` return `Inf` and `-Inf` for a household in which every value is missing, rather than `NA`.
+
+```{r}
+hin95_ext |>
+  summarise(
+    n_infinite = sum(!is.finite(min_educ) | !is.finite(max_educ))
+  )
+# if this count is not zero, convert those values to NA before using them
+```

@@ -1,0 +1,213 @@
+---
+title: Creating a system file from raw data
+---
+
+In this part you learn about reading raw data into R. Raw data are often stored as text files that can be opened using a simple text editor. Typically the data are in the form of a data matrix in which the rows are cases, columns are variables, and values are separated by commas, tabs, or spaces.
+
+In modern R workflows, raw data are usually read from files such as CSV, tab-delimited text files, Excel files, or Stata files. Occasionally, it is also useful to create a small dataset manually in R, for example for examples, tests, or teaching.
+
+## R
+
+In this part you need to learn and read about the following R functions:
+
+| Function       | Description                         |
+|----------------|-------------------------------------|
+| `read_csv()`   | Read comma-separated text data      |
+| `read_tsv()`   | Read tab-separated text data        |
+| `read_table()` | Read whitespace-separated text data |
+| `read_dta()`   | Read a Stata dataset                |
+| `write_csv()`  | Save data as a CSV file             |
+| `write_rds()`  | Save data as an R object            |
+| `tribble()`    | Manually create a small dataset     |
+| `View()`       | Inspect a dataset in RStudio        |
+
+Examples:
+
+Read a CSV file:
+
+```{r, eval=FALSE}
+library(readr)
+data <- read_csv("data/mydata.csv")
+```
+
+Read a tab-delimited text file:
+
+```{r, eval=FALSE}
+data <- read_tsv("data/mydata.txt")
+```
+
+Read a whitespace-separated text file:
+
+```{r, eval=FALSE}
+data <- read_table("data/mydata.dat")
+```
+
+Read a Stata dataset:
+
+```{r, eval=FALSE}
+library(haven)
+data <- read_dta("data/mydata.dta")
+```
+
+Create a small dataset manually:
+
+```{r, eval=FALSE}
+library(tibble)
+data <- tribble(
+  ~hrespnr, ~city,        ~female, ~edu,
+  101,      "Amsterdam",  1,       3,
+  103,      "Den Haag",   0,       5,
+  107,      "Rotterdam",  0,       2,
+  109,      "Utrecht",    1,       3
+)
+```
+
+Inspect the dataset:
+
+```{r, eval=FALSE}
+View(data)
+```
+
+Save the dataset as a CSV file:
+
+```{r, eval=FALSE}
+write_csv(data, "data/mydata.csv")
+```
+
+Save the dataset as an R object:
+
+```{r, eval=FALSE}
+write_rds(data, "data/mydata.rds")
+```
+
+## Assignments
+
+### 1. Manual entering data
+
+We want to create an R dataset with the following variables:
+
+| hrespnr | city      | female | edu |
+|---------|-----------|--------|-----|
+| 101     | Amsterdam | 1      | 3   |
+| 103     | Den Haag  | 0      | 5   |
+| 107     | Rotterdam | 0      | 2   |
+| 109     | Utrecht   | 1      | 3   |
+
+Do this in two ways.
+
+First, create the dataset manually in R using `tribble()`.
+
+Second, create the same dataset as a CSV file, save it in your `data/` folder, and read it into R using `read_csv()`.
+
+Save both newly created datasets.
+
+## Answers
+
+Make sure this file is in the same R Project as the `data` folder. Use relative file paths, not full paths to your computer.
+
+```{r setup-enterdata}
+library(tidyverse)
+```
+
+### 1. Manual entering data
+
+Enter the data by hand with `tribble()`.
+
+```{r}
+mydata <- tribble(
+  ~hrespnr, ~city,        ~female, ~edu,
+  101,      "Amsterdam",  1,       3,
+  103,      "Den Haag",   0,       5,
+  107,      "Rotterdam",  0,       2,
+  109,      "Utrecht",    1,       3
+)
+
+mydata
+# tribble() lays the data out row by row, so the code looks like the table
+# the column names are preceded by a tilde
+```
+
+Check what R made of the variable types.
+
+```{r}
+glimpse(mydata)
+# city is a character variable; the other three are numeric (dbl)
+# note that hrespnr and female are identifiers and codes, not quantities,
+# even though R stores them as numbers
+```
+
+Save this version.
+
+```{r}
+write_rds(mydata, "data/mydata_tribble.rds")
+# .rds keeps the object exactly as it is, including variable types
+```
+
+Now build the same dataset as a CSV file. Writing the file from R is the reproducible way to do it; you could equally well type it in a text editor and save it as `data/mydata.csv`.
+
+```{r}
+csv_text <- "hrespnr,city,female,edu
+101,Amsterdam,1,3
+103,Den Haag,0,5
+107,Rotterdam,0,2
+109,Utrecht,1,3
+"
+
+write_file(csv_text, "data/mydata.csv")
+# the first line holds the variable names, each following line is one case
+# values are separated by commas, without spaces after them
+```
+
+Look at the file as plain text, the way a text editor would show it.
+
+```{r}
+read_file("data/mydata.csv") |>
+  cat()
+# a CSV file is just text: no formatting, no types, only characters
+```
+
+Read the file back into R.
+
+```{r}
+mydata_csv <- read_csv("data/mydata.csv")
+
+mydata_csv
+# read_csv() reports which type it guessed for each column
+```
+
+Verify that both routes produced the same dataset.
+
+```{r}
+all.equal(mydata, mydata_csv)
+# TRUE means the two datasets are identical in content and types
+```
+
+Save the version read from CSV.
+
+```{r}
+write_rds(mydata_csv, "data/mydata_csv.rds")
+```
+
+A remark on types. `read_csv()` guesses the type of each column from its contents, whereas `tribble()` takes the types from what you typed. Here both give the same result, but a guess can go wrong: an identifier with leading zeros, such as a postcode `0234`, would be read as the number 234. You can override the guess.
+
+```{r}
+mydata_typed <- read_csv(
+  "data/mydata.csv",
+  col_types = cols(
+    hrespnr = col_character(),
+    city = col_character(),
+    female = col_double(),
+    edu = col_double()
+  )
+)
+
+glimpse(mydata_typed)
+# hrespnr is now text, which is what an identifier really is
+```
+
+Finally, a note on why `.rds` and `.csv` are both useful. A CSV file can be opened by any program and read by anyone, but it stores only text and loses the variable types. An `.rds` file preserves the R object exactly, but only R can read it.
+
+```{r}
+list.files("data", pattern = "^mydata")
+# the files created in this assignment
+```
