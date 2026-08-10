@@ -107,7 +107,7 @@ data <- data |>
     rel4 = factor(rel4)
   )
 
-fit <- multinom(relevel(party6, ref = "4") ~ educ + rel4 + fem, data = data)
+fit <- multinom(relevel(party6, ref = "4") ~ education + rel4 + fem, data = data)
 summary(fit)
 exp(coef(fit))
 ```
@@ -118,7 +118,7 @@ Choose a different reference category for the categorical predictor `rel4`, and 
 data <- data |>
   mutate(rel4 = relevel(rel4, ref = "3"))
 
-fit_relevel <- multinom(relevel(party6, ref = "4") ~ educ + rel4 + fem, data = data)
+fit_relevel <- multinom(relevel(party6, ref = "4") ~ education + rel4 + fem, data = data)
 exp(coef(fit_relevel))
 ```
 
@@ -127,9 +127,9 @@ Average marginal effects on the predicted probability of each outcome category:
 ```{r, eval=FALSE}
 library(marginaleffects)
 
-fit_me <- multinom(relevel(party6, ref = "1") ~ educ + rel4 + fem, data = data)
+fit_me <- multinom(relevel(party6, ref = "1") ~ education + rel4 + fem, data = data)
 
-avg_slopes(fit_me, variables = c("educ", "fem"))
+avg_slopes(fit_me, variables = c("education", "fem"))
 ```
 
 Pairwise comparisons of the marginal effect of a predictor between response categories:
@@ -141,10 +141,10 @@ avg_slopes(fit_me, variables = "rel4", by = "group")
 Check IIA informally by refitting the model excluding each outcome category in turn, and comparing coefficients:
 
 ```{r, eval=FALSE}
-fit_full <- multinom(party6 ~ educ + rel4 + fem, data = data)
+fit_full <- multinom(party6 ~ education + rel4 + fem, data = data)
 
-fit_no1 <- multinom(party6 ~ educ + rel4 + fem, data = data |> filter(party6 != "1"))
-fit_no2 <- multinom(party6 ~ educ + rel4 + fem, data = data |> filter(party6 != "2"))
+fit_no1 <- multinom(party6 ~ education + rel4 + fem, data = data |> filter(party6 != "1"))
+fit_no2 <- multinom(party6 ~ education + rel4 + fem, data = data |> filter(party6 != "2"))
 # ... and so on for the remaining categories
 
 coef(fit_full)
@@ -179,13 +179,13 @@ Use the dataset `hin95_voting`.
 
 ### Interpreting coefficients
 
-4. Create a dummy variable `fem` for women. Recode `religion` into a new nominal variable `rel4` with four categories. Fit a multinomial logistic regression of `party6` on `educ`, `rel4`, and `fem`, using category 4 as the base category for `party6`, and report relative-risk ratios (RRRs). Interpret the RRR for one unit of education for at least one outcome category.
+4. Create a dummy variable `fem` for women. Recode `religion` into a new nominal variable `rel4` with four categories. Fit a multinomial logistic regression of `party6` on `education`, `rel4`, and `fem`, using category 4 as the base category for `party6`, and report relative-risk ratios (RRRs). Interpret the RRR for one unit of education for at least one outcome category.
 
 5. Refit the same model, but this time set category 3 of `rel4` as the reference category for that predictor (instead of category 1). Compare the RRRs to the previous model. Why do the RRRs for `rel4` change even though the model as a whole fits the data identically?
 
 ### Marginal effects
 
-6. Fit a multinomial logistic regression of `party6` on `educ`, `rel4` (with category 1 as reference), and `fem`, using category 1 as the base category for `party6`. Compute the average marginal effects of `educ` and `fem` on the predicted probability of each outcome category.
+6. Fit a multinomial logistic regression of `party6` on `education`, `rel4` (with category 1 as reference), and `fem`, using category 1 as the base category for `party6`. Compute the average marginal effects of `education` and `fem` on the predicted probability of each outcome category.
 
 7. Refit with category 2 as the reference category for `rel4`. Compute the average marginal effect of `rel4` on the predicted probabilities. Interpret one of these marginal effects.
 
@@ -193,19 +193,19 @@ Use the dataset `hin95_voting`.
 
 ### Checking IIA
 
-9. Fit the full multinomial model of `party6` on `educ`, `rel4`, and `fem`. Then refit the model six times, each time excluding all observations belonging to one category of `party6`. For each of the resulting models, compare the coefficients to those of the full model. For which outcome categories does the exclusion of another category appear to change the coefficients substantially, suggesting that IIA is violated? For which category does IIA appear to hold reasonably well?
+9. Fit the full multinomial model of `party6` on `education`, `rel4`, and `fem`. Then refit the model six times, each time excluding all observations belonging to one category of `party6`. For each of the resulting models, compare the coefficients to those of the full model. For which outcome categories does the exclusion of another category appear to change the coefficients substantially, suggesting that IIA is violated? For which category does IIA appear to hold reasonably well?
 
 10. Based on your answer to the previous question, what do you conclude overall about whether the IIA assumption holds for this model of party choice?
 
 ### Interactions and goodness of fit
 
-11. Recode `educatio` into an ordered variable `edu4` with four categories. Fit a multinomial model of `party6` on `edu4` and `rel4` (main effects only), using category 1 as the base category.
+11. Recode `education` into an ordered variable `edu4` with four categories. Fit a multinomial model of `party6` on `edu4` and `rel4` (main effects only), using category 1 as the base category.
 
 12. Refit the model adding the interaction between `edu4` and `rel4`. Test whether this interaction significantly improves the fit, using a likelihood ratio test comparing the two models.
 
 13. Is there evidence for an interaction between education and religion on party choice? What does — and does not — this tell you about whether education and religion interact in their effect on the *predicted probabilities* of voting for each party (as opposed to the relative-risk ratios)?
 
-14. Fit a multinomial model of `party6` on `educ`, `rel4`, and `fem` (main effects only), and a second model that adds all two-way and three-way interactions between these three predictors. Test whether the full set of interactions significantly improves the fit, using a likelihood ratio test.
+14. Fit a multinomial model of `party6` on `education`, `rel4`, and `fem` (main effects only), and a second model that adds all two-way and three-way interactions between these three predictors. Test whether the full set of interactions significantly improves the fit, using a likelihood ratio test.
 
 ## Answers
 
@@ -307,7 +307,7 @@ hin95_voting <- hin95_voting |>
 hin95_voting |>
   count(rel4)
 
-fit_c1 <- multinom(relevel(party6, ref = "4") ~ educ + rel4 + fem, data = hin95_voting)
+fit_c1 <- multinom(relevel(party6, ref = "4") ~ education + rel4 + fem, data = hin95_voting)
 summary(fit_c1)
 exp(coef(fit_c1))
 
@@ -324,7 +324,7 @@ exp(coef(fit_c1))
 hin95_voting_relevel <- hin95_voting |>
   mutate(rel4 = relevel(rel4, ref = "3"))
 
-fit_c2 <- multinom(relevel(party6, ref = "4") ~ educ + rel4 + fem, data = hin95_voting_relevel)
+fit_c2 <- multinom(relevel(party6, ref = "4") ~ education + rel4 + fem, data = hin95_voting_relevel)
 summary(fit_c2)
 exp(coef(fit_c2))
 
@@ -339,13 +339,13 @@ exp(coef(fit_c2))
 
 ### Marginal effects
 
-#### 6. Average marginal effects of `educ` and `fem`
+#### 6. Average marginal effects of `education` and `fem`
 
 ```{r}
-fit_me1 <- multinom(relevel(party6, ref = "1") ~ educ + relevel(rel4, ref = "1") + fem,
+fit_me1 <- multinom(relevel(party6, ref = "1") ~ education + relevel(rel4, ref = "1") + fem,
                      data = hin95_voting)
 
-avg_slopes(fit_me1, variables = c("educ", "fem"))
+avg_slopes(fit_me1, variables = c("education", "fem"))
 
 # Averaged across response categories and observations, a one-unit
 # increase in education is associated with a change of about -0.015 in
@@ -358,7 +358,7 @@ avg_slopes(fit_me1, variables = c("educ", "fem"))
 #### 7. Average marginal effect of `rel4`
 
 ```{r}
-fit_me2 <- multinom(relevel(party6, ref = "1") ~ educ + relevel(rel4, ref = "2") + fem,
+fit_me2 <- multinom(relevel(party6, ref = "1") ~ education + relevel(rel4, ref = "2") + fem,
                      data = hin95_voting)
 
 avg_slopes(fit_me2, variables = "rel4")
@@ -388,14 +388,14 @@ avg_slopes(fit_me2, variables = "rel4", hypothesis = "pairwise")
 #### 9. Refitting the model excluding each category in turn
 
 ```{r}
-fit_full <- multinom(party6 ~ educ + rel4 + fem, data = hin95_voting)
+fit_full <- multinom(party6 ~ education + rel4 + fem, data = hin95_voting)
 
-fit_no1 <- multinom(party6 ~ educ + rel4 + fem, data = hin95_voting |> filter(party6 != "1"))
-fit_no2 <- multinom(party6 ~ educ + rel4 + fem, data = hin95_voting |> filter(party6 != "2"))
-fit_no3 <- multinom(party6 ~ educ + rel4 + fem, data = hin95_voting |> filter(party6 != "3"))
-fit_no4 <- multinom(party6 ~ educ + rel4 + fem, data = hin95_voting |> filter(party6 != "4"))
-fit_no5 <- multinom(party6 ~ educ + rel4 + fem, data = hin95_voting |> filter(party6 != "5"))
-fit_no6 <- multinom(party6 ~ educ + rel4 + fem, data = hin95_voting |> filter(party6 != "6"))
+fit_no1 <- multinom(party6 ~ education + rel4 + fem, data = hin95_voting |> filter(party6 != "1"))
+fit_no2 <- multinom(party6 ~ education + rel4 + fem, data = hin95_voting |> filter(party6 != "2"))
+fit_no3 <- multinom(party6 ~ education + rel4 + fem, data = hin95_voting |> filter(party6 != "3"))
+fit_no4 <- multinom(party6 ~ education + rel4 + fem, data = hin95_voting |> filter(party6 != "4"))
+fit_no5 <- multinom(party6 ~ education + rel4 + fem, data = hin95_voting |> filter(party6 != "5"))
+fit_no6 <- multinom(party6 ~ education + rel4 + fem, data = hin95_voting |> filter(party6 != "6"))
 
 coef(fit_full)
 coef(fit_no1)
@@ -442,7 +442,7 @@ coef(fit_no6)
 hin95_voting <- hin95_voting |>
   mutate(
     edu4 = case_match(
-      educatio,
+      education,
       1 ~ 1,
       c(2, 3) ~ 2,
       c(4, 5, 6) ~ 3,
@@ -488,8 +488,8 @@ lrtest(fit_a, fit_b)
 #### 14. All two-way and three-way interactions
 
 ```{r}
-fit_main_full <- multinom(party6 ~ educ + rel4 + fem, data = hin95_voting)
-fit_all_interactions <- multinom(party6 ~ educ * rel4 * fem, data = hin95_voting)
+fit_main_full <- multinom(party6 ~ education + rel4 + fem, data = hin95_voting)
+fit_all_interactions <- multinom(party6 ~ education * rel4 * fem, data = hin95_voting)
 
 lrtest(fit_main_full, fit_all_interactions)
 ```

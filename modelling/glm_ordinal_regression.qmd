@@ -105,7 +105,7 @@ data <- data |>
     vote = factor(vote, ordered = TRUE)
   )
 
-fit <- polr(vote ~ educ + age + female + chfreq, data = data, Hess = TRUE)
+fit <- polr(vote ~ education + age + female + chfreq, data = data, Hess = TRUE)
 summary(fit)
 ```
 
@@ -143,12 +143,12 @@ rowSums(predict(fit, type = "probs"))
 Test a hypothesis on one predictor with a likelihood ratio test, making sure both models use the same (listwise-deleted) sample:
 
 ```{r, eval=FALSE}
-fit_a <- polr(vote ~ educ + age + female + chfreq, data = data, Hess = TRUE)
+fit_a <- polr(vote ~ education + age + female + chfreq, data = data, Hess = TRUE)
 
 data_complete <- data |> filter(!is.na(chfreq))
 
-fit_b <- polr(vote ~ educ + age + female, data = data_complete, Hess = TRUE)
-fit_a_same_sample <- polr(vote ~ educ + age + female + chfreq, data = data_complete, Hess = TRUE)
+fit_b <- polr(vote ~ education + age + female, data = data_complete, Hess = TRUE)
+fit_a_same_sample <- polr(vote ~ education + age + female + chfreq, data = data_complete, Hess = TRUE)
 
 lrtest(fit_a_same_sample, fit_b)
 ```
@@ -156,9 +156,9 @@ lrtest(fit_a_same_sample, fit_b)
 Check the linearity of a predictor: compare a linear specification, a fully flexible (factor) specification, and a quadratic specification:
 
 ```{r, eval=FALSE}
-fit_linear <- polr(vote ~ educ + age + female + chfreq, data = data_complete, Hess = TRUE)
-fit_flexible <- polr(vote ~ educ + age + female + factor(chfreq), data = data_complete, Hess = TRUE)
-fit_quadratic <- polr(vote ~ educ + age + female + chfreq + I(chfreq^2), data = data_complete, Hess = TRUE)
+fit_linear <- polr(vote ~ education + age + female + chfreq, data = data_complete, Hess = TRUE)
+fit_flexible <- polr(vote ~ education + age + female + factor(chfreq), data = data_complete, Hess = TRUE)
+fit_quadratic <- polr(vote ~ education + age + female + chfreq + I(chfreq^2), data = data_complete, Hess = TRUE)
 
 lrtest(fit_linear, fit_flexible)
 lrtest(fit_linear, fit_quadratic)
@@ -167,8 +167,8 @@ lrtest(fit_linear, fit_quadratic)
 Include an interaction between a quantitative and a categorical predictor:
 
 ```{r, eval=FALSE}
-fit_interaction <- polr(vote ~ educ + age + female * chfreq, data = data_complete, Hess = TRUE)
-fit_no_interaction <- polr(vote ~ educ + age + female + chfreq, data = data_complete, Hess = TRUE)
+fit_interaction <- polr(vote ~ education + age + female * chfreq, data = data_complete, Hess = TRUE)
+fit_no_interaction <- polr(vote ~ education + age + female + chfreq, data = data_complete, Hess = TRUE)
 
 lrtest(fit_interaction, fit_no_interaction)
 ```
@@ -176,7 +176,7 @@ lrtest(fit_interaction, fit_no_interaction)
 Compute a pseudo-$R^2$ for the latent variable:
 
 ```{r, eval=FALSE}
-fit_r2 <- polr(vote ~ educ + age + female + chfreq, data = data_complete, Hess = TRUE)
+fit_r2 <- polr(vote ~ education + age + female + chfreq, data = data_complete, Hess = TRUE)
 
 lp <- predict(fit_r2, type = "linear.predictor")
 # not all versions of polr expose this directly; the linear predictor
@@ -201,7 +201,7 @@ Use the dataset `hin95_voting`.
 
 ### Fitting the model and interpreting coefficients
 
-1. Construct `age` (from `birthdate`), a dummy `female`, and a recoded church-attendance frequency `chfreq` (visits per year). Fit an ordered logistic regression of `vote` (voting intention, an ordinal variable) on `educ`, `age`, `female`, and `chfreq`. Interpret the coefficient for `chfreq` as an effect on the latent voting-intention variable, and as a change in log odds.
+1. Construct `age` (from `birthdate`), a dummy `female`, and a recoded church-attendance frequency `chfreq` (visits per year). Fit an ordered logistic regression of `vote` (voting intention, an ordinal variable) on `education`, `age`, `female`, and `chfreq`. Interpret the coefficient for `chfreq` as an effect on the latent voting-intention variable, and as a change in log odds.
 
 2. Exponentiate the coefficient for `chfreq` to obtain an odds ratio. Interpret this odds ratio.
 
@@ -221,7 +221,7 @@ Use the dataset `hin95_voting`.
 
 ### Interactions
 
-7. Fit a model with an interaction between `female` and `chfreq` (in addition to the main effects of `educ`, `age`, `female`, and `chfreq`). Is there evidence that the effect of church attendance on voting intention differs between men and women? Report the implied effect of `chfreq` separately for men and for women.
+7. Fit a model with an interaction between `female` and `chfreq` (in addition to the main effects of `education`, `age`, `female`, and `chfreq`). Is there evidence that the effect of church attendance on voting intention differs between men and women? Report the implied effect of `chfreq` separately for men and for women.
 
 8. Confirm your conclusion from the previous question with a likelihood ratio test comparing the model with and without the interaction term.
 
@@ -231,7 +231,7 @@ Use the dataset `hin95_voting`.
 
 ### Proportional odds assumption
 
-10. Test the proportional odds (parallel lines) assumption for the model of `vote` on `educ`, `age`, `female`, and `chfreq`. Is the assumption supported by the data? What would this mean for the interpretation of the model if the assumption were rejected?
+10. Test the proportional odds (parallel lines) assumption for the model of `vote` on `education`, `age`, `female`, and `chfreq`. Is the assumption supported by the data? What would this mean for the interpretation of the model if the assumption were rejected?
 
 ## Answers
 
@@ -268,7 +268,7 @@ hin95_voting <- hin95_voting |>
 #### 1. The ordered logit model
 
 ```{r}
-fit <- polr(vote ~ educ + age + female + chfreq, data = hin95_voting, Hess = TRUE)
+fit <- polr(vote ~ education + age + female + chfreq, data = hin95_voting, Hess = TRUE)
 summary(fit)
 
 # (Latent) voting intention increases with religiosity: for each
@@ -345,8 +345,8 @@ hin95_voting |>
 #### 5. A likelihood ratio test on matching samples
 
 ```{r}
-fit_a <- polr(vote ~ educ + age + female + chfreq, data = hin95_voting, Hess = TRUE)
-fit_b <- polr(vote ~ educ + age + female, data = hin95_voting, Hess = TRUE)
+fit_a <- polr(vote ~ education + age + female + chfreq, data = hin95_voting, Hess = TRUE)
+fit_b <- polr(vote ~ education + age + female, data = hin95_voting, Hess = TRUE)
 
 # This comparison is not valid:
 # tryCatch(lrtest(fit_a, fit_b), error = function(e) e)
@@ -360,8 +360,8 @@ fit_b <- polr(vote ~ educ + age + female, data = hin95_voting, Hess = TRUE)
 hin95_voting_complete <- hin95_voting |>
   filter(!is.na(chfreq))
 
-fit_b_matched <- polr(vote ~ educ + age + female, data = hin95_voting_complete, Hess = TRUE)
-fit_a_matched <- polr(vote ~ educ + age + female + chfreq, data = hin95_voting_complete, Hess = TRUE)
+fit_b_matched <- polr(vote ~ education + age + female, data = hin95_voting_complete, Hess = TRUE)
+fit_a_matched <- polr(vote ~ education + age + female + chfreq, data = hin95_voting_complete, Hess = TRUE)
 
 lrtest(fit_a_matched, fit_b_matched)
 
@@ -375,13 +375,13 @@ lrtest(fit_a_matched, fit_b_matched)
 #### 6. Linear, flexible, and quadratic specifications
 
 ```{r}
-fit_linear <- polr(vote ~ educ + age + female + chfreq,
+fit_linear <- polr(vote ~ education + age + female + chfreq,
                     data = hin95_voting_complete, Hess = TRUE)
 
-fit_flexible <- polr(vote ~ educ + age + female + factor(chfreq),
+fit_flexible <- polr(vote ~ education + age + female + factor(chfreq),
                       data = hin95_voting_complete, Hess = TRUE)
 
-fit_quadratic <- polr(vote ~ educ + age + female + chfreq + I(chfreq^2),
+fit_quadratic <- polr(vote ~ education + age + female + chfreq + I(chfreq^2),
                        data = hin95_voting_complete, Hess = TRUE)
 
 lrtest(fit_linear, fit_flexible)
@@ -398,7 +398,7 @@ lrtest(fit_linear, fit_quadratic)
 #### 7. An interaction between `female` and `chfreq`
 
 ```{r}
-fit_interaction <- polr(vote ~ educ + age + female * chfreq,
+fit_interaction <- polr(vote ~ education + age + female * chfreq,
                          data = hin95_voting_complete, Hess = TRUE)
 summary(fit_interaction)
 
@@ -424,7 +424,7 @@ b["chfreq"] + b["female:chfreq"]
 #### 8. The same conclusion from a likelihood ratio test
 
 ```{r}
-fit_no_interaction <- polr(vote ~ educ + age + female + chfreq,
+fit_no_interaction <- polr(vote ~ education + age + female + chfreq,
                             data = hin95_voting_complete, Hess = TRUE)
 
 lrtest(fit_interaction, fit_no_interaction)
@@ -438,7 +438,7 @@ lrtest(fit_interaction, fit_no_interaction)
 #### 9. A pseudo-$R^2$ for the latent variable
 
 ```{r}
-fit_r2 <- polr(vote ~ educ + age + female + chfreq,
+fit_r2 <- polr(vote ~ education + age + female + chfreq,
                data = hin95_voting_complete, Hess = TRUE)
 
 # The linear predictor (fitted latent variable, without the error term)
