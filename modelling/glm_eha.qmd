@@ -1,0 +1,365 @@
+---
+title: Event history analysis
+---
+
+In this part you will learn about the following basic tasks:
+
+- Recognize event history (survival) data: an outcome consisting of a duration until an event occurs, possibly right-censored for subjects who have not (yet) experienced the event.
+
+- Explain why an ordinary linear regression of duration on predictors is generally not an appropriate way to analyze event history data.
+
+- Set up event history data in R and fit a Cox proportional hazards model.
+
+- Interpret Cox model coefficients in two ways: as effects on the log hazard, and as hazard ratios.
+
+- Plot and interpret the hazard function, the cumulative hazard function, and the survival function.
+
+- Test the proportional hazards assumption.
+
+- Construct a person-period file and fit a discrete-time event history model using logistic regression, as an alternative to the Cox model.
+
+## Event history (survival) data
+
+Event history data record, for each subject, the time until a specific event occurs (for instance, dropping out of school, finding a job, or experiencing a relapse). A defining feature of such data is *censoring*: for some subjects the event has not (yet) occurred by the end of the observation period, so we only know that their duration is *at least* as long as the observed time, not the exact duration. Simply treating censored durations as if they were completed durations, or dropping censored cases from the analysis, both lead to biased results.
+
+Because of censoring, and because durations are often skewed and their effects on the timing of an event need not be additive on the original time scale, an ordinary linear regression of duration on predictors — even restricted to subjects who did experience the event — is generally not an appropriate way to analyze this kind of data. The normality and constant-variance assumptions of linear regression are typically violated, and (if applied to the full sample without special handling) censored cases are handled incorrectly.
+
+## The Cox proportional hazards model
+
+The hazard rate is the instantaneous "risk" of the event occurring at a given time, given that it has not yet occurred. The Cox proportional hazards model relates the hazard rate to a set of predictors without requiring a specific parametric shape for how the hazard changes over time:
+
+$$
+h(t \mid X) = h_0(t) \exp(b_1 X_1 + \dots + b_k X_k)
+$$
+
+Here $h_0(t)$ is the (unspecified) baseline hazard, and the predictors act multiplicatively on this baseline hazard. This is the "proportional hazards" assumption: the ratio of hazards between two subjects with different predictor values is constant over time, even though the hazard itself may go up or down over time for everyone.
+
+Cox model coefficients can be interpreted in two ways, directly analogous to logistic regression:
+
+1. **Log hazard.** A one-unit increase in $X_j$ is associated with a $b_j$ change in the log hazard of the event occurring, holding other predictors constant. A positive coefficient means the event tends to happen sooner (a higher hazard); a negative coefficient means it tends to happen later.
+
+2. **Hazard ratios.** Exponentiating the coefficient, $\exp(b_j)$, gives the multiplicative change in the hazard for a one-unit increase in $X_j$. A hazard ratio above 1 means a higher hazard (event tends to happen sooner); below 1 means a lower hazard (event tends to happen later).
+
+Note that statistical significance from a Cox model need not agree with significance from an ordinary linear regression on the same (uncensored) durations — this is not a contradiction, but a reminder that the linear model's assumptions are often violated for duration data.
+
+## Hazard, cumulative hazard, and survival functions
+
+Three related functions describe the same underlying process from different angles:
+
+- The **hazard function** shows how the instantaneous risk of the event changes over time.
+- The **cumulative hazard function** accumulates the hazard over time.
+- The **survival function** shows the probability of *not yet* having experienced the event, as a function of time; it starts at 1 and decreases (weakly) over time.
+
+Plotting these functions, typically separately for meaningful subgroups (e.g., predicted at representative values of the predictors), gives insight into the shape of the process that a table of hazard ratios alone does not.
+
+## Testing the proportional hazards assumption
+
+The proportional hazards assumption can be tested formally, typically based on the (scaled) Schoenfeld residuals. A significant test result suggests that a predictor's effect on the hazard is not actually constant over time, and the standard Cox model coefficients for that predictor should be interpreted with caution; extensions that allow time-varying effects exist but are beyond the scope of this course.
+
+## Discrete-time event history analysis
+
+An alternative to the (continuous-time) Cox model is to restructure the data into a *person-period* file: one row per subject per time unit (e.g., per month) that the subject was at risk of the event, with an indicator for whether the event occurred in that period. A logistic regression of the event indicator on the predictors (and, optionally, functions of time itself) then estimates a discrete-time hazard model. This approach is conceptually simple and uses only tools you already know (logistic regression), at the cost of requiring the data to be reshaped into a much longer format.
+
+## R
+
+You will learn the R functions listed below to set up and analyze event history data.
+
+| Function | Description |
+|----|----|
+| `survival::Surv()` | Create a survival object (time and event-status pair) |
+| `survival::coxph()` | Fit a Cox proportional hazards model |
+| `summary()` | Display coefficients (log hazard) and hazard ratios for a Cox model |
+| `survival::survfit()` | Estimate the survival function (e.g., baseline or at chosen predictor values) |
+| `survminer::ggsurvplot()` | Plot the survival function |
+| `survival::cox.zph()` | Test the proportional hazards assumption using scaled Schoenfeld residuals |
+| `survival::survSplit()` | Convert a survival dataset into a person-period (long) file |
+
+Examples:
+
+Load the data and construct a helper variable:
+
+```{r, eval=FALSE}
+library(tidyverse)
+library(haven)
+library(survival)
+
+data <- read_dta("data/hschool.dta")
+
+data <- data |>
+  mutate(female = sex)
+```
+
+Count subjects who married before, or during, college:
+
+```{r, eval=FALSE}
+data |>
+  filter(mrg < stm) |>
+  nrow()
+
+data |>
+  filter(mrg >= stm, mrg <= stm + time) |>
+  nrow()
+```
+
+Fit an (inappropriate, for comparison purposes) linear regression on duration, restricted to subjects who experienced the event:
+
+```{r, eval=FALSE}
+fit_lm <- lm(time ~ sex + grades, data = data |> filter(died == 1))
+summary(fit_lm)
+```
+
+Set up the survival object and fit a Cox proportional hazards model:
+
+```{r, eval=FALSE}
+fit_cox <- coxph(Surv(time, died) ~ sex + grades, data = data)
+summary(fit_cox)
+```
+
+The `summary()` output of a `coxph` object reports both the coefficients (`coef`, on the log hazard scale) and the exponentiated coefficients (`exp(coef)`, the hazard ratios) side by side.
+
+Plot the hazard, cumulative hazard, and survival functions:
+
+```{r, eval=FALSE}
+library(survminer)
+
+fit_surv <- survfit(fit_cox)
+
+ggsurvplot(fit_surv, fun = "event", data = data)   # cumulative incidence (1 - survival)
+ggsurvplot(fit_surv, fun = "cumhaz", data = data)  # cumulative hazard
+ggsurvplot(fit_surv, data = data)                  # survival function
+```
+
+Base-R plotting is also available directly from `survfit()`:
+
+```{r, eval=FALSE}
+plot(fit_surv, fun = "cumhaz", xlab = "Time (months)", ylab = "Cumulative hazard")
+plot(fit_surv, xlab = "Time (months)", ylab = "Survival probability")
+```
+
+Test the proportional hazards assumption:
+
+```{r, eval=FALSE}
+cox.zph(fit_cox)
+```
+
+Construct a person-period file and fit a discrete-time logistic model:
+
+```{r, eval=FALSE}
+person_period <- data |>
+  dplyr::select(caseid, time, sex, grades, died) |>
+  rowwise() |>
+  mutate(period = list(seq_len(time))) |>
+  unnest(period) |>
+  mutate(event = as.integer(died == 1 & period == time)) |>
+  dplyr::select(-time, -died)
+
+fit_discrete <- glm(event ~ sex + grades, data = person_period, family = binomial)
+summary(fit_discrete)
+```
+
+## Assignments
+
+Use the dataset `hschool`. The variables are: `caseid` (case identifier), `time` (time in months until school drop-out, or censoring), `died` (event indicator: 1 = dropped out, 0 = censored), `sex` (0 = male, 1 = female), `grades` (1 = high grades, 5 = low grades), `parttime` (1 = part-time student), `mrg` (month of marriage, coded as $12 \times (\text{year} - 1980) + \text{month}$; 99 = never married), and `stm` (month of college entry, coded the same way).
+
+### Data description
+
+1. How many students were married before entering college (i.e., `mrg` occurred before `stm`)?
+
+2. How many students got married during college (i.e., `mrg` fell between `stm` and `stm + time`)?
+
+### Linear regression on duration
+
+3. We are interested in the effect of `sex` and `grades` on the time until school drop-out. Fit a linear regression of `time` on `sex` and `grades`, making sure you correctly restrict the sample to only those subjects for whom drop-out actually occurred. Interpret all coefficients, including the intercept — and note anything odd or hard to interpret about the intercept.
+
+### Cox proportional hazards model
+
+4. Fit a Cox proportional hazards model of drop-out on `sex` and `grades`. Interpret each coefficient (a) as an effect on the log hazard, and (b) as a hazard ratio.
+
+5. Compare the statistical significance of `sex` and `grades` in the Cox model to their significance in the linear regression from question 3. Are the conclusions the same? If not, why is this not a contradiction?
+
+### Plotting the process
+
+6. Plot the hazard function, the cumulative hazard function, and the survival function implied by the Cox model.
+
+### Testing the proportional hazards assumption
+
+7. Test the proportional hazards assumption for the Cox model of question 4. Does the assumption hold?
+
+### BONUS: discrete-time analysis
+
+8. Construct a person-period file from `hschool`: one row per subject per month at risk, with an event indicator equal to 1 only in the month drop-out actually occurred (0 in all other months, including for censored subjects). Fit a discrete-time event history model using logistic regression of the event indicator on `sex` and `grades`. What do you conclude, and how does this compare to the conclusions from the Cox model?
+
+## Answers
+
+Make sure this file is in the same R Project as the `data` folder. Use relative file paths, not full paths to your computer.
+
+```{r setup-eha}
+library(tidyverse)
+library(haven)
+library(survival)
+library(survminer)
+
+hschool <- read_dta("data/hschool.dta")
+
+hschool <- hschool |>
+  mutate(female = sex)
+```
+
+### Data description
+
+#### 1. Married before entering college
+
+```{r}
+hschool |>
+  filter(mrg < stm) |>
+  nrow()
+```
+
+#### 2. Married during college
+
+```{r}
+hschool |>
+  filter(mrg >= stm, mrg <= stm + time) |>
+  nrow()
+```
+
+### Linear regression on duration
+
+#### 3. A linear regression on completed durations
+
+```{r}
+fit_lm <- lm(time ~ sex + grades, data = hschool |> filter(died == 1))
+summary(fit_lm)
+
+# Females drop out about 0.075 months faster than males, but this is
+# not significant.
+# People with lower grades (higher values of grades, since 1 = high,
+# 5 = low) drop out faster, but this is not significant either.
+# Males (sex = 0) with the highest grades (grades = 0, which is outside
+# the actual scale of 1-5 and should ideally be recentered) are
+# predicted to drop out at 18.55 months. Because grades = 0 does not
+# occur in the data, this intercept is not substantively meaningful as
+# it stands.
+```
+
+### Cox proportional hazards model
+
+#### 4. The Cox model
+
+```{r}
+fit_cox <- coxph(Surv(time, died) ~ sex + grades, data = hschool)
+summary(fit_cox)
+
+# Log hazard interpretation:
+# Females have a 0.240 higher log hazard of dropping out than males (a
+# shorter time to drop-out), but this is not significant.
+# People with lower grades have a significantly higher log hazard of
+# dropping out (a shorter time to drop-out).
+#
+# Hazard ratio interpretation (exp(coef), shown directly in the
+# summary() output):
+# Females have a 27% higher hazard of dropping out than males, but this
+# is not significant.
+# People with lower grades have a 39.73% significantly higher hazard of
+# dropping out for each unit increase on the grades scale (i.e., each
+# step toward lower grades).
+```
+
+#### 5. Comparing the two models
+
+```{r}
+# The significance of the predictors is not the same between the linear
+# regression (question 3) and the Cox regression (question 4): grades is
+# significant in the Cox model but not in the linear regression. This is
+# not a contradiction. The linear regression restricts the sample to
+# completed durations only and assumes normally distributed, constant-
+# variance residuals on the raw time scale -- assumptions that are
+# typically violated for duration data. The Cox model instead uses all
+# subjects (including censored ones) and does not require these
+# distributional assumptions, which is why it can detect an effect the
+# linear model misses.
+```
+
+```{r}
+hschool |>
+  count(died)
+# how many cases the linear regression discards as censored
+```
+
+### Plotting the process
+
+#### 6. Hazard, cumulative hazard, and survival
+
+```{r}
+fit_surv <- survfit(fit_cox)
+
+# Cumulative hazard
+plot(fit_surv, fun = "cumhaz", xlab = "Time (months)", ylab = "Cumulative hazard")
+
+# Survival function
+plot(fit_surv, xlab = "Time (months)", ylab = "Survival probability")
+
+# Using survminer for nicer plots, including an approximate hazard shape
+# via the cumulative hazard and survival curves:
+ggsurvplot(fit_surv, data = hschool, fun = "cumhaz")
+ggsurvplot(fit_surv, data = hschool)
+
+# Note: a smoothed hazard function itself (as opposed to the cumulative
+# hazard) is not directly returned by survfit(); it can be approximated
+# with a kernel-smoothed estimate, e.g. using the muhaz package, if a
+# separate plot of the hazard function itself (rather than the
+# cumulative hazard) is required.
+```
+
+### Testing the proportional hazards assumption
+
+#### 7. The Schoenfeld residual test
+
+```{r}
+cox.zph(fit_cox)
+
+# The test does not reject the proportional hazards assumption at
+# conventional significance levels: the proportional hazards assumption
+# appears to hold for this model.
+```
+
+### BONUS: discrete-time analysis
+
+#### 8. A person-period file and a discrete-time model
+
+```{r}
+# Method 1: expand the data manually to one row per subject per month
+person_period <- hschool |>
+  dplyr::select(caseid, time, sex, grades, died) |>
+  rowwise() |>
+  mutate(period = list(seq_len(time))) |>
+  unnest(period) |>
+  ungroup() |>
+  rename(end_time = time) |>
+  mutate(
+    time = period,
+    died = if_else(died == 1 & time != end_time, 0L, as.integer(died))
+  ) |>
+  dplyr::select(caseid, time, end_time, sex, grades, died)
+
+fit_discrete <- glm(died ~ sex + grades, data = person_period, family = binomial)
+summary(fit_discrete)
+
+# The discrete-time logistic model leads to the same substantive
+# conclusion as the Cox model: grades significantly predicts drop-out
+# (lower grades associated with higher risk of dropping out in a given
+# month), while sex does not significantly predict drop-out. This
+# confirms that the Cox model's conclusions are not an artifact of the
+# continuous-time approach; a discrete-time formulation using ordinary
+# logistic regression on the person-period file gives essentially the
+# same answer.
+```
+
+```{r}
+nrow(hschool)
+nrow(person_period)
+sum(person_period$died)
+sum(hschool$died)
+# one row per subject per month at risk; the number of events is
+# unchanged, since each subject can drop out only once
+```

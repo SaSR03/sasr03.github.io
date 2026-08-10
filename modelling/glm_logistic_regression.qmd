@@ -1,0 +1,388 @@
+---
+title: Binary logistic regression
+---
+
+In this part you will learn about the following basic tasks:
+
+- Recognize when a linear probability model is inadequate for a binary (0/1) outcome, and fit a logistic regression model instead.
+
+- Interpret logistic regression coefficients as log odds, and transform them into odds ratios.
+
+- Compute and interpret average marginal effects, expressed in terms of predicted probabilities.
+
+- Compute marginal effects at specific values of the predictors, and at the means of the predictors.
+
+- Test whether a set of predictors, added together, significantly improves a logistic model, using a Wald test and a likelihood ratio test.
+
+- Test whether several coefficients are equal to each other.
+
+- Compare a logit model to a probit model.
+
+## From linear probability to logistic regression
+
+When the outcome variable Y is binary (0/1), one option is to fit an ordinary linear regression of Y on the predictors — the *linear probability model*. The coefficients are then directly interpretable as changes in the probability of Y = 1. This model is simple, but it has a fundamental problem: it can produce predicted probabilities below 0 or above 1, which is not meaningful. In many datasets this problem does not show up for the observed range of the predictors, but it remains a real limitation of the model, and standard errors are not correct without adjustment.
+
+Logistic regression instead models the log odds of Y = 1 as a linear function of the predictors:
+
+$$
+\log \left( \frac{P(Y=1)}{1 - P(Y=1)} \right) = b_0 + b_1 X_1 + \dots + b_k X_k
+$$
+
+This guarantees that predicted probabilities always lie between 0 and 1. The price is that coefficients are no longer directly interpretable as changes in probability; they are changes in the log odds.
+
+## Interpreting logistic regression coefficients
+
+There are three common ways to interpret a logistic regression coefficient $b_j$:
+
+1. **Log odds.** A one-unit increase in $X_j$ is associated with a $b_j$ change in the log odds of Y = 1, holding other predictors constant. This is mathematically convenient but not very intuitive.
+
+2. **Odds ratios.** Exponentiating the coefficient, $\exp(b_j)$, gives the multiplicative change in the odds of Y = 1 for a one-unit increase in $X_j$. Equivalently, $(\exp(b_j) - 1) \times 100\%$ is the percentage change in the odds. This interpretation has the advantage that it applies exactly for every subject, irrespective of the value of $X_j$ itself or of the other predictors — unlike a marginal effect (below), which depends on the values of all predictors.
+
+3. **Marginal effects (average marginal effects).** These translate the model back into the probability scale, giving the average change in the predicted probability of Y = 1 for a one-unit increase in $X_j$. Because the logistic curve is nonlinear, this effect is not constant: it varies with the values of the predictors. An average marginal effect summarizes this variation by averaging over the sample (or by computing the effect at a specific point, such as at the sample means, or at chosen predictor values).
+
+Regardless of which interpretation is chosen, it is good practice to also compare the logistic regression results to a linear probability model. In practice, the two often lead to very similar substantive conclusions, even though the linear probability model is technically inferior.
+
+## Testing sets of coefficients in a logistic model
+
+As in ordinary regression, you can test whether a set of predictors jointly contributes to the model, and whether several coefficients are equal to one another. In a logistic regression (estimated by maximum likelihood rather than least squares), the natural tools are a Wald test and a likelihood ratio (LR) test; both give similar, though not numerically identical, results.
+
+## R
+
+You will learn the R functions listed below to fit and interpret logistic regression models.
+
+| Function | Description |
+|----|----|
+| `glm(..., family = binomial)` | Fit a logistic regression model |
+| `glm(..., family = binomial(link = "probit"))` | Fit a probit regression model |
+| `summary()` | Display coefficients (log odds), standard errors, and significance |
+| `exp(coef())` | Convert log odds coefficients to odds ratios |
+| `marginaleffects::avg_slopes()` | Average marginal effects, on the probability scale |
+| `marginaleffects::slopes()` | Marginal effects at specific or mean values of the predictors |
+| `car::linearHypothesis()` | Wald test of one or more linear restrictions on the coefficients |
+| `lmtest::lrtest()` | Likelihood ratio test comparing two nested models |
+| `predict(..., type = "response")` | Predicted probabilities from a fitted model |
+
+Examples:
+
+Fit a linear probability model and check whether predicted probabilities fall outside the (0, 1) range:
+
+```{r, eval=FALSE}
+library(tidyverse)
+library(haven)
+
+data <- read_dta("data/unemploy.dta")
+
+data <- data |>
+  mutate(work = as.integer(studytim < 53))
+
+fit_lpm <- lm(work ~ age + edu + exp, data = data)
+summary(fit_lpm)
+
+# robust (heteroskedasticity-consistent) standard errors
+library(sandwich)
+library(lmtest)
+coeftest(fit_lpm, vcov = vcovHC(fit_lpm, type = "HC1"))
+```
+
+```{r, eval=FALSE}
+data <- data |>
+  mutate(prob_lpm = predict(fit_lpm))
+
+data |>
+  summarise(n_out_of_range = sum(prob_lpm < 0 | prob_lpm > 1))
+```
+
+Fit a logistic regression model:
+
+```{r, eval=FALSE}
+fit_logit <- glm(work ~ age + edu + exp, data = data, family = binomial)
+summary(fit_logit)
+```
+
+The coefficients are on the log odds scale. Obtain odds ratios by exponentiating:
+
+```{r, eval=FALSE}
+exp(coef(fit_logit))
+exp(confint(fit_logit))
+```
+
+Compute average marginal effects, on the probability scale:
+
+```{r, eval=FALSE}
+library(marginaleffects)
+
+avg_slopes(fit_logit)
+```
+
+Marginal effect of one predictor at chosen values of the other predictors:
+
+```{r, eval=FALSE}
+slopes(fit_logit, variables = "age", newdata = datagrid(edu = 1, exp = 3))
+```
+
+Marginal effect at the means of all predictors:
+
+```{r, eval=FALSE}
+slopes(fit_logit, variables = "age", newdata = "mean")
+```
+
+Test whether a set of predictors significantly improves the model, using a Wald test on the full model:
+
+```{r, eval=FALSE}
+library(car)
+
+fit_hc <- glm(work ~ age + edu + exp, data = data, family = binomial)
+fit_hsc <- glm(work ~ age + edu + exp + scweak + scmedium + scstrong,
+                data = data, family = binomial)
+
+linearHypothesis(fit_hsc, c("scweak = 0", "scmedium = 0", "scstrong = 0"))
+```
+
+Test the same hypothesis with a likelihood ratio test comparing the two nested models:
+
+```{r, eval=FALSE}
+lrtest(fit_hc, fit_hsc)
+```
+
+Test whether several coefficients are equal to each other (not just equal to zero):
+
+```{r, eval=FALSE}
+linearHypothesis(fit_hsc, "scweak = scmedium = scstrong")
+```
+
+Fit a probit model for comparison:
+
+```{r, eval=FALSE}
+fit_probit <- glm(work ~ age + edu + exp, data = data, family = binomial(link = "probit"))
+summary(fit_probit)
+```
+
+## Assignments
+
+Use the dataset `unemploy`. Construct the outcome `work`, coded 1 if `studytim` (the unemployment spell length) is less than 53 (weeks), and 0 otherwise. Human capital is captured by `edu` (education), `age`, and `exp` (number of previous unemployment spells).
+
+### 1. The linear probability model
+
+Fit a linear probability model of `work` on `age`, `edu`, and `exp`. Interpret each coefficient in terms of percentage-point changes in the probability of re-employment.
+
+### 2. Robust standard errors
+
+Refit the same model with heteroskedasticity-consistent (robust) standard errors. Compare the coefficients and standard errors to the previous model. Are the substantive conclusions affected?
+
+### 3. Predicted probabilities outside 0 and 1
+
+Obtain the predicted probabilities from the linear probability model. Count how many predicted probabilities fall outside the range 0 to 1. What does this tell you about the linear probability model in this particular dataset, and about the model in general?
+
+### 4. Logistic regression: log odds
+
+Fit a logistic regression of `work` on `age`, `edu`, and `exp`. Interpret each coefficient in terms of log odds.
+
+### 5. Odds ratios
+
+Exponentiate the coefficients from the previous model to obtain odds ratios. Interpret each odds ratio as a percentage change in the odds of re-employment. Why is the odds ratio interpretation valid for every subject, regardless of the specific values of the predictors, unlike a marginal effect?
+
+### 6. Average marginal effects
+
+Compute the average marginal effects for all predictors in the logistic model, on the probability scale. Compare these effects, and the substantive conclusions they imply, to the coefficients of the linear probability model from question 1.
+
+### 7. Marginal effect at chosen values
+
+Compute the marginal effect of `age` for a person with the lowest education level (`edu = 1`) and the largest number of prior unemployment spells (`exp = 3`). Interpret this effect.
+
+### 8. Marginal effect at the means
+
+Compute the marginal effect of `age` at the means of `edu` and `exp`. Compare this to the average marginal effect of `age` found in question 6. Why can these two values differ?
+
+### 9. Does social capital contribute?
+
+Fit a logistic regression of `work` on `age`, `edu`, and `exp` (human capital only), and a second model that adds three measures of social capital: `scweak`, `scmedium`, and `scstrong`. Test, using both a Wald test and a likelihood ratio test, whether social capital as a set significantly contributes to explaining re-employment, controlling for human capital. Do the two tests agree?
+
+### 10. Are the three forms of social capital equal?
+
+Using the full model from the previous question, test whether the three forms of social capital (`scweak`, `scmedium`, `scstrong`) have equal effects on re-employment. What do you conclude?
+
+### 11. Logit versus probit
+
+Fit a probit regression of `work` on `age`, `edu`, and `exp`. Compare the coefficients to the logistic regression from question 4. Are the substantive conclusions the same, even though the coefficients themselves are not directly comparable in size?
+
+## Answers
+
+Make sure this file is in the same R Project as the `data` folder. Use relative file paths, not full paths to your computer.
+
+```{r setup-logistic}
+library(tidyverse)
+library(haven)
+library(lmtest)
+library(sandwich)
+library(car)
+library(marginaleffects)
+
+unemploy <- read_dta("data/unemploy.dta")
+
+unemploy <- unemploy |>
+  mutate(work = as.integer(studytim < 53))
+```
+
+### 1. The linear probability model
+
+```{r}
+fit_lpm <- lm(work ~ age + edu + exp, data = unemploy)
+summary(fit_lpm)
+
+# If age increases by one year, the probability of re-employment
+# significantly decreases by 3.25 percentage points.
+# If education increases, the probability of re-employment significantly
+# increases by 5.6 percentage points per unit of education.
+# If the number of previous unemployment spells (exp) is higher, the
+# probability of re-employment does not decrease significantly at the
+# 5% level, but does decrease significantly at the 7.7% level (by about
+# 4.8 percentage points per additional spell).
+```
+
+### 2. Robust standard errors
+
+```{r}
+coeftest(fit_lpm, vcov = vcovHC(fit_lpm, type = "HC1"))
+
+# The coefficients are exactly the same as in the OLS model; only the
+# standard errors change slightly. The substantive conclusions are
+# robust to this correction.
+```
+
+### 3. Predicted probabilities outside 0 and 1
+
+```{r}
+unemploy <- unemploy |>
+  mutate(prob_lpm = predict(fit_lpm))
+
+unemploy |>
+  summarise(n_out_of_range = sum(prob_lpm < 0 | prob_lpm > 1))
+
+# None of the observations have predicted probabilities outside the
+# range 0 to 1. In practice, this is very often the case, even though
+# the linear probability model does not guarantee it in general.
+```
+
+### 4. Logistic regression: log odds
+
+```{r}
+fit_logit <- glm(work ~ age + edu + exp, data = unemploy, family = binomial)
+summary(fit_logit)
+
+# If age increases by one year, the log odds of re-employment
+# significantly go down by 0.143.
+# If education increases, the log odds of re-employment significantly
+# increase by 0.259.
+# If the number of previous unemployment spells is higher, the log odds
+# of re-employment do not decrease significantly at the 5% level, but do
+# decrease significantly at the 7.4% level (by 0.216).
+```
+
+### 5. Odds ratios
+
+```{r}
+exp(coef(fit_logit))
+
+# The odds of getting a job within a year (the probability of getting a
+# job divided by the probability of not getting a job) change by
+# (exp(b) - 1) * 100% for a one-unit increase in x:
+#   - the odds increase by (exp(0.259) - 1) * 100 = 29.5% for one unit
+#     of education
+#   - the odds change by (exp(-0.143) - 1) * 100 = -13.3%, i.e. decrease
+#     by 13.3%, for each year older
+#   - the odds decrease by about 19.5% for each previous unemployment
+#     spell (exp(-0.216))
+#
+# The advantage of the odds ratio interpretation is that it applies
+# exactly for every subject, irrespective of the value of the focal
+# variable and of the values of the other predictors -- unlike a
+# marginal effect, which depends on the specific values of all
+# predictors.
+```
+
+### 6. Average marginal effects
+
+```{r}
+avg_slopes(fit_logit)
+
+# variable | coefficient (log odds) |  odds ratio | average marginal effect
+# ---------+-------------------------+-------------+--------------------------
+#      age |          -0.143         |    0.867    |        -0.031
+#      edu |           0.259         |    1.295    |         0.057
+#      exp |          -0.216         |    0.805    |        -0.0475
+#
+# With each year of age, the probability of re-employment decreases on
+# average by about 3.1 percentage points. The effects of the other
+# predictors follow similarly. These average marginal effects are very
+# close to the coefficients of the linear probability model in question
+# 1. In practice, this is very often the case.
+```
+
+### 7. Marginal effect at chosen values
+
+```{r}
+slopes(fit_logit, variables = "age", newdata = datagrid(edu = 1, exp = 3))
+
+# For the lowest educated people with the largest number of prior
+# unemployment spells, a one-year increase in age is associated with a
+# significant decrease in the probability of re-employment of about
+# 3.0 percentage points.
+```
+
+### 8. Marginal effect at the means
+
+```{r}
+slopes(fit_logit, variables = "age", newdata = "mean")
+
+# For a person with average education and an average number of prior
+# unemployment spells, a one-year increase in age is associated with a
+# significant decrease in the probability of re-employment of about
+# 3.6 percentage points. This differs from the average marginal effect
+# in question 6, because there we averaged the marginal effect over all
+# observed combinations of education and prior unemployment spells,
+# rather than evaluating the effect once at the mean values of these
+# predictors.
+```
+
+### 9. Does social capital contribute?
+
+```{r}
+fit_hc <- glm(work ~ age + edu + exp, data = unemploy, family = binomial)
+fit_hsc <- glm(work ~ age + edu + exp + scweak + scmedium + scstrong,
+                data = unemploy, family = binomial)
+
+# Wald test on relevance of social capital
+linearHypothesis(fit_hsc, c("scweak = 0", "scmedium = 0", "scstrong = 0"))
+
+# Likelihood ratio test on relevance of social capital
+lrtest(fit_hc, fit_hsc)
+
+# We find weak evidence that social capital affects re-employment,
+# controlling for human capital (LR chi2(3) = 7.6, p = 0.053). The Wald
+# test gives a similar conclusion.
+```
+
+### 10. Are the three forms of social capital equal?
+
+```{r}
+linearHypothesis(fit_hsc, "scweak = scmedium = scstrong")
+
+# We can reject the null hypothesis that, controlling for human capital,
+# the three forms of social capital affect re-employment to the same
+# degree (chi2(2) = 6.11, p = 0.047).
+```
+
+### 11. Logit versus probit
+
+```{r}
+fit_probit <- glm(work ~ age + edu + exp, data = unemploy, family = binomial(link = "probit"))
+summary(fit_probit)
+
+# The probit coefficients are smaller in absolute size than the logit
+# coefficients (as expected, since the two models are scaled
+# differently), but the signs, significance, and substantive
+# conclusions are the same. Indeed, conclusions from the linear
+# probability model, the logit model, and the probit model are very
+# often similar in practice, even though the models differ in their
+# assumptions and in how coefficients are scaled.
+```

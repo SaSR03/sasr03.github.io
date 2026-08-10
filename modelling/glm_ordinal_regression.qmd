@@ -1,0 +1,474 @@
+---
+title: Ordinal logistic regression
+---
+
+In this part you will learn about the following basic tasks:
+
+- Recognize when an outcome variable is ordinal (ordered categories, but with an unknown "distance" between categories), and fit an ordered (proportional odds) logistic regression model.
+
+- Interpret coefficients as log odds, and transform them into odds ratios.
+
+- Compute and interpret marginal effects on predicted response probabilities.
+
+- Obtain predicted probabilities for each response category, and check that they sum to 1.
+
+- Compare nested ordinal models using a likelihood ratio test, including a check on identical sample sizes.
+
+- Test whether a predictor's effect is adequately captured by a linear term, or whether a quadratic term or a fully flexible (categorical) specification fits better.
+
+- Include an interaction between a quantitative and a categorical predictor in an ordinal model.
+
+- Compute a pseudo-$R^2$ for the latent (underlying continuous) variable.
+
+- Test the proportional odds (parallel lines) assumption.
+
+## The ordered logit model
+
+An ordinal outcome variable has categories that can be ranked (e.g., "certainly not voting" \< "probably not voting" \< "probably voting" \< "certainly voting"), but the distances between adjacent categories are not necessarily equal or even meaningful. Treating such a variable as if it were a plain numeric scale in an ordinary regression assumes equal distances between categories, which is often not appropriate. Treating it as unordered (multinomial) categories throws away the ordering information. Ordinal (ordered) logistic regression — also called the proportional odds model — is designed specifically for this situation.
+
+The model assumes there is an unobserved (latent) continuous variable $Y^*$ underlying the observed ordinal outcome:
+
+$$
+Y^* = b_1 X_1 + \dots + b_k X_k + \varepsilon
+$$
+
+The observed category is determined by where $Y^*$ falls relative to a set of unknown thresholds (cutpoints). The coefficients $b_j$ describe the effect of each predictor on this latent variable, and — under the proportional odds assumption — this same coefficient applies uniformly to every cutpoint between adjacent response categories.
+
+## Interpreting coefficients
+
+As with binary and multinomial logistic regression, there are several common ways to interpret an ordinal logistic regression coefficient:
+
+1. **Log odds (on the latent scale).** A one-unit increase in $X_j$ is associated with a $b_j$ increase in the latent variable underlying the outcome, holding other predictors constant. Equivalently, it changes the log odds of being in a higher response category (versus any set of lower categories) by $b_j$, uniformly across all cutpoints.
+
+2. **Odds ratios.** Exponentiating the coefficient, $\exp(b_j)$, gives the change in the odds of being in a higher rather than a lower response category, for a one-unit increase in $X_j$. This interpretation, like the binary logistic case, applies uniformly across cutpoints under the proportional odds assumption.
+
+3. **Marginal effects on response probabilities.** These translate the model to the probability scale, giving the average change in the predicted probability of each individual response category for a one-unit change in a predictor. Because there are several ordered categories, the marginal effect is typically negative for some categories and positive for others — a predictor that increases the latent variable will, on average, shift probability mass away from the lower categories and toward the higher ones.
+
+## Comparing nested models
+
+As in previous chapters, a set of predictors can be tested jointly using a likelihood ratio (LR) test comparing a restricted and a full model. A common pitfall is that the two models being compared must be fit to *exactly the same set of observations*. If one of the predictors in the full model has missing values that the restricted model's predictors do not, the two models are fit to different samples, and the LR test between them is not valid. Always re-fit the restricted model on the same (listwise-deleted) subsample as the full model before comparing.
+
+## Checking the functional form of a predictor
+
+A quantitative predictor is often entered linearly, assuming its effect on the latent variable is a straight line. This assumption can be checked by comparing the linear specification to a model where the predictor is entered as a set of dummies (fully flexible, one parameter per category) or with a quadratic term added. If neither alternative fits significantly better than the linear specification, the linear form is an adequate simplification.
+
+## A pseudo-$R^2$ for the latent variable
+
+Because the ordinal logit model has a latent continuous variable underneath it, a natural (although not the only) $R^2$-type measure is:
+
+$$
+R^2 = \frac{\text{Var}(\widehat{Y^*})}{\text{Var}(\widehat{Y^*}) + \text{Var}(\varepsilon)}
+$$
+
+where $\widehat{Y^*}$ is the fitted linear predictor (the model without the error term), and $\text{Var}(\varepsilon) = \pi^2/3 \approx 3.29$ is fixed by the logistic distribution used for the error term in the ordered logit model.
+
+## The proportional odds assumption
+
+The key assumption of the ordered logit model is that the effect of each predictor is the same across all cutpoints (the "proportional odds" or "parallel lines" assumption). This can be tested formally (e.g., with a Brant test). If the assumption is violated, a model that allows the effect to differ across cutpoints (such as a generalized ordered logit or partial proportional odds model) may be more appropriate; such extensions are beyond the scope of this course, but it remains important to check the assumption and report when it does not hold.
+
+## R
+
+You will learn the R functions listed below to fit and interpret ordinal logistic regression models.
+
+| Function | Description |
+|----|----|
+| `MASS::polr()` | Fit an ordered (proportional odds) logistic regression model |
+| `summary()` | Display coefficients (log odds) and cutpoints |
+| `exp(coef())` | Convert coefficients to odds ratios |
+| `predict(..., type = "probs")` | Predicted probabilities for each response category |
+| `lmtest::lrtest()` | Likelihood ratio test comparing two nested ordinal models |
+| `marginaleffects::avg_slopes()` | Average marginal effects on response-category probabilities |
+| `brant::brant()` | Brant test of the proportional odds (parallel lines) assumption |
+
+Note that `MASS` masks `dplyr::select()`. If you load `MASS` after the tidyverse, write `dplyr::select()` explicitly where you need it.
+
+Examples:
+
+Construct the predictors and fit an ordered logit model:
+
+```{r, eval=FALSE}
+library(tidyverse)
+library(haven)
+library(MASS)
+
+data <- read_dta("data/hin95_voting.dta")
+
+data <- data |>
+  mutate(
+    age = 95 - birthdate %% 100,
+    female = as.integer(sex == 2),
+    chfreq = case_match(
+      church,
+      1 ~ 0, 2 ~ 1, 3 ~ 12, 4 ~ 52,
+      .default = NA_real_
+    ),
+    vote = factor(vote, ordered = TRUE)
+  )
+
+fit <- polr(vote ~ educ + age + female + chfreq, data = data, Hess = TRUE)
+summary(fit)
+```
+
+`MASS::polr()` reports coefficients as log odds by default. Always verify the direction of an effect against the observed data (for instance with a cross-tabulation of the outcome against a predictor), since the sign convention for the latent variable and its cutpoints differs between implementations.
+
+Obtain odds ratios and their confidence intervals:
+
+```{r, eval=FALSE}
+exp(coef(fit))
+exp(confint(fit))
+```
+
+Average marginal effects on the probability of each response category:
+
+```{r, eval=FALSE}
+library(marginaleffects)
+
+avg_slopes(fit)
+```
+
+Predicted probabilities for each response category, for every observation:
+
+```{r, eval=FALSE}
+data <- data |>
+  mutate(pr = predict(fit, type = "probs"))
+
+data |>
+  filter(irespnr == 1000) |>
+  pull(pr)
+
+# check that probabilities sum to 1 (within rounding) for a subject
+rowSums(predict(fit, type = "probs"))
+```
+
+Test a hypothesis on one predictor with a likelihood ratio test, making sure both models use the same (listwise-deleted) sample:
+
+```{r, eval=FALSE}
+fit_a <- polr(vote ~ educ + age + female + chfreq, data = data, Hess = TRUE)
+
+data_complete <- data |> filter(!is.na(chfreq))
+
+fit_b <- polr(vote ~ educ + age + female, data = data_complete, Hess = TRUE)
+fit_a_same_sample <- polr(vote ~ educ + age + female + chfreq, data = data_complete, Hess = TRUE)
+
+lrtest(fit_a_same_sample, fit_b)
+```
+
+Check the linearity of a predictor: compare a linear specification, a fully flexible (factor) specification, and a quadratic specification:
+
+```{r, eval=FALSE}
+fit_linear <- polr(vote ~ educ + age + female + chfreq, data = data_complete, Hess = TRUE)
+fit_flexible <- polr(vote ~ educ + age + female + factor(chfreq), data = data_complete, Hess = TRUE)
+fit_quadratic <- polr(vote ~ educ + age + female + chfreq + I(chfreq^2), data = data_complete, Hess = TRUE)
+
+lrtest(fit_linear, fit_flexible)
+lrtest(fit_linear, fit_quadratic)
+```
+
+Include an interaction between a quantitative and a categorical predictor:
+
+```{r, eval=FALSE}
+fit_interaction <- polr(vote ~ educ + age + female * chfreq, data = data_complete, Hess = TRUE)
+fit_no_interaction <- polr(vote ~ educ + age + female + chfreq, data = data_complete, Hess = TRUE)
+
+lrtest(fit_interaction, fit_no_interaction)
+```
+
+Compute a pseudo-$R^2$ for the latent variable:
+
+```{r, eval=FALSE}
+fit_r2 <- polr(vote ~ educ + age + female + chfreq, data = data_complete, Hess = TRUE)
+
+lp <- predict(fit_r2, type = "linear.predictor")
+# not all versions of polr expose this directly; the linear predictor
+# can also be computed manually as X %*% coef(fit_r2)
+
+var_lp <- var(lp)
+r2 <- var_lp / (var_lp + pi^2 / 3)
+r2
+```
+
+Test the proportional odds assumption:
+
+```{r, eval=FALSE}
+library(brant)
+
+brant(fit_r2)
+```
+
+## Assignments
+
+Use the dataset `hin95_voting`.
+
+### Fitting the model and interpreting coefficients
+
+1. Construct `age` (from `birthdate`), a dummy `female`, and a recoded church-attendance frequency `chfreq` (visits per year). Fit an ordered logistic regression of `vote` (voting intention, an ordinal variable) on `educ`, `age`, `female`, and `chfreq`. Interpret the coefficient for `chfreq` as an effect on the latent voting-intention variable, and as a change in log odds.
+
+2. Exponentiate the coefficient for `chfreq` to obtain an odds ratio. Interpret this odds ratio.
+
+3. Compute the average marginal effects of all predictors. Interpret the marginal effect of `chfreq` on each of the four response categories of `vote`. Why is it not surprising that some of these marginal effects are positive and others negative?
+
+### Predicted probabilities
+
+4. Obtain predicted probabilities for each of the four response categories, for every subject. Verify, for one particular subject, that these probabilities sum to 1 (within rounding error).
+
+### Testing a hypothesis on religion
+
+5. Fit a restricted ordinal model without `chfreq`, and compare it to the full model with `chfreq` using a likelihood ratio test. What happens if you attempt this directly, without first checking the two models are based on the same sample? Explain why this happens, and how to fix it. After fixing the sample issue, what do you conclude about the relationship between church attendance frequency and voting intention?
+
+### Checking linearity
+
+6. Fit three models: (a) `chfreq` entered linearly, (b) `chfreq` entered as a fully flexible categorical predictor, and (c) `chfreq` entered with both a linear and a quadratic term. Compare (a) to (b), and (a) to (c), using likelihood ratio tests. Is there evidence that the linear specification is inadequate?
+
+### Interactions
+
+7. Fit a model with an interaction between `female` and `chfreq` (in addition to the main effects of `educ`, `age`, `female`, and `chfreq`). Is there evidence that the effect of church attendance on voting intention differs between men and women? Report the implied effect of `chfreq` separately for men and for women.
+
+8. Confirm your conclusion from the previous question with a likelihood ratio test comparing the model with and without the interaction term.
+
+### Explained variance
+
+9. Compute a pseudo-$R^2$ for the latent variable underlying `vote`, using the variance of the fitted linear predictor and the fixed error variance of the ordered logit model ($\pi^2/3$).
+
+### Proportional odds assumption
+
+10. Test the proportional odds (parallel lines) assumption for the model of `vote` on `educ`, `age`, `female`, and `chfreq`. Is the assumption supported by the data? What would this mean for the interpretation of the model if the assumption were rejected?
+
+## Answers
+
+Make sure this file is in the same R Project as the `data` folder. Use relative file paths, not full paths to your computer.
+
+```{r setup-ordinal}
+library(tidyverse)
+library(haven)
+library(MASS)
+library(lmtest)
+library(marginaleffects)
+library(brant)
+
+hin95_voting <- read_dta("data/hin95_voting.dta")
+
+hin95_voting <- hin95_voting |>
+  mutate(
+    age = 95 - birthdate %% 100,
+    female = as.integer(sex == 2),
+    chfreq = case_match(
+      church,
+      1 ~ 0,
+      2 ~ 1,
+      3 ~ 12,
+      4 ~ 52,
+      .default = NA_real_
+    ),
+    vote = factor(vote, ordered = TRUE)
+  )
+```
+
+### Fitting the model and interpreting coefficients
+
+#### 1. The ordered logit model
+
+```{r}
+fit <- polr(vote ~ educ + age + female + chfreq, data = hin95_voting, Hess = TRUE)
+summary(fit)
+
+# (Latent) voting intention increases with religiosity: for each
+# additional church visit per year, the latent voting-intention variable
+# increases by about 0.011 units, holding education, age, and gender
+# constant.
+#
+# Equivalently: if church attendance frequency goes up by 1, the log
+# odds of being in a higher (more likely to vote) response category
+# rather than a lower one increase by 0.011, holding the other
+# predictors constant, and this applies uniformly across all cutpoints
+# under the proportional odds assumption.
+```
+
+#### 2. The odds ratio for `chfreq`
+
+```{r}
+exp(coef(fit))
+
+# If church attendance frequency goes up by 1, the odds of being in a
+# higher rather than a lower response category of vote increase by
+# about 1.13%, holding education, age, and gender constant.
+```
+
+#### 3. Average marginal effects
+
+```{r}
+avg_slopes(fit)
+
+# If church attendance frequency goes up by 1:
+#   - the probability of "certainly voting" increases by about
+#     0.2 percentage points
+#   - the probability of "probably voting" decreases by about
+#     0.1 percentage points
+#   - the probability of "probably not voting" decreases by about
+#     0.08 percentage points
+#   - the probability of "certainly not voting" decreases by about
+#     0.06 percentage points
+#
+# This pattern is not surprising: an increase in the latent
+# voting-intention variable shifts probability mass away from the lower
+# (less likely to vote) categories toward the higher (more likely to
+# vote) category. Because probabilities across all categories must sum
+# to 1, some marginal effects are necessarily negative while others are
+# positive.
+```
+
+### Predicted probabilities
+
+#### 4. Predicted probabilities per response category
+
+```{r}
+pred_probs <- predict(fit, type = "probs")
+
+hin95_voting <- hin95_voting |>
+  bind_cols(as_tibble(pred_probs) |> rename_with(~ paste0("pr", seq_along(.))))
+
+hin95_voting |>
+  filter(irespnr == 1000) |>
+  dplyr::select(starts_with("pr"))
+
+hin95_voting |>
+  filter(irespnr == 1000) |>
+  dplyr::select(starts_with("pr")) |>
+  rowSums()
+
+# The predicted probabilities sum to 1 for each subject (within
+# rounding error). We only consider cases without missing values on any
+# of the predictors in the test above.
+```
+
+### Testing a hypothesis on religion
+
+#### 5. A likelihood ratio test on matching samples
+
+```{r}
+fit_a <- polr(vote ~ educ + age + female + chfreq, data = hin95_voting, Hess = TRUE)
+fit_b <- polr(vote ~ educ + age + female, data = hin95_voting, Hess = TRUE)
+
+# This comparison is not valid:
+# tryCatch(lrtest(fit_a, fit_b), error = function(e) e)
+
+# lrtest refuses (or gives a misleading result) if attempted directly,
+# because the two models are fit to different samples: fit_a excludes
+# cases with a missing value on chfreq, while fit_b does not. A valid
+# likelihood ratio test requires both models to be fit to exactly the
+# same set of observations.
+
+hin95_voting_complete <- hin95_voting |>
+  filter(!is.na(chfreq))
+
+fit_b_matched <- polr(vote ~ educ + age + female, data = hin95_voting_complete, Hess = TRUE)
+fit_a_matched <- polr(vote ~ educ + age + female + chfreq, data = hin95_voting_complete, Hess = TRUE)
+
+lrtest(fit_a_matched, fit_b_matched)
+
+# After matching the samples, we conclude that the higher the
+# religiosity (church attendance frequency), the higher the voting
+# intention (LR chi2(1) = 23.27, p < 0.0001).
+```
+
+### Checking linearity
+
+#### 6. Linear, flexible, and quadratic specifications
+
+```{r}
+fit_linear <- polr(vote ~ educ + age + female + chfreq,
+                    data = hin95_voting_complete, Hess = TRUE)
+
+fit_flexible <- polr(vote ~ educ + age + female + factor(chfreq),
+                      data = hin95_voting_complete, Hess = TRUE)
+
+fit_quadratic <- polr(vote ~ educ + age + female + chfreq + I(chfreq^2),
+                       data = hin95_voting_complete, Hess = TRUE)
+
+lrtest(fit_linear, fit_flexible)
+lrtest(fit_linear, fit_quadratic)
+
+# Neither the fully flexible specification nor the quadratic
+# specification significantly improves the fit over the linear
+# specification of chfreq, so treating chfreq as linear is an adequate
+# simplification.
+```
+
+### Interactions
+
+#### 7. An interaction between `female` and `chfreq`
+
+```{r}
+fit_interaction <- polr(vote ~ educ + age + female * chfreq,
+                         data = hin95_voting_complete, Hess = TRUE)
+summary(fit_interaction)
+
+# No support for an interaction between religiosity and gender
+# (Wald z = -0.25, p = 0.801).
+#
+# Effect of chfreq on the latent vote variable:
+#   = b_chfreq                          for males
+#   = b_chfreq + b_female:chfreq        for females
+#
+# The effect of church attendance on voting intention is essentially the
+# same for men and women.
+```
+
+```{r}
+b <- coef(fit_interaction)
+
+b["chfreq"]
+b["chfreq"] + b["female:chfreq"]
+# the implied effect of chfreq for men and for women
+```
+
+#### 8. The same conclusion from a likelihood ratio test
+
+```{r}
+fit_no_interaction <- polr(vote ~ educ + age + female + chfreq,
+                            data = hin95_voting_complete, Hess = TRUE)
+
+lrtest(fit_interaction, fit_no_interaction)
+
+# The likelihood ratio test confirms the Wald test: there is no evidence
+# that the effect of chfreq on vote differs between men and women.
+```
+
+### Explained variance
+
+#### 9. A pseudo-$R^2$ for the latent variable
+
+```{r}
+fit_r2 <- polr(vote ~ educ + age + female + chfreq,
+               data = hin95_voting_complete, Hess = TRUE)
+
+# The linear predictor (fitted latent variable, without the error term)
+X <- model.matrix(fit_r2)[, -1]
+lp <- as.vector(X %*% coef(fit_r2))
+
+var_lp <- var(lp)
+r2 <- var_lp / (var_lp + pi^2 / 3)
+r2
+
+# R2 = variance(model) / (variance(model) + variance(error)), where
+# variance(error) = pi^2/3 = 3.29 by definition for the ordered logit
+# model. This gives a pseudo-R-squared describing the proportion of
+# variance explained in the latent (underlying continuous) voting
+# intention variable.
+```
+
+### Proportional odds assumption
+
+#### 10. The Brant test
+
+```{r}
+brant(fit_r2)
+
+# The Brant test rejects the proportional odds (parallel lines)
+# assumption for at least one of the predictors. If this assumption is
+# rejected, the effect of that predictor is not the same across all
+# cutpoints of vote, and the ordered logit coefficients should be
+# interpreted with caution -- a model that relaxes the proportional odds
+# assumption (e.g. a generalized/partial proportional odds model) may be
+# more appropriate, though such extensions are beyond the scope of this
+# course.
+```

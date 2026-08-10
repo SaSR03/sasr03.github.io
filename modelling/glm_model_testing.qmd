@@ -1,0 +1,376 @@
+---
+title: Model testing
+---
+
+In this part you will learn about the following basic tasks:
+
+- Test whether a set of predictors, added together, significantly improves a regression model.
+
+- Compare two nested models using an F-test, a Wald test, and a likelihood ratio test, and see that these give the same conclusion.
+
+- Test whether a regression coefficient differs significantly between two groups (e.g., between men and women).
+
+- Combine the ideas of the previous chapters — dummy variables, control variables, and interactions — into a coherent model-building and model-testing strategy.
+
+## Comparing nested models
+
+Two models are *nested* when one model (the smaller, or restricted, model) can be obtained from the other (the larger, or full, model) by setting one or more coefficients to zero. A common question is whether adding a set of predictors to a model significantly improves the fit, over and above the predictors already included.
+
+There are three equivalent ways to test this:
+
+1. **F-test for a set of coefficients.** Fit the full model and test the joint null hypothesis that the added coefficients are all zero.
+2. **Likelihood ratio (LR) test.** Compare the log-likelihood of the restricted and the full model.
+3. **Wald test.** Test the joint null hypothesis for the added coefficients using their (co)variances from the full model only.
+
+For linear regression estimated by ordinary least squares, all three approaches give (essentially) the same conclusion — asymptotically the F-test, LR test, and Wald test are equivalent. It is good practice to know more than one way to perform this test, since not every method extends equally easily to more complex models (e.g., generalized linear models), where the LR test and Wald test may differ.
+
+Do not confuse a *significant improvement in fit* with a *large* improvement. A small increase in $R^2$ can be statistically significant, especially in a large dataset, without being of much practical relevance. Always report and interpret the size of the change in $R^2$, not just its p-value.
+
+## Comparing a coefficient across groups
+
+Sometimes the question is not whether adding predictors improves the fit, but whether the *effect* of a predictor differs between groups (for instance, whether the effect of a pre-test score on a post-test score is the same for boys and girls). One way to answer this is to fit the model separately within each group and compare the coefficients formally, testing whether the two group-specific coefficients are equal. This is closely related to fitting a single model with an interaction between the predictor and a group indicator (as in the previous chapter); testing the interaction term is often the more direct route, but fitting separate models can be more transparent when many coefficients are allowed to differ across groups at once.
+
+## R
+
+You will learn the R functions listed below for testing sets of coefficients and comparing nested models.
+
+| Function | Description |
+|----|----|
+| `anova()` | Compare two nested `lm()` models using an F-test |
+| `car::linearHypothesis()` | Wald test of one or more linear restrictions on the coefficients |
+| `logLik()` | Extract the log-likelihood of a fitted model |
+| `lmtest::lrtest()` | Likelihood ratio test comparing two nested models |
+| `update()` | Refit a model with a modified formula (e.g., adding or dropping terms) |
+| `broom::tidy()` | Tidy summary of model coefficients, useful for comparing across models |
+
+Examples:
+
+Fit a restricted and a full model, and compare them with an F-test (this is the R equivalent of Stata's `nestreg`):
+
+```{r, eval=FALSE}
+library(tidyverse)
+library(haven)
+
+data <- read_dta("data/sesam.dta")
+
+fit_restricted <- lm(postnumb ~ age + prenumb, data = data)
+fit_full <- lm(postnumb ~ age + prenumb + prelet + prerelat + peabody, data = data)
+
+anova(fit_restricted, fit_full)
+summary(fit_full)
+```
+
+The `anova()` output reports the change in residual sum of squares, the F-statistic, degrees of freedom, and the p-value for the joint test that the added coefficients (`prelet`, `prerelat`, `peabody`) are all zero.
+
+Test the same joint hypothesis with a Wald test, using only the full model:
+
+```{r, eval=FALSE}
+library(car)
+
+linearHypothesis(fit_full, c("prelet = 0", "prerelat = 0", "peabody = 0"))
+```
+
+Test the same joint hypothesis with a likelihood ratio test:
+
+```{r, eval=FALSE}
+library(lmtest)
+
+lrtest(fit_restricted, fit_full)
+```
+
+All three tests should lead to the same substantive conclusion.
+
+Compare a coefficient between two groups by fitting the model separately within each group:
+
+```{r, eval=FALSE}
+fit_male <- lm(postnumb ~ prenumb + age, data = data |> filter(sex == 1))
+fit_female <- lm(postnumb ~ prenumb + age, data = data |> filter(sex == 2))
+
+summary(fit_male)
+summary(fit_female)
+```
+
+The more direct way to test whether a coefficient differs between two groups is to fit one model with an interaction between the predictor and the group indicator, and test the interaction term:
+
+```{r, eval=FALSE}
+fit_interaction <- lm(postnumb ~ prenumb * factor(sex) + age, data = data)
+summary(fit_interaction)
+```
+
+The coefficient for the interaction term `prenumb:factor(sex)` tests whether the effect of `prenumb` on `postnumb` differs between the two groups, while both models still control for `age`.
+
+## Assignments
+
+### Improvement in fit: sesam
+
+Use the dataset `sesam`.
+
+1. Fit a restricted model of `postnumb` on `age` and `prenumb`, and a full model that adds `prelet`, `prerelat`, and `peabody`. Compare the two models with an F-test (`anova()`). Does adding this set of three predictors significantly improve the fit? How large is the change in $R^2$? Is this change of much practical relevance?
+
+2. Repeat the same test using a Wald test (`car::linearHypothesis()`) on the full model. Do you reach the same conclusion as with the F-test?
+
+3. Repeat the same test again using a likelihood ratio test (`lmtest::lrtest()`) comparing the restricted and full models. Do all three methods agree?
+
+4. Which of the three added predictors (`prelet`, `prerelat`, `peabody`) is mainly responsible for the improvement in fit? Is this predictor's effect of much substantive importance, even though it is statistically significant?
+
+5. Fit the model `postnumb ~ prenumb + age` separately for boys and for girls (`sex == 1` and `sex == 2`). Compare the coefficient for `prenumb` between the two groups. Is the effect of `prenumb` on `postnumb`, controlling for age, significantly different for boys and girls? (Hint: refit the model as a single regression with an interaction between `prenumb` and `sex`, and test the interaction term, rather than comparing the two separate models informally.)
+
+### Building a model step by step: donations
+
+Use the dataset `donations`. As before, treat the "miscellaneous" category of `religion` as missing and exclude these observations permanently. Construct `propdon`, the proportion of monthly income donated, and `percdon`, this proportion expressed as a percentage. Construct a dummy variable `old` for subjects older than 40.
+
+6. Fit a regression of `percdon` on `old` and `religion` (as a factor, with "none" as reference category). Is there evidence that older people (over 40) donate a larger share of their income than younger people, controlling for religion?
+
+7. Fit a regression of `percdon` on `male` and `religion`. Is there evidence that men donate a larger share of their income than women, controlling for religion? Comment on the strength of the evidence if the p-value is close to, but not below, 0.05.
+
+8. Using the model from the previous question, test whether `religion` as a whole contributes to explaining `percdon`, controlling for gender. Do this in at least two ways: (a) a joint test of all religion coefficients in the full model (e.g. `car::linearHypothesis()` or `anova()` on a single model with `drop1()`), and (b) comparing a restricted model without `religion` to the full model with `religion`, using `anova()`. Do the two approaches agree?
+
+9. Fit a regression of `percdon` on social integration (`socint`) alone. Is there evidence that donations increase with social integration? Now add `religion` to the model. What happens to the coefficient for `socint`? What does this tell you about the relationship between social integration, religion, and donations?
+
+10. Fit a restricted model of `percdon` on `lifevent` alone, and a full model that adds `religion`. Compare the two models with an F-test. Is there evidence that people who experienced a serious health problem (`lifevent = 1`) donate a larger share of their income than those who did not, controlling for religion?
+
+11. Fit a regression of `percdon` on `inc` alone, and then on `inc` together with `religion`. Is there evidence that donations increase with income, even after controlling for religion? Interpret the size of the effect.
+
+12. Construct the interaction between `male` and `socint`. Fit a regression of `percdon` on `male`, `socint`, and their interaction. Is the effect of social integration on donations different for men and women? Use `margins`-style predictions (e.g., compute the predicted slope of `socint` separately for each value of `male` from the fitted coefficients) to describe the effect separately for men and women.
+
+13. Fit a regression of `percdon` on `male`, years of education (`edu`), and their interaction. Is there evidence that the effect of education on donations differs between men and women?
+
+14. Fit a regression of `percdon` on `male`, `lifevent`, and their interaction. Is there evidence that the effect of having experienced a serious health problem on donations differs between men and women?
+
+## Answers
+
+Make sure this file is in the same R Project as the `data` folder. Use relative file paths, not full paths to your computer.
+
+```{r setup-model-testing}
+library(tidyverse)
+library(haven)
+library(car)
+library(lmtest)
+
+sesam <- read_dta("data/sesam.dta")
+donations <- read_dta("data/donations.dta")
+```
+
+### Improvement in fit: sesam
+
+#### 1. F-test comparing a restricted and a full model
+
+```{r}
+fit_restricted <- lm(postnumb ~ age + prenumb, data = sesam)
+fit_full <- lm(postnumb ~ age + prenumb + prelet + prerelat + peabody, data = sesam)
+
+anova(fit_restricted, fit_full)
+summary(fit_full)
+
+# Adding the triplet (prelet, prerelat, peabody) significantly improves the
+# fit of the model. The R-squared change is very small (0.0213), but still
+# significant: F(3, 234) = 3.21, p = 0.0239.
+#
+# E(postnumb) = 3.58 + 0.08 age + 0.56 prenumb + 0.09 prelet
+#                     + 0.33 prerelat + 0.13 peabody
+#               (SE: 0.11, 0.11, 0.10, 0.30, 0.05)
+#
+# The increase in R-squared is mainly due to adding peabody, the score on
+# a general intelligence test for children. The effect is significant,
+# but the change in R-squared is small, so not very relevant in practice.
+```
+
+#### 2. The same test as a Wald test
+
+```{r}
+linearHypothesis(fit_full, c("prelet = 0", "prerelat = 0", "peabody = 0"))
+
+# The Wald test gives the same conclusion as the F-test: the joint null
+# hypothesis that prelet, prerelat, and peabody are all zero is rejected.
+```
+
+#### 3. The same test as a likelihood ratio test
+
+```{r}
+lrtest(fit_restricted, fit_full)
+
+# The likelihood ratio test gives the same conclusion: the full model
+# fits significantly better than the restricted model. All three
+# methods (F-test, Wald test, LR test) agree.
+```
+
+#### 4. Which predictor drives the improvement?
+
+```{r}
+summary(fit_full)
+
+# Peabody (a general intelligence test score) has the largest and most
+# clearly significant coefficient among the three added predictors, and
+# is mainly responsible for the improvement in fit. The effect is
+# statistically significant, but the increase in R-squared it produces
+# is small, so it is not very relevant in practice.
+```
+
+#### 5. Comparing the effect of `prenumb` between boys and girls
+
+```{r}
+fit_male <- lm(postnumb ~ prenumb + age, data = sesam |> filter(sex == 1))
+fit_female <- lm(postnumb ~ prenumb + age, data = sesam |> filter(sex == 2))
+
+summary(fit_male)
+summary(fit_female)
+
+# The effect of prenumb appears higher for females (about 0.90) than for
+# males (about 0.67). Fitting the two models separately does not directly
+# give a significance test for this difference.
+
+fit_interaction <- lm(postnumb ~ prenumb * factor(sex) + age, data = sesam)
+summary(fit_interaction)
+
+# Testing the interaction between prenumb and sex directly (equivalent to
+# Stata's suest + test of equal coefficients) shows that the difference
+# in the effect of prenumb between males and females is not significant
+# at the 5% level (though it approaches significance at the 10% level).
+# We cannot reject the null hypothesis that the effect of prenumb on
+# postnumb, controlling for age, is the same for males and females.
+```
+
+### Building a model step by step: donations
+
+#### 6. Donations by age group, controlling for religion
+
+```{r}
+donations <- donations |>
+  filter(religion != 6) |>
+  mutate(
+    religion = factor(religion),
+    old = as.integer(age > 40),
+    propdon = ((donation * 1000) / 12) / (inc * 1000),
+    percdon = propdon * 100
+  )
+
+fit_old <- lm(percdon ~ old + religion, data = donations)
+summary(fit_old)
+
+# Older people (over 40) donate a larger share of their income than
+# younger people. Controlling for religion, the regression coefficient
+# for old is positive (about 0.82) and significant.
+```
+
+#### 7. Donations by gender, controlling for religion
+
+```{r}
+fit_male_don <- lm(percdon ~ male + religion, data = donations)
+summary(fit_male_don)
+
+# Controlling for religion, men donate a larger share of their income
+# than women: the coefficient for male is positive (about 0.32), but not
+# significant at the 5% level. It is significant at about the 6.5%
+# level. There is therefore no strong evidence that men donate
+# significantly more than women; this result should be interpreted with
+# caution rather than treated as a clear null result.
+```
+
+#### 8. Testing religion as a whole
+
+```{r}
+# (a) Joint test of all religion coefficients in the full model:
+linearHypothesis(fit_male_don, c(
+  "religion2 = 0", "religion3 = 0", "religion4 = 0", "religion5 = 0"
+))
+
+# (b) Comparison of a restricted model (male only) to the full model:
+fit_male_only <- lm(percdon ~ male, data = donations)
+anova(fit_male_only, fit_male_don)
+
+# Both approaches agree: religion significantly influences donations,
+# even after controlling for gender.
+```
+
+#### 9. Social integration and religion
+
+```{r}
+fit_socint <- lm(percdon ~ socint, data = donations)
+summary(fit_socint)
+
+fit_socint_religion <- lm(percdon ~ socint + religion, data = donations)
+summary(fit_socint_religion)
+
+# Donations increase with the extent to which people are socially
+# integrated: the coefficient for socint is positive and significant in
+# the simple model. Once religion is included as a control variable,
+# however, this is no longer the case -- the coefficient for socint
+# becomes negative. This suggests that the marginal (positive)
+# relationship between social integration and donations runs largely
+# through religion (religious people tend to be both more socially
+# integrated and to donate more).
+```
+
+#### 10. A serious health problem, controlling for religion
+
+```{r}
+fit_lifevent <- lm(percdon ~ lifevent, data = donations)
+fit_lifevent_religion <- lm(percdon ~ lifevent + religion, data = donations)
+
+anova(fit_lifevent, fit_lifevent_religion)
+summary(fit_lifevent_religion)
+
+# People who experienced a serious health problem (lifevent = 1) donate
+# more than those who did not, controlling for religion
+# (b = 1.96, t = 11.2, p < 0.001).
+```
+
+#### 11. Income, controlling for religion
+
+```{r}
+fit_inc <- lm(percdon ~ inc, data = donations)
+summary(fit_inc)
+
+fit_inc_religion <- lm(percdon ~ inc + religion, data = donations)
+summary(fit_inc_religion)
+
+# There is evidence that donations increase with income, even
+# controlling for religion (b = 0.424, t = 5.49, p < 0.001). For each
+# 1000 (currency units) per month more, the percentage of income donated
+# increases by about 0.4.
+```
+
+#### 12. Social integration by gender
+
+```{r}
+fit_male_socint <- lm(percdon ~ male * socint, data = donations)
+summary(fit_male_socint)
+
+# The effect of social integration on donations is significantly
+# different for men and women. The slope for socint applies to women
+# (the reference group, male = 0); the interaction term male:socint
+# gives the difference in slope for men.
+
+b <- coef(fit_male_socint)
+slope_women <- b["socint"]
+slope_men <- b["socint"] + b["male:socint"]
+
+slope_women
+slope_men
+
+# The effect of social integration on donations is larger for women
+# (about 0.62) than for men (about 0.62 - 0.51 = 0.11): the difference
+# is about -0.51 (t(521) = 2.08, p = 0.038).
+```
+
+#### 13. Education by gender
+
+```{r}
+fit_male_edu <- lm(percdon ~ male * edu, data = donations)
+summary(fit_male_edu)
+
+# There is no evidence that the effect of years of education on
+# donations differs for men and women
+# (b = -0.024, t(521) = -0.25, p = 0.803).
+```
+
+#### 14. A serious health problem by gender
+
+```{r}
+fit_male_lifevent <- lm(percdon ~ male * lifevent, data = donations)
+summary(fit_male_lifevent)
+
+# There is no evidence that the effect of having experienced a serious
+# health problem on donations is greater for women than for men
+# (b = 0.039, t(521) = 0.09, p = 0.925).
+```

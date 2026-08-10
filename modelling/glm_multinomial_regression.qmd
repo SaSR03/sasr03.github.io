@@ -1,0 +1,495 @@
+---
+title: Multinomial logistic regression
+---
+
+In this part you will learn about the following basic tasks:
+
+- Recode a categorical outcome variable with several unordered categories.
+
+- Fit a multinomial logistic regression model, and choose a reference (base) category for the outcome.
+
+- Interpret coefficients as log relative-risk ratios, and exponentiate them into relative-risk ratios (RRRs).
+
+- Compute and interpret marginal effects on predicted probabilities for a multinomial outcome, including pairwise comparisons between response categories.
+
+- Test the assumption of Independence of Irrelevant Alternatives (IIA).
+
+- Include interactions between predictors, and test whether they improve model fit using a Wald test and a likelihood ratio test.
+
+## From binary to multinomial outcomes
+
+Multinomial logistic regression extends logistic regression to an outcome variable with more than two unordered categories — for instance, which of several political parties a person intends to vote for. One category is chosen as the reference (base) category, and the model estimates one set of coefficients for each of the remaining categories, describing the (log) relative odds of being in that category rather than in the base category.
+
+$$
+\log \left( \frac{P(Y=j)}{P(Y = \text{base})} \right) = b_{0j} + b_{1j} X_1 + \dots + b_{kj} X_k
+$$
+
+Which category is chosen as the base is arbitrary and does not affect the fit of the model, but it does affect which comparisons the coefficients directly represent. Choosing a substantively meaningful reference category (e.g., the largest group, or a natural "neutral" category) makes the output easier to interpret. It is good practice to fit the model with more than one choice of base category to make sure all pairwise comparisons of interest are covered, or to rely on marginal effects and pairwise comparisons (see below), which do not depend on the choice of base category.
+
+## Interpreting coefficients
+
+As with binary logistic regression, there are several ways to interpret the coefficients of a multinomial model:
+
+1. **Log relative-risk ratios.** A one-unit increase in $X$ is associated with a $b_j$ change in the log of the relative risk of category $j$ versus the base category, holding other predictors constant.
+
+2. **Relative-risk ratios (RRR).** Exponentiating a coefficient, $\exp(b_j)$, gives the multiplicative change in the relative risk of category $j$ versus the base category. An RRR above 1 means the relative risk of category $j$ (versus the base) increases with $X$; an RRR below 1 means it decreases.
+
+3. **Marginal effects on predicted probabilities.** As in binary logistic regression, marginal effects translate the model back to the probability scale: the average change in the predicted probability of each category of the outcome for a one-unit change in a predictor. Because a multinomial outcome has several categories, marginal effects are reported separately for each category, and their sum across all categories is necessarily zero (an increase in the probability of one category must come at the expense of the others). Pairwise comparisons between two specific response categories can also be computed directly.
+
+## The IIA assumption
+
+Multinomial logistic regression relies on the assumption of Independence of Irrelevant Alternatives (IIA): the relative odds of choosing between any two categories should not depend on which other categories are also available. This is a strong and often unrealistic assumption. One common way to check it is the Hausman-McFadden style test: refit the model repeatedly, each time excluding all observations belonging to one specific outcome category, and test whether the coefficients for the remaining categories change. If they change substantially, IIA is violated for that comparison, and a model that relaxes the IIA assumption (e.g., a nested logit or multinomial probit model) may be more appropriate — such models are beyond the scope of this course.
+
+## R
+
+You will learn the R functions listed below to fit and interpret multinomial logistic regression models.
+
+| Function | Description |
+|----|----|
+| `nnet::multinom()` | Fit a multinomial logistic regression model |
+| `relevel()` | Change the reference (base) category of the outcome or a predictor factor |
+| `summary()` | Display coefficients (log relative-risk ratios) and standard errors |
+| `exp(coef())` | Convert coefficients to relative-risk ratios |
+| `car::linearHypothesis()` | Wald test of restrictions on the coefficients |
+| `lmtest::lrtest()` | Likelihood ratio test comparing two nested multinomial models |
+| `marginaleffects::avg_slopes()` | Average marginal effects on predicted probabilities, for each outcome category |
+| `marginaleffects::avg_slopes(..., hypothesis = "pairwise")` | Pairwise comparisons of marginal effects between outcome categories |
+
+Examples:
+
+Recode a party-choice variable into a smaller number of unordered categories, and check the recoding:
+
+```{r, eval=FALSE}
+library(tidyverse)
+library(haven)
+
+data <- read_dta("data/hin95_voting.dta")
+
+data <- data |>
+  mutate(
+    party6 = case_match(
+      party,
+      1 ~ 2, 2 ~ 4, 3 ~ 3, 4 ~ 5, 5 ~ 1, 11 ~ 1, 6 ~ 6, 7 ~ 6, 8 ~ 6,
+      .default = NA_real_
+    )
+  )
+
+data |>
+  count(party, party6)
+```
+
+Fit an empty (intercept-only) multinomial model, with a chosen base category, and inspect it again with a different base category:
+
+```{r, eval=FALSE}
+library(nnet)
+
+data <- data |>
+  mutate(party6 = factor(party6))
+
+fit_empty1 <- multinom(relevel(party6, ref = "1") ~ 1, data = data)
+summary(fit_empty1)
+
+fit_empty3 <- multinom(relevel(party6, ref = "3") ~ 1, data = data)
+summary(fit_empty3)
+```
+
+Fit a model with predictors, and obtain relative-risk ratios:
+
+```{r, eval=FALSE}
+data <- data |>
+  mutate(
+    fem = as.integer(sex == 2),
+    rel4 = case_match(
+      religion,
+      1 ~ 1, 2 ~ 2, 3 ~ 3, 4 ~ 3, 8 ~ 4,
+      .default = NA_real_
+    ),
+    rel4 = factor(rel4)
+  )
+
+fit <- multinom(relevel(party6, ref = "4") ~ educ + rel4 + fem, data = data)
+summary(fit)
+exp(coef(fit))
+```
+
+Choose a different reference category for the categorical predictor `rel4`, and compare:
+
+```{r, eval=FALSE}
+data <- data |>
+  mutate(rel4 = relevel(rel4, ref = "3"))
+
+fit_relevel <- multinom(relevel(party6, ref = "4") ~ educ + rel4 + fem, data = data)
+exp(coef(fit_relevel))
+```
+
+Average marginal effects on the predicted probability of each outcome category:
+
+```{r, eval=FALSE}
+library(marginaleffects)
+
+fit_me <- multinom(relevel(party6, ref = "1") ~ educ + rel4 + fem, data = data)
+
+avg_slopes(fit_me, variables = c("educ", "fem"))
+```
+
+Pairwise comparisons of the marginal effect of a predictor between response categories:
+
+```{r, eval=FALSE}
+avg_slopes(fit_me, variables = "rel4", by = "group")
+```
+
+Check IIA informally by refitting the model excluding each outcome category in turn, and comparing coefficients:
+
+```{r, eval=FALSE}
+fit_full <- multinom(party6 ~ educ + rel4 + fem, data = data)
+
+fit_no1 <- multinom(party6 ~ educ + rel4 + fem, data = data |> filter(party6 != "1"))
+fit_no2 <- multinom(party6 ~ educ + rel4 + fem, data = data |> filter(party6 != "2"))
+# ... and so on for the remaining categories
+
+coef(fit_full)
+coef(fit_no1)
+coef(fit_no2)
+```
+
+There is no single function that combines these separately-fitted models into one joint test of equal coefficients. In practice, informally comparing the coefficients and standard errors across the refitted models (as above) is the usual approach; substantial changes in a coefficient after excluding a category suggest that IIA does not hold for that comparison.
+
+Include an interaction between two categorical predictors, and test whether it improves the fit:
+
+```{r, eval=FALSE}
+fit_main <- multinom(relevel(party6, ref = "1") ~ edu4 + rel4, data = data)
+fit_interaction <- multinom(relevel(party6, ref = "1") ~ edu4 * rel4, data = data)
+
+lrtest(fit_main, fit_interaction)
+```
+
+## Assignments
+
+Use the dataset `hin95_voting`.
+
+### Recoding the outcome
+
+1. Recode the variable `party` (Dutch parties in the 1995 election) into a new variable `party6` with six unordered categories: left, social democratic, social liberal, christian democratic, liberal, and strict religious. Categories that do not map onto one of these six groups should become missing. Check the recoding with a cross-tabulation of `party` against `party6`.
+
+### An empty model
+
+2. Fit a multinomial logistic regression of `party6` on no predictors (an empty/intercept-only model), using category 1 as the base category. How do you interpret the intercepts?
+
+3. Refit the same empty model using category 3 as the base category instead. Is there evidence that people are more or less likely to be in category 4 than in category 3?
+
+### Interpreting coefficients
+
+4. Create a dummy variable `fem` for women. Recode `religion` into a new nominal variable `rel4` with four categories. Fit a multinomial logistic regression of `party6` on `educ`, `rel4`, and `fem`, using category 4 as the base category for `party6`, and report relative-risk ratios (RRRs). Interpret the RRR for one unit of education for at least one outcome category.
+
+5. Refit the same model, but this time set category 3 of `rel4` as the reference category for that predictor (instead of category 1). Compare the RRRs to the previous model. Why do the RRRs for `rel4` change even though the model as a whole fits the data identically?
+
+### Marginal effects
+
+6. Fit a multinomial logistic regression of `party6` on `educ`, `rel4` (with category 1 as reference), and `fem`, using category 1 as the base category for `party6`. Compute the average marginal effects of `educ` and `fem` on the predicted probability of each outcome category.
+
+7. Refit with category 2 as the reference category for `rel4`. Compute the average marginal effect of `rel4` on the predicted probabilities. Interpret one of these marginal effects.
+
+8. Compute pairwise comparisons of the marginal effect of `rel4` between two specific response categories. Interpret one such pairwise comparison.
+
+### Checking IIA
+
+9. Fit the full multinomial model of `party6` on `educ`, `rel4`, and `fem`. Then refit the model six times, each time excluding all observations belonging to one category of `party6`. For each of the resulting models, compare the coefficients to those of the full model. For which outcome categories does the exclusion of another category appear to change the coefficients substantially, suggesting that IIA is violated? For which category does IIA appear to hold reasonably well?
+
+10. Based on your answer to the previous question, what do you conclude overall about whether the IIA assumption holds for this model of party choice?
+
+### Interactions and goodness of fit
+
+11. Recode `educatio` into an ordered variable `edu4` with four categories. Fit a multinomial model of `party6` on `edu4` and `rel4` (main effects only), using category 1 as the base category.
+
+12. Refit the model adding the interaction between `edu4` and `rel4`. Test whether this interaction significantly improves the fit, using a likelihood ratio test comparing the two models.
+
+13. Is there evidence for an interaction between education and religion on party choice? What does — and does not — this tell you about whether education and religion interact in their effect on the *predicted probabilities* of voting for each party (as opposed to the relative-risk ratios)?
+
+14. Fit a multinomial model of `party6` on `educ`, `rel4`, and `fem` (main effects only), and a second model that adds all two-way and three-way interactions between these three predictors. Test whether the full set of interactions significantly improves the fit, using a likelihood ratio test.
+
+## Answers
+
+Make sure this file is in the same R Project as the `data` folder. Use relative file paths, not full paths to your computer.
+
+```{r setup-multinomial}
+library(tidyverse)
+library(haven)
+library(nnet)
+library(car)
+library(lmtest)
+library(marginaleffects)
+
+hin95_voting <- read_dta("data/hin95_voting.dta")
+```
+
+### Recoding the outcome
+
+#### 1. Recoding `party` into `party6`
+
+```{r}
+# The recoding follows the original mapping directly:
+#   1 pvda   -> 2 social democratic
+#   2 cda    -> 4 christian democratic
+#   3 d66    -> 3 social liberal
+#   4 vvd    -> 5 liberal
+#   5 GL     -> 1 left
+#  11 sp     -> 1 left
+#   6 sgp    -> 6 strict religious
+#   7 rpf    -> 6 strict religious
+#   8 gpv    -> 6 strict religious
+#  everything else (9 aov, 10 unie55, 12 cd) -> missing
+
+hin95_voting <- hin95_voting |>
+  mutate(
+    party6 = case_match(
+      party,
+      1 ~ 2,
+      2 ~ 4,
+      3 ~ 3,
+      4 ~ 5,
+      c(5, 11) ~ 1,
+      c(6, 7, 8) ~ 6,
+      .default = NA_real_
+    )
+  )
+
+hin95_voting |>
+  count(party, party6)
+```
+
+### An empty model
+
+#### 2. An intercept-only model with base category 1
+
+```{r}
+hin95_voting <- hin95_voting |>
+  mutate(party6 = factor(party6))
+
+fit_empty1 <- multinom(relevel(party6, ref = "1") ~ 1, data = hin95_voting)
+summary(fit_empty1)
+
+# The intercepts b_j represent the "tendency to vote for party6 = j
+# rather than party6 = 1" (the log relative-risk ratio of category j
+# versus the base category 1, in a model with no predictors).
+```
+
+#### 3. The same model with base category 3
+
+```{r}
+fit_empty3 <- multinom(relevel(party6, ref = "3") ~ 1, data = hin95_voting)
+summary(fit_empty3)
+
+# The intercepts now represent the tendency to vote for party6 = j
+# rather than party6 = 3. The intercept for category 4 is not
+# significant at the 5% level: there is no evidence that people are
+# more or less likely to vote for category 4 rather than category 3.
+```
+
+### Interpreting coefficients
+
+#### 4. Relative-risk ratios with base category 4
+
+```{r}
+hin95_voting <- hin95_voting |>
+  mutate(
+    fem = as.integer(sex == 2),
+    rel4 = case_match(
+      religion,
+      1 ~ 1,
+      2 ~ 2,
+      c(3, 4) ~ 3,
+      8 ~ 4,
+      .default = NA_real_
+    ),
+    rel4 = factor(rel4)
+  )
+
+hin95_voting |>
+  count(rel4)
+
+fit_c1 <- multinom(relevel(party6, ref = "4") ~ educ + rel4 + fem, data = hin95_voting)
+summary(fit_c1)
+exp(coef(fit_c1))
+
+# One unit of education is associated with a relative-risk ratio of
+# about 1.02 for at least one of the outcome categories versus category
+# 4: a one-unit increase in education is associated with a small
+# increase (about 2%) in the relative risk of voting for that category
+# rather than category 4, holding rel4 and fem constant.
+```
+
+#### 5. A different reference category for `rel4`
+
+```{r}
+hin95_voting_relevel <- hin95_voting |>
+  mutate(rel4 = relevel(rel4, ref = "3"))
+
+fit_c2 <- multinom(relevel(party6, ref = "4") ~ educ + rel4 + fem, data = hin95_voting_relevel)
+summary(fit_c2)
+exp(coef(fit_c2))
+
+# The RRR for one of the rel4 dummies now shows up as about 0.0099
+# instead of the value found before releveling. The RRRs for rel4
+# change because they always express a comparison to the *current*
+# reference category of rel4; the model itself (the fitted probabilities
+# for every combination of predictors) is identical either way -- only
+# which comparisons the reported coefficients directly represent
+# changes.
+```
+
+### Marginal effects
+
+#### 6. Average marginal effects of `educ` and `fem`
+
+```{r}
+fit_me1 <- multinom(relevel(party6, ref = "1") ~ educ + relevel(rel4, ref = "1") + fem,
+                     data = hin95_voting)
+
+avg_slopes(fit_me1, variables = c("educ", "fem"))
+
+# Averaged across response categories and observations, a one-unit
+# increase in education is associated with a change of about -0.015 in
+# the predicted probability of the (reference-relative) categories
+# considered, and being female is associated with a change of about
+# 0.006. As with any multinomial marginal effects, the effects for
+# individual categories sum to zero across all categories of party6.
+```
+
+#### 7. Average marginal effect of `rel4`
+
+```{r}
+fit_me2 <- multinom(relevel(party6, ref = "1") ~ educ + relevel(rel4, ref = "2") + fem,
+                     data = hin95_voting)
+
+avg_slopes(fit_me2, variables = "rel4")
+
+# One of the average marginal effects of rel4 (relative to category 2)
+# is about 0.0003: moving from the reference category of rel4 to this
+# particular category is associated with a small increase of about
+# 0.03 percentage points in the average predicted probability of the
+# corresponding outcome category of party6.
+```
+
+#### 8. Pairwise comparisons between response categories
+
+```{r}
+avg_slopes(fit_me2, variables = "rel4", hypothesis = "pairwise")
+
+# One of the pairwise comparisons of the marginal effect of rel4 between
+# two response categories is about -0.257: the predicted probability of
+# one response category, relative to another, changes considerably more
+# strongly with rel4 than for the other category, illustrating that
+# marginal effects (unlike RRRs) can differ substantially across
+# response-category comparisons.
+```
+
+### Checking IIA
+
+#### 9. Refitting the model excluding each category in turn
+
+```{r}
+fit_full <- multinom(party6 ~ educ + rel4 + fem, data = hin95_voting)
+
+fit_no1 <- multinom(party6 ~ educ + rel4 + fem, data = hin95_voting |> filter(party6 != "1"))
+fit_no2 <- multinom(party6 ~ educ + rel4 + fem, data = hin95_voting |> filter(party6 != "2"))
+fit_no3 <- multinom(party6 ~ educ + rel4 + fem, data = hin95_voting |> filter(party6 != "3"))
+fit_no4 <- multinom(party6 ~ educ + rel4 + fem, data = hin95_voting |> filter(party6 != "4"))
+fit_no5 <- multinom(party6 ~ educ + rel4 + fem, data = hin95_voting |> filter(party6 != "5"))
+fit_no6 <- multinom(party6 ~ educ + rel4 + fem, data = hin95_voting |> filter(party6 != "6"))
+
+coef(fit_full)
+coef(fit_no1)
+coef(fit_no2)
+coef(fit_no3)
+coef(fit_no4)
+coef(fit_no5)
+coef(fit_no6)
+
+# There is no single function that combines these separately-fitted
+# models into one joint test, so we compare the coefficients across
+# models informally:
+#
+# - Coefficients for category 1 (versus the other categories) change
+#   noticeably when other categories are excluded in turn: IIA does not
+#   appear to hold for category 1 (originally: p = 0.0449).
+# - Coefficients for category 2 change substantially as well: IIA does
+#   not appear to hold for category 2 (originally: p = 0.0002).
+# - Coefficients for category 3 remain fairly stable across the refitted
+#   models: IIA appears to hold reasonably well for category 3
+#   (originally: p = 0.2277).
+# - Coefficients for category 4 change noticeably: IIA does not appear
+#   to hold for category 4 (originally: p = 0.0159).
+# - Coefficients for category 6 change noticeably: IIA does not appear
+#   to hold for category 6 (originally: p = 0.0229).
+```
+
+#### 10. Overall conclusion about IIA
+
+```{r}
+# Overall, the IIA assumption does not hold well for this model of party
+# choice: for most outcome categories, excluding another category from
+# the data changes the estimated coefficients, meaning that the relative
+# odds between remaining categories are not independent of which other
+# alternatives are available. Only for category 3 does the assumption
+# seem to hold reasonably well.
+```
+
+### Interactions and goodness of fit
+
+#### 11. A main-effects model with `edu4` and `rel4`
+
+```{r}
+hin95_voting <- hin95_voting |>
+  mutate(
+    edu4 = case_match(
+      educatio,
+      1 ~ 1,
+      c(2, 3) ~ 2,
+      c(4, 5, 6) ~ 3,
+      c(7, 8, 9) ~ 4,
+      .default = NA_real_
+    ),
+    edu4 = factor(edu4)
+  )
+
+hin95_voting |>
+  count(edu4)
+
+fit_a <- multinom(relevel(party6, ref = "1") ~ edu4 + rel4, data = hin95_voting)
+summary(fit_a)
+```
+
+#### 12. Testing the `edu4 * rel4` interaction
+
+```{r}
+fit_b <- multinom(relevel(party6, ref = "1") ~ edu4 * rel4, data = hin95_voting)
+
+lrtest(fit_a, fit_b)
+
+# Adding the interaction between edu4 and rel4 significantly improves
+# the fit: LR chi2(45) = 69.37, p = 0.0113.
+```
+
+#### 13. What the significant interaction does and does not tell you
+
+```{r}
+# There is evidence for an interaction between education and religion on
+# the (log) relative-risk ratios describing party choice. This does NOT
+# by itself imply that education and religion interact in their effect
+# on the predicted *probabilities* of voting for each party -- a
+# significant interaction in the relative-risk-ratio formulation does
+# not automatically translate into a similarly interpretable interaction
+# on the probability scale, because the mapping from relative risks to
+# probabilities is nonlinear. If this interaction on the probability
+# scale is itself of interest, a more detailed study (e.g. using
+# marginal effects and their interactions) would be needed.
+```
+
+#### 14. All two-way and three-way interactions
+
+```{r}
+fit_main_full <- multinom(party6 ~ educ + rel4 + fem, data = hin95_voting)
+fit_all_interactions <- multinom(party6 ~ educ * rel4 * fem, data = hin95_voting)
+
+lrtest(fit_main_full, fit_all_interactions)
+```

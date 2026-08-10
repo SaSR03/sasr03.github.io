@@ -37,6 +37,10 @@ jobs:
             any::sandwich
             any::skimr
             any::moments
+            any::visdat
+            any::survival
+            any::survminor
+            any::sandwich
 
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2

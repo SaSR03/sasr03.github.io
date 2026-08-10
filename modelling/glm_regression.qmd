@@ -1,0 +1,524 @@
+---
+title: Simple linear regression
+---
+
+In this part you will learn about the following basic tasks:
+
+- Fit a simple (bivariate) linear regression model.
+
+- Interpret the intercept and slope of a regression equation.
+
+- Interpret $R^2$ as the proportion of variance explained.
+
+- Use scatterplots with a fitted regression line to check whether a linear model is appropriate.
+
+- Recognize the influence of outliers on regression results.
+
+- Fit a regression model with a categorical (dummy) predictor and relate the coefficient to a difference in group means.
+
+Simple linear regression describes the relationship between one outcome variable (the dependent variable, Y) and one predictor variable (the independent variable, X) by a straight line:
+
+$$
+E(Y) = b_0 + b_1 X
+$$
+
+The intercept $b_0$ is the expected value of Y when X equals 0. The slope $b_1$ is the expected change in Y for a one-unit increase in X. The coefficient of determination, $R^2$, indicates the proportion of variance in Y explained by X.
+
+A regression model summarizes a relationship with a small number of numbers (intercept, slope, $R^2$). This is convenient, but it can also hide important features of the data. Always inspect a scatterplot together with the regression output. Datasets with very different patterns can produce identical regression coefficients, standard errors, and $R^2$ values. This is famously illustrated by Anscombe's quartet, which you will reconstruct in the assignments below.
+
+Regression results can also be strongly affected by a single unusual observation (an outlier). It is good practice to identify such cases in a scatterplot and to check what happens to the results with and without them.
+
+Finally, a predictor variable need not be quantitative. A dummy variable (coded 0/1) can be used as a predictor in a regression model. In that case, the regression coefficient for the dummy variable equals the difference between the group means, and the intercept equals the mean of the reference group (the group coded 0).
+
+## R
+
+You will learn the R functions listed below to fit and inspect simple linear regression models.
+
+| Function | Description |
+|----|----|
+| `lm()` | Fit a linear regression model |
+| `summary()` | Display coefficients, standard errors, and $R^2$ for a fitted model |
+| `coef()` | Extract the coefficients of a fitted model |
+| `confint()` | Confidence intervals for the coefficients |
+| `ggplot() + geom_point() + geom_smooth()` | Scatterplot with a fitted regression line |
+| `t.test()` | Independent samples t-test, to compare with a regression on a dummy variable |
+| `predict()` | Predicted values from a fitted model |
+
+Examples:
+
+Load the data and inspect a scatterplot before fitting a model:
+
+```{r, eval=FALSE}
+library(tidyverse)
+library(haven)
+
+data <- read_dta("data/state_crime.dta")
+
+ggplot(data, aes(x = poverty, y = murder)) +
+  geom_point()
+```
+
+Add case labels to identify unusual observations (here, the label is the state name):
+
+```{r, eval=FALSE}
+ggplot(data, aes(x = poverty, y = murder, label = state)) +
+  geom_point() +
+  geom_text(nudge_y = 0.5, size = 3)
+```
+
+Fit a simple linear regression model:
+
+```{r, eval=FALSE}
+fit <- lm(murder ~ poverty, data = data)
+summary(fit)
+```
+
+The `summary()` output includes the intercept and slope (under `Estimate`), their standard errors, t-values, p-values, and the value of $R^2$ (`Multiple R-squared`).
+
+Add the fitted regression line to the scatterplot:
+
+```{r, eval=FALSE}
+ggplot(data, aes(x = poverty, y = murder)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE)
+```
+
+Fit the model excluding a specific case (here, excluding Washington DC), without removing the observation from the dataset:
+
+```{r, eval=FALSE}
+fit_no_dc <- lm(murder ~ poverty, data = data |> filter(state != "DC"))
+summary(fit_no_dc)
+```
+
+Extract just the coefficients, or a confidence interval for the slope:
+
+```{r, eval=FALSE}
+coef(fit)
+confint(fit)
+```
+
+Compare a regression on a dummy variable to a t-test of the difference in means. The two approaches give the same estimate of the difference:
+
+```{r, eval=FALSE}
+t.test(hrinc ~ sex, data = data)
+
+fit_sex <- lm(hrinc ~ sex, data = data)
+summary(fit_sex)
+```
+
+The regression coefficient for `sex` equals the difference in mean `hrinc` between the two groups. The intercept equals the mean `hrinc` of the reference group (the group coded 0).
+
+Obtain predicted values for the observations in the data, or for new values of X:
+
+```{r, eval=FALSE}
+data <- data |>
+  mutate(pred_murder = predict(fit))
+
+predict(fit, newdata = tibble(poverty = c(10, 15, 20)))
+```
+
+## Assignments
+
+### Anscombe's quartet
+
+1. Use the dataset `anscombe`. This built-in dataset contains four pairs of variables, (`x1`,`y1`), (`x2`,`y2`), (`x3`,`y3`), and (`x4`,`y4`).
+
+    - Fit four separate bivariate regressions: `y1` on `x1`, `y2` on `x2`, `y3` on `x3`, and `y4` on `x4`. Compare the intercepts, slopes, standard errors, and $R^2$ values of the four models. What do you notice?
+
+    - Make a scatterplot with a fitted regression line for each of the four pairs. Inspect the four plots side by side (for example using `patchwork` or `facet_wrap()` after reshaping the data to long format).
+
+    - What is your conclusion? Why is it not sufficient to only report regression coefficients and $R^2$?
+
+### Crime and poverty
+
+Use the dataset `state_crime`. This dataset contains, for each U.S. state, the murder rate (`murder`) and a poverty score (`poverty`).
+
+2. Make a scatterplot of `murder` against `poverty`, with state names (`state`) as labels. Which state stands out as an outlier?
+
+3. Fit a regression of `murder` on `poverty` using all states. Report and interpret the intercept, the slope, and $R^2$.
+
+4. Refit the regression excluding the outlying state, without removing the observation from the dataset (use a `filter()` inside the `data` argument, or subset only for this call). Compare the intercept, slope, and $R^2$ to the results in the previous question. What is the effect of this single observation on the results?
+
+### Income and age
+
+Use the dataset `sbs399`. We focus on the relation between `age` and hourly income `hrinc`.
+
+5. Make a scatterplot of `hrinc` against `age`. Do you notice anything unusual in the data (for instance, in the distribution of `hrinc`)? Does the relationship look linear?
+
+6. Fit a regression of `hrinc` on `age`. Interpret the intercept, the slope, and $R^2$.
+
+7. Compute the mean of `hrinc` separately for men and women (e.g. using `group_by()` and `summarise()`, or `t.test()`). What is the difference between the two means?
+
+8. Fit a regression of `hrinc` on `sex` (a dummy variable). Compare the regression coefficient for `sex` to the difference in means found in the previous question. What do you conclude about the relation between a two-group t-test and a regression on a dummy variable?
+
+### Nonlinearity
+
+Use the dataset `sesam`. We study the relation between a general IQ test score (`peabody`) and a post-test score (`postnumb`).
+
+9. Make a scatterplot of `postnumb` against `peabody`. Does the relationship look linear, or does it look like it is increasing but at a decreasing rate?
+
+10. Fit a linear regression of `postnumb` on `peabody`. Report and interpret the intercept, slope, and $R^2$. Is the null hypothesis of no relation between `peabody` and `postnumb` rejected?
+
+11. Create a dummy variable `female` from `sex`. Compare the mean `postnumb` of boys and girls using `t.test()`, and again using a regression of `postnumb` on `female`. Do the two approaches agree? Is there evidence that boys and girls differ, on average, on `postnumb`?
+
+## Answers
+
+Make sure this file is in the same R Project as the `data` folder. Use relative file paths, not full paths to your computer.
+
+```{r setup-regression}
+library(tidyverse)
+library(haven)
+
+data(anscombe)
+state_crime <- read_dta("data/state_crime.dta")
+sbs399 <- read_dta("data/sbs399.dta")
+sesam <- read_dta("data/sesam.dta")
+```
+
+### Anscombe's quartet
+
+#### 1. Four regressions with identical output
+
+```{r}
+fit1 <- lm(y1 ~ x1, data = anscombe)
+fit2 <- lm(y2 ~ x2, data = anscombe)
+fit3 <- lm(y3 ~ x3, data = anscombe)
+fit4 <- lm(y4 ~ x4, data = anscombe)
+
+summary(fit1)
+summary(fit2)
+summary(fit3)
+summary(fit4)
+
+# Coefficients, standard errors, and R-squared are (essentially) identical
+# for all four regressions: intercept = 3.00, slope = 0.50, SE(slope) = 0.12,
+# R-squared = 0.67.
+```
+
+The four sets of results side by side.
+
+```{r}
+list(set1 = fit1, set2 = fit2, set3 = fit3, set4 = fit4) |>
+  imap(\(fit, name) tibble(
+    set = name,
+    intercept = coef(fit)[1],
+    slope = coef(fit)[2],
+    se_slope = summary(fit)$coefficients[2, 2],
+    r_squared = summary(fit)$r.squared
+  )) |>
+  list_rbind()
+# the same four numbers, four times over
+```
+
+Scatterplots with fitted regression line:
+
+```{r}
+ggplot(anscombe, aes(x = x1, y = y1)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE)
+
+ggplot(anscombe, aes(x = x2, y = y2)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE)
+
+ggplot(anscombe, aes(x = x3, y = y3)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE)
+
+ggplot(anscombe, aes(x = x4, y = y4)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE)
+```
+
+All four plots combined, after reshaping to long format:
+
+```{r}
+anscombe_long <- anscombe |>
+  pivot_longer(
+    everything(),
+    names_to = c(".value", "set"),
+    names_pattern = "(x|y)(\\d)"
+  )
+
+anscombe_long |>
+  slice(1:8)
+# ".value" turns x and y into columns, the digit becomes the set number
+# note that we pivot the raw anscombe data: adding a row number first would
+# create a column that does not match the pattern
+```
+
+```{r}
+ggplot(anscombe_long, aes(x = x, y = y)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  facet_wrap(~ set) +
+  labs(title = "Anscombe's quartet")
+
+# Results (coefficients, SEs, R-squared) for all four regressions are identical.
+# From these results you might be tempted to conclude that the data look
+# identical. But the four scatterplots look completely different:
+# - Set 1: a roughly linear relationship, well described by the line.
+# - Set 2: a clear curved (nonlinear) relationship; a line is not appropriate.
+# - Set 3: a perfect linear relationship except for one outlier that pulls
+#   the line away from the other points.
+# - Set 4: no relationship at all except for one high-leverage point that
+#   alone determines the slope.
+# Conclusion: never rely on regression coefficients and R-squared alone,
+# always inspect a scatterplot.
+```
+
+### Crime and poverty
+
+#### 2. Spotting the outlier
+
+```{r}
+ggplot(state_crime, aes(x = poverty, y = murder)) +
+  geom_point()
+
+ggplot(state_crime, aes(x = poverty, y = murder, label = state)) +
+  geom_point() +
+  geom_text(nudge_y = 0.5, size = 3)
+
+# The outlier is Washington DC, with an exceptionally high murder rate.
+```
+
+```{r}
+state_crime |>
+  slice_max(murder, n = 5) |>
+  select(state, poverty, murder)
+# the five highest murder rates, to confirm how far DC stands apart
+```
+
+#### 3. Regression using all states
+
+```{r}
+fit_crime <- lm(murder ~ poverty, data = state_crime)
+summary(fit_crime)
+
+# E(murder) = -10.14 + 1.32 poverty       (SE = 0.28)
+#
+# A 1 unit increase in the poverty scale yields a predicted increase of
+# 1.32 units in the murder rate. R-squared = 0.32: 32% of the variance
+# in murder rate is explained by the poverty rate.
+```
+
+```{r}
+confint(fit_crime)
+# a confidence interval for the slope, to compare with the next model
+```
+
+Note that the intercept is negative, which would mean a negative murder rate at a poverty score of 0. That is not a defect of the model: a poverty score of 0 lies outside the range of the data, so the intercept has no substantive interpretation here.
+
+```{r}
+range(state_crime$poverty)
+# the observed range of poverty; the intercept extrapolates far below it
+```
+
+#### 4. Regression excluding the outlier
+
+```{r}
+fit_crime_no_dc <- lm(murder ~ poverty, data = state_crime |> filter(state != "DC"))
+summary(fit_crime_no_dc)
+
+# E(murder) = -0.86 + 0.58 poverty        (SE = 0.10)
+#
+# A 1 unit increase in the poverty scale now gives a predicted increase
+# of only 0.58 units in the murder rate, about half the earlier estimate.
+# R-squared = 0.40: 40% of the variance in murder rate is now explained
+# by the poverty rate. A single unusual observation (DC) had a
+# substantial effect on the slope, its standard error, and R-squared.
+```
+
+```{r}
+bind_rows(
+  tibble(model = "all states", intercept = coef(fit_crime)[1], slope = coef(fit_crime)[2],
+         r_squared = summary(fit_crime)$r.squared),
+  tibble(model = "without DC", intercept = coef(fit_crime_no_dc)[1], slope = coef(fit_crime_no_dc)[2],
+         r_squared = summary(fit_crime_no_dc)$r.squared)
+)
+# the two models side by side
+```
+
+```{r}
+ggplot(state_crime, aes(x = poverty, y = murder)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  geom_smooth(
+    data = state_crime |> filter(state != "DC"),
+    method = "lm", se = FALSE, linetype = "dashed"
+  )
+# solid line: all states; dashed line: excluding DC
+# one observation visibly rotates the fitted line
+```
+
+Note that dropping DC raises $R^2$ even though the fit is now based on less extreme data. $R^2$ is a ratio, and DC inflated both the explained and the total variance; removing it changes the two by different amounts. This is a good reason not to read $R^2$ as a measure of how "good" a model is in any absolute sense.
+
+### Income and age
+
+#### 5. Scatterplot of income against age
+
+```{r}
+ggplot(sbs399, aes(x = age, y = hrinc)) +
+  geom_point()
+
+# We expect a positive relation between age and hourly income.
+# A number of observations have hrinc equal to exactly 100. It is unclear
+# whether this reflects missing values or values top-coded at 100 -- this
+# should be checked. These observations may be outliers in Y-space.
+# The relation may not be strictly linear; possibly quadratic.
+```
+
+Check the suspicion about the value 100 before doing anything else.
+
+```{r}
+sbs399 |>
+  count(hrinc) |>
+  slice_max(hrinc, n = 5)
+# a spike at exactly 100 would confirm top-coding or a missing value code
+```
+
+```{r}
+sum(sbs399$hrinc == 100, na.rm = TRUE)
+# how many observations sit exactly at 100
+```
+
+#### 6. Regression of income on age
+
+```{r}
+fit_age <- lm(hrinc ~ age, data = sbs399)
+summary(fit_age)
+
+# E(hrinc) = 8.02 + 0.29 age               (SE = 0.03)
+#
+# R-squared = 0.065. If age increases by 1 year, hourly income
+# significantly rises by 0.29 EUR. Age explains 6.5% of the variance
+# in income.
+```
+
+The intercept of 8.02 is the predicted income at age 0, which is meaningless in itself: nobody in the data is anywhere near that age.
+
+```{r}
+range(sbs399$age, na.rm = TRUE)
+# centring age would give the intercept a usable interpretation
+```
+
+```{r}
+lm(hrinc ~ I(age - mean(age, na.rm = TRUE)), data = sbs399) |>
+  coef()
+# after centring, the intercept is the predicted income at the mean age
+# the slope is unchanged
+```
+
+#### 7. Mean income for men and women
+
+```{r}
+table(sbs399$sex, useNA = "ifany")
+# sex = 0 for men and sex = 1 for women
+```
+
+```{r}
+sbs399 |>
+  group_by(sex) |>
+  summarise(mean_hrinc = mean(hrinc, na.rm = TRUE))
+
+t.test(hrinc ~ sex, data = sbs399)
+
+# E(hrinc) for men = 19.60; E(hrinc) for women = 16.18
+# Women have 3.42 EUR lower income than men.
+```
+
+#### 8. Regression on a dummy variable
+
+```{r}
+fit_sex <- lm(hrinc ~ sex, data = sbs399)
+summary(fit_sex)
+
+# The regression coefficient for sex = -3.41, which is the difference
+# in expected hourly income between men and women -- the same result
+# as the independent-samples t-test.
+```
+
+```{r}
+coef(fit_sex)
+# the intercept is the mean of the reference group (sex = 0, men)
+# the slope is the difference between the two group means
+```
+
+```{r}
+t.test(hrinc ~ sex, data = sbs399, var.equal = TRUE)
+# the default t.test() does NOT assume equal variances, while lm() does
+# with var.equal = TRUE the t-value and p-value match the regression exactly
+```
+
+A regression on a single dummy variable and an independent samples t-test are the same procedure, provided both assume equal variances. The regression formulation is more general: it extends to several predictors, whereas the t-test does not.
+
+### Nonlinearity
+
+#### 9. Scatterplot of postnumb against peabody
+
+```{r}
+ggplot(sesam, aes(x = peabody, y = postnumb)) +
+  geom_point()
+
+# The relation looks nonlinear: it is increasing, but decreasingly so.
+# A quadratic transformation of peabody might help.
+```
+
+```{r}
+ggplot(sesam, aes(x = peabody, y = postnumb)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  geom_smooth(method = "loess", se = FALSE, linetype = "dashed")
+# the straight line and a smoother in one plot
+# where the dashed curve bends away from the line, a linear model misfits
+```
+
+#### 10. Linear regression of postnumb on peabody
+
+```{r}
+fit_peabody <- lm(postnumb ~ peabody, data = sesam)
+summary(fit_peabody)
+
+# E(postnumb) = 10.50 + 0.42 peabody       (SE = 0.04)
+# R-squared = 0.27. The null hypothesis of no relation between peabody
+# and postnumb is rejected.
+```
+
+A significant slope does not mean the linear model is appropriate. It only means a straight line fits better than a horizontal one.
+
+```{r}
+fit_peabody_quad <- lm(postnumb ~ peabody + I(peabody^2), data = sesam)
+summary(fit_peabody_quad)
+# if the quadratic term is significant, the relation is indeed curved
+# compare the R-squared of the two models
+```
+
+#### 11. Comparing boys and girls
+
+```{r}
+table(sesam$sex, useNA = "ifany")
+# check the coding before constructing the dummy
+```
+
+```{r}
+sesam <- sesam |>
+  mutate(female = sex - 1)
+
+table(sesam$sex, sesam$female, useNA = "ifany")
+# female should be 0 for boys and 1 for girls
+# this recode assumes sex is coded 1 and 2; adjust if your codebook differs
+```
+
+```{r}
+t.test(postnumb ~ female, data = sesam)
+
+fit_female <- lm(postnumb ~ female, data = sesam)
+summary(fit_female)
+
+# Difference in means (independent samples t-test) = 0.02, not significant.
+# There is no evidence that the average postnumb scores for boys and girls
+# differ. The regression gives the same conclusion: the coefficient for
+# female is the difference in sample means, and it is not significant.
+```
+
+
