@@ -32,7 +32,7 @@ website:
           - text: "Model testing"
             href: modelling/glm_model_testing.qmd
           - text: "Binary logistic regression"
-            href: modelling/glm_logistic_regression.qmd"
+            href: modelling/glm_logistic_regression.qmd
           - text: "Multinomial Logistic Regression"
             href: modelling/glm_multinomial_regression.qmd
           - text: "Ordinal Logistic Regression"
