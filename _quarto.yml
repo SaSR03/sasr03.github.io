@@ -21,10 +21,32 @@ website:
             href: data_handling/dh_select.qmd
           - text: "Using fuctions"
             href: data_handling/dh_functions.qmd
+          - href: data_handling/dh_missing.qmd
+            text: "Dealing with missing data"
       - section: "Modelling (Assignments)"
         contents:
-          - text: "Linear regression"
-            href: modelling/simple_linear_regression.qmd
+          - text: "Simple linear regression"
+            href: modelling/glm_regression.qmd
+          - text: "Multiple linear regression"
+            href: modelling/glm_multiple_regression.qmd
+          - text: "Model testing"
+            href: modelling/glm_model_testing.qmd
+          - text: "Binary logistic regression"
+            href: modelling/glm_logistic_regression.qmd"
+          - text: "Multinomial Logistic Regression"
+            href: modelling/glm_multinomial_regression.qmd
+          - text: "Ordinal Logistic Regression"
+            href: modelling/glm_ordinal_regression.qmd
+          - text: "Event history analysis"
+            href: modelling/glm_eha.qmd"
+        - section: "GGPlot2"
+          contents:
+            - text: 
+              href: 
+        - section: "Miscellaneous"
+          contents:
+            - text:               
+              href: 
 
 format:
   html:
