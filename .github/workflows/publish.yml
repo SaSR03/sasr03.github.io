@@ -40,6 +40,7 @@ jobs:
             any::visdat
             any::survminer
             any::readstata13
+            any::psych
 
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2

@@ -1,0 +1,116 @@
+---
+title: Some programming features in R
+---
+
+## Objects
+
+Objects allow you to abbreviate commands considerably, making code more readable, and improving consistency. For instance, we can define an object `C` with a set of variables to be used as controls in a series of models. Using an object ensures you use the same control variables everywhere; changing the controls in all models is accomplished by editing one line of code.
+
+```{r, eval=FALSE}
+C <- c("sex", "age", "married")
+```
+
+## Repeating commands
+
+Often, you want to apply the same operation to several variables. You can write out the commands by hand, but this is repetitive and easy to mistype.
+
+1a. Repeat a variable construction for multiple variables
+
+```{r, eval=FALSE}
+data <- data |>
+  mutate(
+    rgood1 = 1 - good1,
+    rgood2 = 1 - good2,
+    rgood3 = 1 - good3,
+    rgood4 = 1 - good4,
+    rgood5 = 1 - good5
+  )
+```
+
+This works, but it is not very efficient. If you later discover that the transformation should be different, you have to change five lines of code.
+
+1b. Equivalent, using `across()`
+
+```{r, eval=FALSE}
+data <- data |>
+  mutate(
+    across(
+      good1:good5,
+      ~ 1 - .x,
+      .names = "r{.col}"
+    )
+  )
+```
+
+The function `across()` applies the same operation to several variables. Here, `good1:good5` selects the variables from `good1` to `good5`. The expression `~ 1 - .x` means: take each selected variable and compute `1 - variable`. The argument `.names = "r{.col}"` creates new variable names by adding `r` before the original variable name.
+
+1c. Equivalent, selecting variables by name pattern
+
+```{r, eval=FALSE}
+data <- data |>
+  mutate(
+    across(
+      starts_with("good"),
+      ~ 1 - .x,
+      .names = "r{.col}"
+    )
+  )
+```
+
+This does the same thing, but selects variables by name. All variables whose names start with good are transformed. This is useful when there are many variables with a shared naming pattern.
+
+1d. Equivalent, looping over a numerical range
+
+```{r, eval=FALSE}
+for (i in 1:5) {
+  data[[paste0("rgood", i)]] <- 1 - data[[paste0("good", i)]]
+}
+```
+
+This loop repeats the same command for `i = 1, 2, 3, 4, 5`. The function `paste0()` creates variable names such as `good1` and `rgood1`. This approach is useful, but for data manipulation in the tidyverse, `across()` is often easier to read.
+
+2.
+
+```{r, eval=FALSE}
+for (i in 1:5) {
+
+  data |>
+    filter(country == i) |>
+    summarise(
+      mean_income = mean(income, na.rm = TRUE)
+    )
+
+  data |>
+    filter(country == i) |>
+    count(religion)
+
+}
+```
+
+This loop repeats two analyses for each value of `country` from 1 to 5. For each country, it computes the mean income and creates a frequency table of religion. This is useful when you want to run the same checks separately for multiple groups.
+
+## Writing your own functions
+
+If you repeat the same block of code many times, it can be useful to write your own function. A function takes inputs, does something with them, and returns an output.
+
+```{r, eval=FALSE}
+rob_regress <- function(formula, data) {
+
+  lm(
+    formula = formula,
+    data = data
+  )
+
+}
+```
+
+This function is called `rob_regress`. It takes two inputs: a model formula and a dataset. Inside the function, `lm()` estimates a linear regression model.
+
+```{r, eval=FALSE}
+rob_regress(
+  inc ~ edu + age,
+  data = data
+)
+```
+
+This runs the function with income as the dependent variable and education and age as explanatory variables.

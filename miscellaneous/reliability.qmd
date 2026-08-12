@@ -1,0 +1,219 @@
+---
+title: Reliability
+---
+
+See slides.
+
+## R
+
+You need to learn about the following R functions:
+
+| R | Description |
+|---|---|
+| alpha() | Cronbach's alpha |
+
+The function `alpha()` is part of the `psych` package.
+
+Examples:
+
+Cronbach's alpha coefficient for unstandardized items `item1-item10`:
+
+```{r, eval=FALSE}
+psych::alpha(
+  data |> select(item1:item10)
+)
+```
+
+Standardized items, sign of each item as is:
+
+```{r, eval=FALSE}
+psych::alpha(
+  data |> select(item1:item10),
+  check.keys = FALSE
+)
+```
+
+Store a scale as a new variable:
+
+```{r, eval=FALSE}
+data <- data |>
+  mutate(
+    SR = rowMeans(
+      select(., item1:item10),
+      na.rm = TRUE
+    )
+  )
+```
+
+Display item statistics and alpha if item deleted:
+
+```{r, eval=FALSE}
+psych::alpha(
+  data |> select(item1:item10)
+)
+```
+
+The output includes Cronbach's alpha, item-total correlations, and the value of alpha if each item is deleted in turn.
+
+## Assignments
+
+1. Use the dataset `sbs399_sexroles`. We assess the reliability for the sex role items in this dataset.
+
+- Check the descriptives of the sex role items `sexrol1-sexrol5`, including the number of missing values for each of the variables.
+
+- Do a reliability analysis of the standardized items, keeping the items directed as in the data. What is the value (estimate) of Cronbach's alpha?
+
+- Check the alpha's if each item is deleted from the scale in turn. The deletion of which item will increase the reliability? Why?
+
+Hint: Verify that it is negatively correlated to the other items and should be recoded first.
+
+- Reverse item 5 and redo the analysis. What is the value of Cronbach's alpha now?
+
+- Check the alpha's if items are deleted. The deletion of which item will increase the reliability? Is this increase large? Discuss the advantage and drawback of deleting this item. For instance, one drawback of deleting an item is the decrease in the range of attitude measures.
+
+- What is the sample size in the data and what is the sample size in the analysis?
+
+- Replace the missing values for a variable with the mean of this variable. Do again a reliability analysis. Notice that the reliability goes down. Why will this be the case? What would be a better imputation for the missing values?
+
+2. Use the dataset `muslimrights`. We now assess the reliability for scales in this dataset. Refer to your results in the section on factor analysis. We want to assess the reliability of the two factors of the two-dimensional solution and the reliability of the unidimensional solution.
+
+- Do again the factor analysis with an oblique rotation. Notice that two items are difficult to place: items 2 and 7.
+
+- Assess reliability separately for items 1 to 4 and for items 5 to 7. What happens to the reliability if you delete items 2 and 7?
+
+- Do a reliability analysis for items 1 to 7 together. What happens if you delete items 2 and 7?
+
+## Answers
+
+Make sure this file is in the same R Project as the `data` folder. Use relative file paths, not full paths to your computer.
+
+```{r setup-reliability}
+library(tidyverse)
+library(haven)
+library(psych)
+
+sexroles <- read_dta("data/sbs399_sexroles.dta")
+muslimrights <- read_dta("data/muslimrights.dta")
+```
+
+### 1. Sex role items (sbs399_sexroles)
+
+```{r}
+sexroles |>
+  select(sexrol1:sexrol5) |>
+  summary()
+
+sexroles |>
+  summarise(across(sexrol1:sexrol5, ~ sum(is.na(.x)), .names = "n_missing_{.col}"))
+```
+
+Reliability of the standardized items, keeping the items directed as in the data (`check.keys = FALSE` stops `psych::alpha()` from auto-reversing any item, matching Stata's `asis` option):
+
+```{r}
+psych::alpha(
+  sexroles |> select(sexrol1:sexrol5),
+  check.keys = FALSE
+)
+
+# read off std.alpha for the reliability of the standardized items.
+# the "reliability if an item is dropped" table in the same output shows
+# which item's removal would raise alpha the most.
+```
+
+```{r}
+sexroles |>
+  summarise(across(sexrol1:sexrol4, ~ cor(.x, sexrol5, use = "pairwise.complete.obs")))
+
+# sexrol5 correlates negatively with the other four items, dragging alpha
+# down; it should be reverse coded before combining the items into a scale.
+```
+
+Reverse item 5 (on a 1-5 scale, the reversal is `max + min - x = 6 - x`) and redo the analysis:
+
+```{r}
+sexroles <- sexroles |>
+  mutate(Rsexrol5 = 6 - sexrol5)
+
+psych::alpha(
+  sexroles |> select(sexrol1, sexrol2, sexrol3, sexrol4, Rsexrol5)
+)
+
+# alpha should now be noticeably higher than in the "asis" analysis, since
+# the reversed item correlates positively with the rest of the scale.
+```
+
+```{r}
+psych::alpha(
+  sexroles |> select(sexrol1, sexrol2, sexrol3, sexrol4, Rsexrol5)
+)
+
+# check the "reliability if an item is dropped" column again: any further
+# gain from dropping an item should now be small, since the main problem
+# (the unreversed item) is already fixed. Weigh a small reliability gain
+# against the cost of shortening the scale and narrowing what it measures.
+```
+
+```{r}
+nrow(sexroles)
+
+sexroles |>
+  select(sexrol1, sexrol2, sexrol3, sexrol4, Rsexrol5) |>
+  drop_na() |>
+  nrow()
+
+# psych::alpha() drops any case with a missing value on at least one item
+# (casewise/listwise deletion), so the analysis sample is smaller than the
+# full dataset.
+```
+
+Replace missing values with the variable mean, and redo the reliability analysis:
+
+```{r}
+sexroles <- sexroles |>
+  mutate(across(
+    c(sexrol1, sexrol2, sexrol3, sexrol4, Rsexrol5),
+    ~ if_else(is.na(.x), mean(.x, na.rm = TRUE), .x),
+    .names = "i{.col}"
+  ))
+
+psych::alpha(
+  sexroles |> select(isexrol1, isexrol2, isexrol3, isexrol4, iRsexrol5)
+)
+
+# mean imputation replaces every missing value with the same constant, so
+# it removes real variation in the imputed items and weakens their
+# covariance with the other items; alpha therefore drops rather than
+# rises with the larger sample. Regression imputation or, better, multiple
+# imputation preserves more of the association between items than a
+# single mean substitution does.
+```
+
+### 2. Muslim expressive rights and national identification (muslimrights)
+
+Reliability of the two factors found in the factor analysis of this dataset (items 1-4 and items 5-7), using casewise (listwise) deletion of missing values:
+
+```{r}
+psych::alpha(muslimrights |> select(right1:right4) |> drop_na())
+psych::alpha(muslimrights |> select(right5:right7) |> drop_na())
+
+# items 2 and 7 were the items that did not load cleanly on either factor
+# in the factor analysis; check whether dropping them raises alpha for
+# their respective scale.
+```
+
+```{r}
+psych::alpha(muslimrights |> select(right1, right3, right4) |> drop_na())
+psych::alpha(muslimrights |> select(right5, right6) |> drop_na())
+```
+
+Reliability for all seven items together, with and without items 2 and 7:
+
+```{r}
+psych::alpha(muslimrights |> select(right1:right7) |> drop_na())
+psych::alpha(muslimrights |> select(right1, right3, right4, right5, right6) |> drop_na())
+
+# compare alpha for the combined 7-item scale to the two separate
+# subscales above: a single alpha for all items together is only
+# meaningful if the items form one dimension, which the factor analysis
+# suggests they do not.
+```

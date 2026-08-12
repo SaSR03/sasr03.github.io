@@ -1,0 +1,40 @@
+---
+title: Random sampling data
+---
+
+Load the dataset `world95`.
+
+Take a random sample of 25% of the observations:
+
+```{r, eval=FALSE}
+world95_sample <- world95 |>
+  slice_sample(prop = 0.25)
+```
+
+Obtain the mean and variance of a variable that interests you (by now you know or can find out what function to use to obtain summary statistics). Copy these numbers to paper.
+
+Reload the dataset `world95`; take again a sample of 25%; and obtain again the average and variance of the same variable. Convince yourself that you understand why these numbers are different.
+
+Note that the sample sizes of the random samples are the same. The samples were drawn WITHOUT replacement. You may also express that you want 30 observations selected at random (and without replacement) from the 109 observations contained in the full dataset.
+
+```{r, eval=FALSE}
+world95_sample <- world95 |>
+  slice_sample(n = 30)
+```
+
+A different sampling strategy is to select each observation independently with probability 0.25 (see `rbinom()`). Now the actual sample size that is obtained will be random, on average 0.25 × 109, but with some chance variation. Convince yourself that the actual sample size is not constant across replications.
+
+```{r, eval=FALSE}
+world95_sample <- world95 |>
+  filter(rbinom(n(), 1, 0.25) == 1)
+```
+
+If you redo an analysis multiple times on a random sample, you will obtain different results each time. This is often not what you want. Thus, often it is better to ensure that the same random numbers are generated.
+
+```{r, eval=FALSE}
+set.seed(13579)
+```
+
+Sampling from data has many applications. When you analyze a very big dataset, software may take quite a long time reading data and computing the quantities of interest. To get a good feeling for the data one may look at a random selection of the data. Final analyses may subsequently be performed using the full dataset.
+
+A more advanced use of (re)sampling from a dataset is the bootstrap, a modern method for making inferences from data relying less on strong assumptions and mathematics and more on intensive computer calculations.

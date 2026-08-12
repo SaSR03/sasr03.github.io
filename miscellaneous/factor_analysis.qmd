@@ -1,0 +1,349 @@
+---
+title: Factor analysis (FA)
+---
+
+## Introduction
+
+See slides.
+
+## R
+
+You need to learn about the following R functions for factor analysis. Optionally you may want to check principal component analysis.
+
+| R | Description |
+|---|---|
+| factanal() | factor analysis by maximum likelihood |
+| prcomp() | principal component analysis |
+| screeplot() | plot of eigenvalues to determine number of factors |
+| predict() | factor scores |
+
+`factanal()` performs factor analysis using maximum likelihood estimation. The other functions can be used to inspect and interpret the factor solution.
+
+Examples:
+
+Setup data on sex role attitudes
+
+```{r, eval=FALSE}
+data <- read_dta("sbs399_sexroles.dta")
+```
+
+Determine the number of factors with a scree plot:
+
+```{r, eval=FALSE}
+cor_mat <- cor(
+  data |> select(sexrol1:sexrol5),
+  use = "pairwise.complete.obs"
+)
+
+eigenvalues <- eigen(cor_mat)$values
+
+screeplot(
+  princomp(
+    data |> select(sexrol1:sexrol5)
+  ),
+  type = "lines"
+)
+```
+
+Factor analysis using maximum likelihood:
+
+```{r, eval=FALSE}
+fa <- factanal(
+  data |> select(sexrol1:sexrol5),
+  factors = 2
+)
+```
+
+Rotate common factors to ease interpretation:
+
+```{r, eval=FALSE}
+fa_varimax <- factanal(
+  data |> select(sexrol1:sexrol5),
+  factors = 2,
+  rotation = "varimax"
+)
+
+print(
+  fa_varimax,
+  digits = 2,
+  cutoff = .30
+)
+```
+
+Oblique rotation:
+
+```{r, eval=FALSE}
+fa_oblique <- factanal(
+  data |> select(sexrol1:sexrol5),
+  factors = 2,
+  rotation = "promax"
+)
+
+print(
+  fa_oblique,
+  digits = 2,
+  cutoff = .30
+)
+```
+
+Factor scores, estimated by regression scoring:
+
+```{r, eval=FALSE}
+scores <- predict(
+  fa_varimax,
+  data |> select(sexrol1:sexrol5)
+)
+```
+
+## Assignments
+
+Solutions are contained in `dh_factor_assignments.R`.
+
+1. Use the dataset `muslimrights`. You will see that more than 1 factor is needed to obtain a good approximation of the association structure of the variables. The dataset contains two sets of items.
+
+Opposition towards Muslim expressive rights was measured with seven statements. Four example items were:
+
+- The right to establish Islamic schools should always exist in the Netherlands.
+- Some Islamic holidays should become official Dutch holidays.
+- Dutch TV should broadcast more programmes by and for Muslims.
+- In the Netherlands the wearing of a headscarf should not be forbidden.
+
+National identification was measured by six statements:
+
+- My Dutch identity is an important part of my self (iden1);
+- I identify strongly with the Netherlands (iden2);
+- I feel a strong attachment to the Netherlands (iden3);
+- I am proud of my Dutch background (iden4);
+- Being Dutch is a very important part of how I see myself (iden5); and
+- I feel a strong sense of belonging to the Netherlands (iden6).
+
+i. Check the descriptives. Check the frequencies. Are the variables approximately normally distributed? Why is this important?
+
+ii. Change the value labels of the variables. Categories run from 1 (completely disagree) to 7 (completely agree).
+
+iii. Do an EFA/ML of the data. Apply a varimax rotation.
+
+iv. Provide interpretations:
+
+- You find two eigenvalues larger than 1. Check the scree plot. How many dimensions would you choose?
+- For the moment we choose two dimensions. In the unrotated solution, how much variance is explained by factor 1 and factor 2? And in the rotated solution? Verify that the sum of the variances of factors 1 and 2 is the same for the unrotated and rotated solutions.
+- Which variable is not very well explained by the two factors?
+- Interpret the two factors.
+- If you would make two sum scores for the items, which variables go into sum score 1 and which in sum score 2?
+- Apply a promax rotation.
+- Provide interpretations:
+  - Which parts of the output are the same as with the varimax rotation and which are different?
+  - Interpret the two factors.
+  - What is the correlation between the factors?
+  - Which variables go into each of the factors?
+
+v. Oversee all analyses that you carried out. What is your final conclusion with respect to the number of dimensions (factors)? Assume for the moment that you choose two dimensions, what is your final conclusion with respect to the interpretation of the dimensions?
+
+vi. Optional. Analyze the 6 items about national identification in the dataset. Change the variable labels and value labels before you start.
+
+2. Use the dataset `bsri`.
+
+BSRI stands for the Bem Sex Role Inventory (Bem, 1974). We have data from a sample of 369 middle-class, English speaking women between the ages of 21 and 60 who were interviewed face-to-face.
+
+The full inventory takes 60 items. Tabachnick and Fidell state that in our data there are 20 items measuring the overall trait femininity, 20 items the overall trait masculinity, and 5 items measuring the overall trait social desirability.
+
+- Do an initial check on the data using frequencies and descriptives.
+- Do an initial EFA/ML and study the eigenvalues from the scree plot.
+- Do a second EFA/ML with two factors with a promax rotation. Interpret the two factors.
+- Do a third EFA/ML with five factors with a promax rotation. Interpret the five factors using only those variables that have loadings larger than .40.
+
+We stop here. We have seen that interpreting the factor structure for such a large list of items is difficult and sometimes somewhat arbitrary. More insight could be found from validating the factors in experimental research and by correlating the factors to other variables. Of course, this is beyond the scope of this course.
+
+## Answers
+
+Make sure this file is in the same R Project as the `data` folder. Use relative file paths, not full paths to your computer.
+
+```{r setup-factor-analysis}
+library(tidyverse)
+library(haven)
+
+muslimrights <- read_dta("data/muslimrights.dta")
+bsri <- read_dta("data/bsri.dta")
+
+bsri_vars <- c(
+  "helpful", "reliant", "defbel", "yielding", "cheerful", "indpt", "athlet", "shy",
+  "assert", "strpers", "forceful", "affect", "flatter", "loyal", "analyt", "feminine",
+  "sympathy", "moody", "sensitiv", "undstand", "compass", "leaderab", "soothe", "risk",
+  "decide", "selfsuff", "conscien", "dominant", "masculin", "stand", "happy", "softspok",
+  "warm", "truthful", "tender", "gullible", "leadact", "childlik", "individ", "foullang",
+  "lovchil", "compete", "ambitiou", "gentle"
+)
+```
+
+### 1. Opposition to Muslim expressive rights (muslimrights)
+
+Descriptives and frequencies:
+
+```{r}
+muslimrights |>
+  select(right1:right7) |>
+  summary()
+
+muslimrights |>
+  select(right1:right7) |>
+  map(table)
+
+# these are 7-point Likert items, so they are not truly continuous or
+# normally distributed; ML factor analysis assumes multivariate normality,
+# so with clearly skewed or heavily piled-up items the ML significance
+# tests should be interpreted with some caution.
+```
+
+Change the value labels:
+
+```{r}
+muslimrights <- muslimrights |>
+  mutate(across(
+    right1:right7,
+    ~ factor(
+      .x,
+      levels = 1:7,
+      labels = c(
+        "completely disagree", "mostly disagree", "disagree",
+        "neutral", "agree", "mostly agree", "completely agree"
+      )
+    ),
+    .names = "f{.col}"
+  ))
+
+# the ffright* factor versions are for labeled frequency tables; the
+# analyses below keep using the original numeric right1:right7 variables.
+```
+
+Determine the number of factors with a scree plot, then fit a two-factor solution:
+
+```{r}
+cor_mat_muslim <- cor(
+  muslimrights |> select(right1:right7),
+  use = "pairwise.complete.obs"
+)
+eigen(cor_mat_muslim)$values
+
+screeplot(
+  princomp(muslimrights |> select(right1:right7) |> drop_na()),
+  type = "lines"
+)
+
+# two eigenvalues clearly larger than 1, consistent with choosing a
+# two-factor solution.
+```
+
+```{r}
+fa_muslim <- factanal(
+  muslimrights |> select(right1:right7) |> drop_na(),
+  factors = 2,
+  rotation = "varimax"
+)
+fa_muslim
+```
+
+Compare the unrotated and rotated (varimax) solutions:
+
+```{r}
+fa_muslim_unrotated <- factanal(
+  muslimrights |> select(right1:right7) |> drop_na(),
+  factors = 2,
+  rotation = "none"
+)
+fa_muslim_unrotated
+fa_muslim
+
+# the sum of the SS loadings (variance explained) across both factors is
+# the same for the unrotated and the rotated solution; varimax rotation
+# only redistributes how much of that total variance is attributed to
+# factor 1 versus factor 2, to make the loadings easier to interpret.
+```
+
+```{r}
+fa_muslim
+# the uniquenesses reported for each item show which variable is least
+# well explained by the two-factor solution (the item with the largest
+# uniqueness).
+```
+
+Oblique (promax) rotation:
+
+```{r}
+fa_muslim_promax <- factanal(
+  muslimrights |> select(right1:right7) |> drop_na(),
+  factors = 2,
+  rotation = "promax"
+)
+fa_muslim_promax
+
+# unlike varimax, promax allows the two factors to correlate with each
+# other; that correlation is reported separately below.
+fa_muslim_promax$correlation
+```
+
+```{r}
+# Optional: national identification items (iden1:iden6)
+muslimrights <- muslimrights |>
+  mutate(across(
+    iden1:iden6,
+    ~ factor(.x, levels = 1:7),
+    .names = "f{.col}"
+  ))
+
+fa_iden <- factanal(
+  muslimrights |> select(iden1:iden6) |> drop_na(),
+  factors = 1
+)
+fa_iden
+```
+
+### 2. Bem Sex Role Inventory (bsri)
+
+Initial check of the data:
+
+```{r}
+bsri |>
+  select(all_of(bsri_vars)) |>
+  summary()
+```
+
+Initial factor analysis; use a scree plot to judge how many factors to retain:
+
+```{r}
+cor_mat_bsri <- cor(
+  bsri |> select(all_of(bsri_vars)),
+  use = "pairwise.complete.obs"
+)
+eigen(cor_mat_bsri)$values
+
+screeplot(
+  princomp(bsri |> select(all_of(bsri_vars)) |> drop_na()),
+  type = "lines"
+)
+```
+
+Two-factor solution with a promax rotation:
+
+```{r}
+fa_bsri_2 <- factanal(
+  bsri |> select(all_of(bsri_vars)) |> drop_na(),
+  factors = 2,
+  rotation = "promax"
+)
+print(fa_bsri_2, digits = 2, cutoff = .30)
+```
+
+Five-factor solution with a promax rotation, showing only loadings larger than .40:
+
+```{r}
+fa_bsri_5 <- factanal(
+  bsri |> select(all_of(bsri_vars)) |> drop_na(),
+  factors = 5,
+  rotation = "promax"
+)
+print(fa_bsri_5, digits = 2, cutoff = .40)
+
+# interpret each factor from the items that load above .40 on it; with 42
+# items spread over 5 factors, some items may fail to load cleanly on any
+# single factor.
+```
