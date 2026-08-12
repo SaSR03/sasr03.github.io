@@ -50,7 +50,7 @@ website:
           - text: "Programming features in R"
             href: miscellaneous/r_programming_features.qmd
           - text: "Factor analysis"
-             href: miscellaneous/factor_analysis.qmd
+            href: miscellaneous/factor_analysis.qmd
           - text: "Reliability"
             href: miscellaneous/reliability.qmd
 format:
