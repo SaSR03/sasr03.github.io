@@ -1,5 +1,108 @@
 ---
-title: "ggplot"
-format: html
+title: Data visualization with ggplot2
 ---
 
+In this section, we use `ggplot2` to create basic graphs in R. The examples use the built-in `mpg` dataset from the `ggplot2` package.
+
+```{r}
+#| message: false
+library(tidyverse)
+```
+
+## Scatterplots
+
+Scatterplots are useful for studying relationships between numerical variables.
+
+```{r}
+ggplot(mpg, aes(x = displ, y = hwy)) +
+  geom_point()
+```
+
+A regression line can be added with `geom_smooth()`.
+
+```{r}
+#| message: false
+ggplot(mpg, aes(x = displ, y = hwy)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE)
+```
+
+## Histograms
+
+Histograms show the distribution of one numerical variable.
+
+```{r}
+#| message: false
+ggplot(mpg, aes(x = hwy)) +
+  geom_histogram()
+```
+
+You can change the bin width.
+
+```{r}
+ggplot(mpg, aes(x = hwy)) +
+  geom_histogram(binwidth = 2)
+```
+
+## Density plots
+
+Density plots show a smoother version of a distribution.
+
+```{r}
+ggplot(mpg, aes(x = hwy)) +
+  geom_density()
+```
+
+## Bar charts
+
+Bar charts are useful for categorical variables.
+
+```{r}
+ggplot(mpg, aes(x = class)) +
+  geom_bar()
+```
+
+## Grouping with color
+
+You can use color to show groups within the same graph.
+
+```{r}
+ggplot(mpg, aes(x = displ, y = hwy, color = class)) +
+  geom_point()
+```
+
+## Faceting
+
+Faceting creates separate panels for different groups.
+
+```{r}
+ggplot(mpg, aes(x = displ, y = hwy)) +
+  geom_point() +
+  facet_wrap(~ class)
+```
+
+## Labels
+
+Good graphs need clear labels.
+
+```{r}
+ggplot(mpg, aes(x = displ, y = hwy)) +
+  geom_point() +
+  labs(
+    title = "Fuel efficiency by engine size",
+    x = "Engine displacement",
+    y = "Highway miles per gallon"
+  )
+```
+
+## Themes
+
+Themes change the appearance of the graph.
+
+```{r}
+ggplot(mpg, aes(x = displ, y = hwy)) +
+  geom_point() +
+  theme_minimal()
+```
+
+The goal of a graph is to make the data easier to understand. Always choose a graph that fits the type of variable and the question you want to answer.
