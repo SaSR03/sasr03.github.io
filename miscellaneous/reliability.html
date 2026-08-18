@@ -1,0 +1,1376 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.37">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Reliability – SaSR03</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-267efaf477eec0fe62d4fb3579b721f4.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">SaSR03</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../miscellaneous/random_sampling.html">Miscellaneous</a></li><li class="breadcrumb-item"><a href="../miscellaneous/reliability.html">Reliability</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Data Handling</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data_handling/dh_summary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Get to know and summarise data</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data_handling/dh_doc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Documenting data</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data_handling/dh_variables.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Creating new variables</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data_handling/dh_select.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Selecting cases and repeating analyses for groups</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data_handling/dh_functions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Using fuctions</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data_handling/dh_missing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Dealing with missing data</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Modelling (Assignments)</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../modelling/glm_regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Simple linear regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../modelling/glm_multiple_regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Multiple linear regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../modelling/glm_model_testing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Model testing</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../modelling/glm_logistic_regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Binary logistic regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../modelling/glm_multinomial_regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Multinomial Logistic Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../modelling/glm_ordinal_regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Ordinal Logistic Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../modelling/glm_eha.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Event history analysis</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">GGPlot</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ggplot/ggplot.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Visualization with ggplot2</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Miscellaneous</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../miscellaneous/random_sampling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Random sampling</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../miscellaneous/r_programming_features.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Programming features in R</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../miscellaneous/factor_analysis.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Factor analysis</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../miscellaneous/reliability.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Reliability</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#r" id="toc-r" class="nav-link active" data-scroll-target="#r">R</a></li>
+  <li><a href="#assignments" id="toc-assignments" class="nav-link" data-scroll-target="#assignments">Assignments</a></li>
+  <li><a href="#answers" id="toc-answers" class="nav-link" data-scroll-target="#answers">Answers</a>
+  <ul class="collapse">
+  <li><a href="#sex-role-items-sbs399_sexroles" id="toc-sex-role-items-sbs399_sexroles" class="nav-link" data-scroll-target="#sex-role-items-sbs399_sexroles">1. Sex role items (sbs399_sexroles)</a></li>
+  <li><a href="#muslim-expressive-rights-and-national-identification-muslimrights" id="toc-muslim-expressive-rights-and-national-identification-muslimrights" class="nav-link" data-scroll-target="#muslim-expressive-rights-and-national-identification-muslimrights">2. Muslim expressive rights and national identification (muslimrights)</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../miscellaneous/random_sampling.html">Miscellaneous</a></li><li class="breadcrumb-item"><a href="../miscellaneous/reliability.html">Reliability</a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">Reliability</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>See slides.</p>
+<section id="r" class="level2">
+<h2 class="anchored" data-anchor-id="r">R</h2>
+<p>You need to learn about the following R functions:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>R</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>alpha()</td>
+<td>Cronbach’s alpha</td>
+</tr>
+</tbody>
+</table>
+<p>The function <code>alpha()</code> is part of the <code>psych</code> package.</p>
+<p>Examples:</p>
+<p>Cronbach’s alpha coefficient for unstandardized items <code>item1-item10</code>:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>psych<span class="sc">::</span><span class="fu">alpha</span>(</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  data <span class="sc">|&gt;</span> <span class="fu">select</span>(item1<span class="sc">:</span>item10)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Standardized items, sign of each item as is:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>psych<span class="sc">::</span><span class="fu">alpha</span>(</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  data <span class="sc">|&gt;</span> <span class="fu">select</span>(item1<span class="sc">:</span>item10),</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">check.keys =</span> <span class="cn">FALSE</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Store a scale as a new variable:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">SR =</span> <span class="fu">rowMeans</span>(</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>      <span class="fu">select</span>(., item1<span class="sc">:</span>item10),</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>      <span class="at">na.rm =</span> <span class="cn">TRUE</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Display item statistics and alpha if item deleted:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>psych<span class="sc">::</span><span class="fu">alpha</span>(</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  data <span class="sc">|&gt;</span> <span class="fu">select</span>(item1<span class="sc">:</span>item10)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The output includes Cronbach’s alpha, item-total correlations, and the value of alpha if each item is deleted in turn.</p>
+</section>
+<section id="assignments" class="level2">
+<h2 class="anchored" data-anchor-id="assignments">Assignments</h2>
+<ol type="1">
+<li>Use the dataset <code>sbs399_sexroles</code>. We assess the reliability for the sex role items in this dataset.</li>
+</ol>
+<ul>
+<li><p>Check the descriptives of the sex role items <code>sexrol1-sexrol5</code>, including the number of missing values for each of the variables.</p></li>
+<li><p>Do a reliability analysis of the standardized items, keeping the items directed as in the data. What is the value (estimate) of Cronbach’s alpha?</p></li>
+<li><p>Check the alpha’s if each item is deleted from the scale in turn. The deletion of which item will increase the reliability? Why?</p></li>
+</ul>
+<p>Hint: Verify that it is negatively correlated to the other items and should be recoded first.</p>
+<ul>
+<li><p>Reverse item 5 and redo the analysis. What is the value of Cronbach’s alpha now?</p></li>
+<li><p>Check the alpha’s if items are deleted. The deletion of which item will increase the reliability? Is this increase large? Discuss the advantage and drawback of deleting this item. For instance, one drawback of deleting an item is the decrease in the range of attitude measures.</p></li>
+<li><p>What is the sample size in the data and what is the sample size in the analysis?</p></li>
+<li><p>Replace the missing values for a variable with the mean of this variable. Do again a reliability analysis. Notice that the reliability goes down. Why will this be the case? What would be a better imputation for the missing values?</p></li>
+</ul>
+<ol start="2" type="1">
+<li>Use the dataset <code>muslimrights</code>. We now assess the reliability for scales in this dataset. Refer to your results in the section on factor analysis. We want to assess the reliability of the two factors of the two-dimensional solution and the reliability of the unidimensional solution.</li>
+</ol>
+<ul>
+<li><p>Do again the factor analysis with an oblique rotation. Notice that two items are difficult to place: items 2 and 7.</p></li>
+<li><p>Assess reliability separately for items 1 to 4 and for items 5 to 7. What happens to the reliability if you delete items 2 and 7?</p></li>
+<li><p>Do a reliability analysis for items 1 to 7 together. What happens if you delete items 2 and 7?</p></li>
+</ul>
+</section>
+<section id="answers" class="level2">
+<h2 class="anchored" data-anchor-id="answers">Answers</h2>
+<p>Make sure this file is in the same R Project as the <code>data</code> folder. Use relative file paths, not full paths to your computer.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.2.1     ✔ readr     2.2.0
+✔ forcats   1.0.1     ✔ stringr   1.6.0
+✔ ggplot2   4.0.2     ✔ tibble    3.3.1
+✔ lubridate 1.9.5     ✔ tidyr     1.3.2
+✔ purrr     1.2.2     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(psych)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'psych'
+
+The following objects are masked from 'package:ggplot2':
+
+    %+%, alpha</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>sexroles <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(<span class="st">"data/sbs399_sexroles.dta"</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>muslimrights <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(<span class="st">"data/muslimrights.dta"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<section id="sex-role-items-sbs399_sexroles" class="level3">
+<h3 class="anchored" data-anchor-id="sex-role-items-sbs399_sexroles">1. Sex role items (sbs399_sexroles)</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>sexroles <span class="sc">|&gt;</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(sexrol1<span class="sc">:</span>sexrol5) <span class="sc">|&gt;</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    sexrol1         sexrol2         sexrol3         sexrol4     
+ Min.   :1.000   Min.   :1.000   Min.   :1.000   Min.   :1.000  
+ 1st Qu.:1.000   1st Qu.:1.000   1st Qu.:1.000   1st Qu.:1.000  
+ Median :2.000   Median :2.000   Median :1.000   Median :2.000  
+ Mean   :2.538   Mean   :2.347   Mean   :1.423   Mean   :2.003  
+ 3rd Qu.:4.000   3rd Qu.:3.000   3rd Qu.:1.000   3rd Qu.:3.000  
+ Max.   :5.000   Max.   :5.000   Max.   :5.000   Max.   :5.000  
+ NA's   :444     NA's   :377     NA's   :416     NA's   :411    
+    sexrol5     
+ Min.   :1.000  
+ 1st Qu.:4.000  
+ Median :5.000  
+ Mean   :4.472  
+ 3rd Qu.:5.000  
+ Max.   :5.000  
+ NA's   :416    </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>sexroles <span class="sc">|&gt;</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">across</span>(sexrol1<span class="sc">:</span>sexrol5, <span class="sc">~</span> <span class="fu">sum</span>(<span class="fu">is.na</span>(.x)), <span class="at">.names =</span> <span class="st">"n_missing_{.col}"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 5
+  n_missing_sexrol1 n_missing_sexrol2 n_missing_sexrol3 n_missing_sexrol4
+              &lt;int&gt;             &lt;int&gt;             &lt;int&gt;             &lt;int&gt;
+1               444               377               416               411
+# ℹ 1 more variable: n_missing_sexrol5 &lt;int&gt;</code></pre>
+</div>
+</div>
+<p>Reliability of the standardized items, keeping the items directed as in the data (<code>check.keys = FALSE</code> stops <code>psych::alpha()</code> from auto-reversing any item, matching Stata’s <code>asis</code> option):</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>psych<span class="sc">::</span><span class="fu">alpha</span>(</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  sexroles <span class="sc">|&gt;</span> <span class="fu">select</span>(sexrol1<span class="sc">:</span>sexrol5),</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">check.keys =</span> <span class="cn">FALSE</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in psych::alpha(select(sexroles, sexrol1:sexrol5), check.keys = FALSE): Some items were negatively correlated with the first principal component and probably 
+should be reversed.  
+To do this, run the function again with the 'check.keys=TRUE' option</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Some items ( sexrol5 ) were negatively correlated with the first principal component and 
+probably should be reversed.  
+To do this, run the function again with the 'check.keys=TRUE' option</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Reliability analysis   
+Call: psych::alpha(x = select(sexroles, sexrol1:sexrol5), check.keys = FALSE)
+
+  raw_alpha std.alpha G6(smc) average_r S/N   ase mean   sd median_r
+      0.51      0.44     0.5      0.14 0.8 0.012  2.6 0.76     0.29
+
+    95% confidence boundaries 
+         lower alpha upper
+Feldt     0.48  0.51  0.54
+Duhachek  0.49  0.51  0.53
+
+ Reliability if an item is dropped:
+        raw_alpha std.alpha G6(smc) average_r  S/N alpha se var.r med.r
+sexrol1      0.33      0.25    0.35     0.078 0.34   0.0168 0.110 0.058
+sexrol2      0.28      0.21    0.29     0.063 0.27   0.0183 0.087 0.044
+sexrol3      0.43      0.33    0.41     0.111 0.50   0.0140 0.116 0.095
+sexrol4      0.33      0.23    0.32     0.069 0.30   0.0164 0.098 0.044
+sexrol5      0.70      0.70    0.65     0.369 2.34   0.0081 0.006 0.367
+
+ Item statistics 
+           n raw.r std.r r.cor r.drop mean   sd
+sexrol1 2906 0.715  0.69  0.59   0.44  2.5 1.40
+sexrol2 2973 0.741  0.72  0.67   0.50  2.3 1.40
+sexrol3 2934 0.560  0.62  0.46   0.34  1.4 0.94
+sexrol4 2939 0.685  0.71  0.63   0.46  2.0 1.24
+sexrol5 2934 0.032  0.06 -0.38  -0.28  4.5 0.96
+
+Non missing response frequency for each item
+           1    2    3    4    5 miss
+sexrol1 0.34 0.19 0.20 0.16 0.12 0.13
+sexrol2 0.41 0.17 0.18 0.12 0.11 0.11
+sexrol3 0.78 0.11 0.05 0.03 0.03 0.12
+sexrol4 0.50 0.20 0.18 0.06 0.07 0.12
+sexrol5 0.03 0.03 0.09 0.16 0.70 0.12</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># read off std.alpha for the reliability of the standardized items.</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="co"># the "reliability if an item is dropped" table in the same output shows</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="co"># which item's removal would raise alpha the most.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>sexroles <span class="sc">|&gt;</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">across</span>(sexrol1<span class="sc">:</span>sexrol4, <span class="sc">~</span> <span class="fu">cor</span>(.x, sexrol5, <span class="at">use =</span> <span class="st">"pairwise.complete.obs"</span>)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 4
+  sexrol1 sexrol2 sexrol3 sexrol4
+    &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
+1  -0.166  -0.223  -0.238  -0.205</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># sexrol5 correlates negatively with the other four items, dragging alpha</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="co"># down; it should be reverse coded before combining the items into a scale.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Reverse item 5 (on a 1-5 scale, the reversal is <code>max + min - x = 6 - x</code>) and redo the analysis:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>sexroles <span class="ot">&lt;-</span> sexroles <span class="sc">|&gt;</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Rsexrol5 =</span> <span class="dv">6</span> <span class="sc">-</span> sexrol5)</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>psych<span class="sc">::</span><span class="fu">alpha</span>(</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  sexroles <span class="sc">|&gt;</span> <span class="fu">select</span>(sexrol1, sexrol2, sexrol3, sexrol4, Rsexrol5)</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Reliability analysis   
+Call: psych::alpha(x = select(sexroles, sexrol1, sexrol2, sexrol3, 
+    sexrol4, Rsexrol5))
+
+  raw_alpha std.alpha G6(smc) average_r S/N   ase mean   sd median_r
+      0.69      0.69    0.65       0.3 2.2 0.008    2 0.83     0.29
+
+    95% confidence boundaries 
+         lower alpha upper
+Feldt     0.67  0.69  0.71
+Duhachek  0.67  0.69  0.71
+
+ Reliability if an item is dropped:
+         raw_alpha std.alpha G6(smc) average_r S/N alpha se  var.r med.r
+sexrol1       0.63      0.63    0.57      0.30 1.7   0.0098 0.0088  0.28
+sexrol2       0.59      0.59    0.53      0.27 1.5   0.0113 0.0070  0.25
+sexrol3       0.65      0.64    0.59      0.31 1.8   0.0092 0.0165  0.29
+sexrol4       0.61      0.61    0.55      0.28 1.5   0.0103 0.0111  0.25
+Rsexrol5      0.70      0.70    0.65      0.37 2.3   0.0081 0.0060  0.37
+
+ Item statistics 
+            n raw.r std.r r.cor r.drop mean   sd
+sexrol1  2906  0.73  0.67  0.56   0.47  2.5 1.40
+sexrol2  2973  0.78  0.74  0.66   0.56  2.3 1.40
+sexrol3  2934  0.61  0.66  0.52   0.43  1.4 0.94
+sexrol4  2939  0.73  0.71  0.61   0.51  2.0 1.24
+Rsexrol5 2934  0.51  0.55  0.34   0.28  1.5 0.96
+
+Non missing response frequency for each item
+            1    2    3    4    5 miss
+sexrol1  0.34 0.19 0.20 0.16 0.12 0.13
+sexrol2  0.41 0.17 0.18 0.12 0.11 0.11
+sexrol3  0.78 0.11 0.05 0.03 0.03 0.12
+sexrol4  0.50 0.20 0.18 0.06 0.07 0.12
+Rsexrol5 0.70 0.16 0.09 0.03 0.03 0.12</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># alpha should now be noticeably higher than in the "asis" analysis, since</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="co"># the reversed item correlates positively with the rest of the scale.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>psych<span class="sc">::</span><span class="fu">alpha</span>(</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  sexroles <span class="sc">|&gt;</span> <span class="fu">select</span>(sexrol1, sexrol2, sexrol3, sexrol4, Rsexrol5)</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Reliability analysis   
+Call: psych::alpha(x = select(sexroles, sexrol1, sexrol2, sexrol3, 
+    sexrol4, Rsexrol5))
+
+  raw_alpha std.alpha G6(smc) average_r S/N   ase mean   sd median_r
+      0.69      0.69    0.65       0.3 2.2 0.008    2 0.83     0.29
+
+    95% confidence boundaries 
+         lower alpha upper
+Feldt     0.67  0.69  0.71
+Duhachek  0.67  0.69  0.71
+
+ Reliability if an item is dropped:
+         raw_alpha std.alpha G6(smc) average_r S/N alpha se  var.r med.r
+sexrol1       0.63      0.63    0.57      0.30 1.7   0.0098 0.0088  0.28
+sexrol2       0.59      0.59    0.53      0.27 1.5   0.0113 0.0070  0.25
+sexrol3       0.65      0.64    0.59      0.31 1.8   0.0092 0.0165  0.29
+sexrol4       0.61      0.61    0.55      0.28 1.5   0.0103 0.0111  0.25
+Rsexrol5      0.70      0.70    0.65      0.37 2.3   0.0081 0.0060  0.37
+
+ Item statistics 
+            n raw.r std.r r.cor r.drop mean   sd
+sexrol1  2906  0.73  0.67  0.56   0.47  2.5 1.40
+sexrol2  2973  0.78  0.74  0.66   0.56  2.3 1.40
+sexrol3  2934  0.61  0.66  0.52   0.43  1.4 0.94
+sexrol4  2939  0.73  0.71  0.61   0.51  2.0 1.24
+Rsexrol5 2934  0.51  0.55  0.34   0.28  1.5 0.96
+
+Non missing response frequency for each item
+            1    2    3    4    5 miss
+sexrol1  0.34 0.19 0.20 0.16 0.12 0.13
+sexrol2  0.41 0.17 0.18 0.12 0.11 0.11
+sexrol3  0.78 0.11 0.05 0.03 0.03 0.12
+sexrol4  0.50 0.20 0.18 0.06 0.07 0.12
+Rsexrol5 0.70 0.16 0.09 0.03 0.03 0.12</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># check the "reliability if an item is dropped" column again: any further</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="co"># gain from dropping an item should now be small, since the main problem</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="co"># (the unreversed item) is already fixed. Weigh a small reliability gain</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="co"># against the cost of shortening the scale and narrowing what it measures.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(sexroles)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3350</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>sexroles <span class="sc">|&gt;</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(sexrol1, sexrol2, sexrol3, sexrol4, Rsexrol5) <span class="sc">|&gt;</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>() <span class="sc">|&gt;</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nrow</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1720</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># psych::alpha() drops any case with a missing value on at least one item</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="co"># (casewise/listwise deletion), so the analysis sample is smaller than the</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="co"># full dataset.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Replace missing values with the variable mean, and redo the reliability analysis:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>sexroles <span class="ot">&lt;-</span> sexroles <span class="sc">|&gt;</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">c</span>(sexrol1, sexrol2, sexrol3, sexrol4, Rsexrol5),</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>    <span class="sc">~</span> <span class="fu">if_else</span>(<span class="fu">is.na</span>(.x), <span class="fu">mean</span>(.x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), .x),</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">.names =</span> <span class="st">"i{.col}"</span></span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>  ))</span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>psych<span class="sc">::</span><span class="fu">alpha</span>(</span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>  sexroles <span class="sc">|&gt;</span> <span class="fu">select</span>(isexrol1, isexrol2, isexrol3, isexrol4, iRsexrol5)</span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Reliability analysis   
+Call: psych::alpha(x = select(sexroles, isexrol1, isexrol2, isexrol3, 
+    isexrol4, iRsexrol5))
+
+  raw_alpha std.alpha G6(smc) average_r S/N    ase mean   sd median_r
+      0.65      0.65    0.61      0.27 1.8 0.0091    2 0.73     0.25
+
+    95% confidence boundaries 
+         lower alpha upper
+Feldt     0.63  0.65  0.67
+Duhachek  0.63  0.65  0.67
+
+ Reliability if an item is dropped:
+          raw_alpha std.alpha G6(smc) average_r S/N alpha se  var.r med.r
+isexrol1       0.59      0.59    0.53      0.27 1.4   0.0110 0.0069  0.25
+isexrol2       0.54      0.55    0.48      0.23 1.2   0.0125 0.0052  0.22
+isexrol3       0.61      0.60    0.54      0.27 1.5   0.0104 0.0128  0.25
+isexrol4       0.57      0.56    0.51      0.25 1.3   0.0115 0.0085  0.22
+iRsexrol5      0.66      0.66    0.60      0.32 1.9   0.0094 0.0047  0.32
+
+ Item statistics 
+             n raw.r std.r r.cor r.drop mean   sd
+isexrol1  3350  0.69  0.65  0.51   0.42  2.5 1.31
+isexrol2  3350  0.75  0.71  0.62   0.51  2.3 1.32
+isexrol3  3350  0.58  0.64  0.48   0.39  1.4 0.88
+isexrol4  3350  0.69  0.69  0.57   0.46  2.0 1.16
+iRsexrol5 3350  0.48  0.54  0.32   0.26  1.5 0.90
+
+Non missing response frequency for each item
+             1 1.42297205180641 1.52760736196319    2 2.00272201429057
+isexrol1  0.29             0.00             0.00 0.16             0.00
+isexrol2  0.37             0.00             0.00 0.15             0.00
+isexrol3  0.68             0.12             0.00 0.10             0.00
+isexrol4  0.44             0.00             0.00 0.17             0.12
+iRsexrol5 0.61             0.00             0.12 0.14             0.00
+          2.34712411705348 2.53819683413627    3    4    5 miss
+isexrol1              0.00             0.13 0.17 0.13 0.11    0
+isexrol2              0.11             0.00 0.16 0.11 0.10    0
+isexrol3              0.00             0.00 0.05 0.02 0.03    0
+isexrol4              0.00             0.00 0.16 0.05 0.06    0
+iRsexrol5             0.00             0.00 0.08 0.02 0.03    0</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># mean imputation replaces every missing value with the same constant, so</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="co"># it removes real variation in the imputed items and weakens their</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="co"># covariance with the other items; alpha therefore drops rather than</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a><span class="co"># rises with the larger sample. Regression imputation or, better, multiple</span></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a><span class="co"># imputation preserves more of the association between items than a</span></span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a><span class="co"># single mean substitution does.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="muslim-expressive-rights-and-national-identification-muslimrights" class="level3">
+<h3 class="anchored" data-anchor-id="muslim-expressive-rights-and-national-identification-muslimrights">2. Muslim expressive rights and national identification (muslimrights)</h3>
+<p>Reliability of the two factors found in the factor analysis of this dataset (items 1-4 and items 5-7), using casewise (listwise) deletion of missing values:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>psych<span class="sc">::</span><span class="fu">alpha</span>(muslimrights <span class="sc">|&gt;</span> <span class="fu">select</span>(right1<span class="sc">:</span>right4) <span class="sc">|&gt;</span> <span class="fu">drop_na</span>())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Reliability analysis   
+Call: psych::alpha(x = drop_na(select(muslimrights, right1:right4)))
+
+  raw_alpha std.alpha G6(smc) average_r S/N   ase mean  sd median_r
+      0.74      0.75    0.72      0.43   3 0.048    4 1.1      0.4
+
+    95% confidence boundaries 
+         lower alpha upper
+Feldt     0.63  0.74  0.83
+Duhachek  0.65  0.74  0.84
+
+ Reliability if an item is dropped:
+       raw_alpha std.alpha G6(smc) average_r S/N alpha se  var.r med.r
+right1      0.68      0.68    0.64      0.42 2.1    0.064 0.0446  0.31
+right2      0.79      0.80    0.73      0.57 4.0    0.040 0.0068  0.55
+right3      0.61      0.61    0.53      0.35 1.6    0.078 0.0177  0.28
+right4      0.63      0.64    0.57      0.37 1.8    0.074 0.0236  0.31
+
+ Item statistics 
+        n raw.r std.r r.cor r.drop mean  sd
+right1 75  0.74  0.76  0.64   0.56  4.5 1.3
+right2 75  0.61  0.61  0.38   0.33  4.3 1.5
+right3 75  0.83  0.83  0.79   0.68  3.9 1.5
+right4 75  0.83  0.81  0.74   0.62  3.4 1.7
+
+Non missing response frequency for each item
+          1    2    3    4    5    6    7 miss
+right1 0.03 0.07 0.11 0.21 0.36 0.21 0.01    0
+right2 0.05 0.09 0.13 0.16 0.36 0.15 0.05    0
+right3 0.07 0.11 0.20 0.25 0.27 0.07 0.04    0
+right4 0.16 0.21 0.19 0.17 0.13 0.08 0.05    0</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>psych<span class="sc">::</span><span class="fu">alpha</span>(muslimrights <span class="sc">|&gt;</span> <span class="fu">select</span>(right5<span class="sc">:</span>right7) <span class="sc">|&gt;</span> <span class="fu">drop_na</span>())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Reliability analysis   
+Call: psych::alpha(x = drop_na(select(muslimrights, right5:right7)))
+
+  raw_alpha std.alpha G6(smc) average_r S/N   ase mean  sd median_r
+      0.69      0.72    0.63      0.46 2.5 0.061    5 1.1     0.44
+
+    95% confidence boundaries 
+         lower alpha upper
+Feldt     0.54  0.69  0.79
+Duhachek  0.57  0.69  0.81
+
+ Reliability if an item is dropped:
+       raw_alpha std.alpha G6(smc) average_r S/N alpha se var.r med.r
+right5      0.53      0.56    0.39      0.39 1.3    0.098    NA  0.39
+right6      0.59      0.61    0.44      0.44 1.6    0.089    NA  0.44
+right7      0.70      0.70    0.54      0.54 2.3    0.069    NA  0.54
+
+ Item statistics 
+        n raw.r std.r r.cor r.drop mean  sd
+right5 75  0.80  0.83  0.70   0.57  5.4 1.2
+right6 75  0.76  0.81  0.66   0.53  5.6 1.1
+right7 75  0.83  0.76  0.56   0.48  4.1 1.7
+
+Non missing response frequency for each item
+          1    2    3    4    5    6    7 miss
+right5 0.01 0.03 0.03 0.05 0.37 0.35 0.16    0
+right6 0.00 0.00 0.04 0.12 0.24 0.36 0.24    0
+right7 0.08 0.15 0.11 0.24 0.21 0.15 0.07    0</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co"># items 2 and 7 were the items that did not load cleanly on either factor</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="co"># in the factor analysis; check whether dropping them raises alpha for</span></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="co"># their respective scale.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>psych<span class="sc">::</span><span class="fu">alpha</span>(muslimrights <span class="sc">|&gt;</span> <span class="fu">select</span>(right1, right3, right4) <span class="sc">|&gt;</span> <span class="fu">drop_na</span>())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Reliability analysis   
+Call: psych::alpha(x = drop_na(select(muslimrights, right1, right3, 
+    right4)))
+
+  raw_alpha std.alpha G6(smc) average_r S/N  ase mean  sd median_r
+      0.79       0.8    0.73      0.57   4 0.04  3.9 1.3     0.55
+
+    95% confidence boundaries 
+         lower alpha upper
+Feldt     0.70  0.79  0.86
+Duhachek  0.72  0.79  0.87
+
+ Reliability if an item is dropped:
+       raw_alpha std.alpha G6(smc) average_r S/N alpha se var.r med.r
+right1      0.79      0.79    0.66      0.66 3.9    0.048    NA  0.66
+right3      0.65      0.67    0.50      0.50 2.0    0.077    NA  0.50
+right4      0.70      0.71    0.55      0.55 2.4    0.068    NA  0.55
+
+ Item statistics 
+        n raw.r std.r r.cor r.drop mean  sd
+right1 75  0.78  0.81  0.64   0.57  4.5 1.3
+right3 75  0.87  0.87  0.79   0.70  3.9 1.5
+right4 75  0.88  0.85  0.75   0.66  3.4 1.7
+
+Non missing response frequency for each item
+          1    2    3    4    5    6    7 miss
+right1 0.03 0.07 0.11 0.21 0.36 0.21 0.01    0
+right3 0.07 0.11 0.20 0.25 0.27 0.07 0.04    0
+right4 0.16 0.21 0.19 0.17 0.13 0.08 0.05    0</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>psych<span class="sc">::</span><span class="fu">alpha</span>(muslimrights <span class="sc">|&gt;</span> <span class="fu">select</span>(right5, right6) <span class="sc">|&gt;</span> <span class="fu">drop_na</span>())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Reliability analysis   
+Call: psych::alpha(x = drop_na(select(muslimrights, right5, right6)))
+
+  raw_alpha std.alpha G6(smc) average_r S/N   ase mean sd median_r
+       0.7       0.7    0.54      0.54 2.3 0.069  5.5  1     0.54
+
+    95% confidence boundaries 
+         lower alpha upper
+Feldt     0.52   0.7  0.81
+Duhachek  0.56   0.7  0.83
+
+ Reliability if an item is dropped:
+       raw_alpha std.alpha G6(smc) average_r S/N alpha se var.r med.r
+right5      0.59      0.54    0.29      0.54 1.2       NA     0  0.54
+right6      0.49      0.54    0.29      0.54 1.2       NA     0  0.54
+
+ Item statistics 
+        n raw.r std.r r.cor r.drop mean  sd
+right5 75  0.89  0.88  0.64   0.54  5.4 1.2
+right6 75  0.87  0.88  0.64   0.54  5.6 1.1
+
+Non missing response frequency for each item
+          1    2    3    4    5    6    7 miss
+right5 0.01 0.03 0.03 0.05 0.37 0.35 0.16    0
+right6 0.00 0.00 0.04 0.12 0.24 0.36 0.24    0</code></pre>
+</div>
+</div>
+<p>Reliability for all seven items together, with and without items 2 and 7:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>psych<span class="sc">::</span><span class="fu">alpha</span>(muslimrights <span class="sc">|&gt;</span> <span class="fu">select</span>(right1<span class="sc">:</span>right7) <span class="sc">|&gt;</span> <span class="fu">drop_na</span>())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Reliability analysis   
+Call: psych::alpha(x = drop_na(select(muslimrights, right1:right7)))
+
+  raw_alpha std.alpha G6(smc) average_r S/N   ase mean   sd median_r
+      0.78      0.78     0.8      0.33 3.5 0.038  4.5 0.95      0.3
+
+    95% confidence boundaries 
+         lower alpha upper
+Feldt     0.69  0.78  0.85
+Duhachek  0.70  0.78  0.85
+
+ Reliability if an item is dropped:
+       raw_alpha std.alpha G6(smc) average_r S/N alpha se var.r med.r
+right1      0.74      0.74    0.76      0.33 2.9    0.045 0.026  0.30
+right2      0.78      0.77    0.79      0.36 3.4    0.039 0.030  0.39
+right3      0.73      0.74    0.74      0.32 2.8    0.047 0.016  0.28
+right4      0.73      0.74    0.74      0.32 2.8    0.048 0.017  0.30
+right5      0.77      0.77    0.77      0.36 3.3    0.040 0.020  0.31
+right6      0.76      0.76    0.77      0.35 3.2    0.041 0.026  0.31
+right7      0.73      0.73    0.75      0.31 2.7    0.047 0.028  0.26
+
+ Item statistics 
+        n raw.r std.r r.cor r.drop mean  sd
+right1 75  0.68  0.68  0.61   0.55  4.5 1.3
+right2 75  0.57  0.57  0.43   0.38  4.3 1.5
+right3 75  0.73  0.71  0.67   0.60  3.9 1.5
+right4 75  0.75  0.71  0.68   0.59  3.4 1.7
+right5 75  0.54  0.58  0.51   0.39  5.4 1.2
+right6 75  0.57  0.62  0.53   0.44  5.6 1.1
+right7 75  0.74  0.72  0.67   0.59  4.1 1.7
+
+Non missing response frequency for each item
+          1    2    3    4    5    6    7 miss
+right1 0.03 0.07 0.11 0.21 0.36 0.21 0.01    0
+right2 0.05 0.09 0.13 0.16 0.36 0.15 0.05    0
+right3 0.07 0.11 0.20 0.25 0.27 0.07 0.04    0
+right4 0.16 0.21 0.19 0.17 0.13 0.08 0.05    0
+right5 0.01 0.03 0.03 0.05 0.37 0.35 0.16    0
+right6 0.00 0.00 0.04 0.12 0.24 0.36 0.24    0
+right7 0.08 0.15 0.11 0.24 0.21 0.15 0.07    0</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>psych<span class="sc">::</span><span class="fu">alpha</span>(muslimrights <span class="sc">|&gt;</span> <span class="fu">select</span>(right1, right3, right4, right5, right6) <span class="sc">|&gt;</span> <span class="fu">drop_na</span>())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Reliability analysis   
+Call: psych::alpha(x = drop_na(select(muslimrights, right1, right3, 
+    right4, right5, right6)))
+
+  raw_alpha std.alpha G6(smc) average_r S/N  ase mean   sd median_r
+      0.72      0.71    0.74      0.33 2.5 0.05  4.6 0.95     0.23
+
+    95% confidence boundaries 
+         lower alpha upper
+Feldt     0.60  0.72  0.81
+Duhachek  0.62  0.72  0.82
+
+ Reliability if an item is dropped:
+       raw_alpha std.alpha G6(smc) average_r S/N alpha se var.r med.r
+right1      0.63      0.64    0.67      0.30 1.7    0.069 0.056  0.20
+right3      0.62      0.63    0.63      0.30 1.7    0.072 0.030  0.23
+right4      0.64      0.64    0.65      0.31 1.8    0.070 0.036  0.23
+right5      0.73      0.72    0.69      0.39 2.5    0.047 0.043  0.35
+right6      0.71      0.69    0.69      0.36 2.3    0.052 0.057  0.38
+
+ Item statistics 
+        n raw.r std.r r.cor r.drop mean  sd
+right1 75  0.74  0.73  0.64   0.57  4.5 1.3
+right3 75  0.78  0.74  0.69   0.60  3.9 1.5
+right4 75  0.79  0.72  0.66   0.56  3.4 1.7
+right5 75  0.52  0.59  0.45   0.30  5.4 1.2
+right6 75  0.56  0.63  0.50   0.37  5.6 1.1
+
+Non missing response frequency for each item
+          1    2    3    4    5    6    7 miss
+right1 0.03 0.07 0.11 0.21 0.36 0.21 0.01    0
+right3 0.07 0.11 0.20 0.25 0.27 0.07 0.04    0
+right4 0.16 0.21 0.19 0.17 0.13 0.08 0.05    0
+right5 0.01 0.03 0.03 0.05 0.37 0.35 0.16    0
+right6 0.00 0.00 0.04 0.12 0.24 0.36 0.24    0</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="co"># compare alpha for the combined 7-item scale to the two separate</span></span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a><span class="co"># subscales above: a single alpha for all items together is only</span></span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a><span class="co"># meaningful if the items form one dimension, which the factor analysis</span></span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a><span class="co"># suggests they do not.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/SaSR03\.github\.io\/sasr03\.github\.io\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

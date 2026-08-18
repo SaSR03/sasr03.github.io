@@ -1,0 +1,1866 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.37">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Multinomial logistic regression – SaSR03</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-267efaf477eec0fe62d4fb3579b721f4.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">SaSR03</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../modelling/glm_regression.html">Modelling (Assignments)</a></li><li class="breadcrumb-item"><a href="../modelling/glm_multinomial_regression.html">Multinomial Logistic Regression</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Data Handling</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data_handling/dh_summary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Get to know and summarise data</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data_handling/dh_doc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Documenting data</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data_handling/dh_variables.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Creating new variables</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data_handling/dh_select.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Selecting cases and repeating analyses for groups</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data_handling/dh_functions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Using fuctions</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data_handling/dh_missing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Dealing with missing data</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Modelling (Assignments)</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../modelling/glm_regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Simple linear regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../modelling/glm_multiple_regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Multiple linear regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../modelling/glm_model_testing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Model testing</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../modelling/glm_logistic_regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Binary logistic regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../modelling/glm_multinomial_regression.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Multinomial Logistic Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../modelling/glm_ordinal_regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Ordinal Logistic Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../modelling/glm_eha.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Event history analysis</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">GGPlot</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ggplot/ggplot.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Visualization with ggplot2</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Miscellaneous</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../miscellaneous/random_sampling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Random sampling</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../miscellaneous/r_programming_features.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Programming features in R</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../miscellaneous/factor_analysis.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Factor analysis</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../miscellaneous/reliability.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Reliability</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#from-binary-to-multinomial-outcomes" id="toc-from-binary-to-multinomial-outcomes" class="nav-link active" data-scroll-target="#from-binary-to-multinomial-outcomes">From binary to multinomial outcomes</a></li>
+  <li><a href="#interpreting-coefficients" id="toc-interpreting-coefficients" class="nav-link" data-scroll-target="#interpreting-coefficients">Interpreting coefficients</a></li>
+  <li><a href="#the-iia-assumption" id="toc-the-iia-assumption" class="nav-link" data-scroll-target="#the-iia-assumption">The IIA assumption</a></li>
+  <li><a href="#r" id="toc-r" class="nav-link" data-scroll-target="#r">R</a></li>
+  <li><a href="#assignments" id="toc-assignments" class="nav-link" data-scroll-target="#assignments">Assignments</a>
+  <ul class="collapse">
+  <li><a href="#recoding-the-outcome" id="toc-recoding-the-outcome" class="nav-link" data-scroll-target="#recoding-the-outcome">Recoding the outcome</a></li>
+  <li><a href="#an-empty-model" id="toc-an-empty-model" class="nav-link" data-scroll-target="#an-empty-model">An empty model</a></li>
+  <li><a href="#interpreting-coefficients-1" id="toc-interpreting-coefficients-1" class="nav-link" data-scroll-target="#interpreting-coefficients-1">Interpreting coefficients</a></li>
+  <li><a href="#marginal-effects" id="toc-marginal-effects" class="nav-link" data-scroll-target="#marginal-effects">Marginal effects</a></li>
+  <li><a href="#checking-iia" id="toc-checking-iia" class="nav-link" data-scroll-target="#checking-iia">Checking IIA</a></li>
+  <li><a href="#interactions-and-goodness-of-fit" id="toc-interactions-and-goodness-of-fit" class="nav-link" data-scroll-target="#interactions-and-goodness-of-fit">Interactions and goodness of fit</a></li>
+  </ul></li>
+  <li><a href="#answers" id="toc-answers" class="nav-link" data-scroll-target="#answers">Answers</a>
+  <ul class="collapse">
+  <li><a href="#recoding-the-outcome-1" id="toc-recoding-the-outcome-1" class="nav-link" data-scroll-target="#recoding-the-outcome-1">Recoding the outcome</a></li>
+  <li><a href="#an-empty-model-1" id="toc-an-empty-model-1" class="nav-link" data-scroll-target="#an-empty-model-1">An empty model</a></li>
+  <li><a href="#interpreting-coefficients-2" id="toc-interpreting-coefficients-2" class="nav-link" data-scroll-target="#interpreting-coefficients-2">Interpreting coefficients</a></li>
+  <li><a href="#marginal-effects-1" id="toc-marginal-effects-1" class="nav-link" data-scroll-target="#marginal-effects-1">Marginal effects</a></li>
+  <li><a href="#checking-iia-1" id="toc-checking-iia-1" class="nav-link" data-scroll-target="#checking-iia-1">Checking IIA</a></li>
+  <li><a href="#interactions-and-goodness-of-fit-1" id="toc-interactions-and-goodness-of-fit-1" class="nav-link" data-scroll-target="#interactions-and-goodness-of-fit-1">Interactions and goodness of fit</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../modelling/glm_regression.html">Modelling (Assignments)</a></li><li class="breadcrumb-item"><a href="../modelling/glm_multinomial_regression.html">Multinomial Logistic Regression</a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">Multinomial logistic regression</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>In this part you will learn about the following basic tasks:</p>
+<ul>
+<li><p>Recode a categorical outcome variable with several unordered categories.</p></li>
+<li><p>Fit a multinomial logistic regression model, and choose a reference (base) category for the outcome.</p></li>
+<li><p>Interpret coefficients as log relative-risk ratios, and exponentiate them into relative-risk ratios (RRRs).</p></li>
+<li><p>Compute and interpret marginal effects on predicted probabilities for a multinomial outcome, including pairwise comparisons between response categories.</p></li>
+<li><p>Test the assumption of Independence of Irrelevant Alternatives (IIA).</p></li>
+<li><p>Include interactions between predictors, and test whether they improve model fit using a Wald test and a likelihood ratio test.</p></li>
+</ul>
+<section id="from-binary-to-multinomial-outcomes" class="level2">
+<h2 class="anchored" data-anchor-id="from-binary-to-multinomial-outcomes">From binary to multinomial outcomes</h2>
+<p>Multinomial logistic regression extends logistic regression to an outcome variable with more than two unordered categories — for instance, which of several political parties a person intends to vote for. One category is chosen as the reference (base) category, and the model estimates one set of coefficients for each of the remaining categories, describing the (log) relative odds of being in that category rather than in the base category.</p>
+<p><span class="math display">\[
+\log \left( \frac{P(Y=j)}{P(Y = \text{base})} \right) = b_{0j} + b_{1j} X_1 + \dots + b_{kj} X_k
+\]</span></p>
+<p>Which category is chosen as the base is arbitrary and does not affect the fit of the model, but it does affect which comparisons the coefficients directly represent. Choosing a substantively meaningful reference category (e.g., the largest group, or a natural “neutral” category) makes the output easier to interpret. It is good practice to fit the model with more than one choice of base category to make sure all pairwise comparisons of interest are covered, or to rely on marginal effects and pairwise comparisons (see below), which do not depend on the choice of base category.</p>
+</section>
+<section id="interpreting-coefficients" class="level2">
+<h2 class="anchored" data-anchor-id="interpreting-coefficients">Interpreting coefficients</h2>
+<p>As with binary logistic regression, there are several ways to interpret the coefficients of a multinomial model:</p>
+<ol type="1">
+<li><p><strong>Log relative-risk ratios.</strong> A one-unit increase in <span class="math inline">\(X\)</span> is associated with a <span class="math inline">\(b_j\)</span> change in the log of the relative risk of category <span class="math inline">\(j\)</span> versus the base category, holding other predictors constant.</p></li>
+<li><p><strong>Relative-risk ratios (RRR).</strong> Exponentiating a coefficient, <span class="math inline">\(\exp(b_j)\)</span>, gives the multiplicative change in the relative risk of category <span class="math inline">\(j\)</span> versus the base category. An RRR above 1 means the relative risk of category <span class="math inline">\(j\)</span> (versus the base) increases with <span class="math inline">\(X\)</span>; an RRR below 1 means it decreases.</p></li>
+<li><p><strong>Marginal effects on predicted probabilities.</strong> As in binary logistic regression, marginal effects translate the model back to the probability scale: the average change in the predicted probability of each category of the outcome for a one-unit change in a predictor. Because a multinomial outcome has several categories, marginal effects are reported separately for each category, and their sum across all categories is necessarily zero (an increase in the probability of one category must come at the expense of the others). Pairwise comparisons between two specific response categories can also be computed directly.</p></li>
+</ol>
+</section>
+<section id="the-iia-assumption" class="level2">
+<h2 class="anchored" data-anchor-id="the-iia-assumption">The IIA assumption</h2>
+<p>Multinomial logistic regression relies on the assumption of Independence of Irrelevant Alternatives (IIA): the relative odds of choosing between any two categories should not depend on which other categories are also available. This is a strong and often unrealistic assumption. One common way to check it is the Hausman-McFadden style test: refit the model repeatedly, each time excluding all observations belonging to one specific outcome category, and test whether the coefficients for the remaining categories change. If they change substantially, IIA is violated for that comparison, and a model that relaxes the IIA assumption (e.g., a nested logit or multinomial probit model) may be more appropriate — such models are beyond the scope of this course.</p>
+</section>
+<section id="r" class="level2">
+<h2 class="anchored" data-anchor-id="r">R</h2>
+<p>You will learn the R functions listed below to fit and interpret multinomial logistic regression models.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>nnet::multinom()</code></td>
+<td>Fit a multinomial logistic regression model</td>
+</tr>
+<tr class="even">
+<td><code>relevel()</code></td>
+<td>Change the reference (base) category of the outcome or a predictor factor</td>
+</tr>
+<tr class="odd">
+<td><code>summary()</code></td>
+<td>Display coefficients (log relative-risk ratios) and standard errors</td>
+</tr>
+<tr class="even">
+<td><code>exp(coef())</code></td>
+<td>Convert coefficients to relative-risk ratios</td>
+</tr>
+<tr class="odd">
+<td><code>car::linearHypothesis()</code></td>
+<td>Wald test of restrictions on the coefficients</td>
+</tr>
+<tr class="even">
+<td><code>lmtest::lrtest()</code></td>
+<td>Likelihood ratio test comparing two nested multinomial models</td>
+</tr>
+<tr class="odd">
+<td><code>marginaleffects::avg_slopes()</code></td>
+<td>Average marginal effects on predicted probabilities, for each outcome category</td>
+</tr>
+<tr class="even">
+<td><code>marginaleffects::avg_slopes(..., hypothesis = "pairwise")</code></td>
+<td>Pairwise comparisons of marginal effects between outcome categories</td>
+</tr>
+</tbody>
+</table>
+<p>Examples:</p>
+<p>Recode a party-choice variable into a smaller number of unordered categories, and check the recoding:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(<span class="st">"data/hin95_voting.dta"</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">party6 =</span> <span class="fu">case_match</span>(</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>      party,</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>      <span class="dv">1</span> <span class="sc">~</span> <span class="dv">2</span>, <span class="dv">2</span> <span class="sc">~</span> <span class="dv">4</span>, <span class="dv">3</span> <span class="sc">~</span> <span class="dv">3</span>, <span class="dv">4</span> <span class="sc">~</span> <span class="dv">5</span>, <span class="dv">5</span> <span class="sc">~</span> <span class="dv">1</span>, <span class="dv">11</span> <span class="sc">~</span> <span class="dv">1</span>, <span class="dv">6</span> <span class="sc">~</span> <span class="dv">6</span>, <span class="dv">7</span> <span class="sc">~</span> <span class="dv">6</span>, <span class="dv">8</span> <span class="sc">~</span> <span class="dv">6</span>,</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>      <span class="at">.default =</span> <span class="cn">NA_real_</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>data <span class="sc">|&gt;</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(party, party6)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Fit an empty (intercept-only) multinomial model, with a chosen base category, and inspect it again with a different base category:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(nnet)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">party6 =</span> <span class="fu">factor</span>(party6))</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>fit_empty1 <span class="ot">&lt;-</span> <span class="fu">multinom</span>(<span class="fu">relevel</span>(party6, <span class="at">ref =</span> <span class="st">"1"</span>) <span class="sc">~</span> <span class="dv">1</span>, <span class="at">data =</span> data)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit_empty1)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>fit_empty3 <span class="ot">&lt;-</span> <span class="fu">multinom</span>(<span class="fu">relevel</span>(party6, <span class="at">ref =</span> <span class="st">"3"</span>) <span class="sc">~</span> <span class="dv">1</span>, <span class="at">data =</span> data)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit_empty3)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Fit a model with predictors, and obtain relative-risk ratios:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">fem =</span> <span class="fu">as.integer</span>(sex <span class="sc">==</span> <span class="dv">2</span>),</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">rel4 =</span> <span class="fu">case_match</span>(</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>      religion,</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>      <span class="dv">1</span> <span class="sc">~</span> <span class="dv">1</span>, <span class="dv">2</span> <span class="sc">~</span> <span class="dv">2</span>, <span class="dv">3</span> <span class="sc">~</span> <span class="dv">3</span>, <span class="dv">4</span> <span class="sc">~</span> <span class="dv">3</span>, <span class="dv">8</span> <span class="sc">~</span> <span class="dv">4</span>,</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">.default =</span> <span class="cn">NA_real_</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">rel4 =</span> <span class="fu">factor</span>(rel4)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">multinom</span>(<span class="fu">relevel</span>(party6, <span class="at">ref =</span> <span class="st">"4"</span>) <span class="sc">~</span> education <span class="sc">+</span> rel4 <span class="sc">+</span> fem, <span class="at">data =</span> data)</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit)</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="fu">exp</span>(<span class="fu">coef</span>(fit))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Choose a different reference category for the categorical predictor <code>rel4</code>, and compare:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">rel4 =</span> <span class="fu">relevel</span>(rel4, <span class="at">ref =</span> <span class="st">"3"</span>))</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>fit_relevel <span class="ot">&lt;-</span> <span class="fu">multinom</span>(<span class="fu">relevel</span>(party6, <span class="at">ref =</span> <span class="st">"4"</span>) <span class="sc">~</span> education <span class="sc">+</span> rel4 <span class="sc">+</span> fem, <span class="at">data =</span> data)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="fu">exp</span>(<span class="fu">coef</span>(fit_relevel))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Average marginal effects on the predicted probability of each outcome category:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(marginaleffects)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>fit_me <span class="ot">&lt;-</span> <span class="fu">multinom</span>(<span class="fu">relevel</span>(party6, <span class="at">ref =</span> <span class="st">"1"</span>) <span class="sc">~</span> education <span class="sc">+</span> rel4 <span class="sc">+</span> fem, <span class="at">data =</span> data)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="fu">avg_slopes</span>(fit_me, <span class="at">variables =</span> <span class="fu">c</span>(<span class="st">"education"</span>, <span class="st">"fem"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Pairwise comparisons of the marginal effect of a predictor between response categories:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">avg_slopes</span>(fit_me, <span class="at">variables =</span> <span class="st">"rel4"</span>, <span class="at">by =</span> <span class="st">"group"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Check IIA informally by refitting the model excluding each outcome category in turn, and comparing coefficients:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>fit_full <span class="ot">&lt;-</span> <span class="fu">multinom</span>(party6 <span class="sc">~</span> education <span class="sc">+</span> rel4 <span class="sc">+</span> fem, <span class="at">data =</span> data)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>fit_no1 <span class="ot">&lt;-</span> <span class="fu">multinom</span>(party6 <span class="sc">~</span> education <span class="sc">+</span> rel4 <span class="sc">+</span> fem, <span class="at">data =</span> data <span class="sc">|&gt;</span> <span class="fu">filter</span>(party6 <span class="sc">!=</span> <span class="st">"1"</span>))</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>fit_no2 <span class="ot">&lt;-</span> <span class="fu">multinom</span>(party6 <span class="sc">~</span> education <span class="sc">+</span> rel4 <span class="sc">+</span> fem, <span class="at">data =</span> data <span class="sc">|&gt;</span> <span class="fu">filter</span>(party6 <span class="sc">!=</span> <span class="st">"2"</span>))</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co"># ... and so on for the remaining categories</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(fit_full)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(fit_no1)</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(fit_no2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>There is no single function that combines these separately-fitted models into one joint test of equal coefficients. In practice, informally comparing the coefficients and standard errors across the refitted models (as above) is the usual approach; substantial changes in a coefficient after excluding a category suggest that IIA does not hold for that comparison.</p>
+<p>Include an interaction between two categorical predictors, and test whether it improves the fit:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>fit_main <span class="ot">&lt;-</span> <span class="fu">multinom</span>(<span class="fu">relevel</span>(party6, <span class="at">ref =</span> <span class="st">"1"</span>) <span class="sc">~</span> edu4 <span class="sc">+</span> rel4, <span class="at">data =</span> data)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>fit_interaction <span class="ot">&lt;-</span> <span class="fu">multinom</span>(<span class="fu">relevel</span>(party6, <span class="at">ref =</span> <span class="st">"1"</span>) <span class="sc">~</span> edu4 <span class="sc">*</span> rel4, <span class="at">data =</span> data)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="fu">lrtest</span>(fit_main, fit_interaction)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="assignments" class="level2">
+<h2 class="anchored" data-anchor-id="assignments">Assignments</h2>
+<p>Use the dataset <code>hin95_voting</code>.</p>
+<section id="recoding-the-outcome" class="level3">
+<h3 class="anchored" data-anchor-id="recoding-the-outcome">Recoding the outcome</h3>
+<ol type="1">
+<li>Recode the variable <code>party</code> (Dutch parties in the 1995 election) into a new variable <code>party6</code> with six unordered categories: left, social democratic, social liberal, christian democratic, liberal, and strict religious. Categories that do not map onto one of these six groups should become missing. Check the recoding with a cross-tabulation of <code>party</code> against <code>party6</code>.</li>
+</ol>
+</section>
+<section id="an-empty-model" class="level3">
+<h3 class="anchored" data-anchor-id="an-empty-model">An empty model</h3>
+<ol start="2" type="1">
+<li><p>Fit a multinomial logistic regression of <code>party6</code> on no predictors (an empty/intercept-only model), using category 1 as the base category. How do you interpret the intercepts?</p></li>
+<li><p>Refit the same empty model using category 3 as the base category instead. Is there evidence that people are more or less likely to be in category 4 than in category 3?</p></li>
+</ol>
+</section>
+<section id="interpreting-coefficients-1" class="level3">
+<h3 class="anchored" data-anchor-id="interpreting-coefficients-1">Interpreting coefficients</h3>
+<ol start="4" type="1">
+<li><p>Create a dummy variable <code>fem</code> for women. Recode <code>religion</code> into a new nominal variable <code>rel4</code> with four categories. Fit a multinomial logistic regression of <code>party6</code> on <code>education</code>, <code>rel4</code>, and <code>fem</code>, using category 4 as the base category for <code>party6</code>, and report relative-risk ratios (RRRs). Interpret the RRR for one unit of education for at least one outcome category.</p></li>
+<li><p>Refit the same model, but this time set category 3 of <code>rel4</code> as the reference category for that predictor (instead of category 1). Compare the RRRs to the previous model. Why do the RRRs for <code>rel4</code> change even though the model as a whole fits the data identically?</p></li>
+</ol>
+</section>
+<section id="marginal-effects" class="level3">
+<h3 class="anchored" data-anchor-id="marginal-effects">Marginal effects</h3>
+<ol start="6" type="1">
+<li><p>Fit a multinomial logistic regression of <code>party6</code> on <code>education</code>, <code>rel4</code> (with category 1 as reference), and <code>fem</code>, using category 1 as the base category for <code>party6</code>. Compute the average marginal effects of <code>education</code> and <code>fem</code> on the predicted probability of each outcome category.</p></li>
+<li><p>Refit with category 2 as the reference category for <code>rel4</code>. Compute the average marginal effect of <code>rel4</code> on the predicted probabilities. Interpret one of these marginal effects.</p></li>
+<li><p>Compute pairwise comparisons of the marginal effect of <code>rel4</code> between two specific response categories. Interpret one such pairwise comparison.</p></li>
+</ol>
+</section>
+<section id="checking-iia" class="level3">
+<h3 class="anchored" data-anchor-id="checking-iia">Checking IIA</h3>
+<ol start="9" type="1">
+<li><p>Fit the full multinomial model of <code>party6</code> on <code>education</code>, <code>rel4</code>, and <code>fem</code>. Then refit the model six times, each time excluding all observations belonging to one category of <code>party6</code>. For each of the resulting models, compare the coefficients to those of the full model. For which outcome categories does the exclusion of another category appear to change the coefficients substantially, suggesting that IIA is violated? For which category does IIA appear to hold reasonably well?</p></li>
+<li><p>Based on your answer to the previous question, what do you conclude overall about whether the IIA assumption holds for this model of party choice?</p></li>
+</ol>
+</section>
+<section id="interactions-and-goodness-of-fit" class="level3">
+<h3 class="anchored" data-anchor-id="interactions-and-goodness-of-fit">Interactions and goodness of fit</h3>
+<ol start="11" type="1">
+<li><p>Recode <code>education</code> into an ordered variable <code>edu4</code> with four categories. Fit a multinomial model of <code>party6</code> on <code>edu4</code> and <code>rel4</code> (main effects only), using category 1 as the base category.</p></li>
+<li><p>Refit the model adding the interaction between <code>edu4</code> and <code>rel4</code>. Test whether this interaction significantly improves the fit, using a likelihood ratio test comparing the two models.</p></li>
+<li><p>Is there evidence for an interaction between education and religion on party choice? What does — and does not — this tell you about whether education and religion interact in their effect on the <em>predicted probabilities</em> of voting for each party (as opposed to the relative-risk ratios)?</p></li>
+<li><p>Fit a multinomial model of <code>party6</code> on <code>education</code>, <code>rel4</code>, and <code>fem</code> (main effects only), and a second model that adds all two-way and three-way interactions between these three predictors. Test whether the full set of interactions significantly improves the fit, using a likelihood ratio test.</p></li>
+</ol>
+</section>
+</section>
+<section id="answers" class="level2">
+<h2 class="anchored" data-anchor-id="answers">Answers</h2>
+<p>Make sure this file is in the same R Project as the <code>data</code> folder. Use relative file paths, not full paths to your computer.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.2.1     ✔ readr     2.2.0
+✔ forcats   1.0.1     ✔ stringr   1.6.0
+✔ ggplot2   4.0.3     ✔ tibble    3.3.1
+✔ lubridate 1.9.5     ✔ tidyr     1.3.2
+✔ purrr     1.2.2     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(nnet)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(car)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'car' was built under R version 4.6.1</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: carData</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'carData' was built under R version 4.6.1</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'car'
+
+The following object is masked from 'package:dplyr':
+
+    recode
+
+The following object is masked from 'package:purrr':
+
+    some</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lmtest)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'lmtest' was built under R version 4.6.1</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: zoo
+
+Attaching package: 'zoo'
+
+The following objects are masked from 'package:base':
+
+    as.Date, as.Date.numeric</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(marginaleffects)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>hin95_voting <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(<span class="st">"data/hin95_voting.dta"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<section id="recoding-the-outcome-1" class="level3">
+<h3 class="anchored" data-anchor-id="recoding-the-outcome-1">Recoding the outcome</h3>
+<section id="recoding-party-into-party6" class="level4">
+<h4 class="anchored" data-anchor-id="recoding-party-into-party6">1. Recoding <code>party</code> into <code>party6</code></h4>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The recoding follows the original mapping directly:</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="co">#   1 pvda   -&gt; 2 social democratic</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="co">#   2 cda    -&gt; 4 christian democratic</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="co">#   3 d66    -&gt; 3 social liberal</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="co">#   4 vvd    -&gt; 5 liberal</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="co">#   5 GL     -&gt; 1 left</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="co">#  11 sp     -&gt; 1 left</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a><span class="co">#   6 sgp    -&gt; 6 strict religious</span></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a><span class="co">#   7 rpf    -&gt; 6 strict religious</span></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a><span class="co">#   8 gpv    -&gt; 6 strict religious</span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a><span class="co">#  everything else (9 aov, 10 unie55, 12 cd) -&gt; missing</span></span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>hin95_voting <span class="ot">&lt;-</span> hin95_voting <span class="sc">|&gt;</span></span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">party6 =</span> <span class="fu">case_match</span>(</span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>      party,</span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a>      <span class="dv">1</span> <span class="sc">~</span> <span class="dv">2</span>,</span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a>      <span class="dv">2</span> <span class="sc">~</span> <span class="dv">4</span>,</span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a>      <span class="dv">3</span> <span class="sc">~</span> <span class="dv">3</span>,</span>
+<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a>      <span class="dv">4</span> <span class="sc">~</span> <span class="dv">5</span>,</span>
+<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a>      <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">11</span>) <span class="sc">~</span> <span class="dv">1</span>,</span>
+<span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a>      <span class="fu">c</span>(<span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">8</span>) <span class="sc">~</span> <span class="dv">6</span>,</span>
+<span id="cb20-23"><a href="#cb20-23" aria-hidden="true" tabindex="-1"></a>      <span class="at">.default =</span> <span class="cn">NA_real_</span></span>
+<span id="cb20-24"><a href="#cb20-24" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb20-25"><a href="#cb20-25" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: There was 1 warning in `mutate()`.
+ℹ In argument: `party6 = case_match(...)`.
+Caused by warning:
+! `case_match()` was deprecated in dplyr 1.2.0.
+ℹ Please use `recode_values()` instead.</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>hin95_voting <span class="sc">|&gt;</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(party, party6)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 13 × 3
+   party           party6     n
+   &lt;dbl+lbl&gt;        &lt;dbl&gt; &lt;int&gt;
+ 1  1 [pvda]            2   622
+ 2  2 [cda]             4   525
+ 3  3 [d66]             3   634
+ 4  4 [vvd]             5   930
+ 5  5 [groenlinks]      1   199
+ 6  6 [sgp]             6    54
+ 7  7 [rpf]             6    63
+ 8  8 [gpv]             6    30
+ 9  9 [aov]            NA    17
+10 10 [unie55]         NA    23
+11 11 [sp]              1    45
+12 12 [cd]             NA    25
+13 NA                  NA   187</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="an-empty-model-1" class="level3">
+<h3 class="anchored" data-anchor-id="an-empty-model-1">An empty model</h3>
+<section id="an-intercept-only-model-with-base-category-1" class="level4">
+<h4 class="anchored" data-anchor-id="an-intercept-only-model-with-base-category-1">2. An intercept-only model with base category 1</h4>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>hin95_voting <span class="ot">&lt;-</span> hin95_voting <span class="sc">|&gt;</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">party6 =</span> <span class="fu">factor</span>(party6))</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>fit_empty1 <span class="ot">&lt;-</span> <span class="fu">multinom</span>(<span class="fu">relevel</span>(party6, <span class="at">ref =</span> <span class="st">"1"</span>) <span class="sc">~</span> <span class="dv">1</span>, <span class="at">data =</span> hin95_voting)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># weights:  12 (5 variable)
+initial  value 5558.037874 
+iter  10 value 5127.670877
+final  value 5127.670705 
+converged</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit_empty1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Call:
+multinom(formula = relevel(party6, ref = "1") ~ 1, data = hin95_voting)
+
+Coefficients:
+  (Intercept)
+2   0.9357820
+3   0.9548884
+4   0.7662412
+5   1.3380265
+6  -0.5067322
+
+Std. Errors:
+  (Intercept)
+2  0.07553880
+3  0.07533714
+4  0.07748002
+5  0.07192818
+6  0.10440859
+
+Residual Deviance: 10255.34 
+AIC: 10265.34 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The intercepts b_j represent the "tendency to vote for party6 = j</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="co"># rather than party6 = 1" (the log relative-risk ratio of category j</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="co"># versus the base category 1, in a model with no predictors).</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="the-same-model-with-base-category-3" class="level4">
+<h4 class="anchored" data-anchor-id="the-same-model-with-base-category-3">3. The same model with base category 3</h4>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>fit_empty3 <span class="ot">&lt;-</span> <span class="fu">multinom</span>(<span class="fu">relevel</span>(party6, <span class="at">ref =</span> <span class="st">"3"</span>) <span class="sc">~</span> <span class="dv">1</span>, <span class="at">data =</span> hin95_voting)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># weights:  12 (5 variable)
+initial  value 5558.037874 
+iter  10 value 5127.670707
+iter  10 value 5127.670705
+iter  10 value 5127.670705
+final  value 5127.670705 
+converged</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit_empty3)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Call:
+multinom(formula = relevel(party6, ref = "3") ~ 1, data = hin95_voting)
+
+Coefficients:
+  (Intercept)
+1 -0.95488086
+2 -0.01910726
+4 -0.18865347
+5  0.38313393
+6 -1.46162482
+
+Std. Errors:
+  (Intercept)
+1  0.07533686
+2  0.05643579
+4  0.05900890
+5  0.05150296
+6  0.09154265
+
+Residual Deviance: 10255.34 
+AIC: 10265.34 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The intercepts now represent the tendency to vote for party6 = j</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="co"># rather than party6 = 3. The intercept for category 4 is not</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="co"># significant at the 5% level: there is no evidence that people are</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="co"># more or less likely to vote for category 4 rather than category 3.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+</section>
+<section id="interpreting-coefficients-2" class="level3">
+<h3 class="anchored" data-anchor-id="interpreting-coefficients-2">Interpreting coefficients</h3>
+<section id="relative-risk-ratios-with-base-category-4" class="level4">
+<h4 class="anchored" data-anchor-id="relative-risk-ratios-with-base-category-4">4. Relative-risk ratios with base category 4</h4>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>hin95_voting <span class="ot">&lt;-</span> hin95_voting <span class="sc">|&gt;</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">fem =</span> <span class="fu">as.integer</span>(sex <span class="sc">==</span> <span class="dv">2</span>),</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">rel4 =</span> <span class="fu">case_match</span>(</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>      religion,</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>      <span class="dv">1</span> <span class="sc">~</span> <span class="dv">1</span>,</span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>      <span class="dv">2</span> <span class="sc">~</span> <span class="dv">2</span>,</span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>      <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">4</span>) <span class="sc">~</span> <span class="dv">3</span>,</span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>      <span class="dv">8</span> <span class="sc">~</span> <span class="dv">4</span>,</span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>      <span class="at">.default =</span> <span class="cn">NA_real_</span></span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">rel4 =</span> <span class="fu">factor</span>(rel4)</span>
+<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a>hin95_voting <span class="sc">|&gt;</span></span>
+<span id="cb34-16"><a href="#cb34-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(rel4)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 2
+  rel4      n
+  &lt;fct&gt; &lt;int&gt;
+1 1      1591
+2 2       863
+3 3       727
+4 4       109
+5 &lt;NA&gt;     64</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>fit_c1 <span class="ot">&lt;-</span> <span class="fu">multinom</span>(<span class="fu">relevel</span>(party6, <span class="at">ref =</span> <span class="st">"4"</span>) <span class="sc">~</span> education <span class="sc">+</span> rel4 <span class="sc">+</span> fem, <span class="at">data =</span> hin95_voting)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># weights:  42 (30 variable)
+initial  value 5473.825178 
+iter  10 value 4804.129979
+iter  20 value 4704.343292
+iter  30 value 4677.152700
+iter  40 value 4671.752361
+iter  40 value 4671.752341
+iter  40 value 4671.752340
+final  value 4671.752340 
+converged</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit_c1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Call:
+multinom(formula = relevel(party6, ref = "4") ~ education + rel4 + 
+    fem, data = hin95_voting)
+
+Coefficients:
+  (Intercept)  education     rel42     rel43     rel44         fem
+1  -0.6740242 0.21273846 -1.793051 -2.440052 -1.538443  0.32212457
+2   1.1788407 0.05579060 -1.892032 -2.524853 -1.804187  0.05933598
+3   0.5249444 0.18800813 -1.731485 -2.212484 -1.841132  0.03658878
+5   1.3268600 0.10246820 -1.477010 -1.801292 -1.842196 -0.27039331
+6  -3.0971069 0.07604944 -1.523007  2.093151  2.958502  0.10955964
+
+Std. Errors:
+  (Intercept)  education     rel42     rel43     rel44       fem
+1   0.2486135 0.03783273 0.2033236 0.2361513 0.4682847 0.1622512
+2   0.1845222 0.02868524 0.1615380 0.1810917 0.3829744 0.1261739
+3   0.1896228 0.02865207 0.1604378 0.1718599 0.3854611 0.1245471
+5   0.1726210 0.02589920 0.1492390 0.1544461 0.3640456 0.1143185
+6   0.4807017 0.04423106 0.7186035 0.4377547 0.5251181 0.1954198
+
+Residual Deviance: 9343.505 
+AIC: 9403.505 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">exp</span>(<span class="fu">coef</span>(fit_c1))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  (Intercept) education     rel42      rel43      rel44       fem
+1  0.50965350  1.237061 0.1664516 0.08715636  0.2147151 1.3800567
+2  3.25060367  1.057376 0.1507652 0.08007006  0.1646082 1.0611317
+3  1.69036490  1.206843 0.1770214 0.10942849  0.1586377 1.0372664
+5  3.76918969  1.107902 0.2283194 0.16508539  0.1584690 0.7630793
+6  0.04517972  1.079016 0.2180553 8.11042899 19.2690913 1.1157866</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co"># One unit of education is associated with a relative-risk ratio of</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="co"># about 1.02 for at least one of the outcome categories versus category</span></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 4: a one-unit increase in education is associated with a small</span></span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a><span class="co"># increase (about 2%) in the relative risk of voting for that category</span></span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a><span class="co"># rather than category 4, holding rel4 and fem constant.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="a-different-reference-category-for-rel4" class="level4">
+<h4 class="anchored" data-anchor-id="a-different-reference-category-for-rel4">5. A different reference category for <code>rel4</code></h4>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>hin95_voting_relevel <span class="ot">&lt;-</span> hin95_voting <span class="sc">|&gt;</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">rel4 =</span> <span class="fu">relevel</span>(rel4, <span class="at">ref =</span> <span class="st">"3"</span>))</span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>fit_c2 <span class="ot">&lt;-</span> <span class="fu">multinom</span>(<span class="fu">relevel</span>(party6, <span class="at">ref =</span> <span class="st">"4"</span>) <span class="sc">~</span> education <span class="sc">+</span> rel4 <span class="sc">+</span> fem, <span class="at">data =</span> hin95_voting_relevel)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># weights:  42 (30 variable)
+initial  value 5473.825178 
+iter  10 value 4866.349736
+iter  20 value 4721.132388
+iter  30 value 4679.099379
+iter  40 value 4671.752806
+final  value 4671.752337 
+converged</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit_c2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Call:
+multinom(formula = relevel(party6, ref = "4") ~ education + rel4 + 
+    fem, data = hin95_voting_relevel)
+
+Coefficients:
+  (Intercept)  education     rel41      rel42       rel44         fem
+1  -3.1141089 0.21270834  2.440014  0.6470474  0.90145472  0.32217925
+2  -1.3459644 0.05577294  2.524700  0.6328207  0.72061942  0.05934745
+3  -1.6875370 0.18799465  2.212337  0.4810275  0.37136399  0.03659545
+5  -0.4743526 0.10244871  1.801120  0.3242838 -0.04079356 -0.27040883
+6  -1.0039742 0.07606186 -2.093615 -3.6150404  0.86531081  0.10941897
+
+Std. Errors:
+  (Intercept)  education     rel41     rel42     rel44       fem
+1   0.2951231 0.03783282 0.2361553 0.2472215 0.4881525 0.1622527
+2   0.2044909 0.02868475 0.1810859 0.1774771 0.3895338 0.1261720
+3   0.2025079 0.02865170 0.1718547 0.1657653 0.3869404 0.1245455
+5   0.1706801 0.02589864 0.1544392 0.1401372 0.3598420 0.1143163
+6   0.2670829 0.04423085 0.4378131 0.5935158 0.3339317 0.1954177
+
+Residual Deviance: 9343.505 
+AIC: 9403.505 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">exp</span>(<span class="fu">coef</span>(fit_c2))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  (Intercept) education      rel41      rel42     rel44       fem
+1  0.04441807  1.237024 11.4731985 1.90989328 2.4631838 1.3801321
+2  0.26028856  1.057358 12.4871522 1.88291430 2.0557062 1.0611439
+3  0.18497455  1.206827  9.1370442 1.61773584 1.4497107 1.0372733
+5  0.62228782  1.107880  6.0564271 1.38303980 0.9600273 0.7630675
+6  0.36642032  1.079029  0.1232408 0.02691584 2.3757444 1.1156297</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The RRR for one of the rel4 dummies now shows up as about 0.0099</span></span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a><span class="co"># instead of the value found before releveling. The RRRs for rel4</span></span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a><span class="co"># change because they always express a comparison to the *current*</span></span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a><span class="co"># reference category of rel4; the model itself (the fitted probabilities</span></span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a><span class="co"># for every combination of predictors) is identical either way -- only</span></span>
+<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a><span class="co"># which comparisons the reported coefficients directly represent</span></span>
+<span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a><span class="co"># changes.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+</section>
+<section id="marginal-effects-1" class="level3">
+<h3 class="anchored" data-anchor-id="marginal-effects-1">Marginal effects</h3>
+<section id="average-marginal-effects-of-education-and-fem" class="level4">
+<h4 class="anchored" data-anchor-id="average-marginal-effects-of-education-and-fem">6. Average marginal effects of <code>education</code> and <code>fem</code></h4>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>fit_me1 <span class="ot">&lt;-</span> <span class="fu">multinom</span>(<span class="fu">relevel</span>(party6, <span class="at">ref =</span> <span class="st">"1"</span>) <span class="sc">~</span> education <span class="sc">+</span> <span class="fu">relevel</span>(rel4, <span class="at">ref =</span> <span class="st">"1"</span>) <span class="sc">+</span> fem,</span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>                     <span class="at">data =</span> hin95_voting)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># weights:  42 (30 variable)
+initial  value 5473.825178 
+iter  10 value 4809.014143
+iter  20 value 4714.617504
+iter  30 value 4676.646356
+final  value 4671.752342 
+converged</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="fu">avg_slopes</span>(fit_me1, <span class="at">variables =</span> <span class="fu">c</span>(<span class="st">"education"</span>, <span class="st">"fem"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+      Term Group Contrast  Estimate Std. Error       z Pr(&gt;|z|)    S    2.5 %
+ education     1    dY/dX  0.008292    0.00231  3.5931  &lt; 0.001 11.6  0.00377
+ education     2    dY/dX -0.009702    0.00318 -3.0510  0.00228  8.8 -0.01593
+ education     3    dY/dX  0.016848    0.00334  5.0486  &lt; 0.001 21.1  0.01031
+ education     4    dY/dX -0.015222    0.00289 -5.2590  &lt; 0.001 22.7 -0.02089
+ education     5    dY/dX  0.000127    0.00372  0.0341  0.97279  0.0 -0.00717
+ education     6    dY/dX -0.000344    0.00161 -0.2133  0.83113  0.3 -0.00351
+ fem           1    1 - 0  0.027631    0.00979  2.8237  0.00475  7.7  0.00845
+ fem           2    1 - 0  0.017877    0.01419  1.2595  0.20787  2.3 -0.00994
+ fem           3    1 - 0  0.013692    0.01452  0.9428  0.34580  1.5 -0.01477
+ fem           4    1 - 0  0.005658    0.01302  0.4346  0.66389  0.6 -0.01986
+ fem           5    1 - 0 -0.071025    0.01650 -4.3044  &lt; 0.001 15.9 -0.10336
+ fem           6    1 - 0  0.006166    0.00725  0.8510  0.39478  1.3 -0.00804
+   97.5 %
+  0.01282
+ -0.00347
+  0.02339
+ -0.00955
+  0.00743
+  0.00282
+  0.04681
+  0.04570
+  0.04216
+  0.03118
+ -0.03868
+  0.02037
+
+Type: probs</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Averaged across response categories and observations, a one-unit</span></span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a><span class="co"># increase in education is associated with a change of about -0.015 in</span></span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a><span class="co"># the predicted probability of the (reference-relative) categories</span></span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a><span class="co"># considered, and being female is associated with a change of about</span></span>
+<span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a><span class="co"># 0.006. As with any multinomial marginal effects, the effects for</span></span>
+<span id="cb54-6"><a href="#cb54-6" aria-hidden="true" tabindex="-1"></a><span class="co"># individual categories sum to zero across all categories of party6.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="average-marginal-effect-of-rel4" class="level4">
+<h4 class="anchored" data-anchor-id="average-marginal-effect-of-rel4">7. Average marginal effect of <code>rel4</code></h4>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>fit_me2 <span class="ot">&lt;-</span> <span class="fu">multinom</span>(<span class="fu">relevel</span>(party6, <span class="at">ref =</span> <span class="st">"1"</span>) <span class="sc">~</span> education <span class="sc">+</span> <span class="fu">relevel</span>(rel4, <span class="at">ref =</span> <span class="st">"2"</span>) <span class="sc">+</span> fem,</span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>                     <span class="at">data =</span> hin95_voting)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># weights:  42 (30 variable)
+initial  value 5473.825178 
+iter  10 value 4829.400868
+iter  20 value 4729.156791
+iter  30 value 4677.772709
+final  value 4671.752365 
+converged</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="fu">avg_slopes</span>(fit_me2, <span class="at">variables =</span> <span class="st">"rel4"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+ Group Contrast  Estimate Std. Error      z Pr(&gt;|z|)     S    2.5 %   97.5 %
+     1    2 - 1 -0.028602    0.01210 -2.363  0.01813   5.8 -0.05233 -0.00488
+     1    3 - 1 -0.056579    0.01090 -5.192  &lt; 0.001  22.2 -0.07794 -0.03522
+     1    4 - 1 -0.026444    0.02786 -0.949  0.34255   1.5 -0.08105  0.02816
+     2    2 - 1 -0.095442    0.01747 -5.464  &lt; 0.001  24.4 -0.12968 -0.06120
+     2    3 - 1 -0.159884    0.01618 -9.884  &lt; 0.001  74.1 -0.19159 -0.12818
+     2    4 - 1 -0.116719    0.03886 -3.004  0.00267   8.5 -0.19288 -0.04055
+     3    2 - 1 -0.061037    0.01800 -3.390  &lt; 0.001  10.5 -0.09633 -0.02575
+     3    3 - 1 -0.114607    0.01709 -6.706  &lt; 0.001  35.5 -0.14810 -0.08111
+     3    4 - 1 -0.114640    0.03701 -3.098  0.00195   9.0 -0.18718 -0.04210
+     4    2 - 1  0.196053    0.01660 11.812  &lt; 0.001 104.5  0.16352  0.22858
+     4    3 - 1  0.234574    0.01832 12.804  &lt; 0.001 122.3  0.19867  0.27048
+     4    4 - 1  0.144100    0.04327  3.330  &lt; 0.001  10.2  0.05929  0.22891
+     5    2 - 1 -0.010638    0.02045 -0.520  0.60300   0.7 -0.05073  0.02945
+     5    3 - 1 -0.061037    0.02050 -2.977  0.00291   8.4 -0.10122 -0.02086
+     5    4 - 1 -0.147844    0.04119 -3.589  &lt; 0.001  11.6 -0.22858 -0.06710
+     6    2 - 1 -0.000334    0.00273 -0.122  0.90276   0.1 -0.00569  0.00502
+     6    3 - 1  0.157533    0.01403 11.226  &lt; 0.001  94.7  0.13003  0.18504
+     6    4 - 1  0.261546    0.04656  5.618  &lt; 0.001  25.6  0.17030  0.35280
+
+Term: rel4
+Type: probs</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="co"># One of the average marginal effects of rel4 (relative to category 2)</span></span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a><span class="co"># is about 0.0003: moving from the reference category of rel4 to this</span></span>
+<span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a><span class="co"># particular category is associated with a small increase of about</span></span>
+<span id="cb59-4"><a href="#cb59-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 0.03 percentage points in the average predicted probability of the</span></span>
+<span id="cb59-5"><a href="#cb59-5" aria-hidden="true" tabindex="-1"></a><span class="co"># corresponding outcome category of party6.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="pairwise-comparisons-between-response-categories" class="level4">
+<h4 class="anchored" data-anchor-id="pairwise-comparisons-between-response-categories">8. Pairwise comparisons between response categories</h4>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="fu">avg_slopes</span>(fit_me2, <span class="at">variables =</span> <span class="st">"rel4"</span>, <span class="at">by =</span> <span class="st">"group"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+ Group Contrast  Estimate Std. Error      z Pr(&gt;|z|)     S    2.5 %   97.5 %
+     1    2 - 1 -0.028602    0.01210 -2.363  0.01813   5.8 -0.05233 -0.00488
+     1    3 - 1 -0.056579    0.01090 -5.192  &lt; 0.001  22.2 -0.07794 -0.03522
+     1    4 - 1 -0.026444    0.02786 -0.949  0.34255   1.5 -0.08105  0.02816
+     2    2 - 1 -0.095442    0.01747 -5.464  &lt; 0.001  24.4 -0.12968 -0.06120
+     2    3 - 1 -0.159884    0.01618 -9.884  &lt; 0.001  74.1 -0.19159 -0.12818
+     2    4 - 1 -0.116719    0.03886 -3.004  0.00267   8.5 -0.19288 -0.04055
+     3    2 - 1 -0.061037    0.01800 -3.390  &lt; 0.001  10.5 -0.09633 -0.02575
+     3    3 - 1 -0.114607    0.01709 -6.706  &lt; 0.001  35.5 -0.14810 -0.08111
+     3    4 - 1 -0.114640    0.03701 -3.098  0.00195   9.0 -0.18718 -0.04210
+     4    2 - 1  0.196053    0.01660 11.812  &lt; 0.001 104.5  0.16352  0.22858
+     4    3 - 1  0.234574    0.01832 12.804  &lt; 0.001 122.3  0.19867  0.27048
+     4    4 - 1  0.144100    0.04327  3.330  &lt; 0.001  10.2  0.05929  0.22891
+     5    2 - 1 -0.010638    0.02045 -0.520  0.60300   0.7 -0.05073  0.02945
+     5    3 - 1 -0.061037    0.02050 -2.977  0.00291   8.4 -0.10122 -0.02086
+     5    4 - 1 -0.147844    0.04119 -3.589  &lt; 0.001  11.6 -0.22858 -0.06710
+     6    2 - 1 -0.000334    0.00273 -0.122  0.90276   0.1 -0.00569  0.00502
+     6    3 - 1  0.157533    0.01403 11.226  &lt; 0.001  94.7  0.13003  0.18504
+     6    4 - 1  0.261546    0.04656  5.618  &lt; 0.001  25.6  0.17030  0.35280
+
+Term: rel4
+Type: probs</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="co"># One of the pairwise comparisons of the marginal effect of rel4 between</span></span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a><span class="co"># two response categories is about -0.257: the predicted probability of</span></span>
+<span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a><span class="co"># one response category, relative to another, changes considerably more</span></span>
+<span id="cb62-4"><a href="#cb62-4" aria-hidden="true" tabindex="-1"></a><span class="co"># strongly with rel4 than for the other category, illustrating that</span></span>
+<span id="cb62-5"><a href="#cb62-5" aria-hidden="true" tabindex="-1"></a><span class="co"># marginal effects (unlike RRRs) can differ substantially across</span></span>
+<span id="cb62-6"><a href="#cb62-6" aria-hidden="true" tabindex="-1"></a><span class="co"># response-category comparisons.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+</section>
+<section id="checking-iia-1" class="level3">
+<h3 class="anchored" data-anchor-id="checking-iia-1">Checking IIA</h3>
+<section id="refitting-the-model-excluding-each-category-in-turn" class="level4">
+<h4 class="anchored" data-anchor-id="refitting-the-model-excluding-each-category-in-turn">9. Refitting the model excluding each category in turn</h4>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a>fit_full <span class="ot">&lt;-</span> <span class="fu">multinom</span>(party6 <span class="sc">~</span> education <span class="sc">+</span> rel4 <span class="sc">+</span> fem, <span class="at">data =</span> hin95_voting)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># weights:  42 (30 variable)
+initial  value 5473.825178 
+iter  10 value 4809.014143
+iter  20 value 4714.617504
+iter  30 value 4676.646356
+final  value 4671.752342 
+converged</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a>fit_no1 <span class="ot">&lt;-</span> <span class="fu">multinom</span>(party6 <span class="sc">~</span> education <span class="sc">+</span> rel4 <span class="sc">+</span> fem, <span class="at">data =</span> hin95_voting <span class="sc">|&gt;</span> <span class="fu">filter</span>(party6 <span class="sc">!=</span> <span class="st">"1"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in multinom(party6 ~ education + rel4 + fem, data =
+filter(hin95_voting, : group '1' is empty</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code># weights:  35 (24 variable)
+initial  value 4528.958286 
+iter  10 value 3988.965849
+iter  20 value 3895.234219
+iter  30 value 3849.929769
+final  value 3849.761486 
+converged</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb68"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a>fit_no2 <span class="ot">&lt;-</span> <span class="fu">multinom</span>(party6 <span class="sc">~</span> education <span class="sc">+</span> rel4 <span class="sc">+</span> fem, <span class="at">data =</span> hin95_voting <span class="sc">|&gt;</span> <span class="fu">filter</span>(party6 <span class="sc">!=</span> <span class="st">"2"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in multinom(party6 ~ education + rel4 + fem, data =
+filter(hin95_voting, : group '2' is empty</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code># weights:  35 (24 variable)
+initial  value 3949.560637 
+iter  10 value 3322.399365
+iter  20 value 3232.995213
+iter  30 value 3204.490706
+final  value 3204.449190 
+converged</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a>fit_no3 <span class="ot">&lt;-</span> <span class="fu">multinom</span>(party6 <span class="sc">~</span> education <span class="sc">+</span> rel4 <span class="sc">+</span> fem, <span class="at">data =</span> hin95_voting <span class="sc">|&gt;</span> <span class="fu">filter</span>(party6 <span class="sc">!=</span> <span class="st">"3"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in multinom(party6 ~ education + rel4 + fem, data =
+filter(hin95_voting, : group '3' is empty</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code># weights:  35 (24 variable)
+initial  value 3904.496376 
+iter  10 value 3269.776374
+iter  20 value 3187.442746
+iter  30 value 3154.989680
+final  value 3154.951705 
+converged</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb74"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a>fit_no4 <span class="ot">&lt;-</span> <span class="fu">multinom</span>(party6 <span class="sc">~</span> education <span class="sc">+</span> rel4 <span class="sc">+</span> fem, <span class="at">data =</span> hin95_voting <span class="sc">|&gt;</span> <span class="fu">filter</span>(party6 <span class="sc">!=</span> <span class="st">"4"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in multinom(party6 ~ education + rel4 + fem, data =
+filter(hin95_voting, : group '4' is empty</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code># weights:  35 (24 variable)
+initial  value 4076.706232 
+iter  10 value 3525.863171
+iter  20 value 3448.446169
+iter  30 value 3422.562755
+final  value 3422.443108 
+converged</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb77"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a>fit_no5 <span class="ot">&lt;-</span> <span class="fu">multinom</span>(party6 <span class="sc">~</span> education <span class="sc">+</span> rel4 <span class="sc">+</span> fem, <span class="at">data =</span> hin95_voting <span class="sc">|&gt;</span> <span class="fu">filter</span>(party6 <span class="sc">!=</span> <span class="st">"5"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in multinom(party6 ~ education + rel4 + fem, data =
+filter(hin95_voting, : group '5' is empty</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code># weights:  35 (24 variable)
+initial  value 3442.587695 
+iter  10 value 3070.641170
+iter  20 value 2848.674662
+iter  30 value 2823.990233
+final  value 2823.339383 
+converged</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb80"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a>fit_no6 <span class="ot">&lt;-</span> <span class="fu">multinom</span>(party6 <span class="sc">~</span> education <span class="sc">+</span> rel4 <span class="sc">+</span> fem, <span class="at">data =</span> hin95_voting <span class="sc">|&gt;</span> <span class="fu">filter</span>(party6 <span class="sc">!=</span> <span class="st">"6"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in multinom(party6 ~ education + rel4 + fem, data =
+filter(hin95_voting, : group '6' is empty</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code># weights:  35 (24 variable)
+initial  value 4681.854887 
+iter  10 value 4283.477198
+iter  20 value 4256.681146
+final  value 4251.975499 
+converged</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb83"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(fit_full)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  (Intercept)   education       rel42      rel43      rel44        fem
+2   1.8527148 -0.15692289 -0.09897465 -0.0847796 -0.2655258 -0.2627560
+3   1.1987900 -0.02470144  0.06157056  0.2275846 -0.3023548 -0.2855127
+4   0.6741374 -0.21268294  1.79265987  2.4396563  1.5383402 -0.3220884
+5   2.0007254 -0.11024178  0.31605228  0.6387535 -0.3033937 -0.5924906
+6  -2.4229458 -0.13666512  0.26955285  4.5328678  4.4969051 -0.2125334</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb85"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb85-1"><a href="#cb85-1" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(fit_no1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  (Intercept)   education     rel42     rel43       rel44         fem
+3  -0.6627779  0.13342669 0.1583301 0.3091370 -0.03829583 -0.01470198
+4  -1.1764119 -0.05789746 1.8916497 2.5257880  1.80551396 -0.04626229
+5   0.1498985  0.04596967 0.4114893 0.7199691 -0.04041034 -0.32364168
+6  -4.2810444  0.01849639 0.3702314 4.6191518  4.76589482  0.07397484</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb87"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb87-1"><a href="#cb87-1" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(fit_no2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  (Intercept)   education      rel42     rel43      rel44        fem
+3    1.211225 -0.02701243 0.06353216 0.2281555 -0.3003543 -0.2875865
+4    0.740845 -0.22742570 1.81152709 2.4524580  1.5579904 -0.3350032
+5    2.038718 -0.11765924 0.32537098 0.6434312 -0.2950804 -0.6013644
+6   -2.378598 -0.14630409 0.27996410 4.5403605  4.5075856 -0.2161521</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb89"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb89-1"><a href="#cb89-1" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(fit_no3)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  (Intercept)  education      rel42       rel43      rel44        fem
+2    1.851571 -0.1550990 -0.1145926 -0.09279337 -0.2462416 -0.2694822
+4    0.653253 -0.2055179  1.7743970  2.42886443  1.5633593 -0.3332180
+5    1.997275 -0.1084279  0.3043252  0.63351345 -0.2861824 -0.5970525
+6   -2.410629 -0.1368054  0.2613486  4.52837529  4.5159223 -0.2328860</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb91"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb91-1"><a href="#cb91-1" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(fit_no4)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  (Intercept)   education       rel42      rel43      rel44        fem
+2    1.842571 -0.15522593 -0.09516311 -0.1043013 -0.2952553 -0.2548706
+3    1.191507 -0.02351113  0.06450918  0.2217039 -0.3063049 -0.2828329
+5    1.979056 -0.10635026  0.32121167  0.6197920 -0.3235729 -0.5828481
+6   -2.555856 -0.11353212  0.27851961  4.5143668  4.4661660 -0.1619057</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb93"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb93-1"><a href="#cb93-1" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(fit_no5)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  (Intercept)   education       rel42       rel43      rel44        fem
+2   1.8178535 -0.15273856 -0.09752081 -0.06355129 -0.2522270 -0.2416653
+3   1.1878907 -0.02302048  0.06317433  0.23546007 -0.2977618 -0.2842494
+4   0.6798017 -0.21438981  1.79458692  2.47316439  1.5593174 -0.3372705
+6  -2.3282658 -0.15222589  0.27091048  4.56107046  4.5191232 -0.2720833</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb95"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb95-1"><a href="#cb95-1" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(fit_no6)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  (Intercept)  education       rel42       rel43      rel44        fem
+2   1.8496543 -0.1564022 -0.09994614 -0.08500489 -0.2803322 -0.2606721
+3   1.1976722 -0.0243902  0.06182797  0.22908167 -0.3111608 -0.2865478
+4   0.6649771 -0.2105538  1.79176085  2.43847362  1.5163780 -0.3209407
+5   1.9960753 -0.1092180  0.31611229  0.64033053 -0.3222084 -0.5928973</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb97"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb97-1"><a href="#cb97-1" aria-hidden="true" tabindex="-1"></a><span class="co"># There is no single function that combines these separately-fitted</span></span>
+<span id="cb97-2"><a href="#cb97-2" aria-hidden="true" tabindex="-1"></a><span class="co"># models into one joint test, so we compare the coefficients across</span></span>
+<span id="cb97-3"><a href="#cb97-3" aria-hidden="true" tabindex="-1"></a><span class="co"># models informally:</span></span>
+<span id="cb97-4"><a href="#cb97-4" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb97-5"><a href="#cb97-5" aria-hidden="true" tabindex="-1"></a><span class="co"># - Coefficients for category 1 (versus the other categories) change</span></span>
+<span id="cb97-6"><a href="#cb97-6" aria-hidden="true" tabindex="-1"></a><span class="co">#   noticeably when other categories are excluded in turn: IIA does not</span></span>
+<span id="cb97-7"><a href="#cb97-7" aria-hidden="true" tabindex="-1"></a><span class="co">#   appear to hold for category 1 (originally: p = 0.0449).</span></span>
+<span id="cb97-8"><a href="#cb97-8" aria-hidden="true" tabindex="-1"></a><span class="co"># - Coefficients for category 2 change substantially as well: IIA does</span></span>
+<span id="cb97-9"><a href="#cb97-9" aria-hidden="true" tabindex="-1"></a><span class="co">#   not appear to hold for category 2 (originally: p = 0.0002).</span></span>
+<span id="cb97-10"><a href="#cb97-10" aria-hidden="true" tabindex="-1"></a><span class="co"># - Coefficients for category 3 remain fairly stable across the refitted</span></span>
+<span id="cb97-11"><a href="#cb97-11" aria-hidden="true" tabindex="-1"></a><span class="co">#   models: IIA appears to hold reasonably well for category 3</span></span>
+<span id="cb97-12"><a href="#cb97-12" aria-hidden="true" tabindex="-1"></a><span class="co">#   (originally: p = 0.2277).</span></span>
+<span id="cb97-13"><a href="#cb97-13" aria-hidden="true" tabindex="-1"></a><span class="co"># - Coefficients for category 4 change noticeably: IIA does not appear</span></span>
+<span id="cb97-14"><a href="#cb97-14" aria-hidden="true" tabindex="-1"></a><span class="co">#   to hold for category 4 (originally: p = 0.0159).</span></span>
+<span id="cb97-15"><a href="#cb97-15" aria-hidden="true" tabindex="-1"></a><span class="co"># - Coefficients for category 6 change noticeably: IIA does not appear</span></span>
+<span id="cb97-16"><a href="#cb97-16" aria-hidden="true" tabindex="-1"></a><span class="co">#   to hold for category 6 (originally: p = 0.0229).</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="overall-conclusion-about-iia" class="level4">
+<h4 class="anchored" data-anchor-id="overall-conclusion-about-iia">10. Overall conclusion about IIA</h4>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb98"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb98-1"><a href="#cb98-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Overall, the IIA assumption does not hold well for this model of party</span></span>
+<span id="cb98-2"><a href="#cb98-2" aria-hidden="true" tabindex="-1"></a><span class="co"># choice: for most outcome categories, excluding another category from</span></span>
+<span id="cb98-3"><a href="#cb98-3" aria-hidden="true" tabindex="-1"></a><span class="co"># the data changes the estimated coefficients, meaning that the relative</span></span>
+<span id="cb98-4"><a href="#cb98-4" aria-hidden="true" tabindex="-1"></a><span class="co"># odds between remaining categories are not independent of which other</span></span>
+<span id="cb98-5"><a href="#cb98-5" aria-hidden="true" tabindex="-1"></a><span class="co"># alternatives are available. Only for category 3 does the assumption</span></span>
+<span id="cb98-6"><a href="#cb98-6" aria-hidden="true" tabindex="-1"></a><span class="co"># seem to hold reasonably well.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+</section>
+<section id="interactions-and-goodness-of-fit-1" class="level3">
+<h3 class="anchored" data-anchor-id="interactions-and-goodness-of-fit-1">Interactions and goodness of fit</h3>
+<section id="a-main-effects-model-with-edu4-and-rel4" class="level4">
+<h4 class="anchored" data-anchor-id="a-main-effects-model-with-edu4-and-rel4">11. A main-effects model with <code>edu4</code> and <code>rel4</code></h4>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb99"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb99-1"><a href="#cb99-1" aria-hidden="true" tabindex="-1"></a>hin95_voting <span class="ot">&lt;-</span> hin95_voting <span class="sc">|&gt;</span></span>
+<span id="cb99-2"><a href="#cb99-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb99-3"><a href="#cb99-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">edu4 =</span> <span class="fu">case_match</span>(</span>
+<span id="cb99-4"><a href="#cb99-4" aria-hidden="true" tabindex="-1"></a>      education,</span>
+<span id="cb99-5"><a href="#cb99-5" aria-hidden="true" tabindex="-1"></a>      <span class="dv">1</span> <span class="sc">~</span> <span class="dv">1</span>,</span>
+<span id="cb99-6"><a href="#cb99-6" aria-hidden="true" tabindex="-1"></a>      <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">3</span>) <span class="sc">~</span> <span class="dv">2</span>,</span>
+<span id="cb99-7"><a href="#cb99-7" aria-hidden="true" tabindex="-1"></a>      <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>) <span class="sc">~</span> <span class="dv">3</span>,</span>
+<span id="cb99-8"><a href="#cb99-8" aria-hidden="true" tabindex="-1"></a>      <span class="fu">c</span>(<span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">9</span>) <span class="sc">~</span> <span class="dv">4</span>,</span>
+<span id="cb99-9"><a href="#cb99-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">.default =</span> <span class="cn">NA_real_</span></span>
+<span id="cb99-10"><a href="#cb99-10" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb99-11"><a href="#cb99-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">edu4 =</span> <span class="fu">factor</span>(edu4)</span>
+<span id="cb99-12"><a href="#cb99-12" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb99-13"><a href="#cb99-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb99-14"><a href="#cb99-14" aria-hidden="true" tabindex="-1"></a>hin95_voting <span class="sc">|&gt;</span></span>
+<span id="cb99-15"><a href="#cb99-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(edu4)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 2
+  edu4      n
+  &lt;fct&gt; &lt;int&gt;
+1 1       248
+2 2      1114
+3 3      1140
+4 4       828
+5 &lt;NA&gt;     24</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb101"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb101-1"><a href="#cb101-1" aria-hidden="true" tabindex="-1"></a>fit_a <span class="ot">&lt;-</span> <span class="fu">multinom</span>(<span class="fu">relevel</span>(party6, <span class="at">ref =</span> <span class="st">"1"</span>) <span class="sc">~</span> edu4 <span class="sc">+</span> rel4, <span class="at">data =</span> hin95_voting)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># weights:  48 (35 variable)
+initial  value 5473.825178 
+iter  10 value 4742.661769
+iter  20 value 4690.971484
+iter  30 value 4667.728716
+iter  40 value 4665.890875
+final  value 4665.887872 
+converged</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb103"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb103-1"><a href="#cb103-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit_a)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Call:
+multinom(formula = relevel(party6, ref = "1") ~ edu4 + rel4, 
+    data = hin95_voting)
+
+Coefficients:
+  (Intercept)      edu42      edu43      edu44       rel42       rel43
+2   1.3342736 0.02373577 -0.4794780 -0.7420891 -0.09965324 -0.09277323
+3  -0.1129428 1.23081505  1.1835060  0.8346402  0.07735042  0.23873885
+4  -0.4194565 0.55298315 -0.1293027 -0.8164376  1.80391654  2.44589239
+5   1.0949592 0.39453710  0.1906914 -0.3656665  0.31992309  0.63854828
+6  -3.1856946 0.32425596  0.1112329 -0.5190703  0.28780338  4.53420010
+       rel44
+2 -0.2425227
+3 -0.2455310
+4  1.6192631
+5 -0.2443648
+6  4.5383530
+
+Std. Errors:
+  (Intercept)     edu42     edu43     edu44     rel42     rel43     rel44
+2   0.2909427 0.3208635 0.3131137 0.3122447 0.1881482 0.2367433 0.4805338
+3   0.3664470 0.3914338 0.3821731 0.3816873 0.1861671 0.2285631 0.4801377
+4   0.3237107 0.3396997 0.3336548 0.3380670 0.2036694 0.2364236 0.4693851
+5   0.2914229 0.3191760 0.3094230 0.3096656 0.1772936 0.2166818 0.4646764
+6   0.5894373 0.4820885 0.4661240 0.4746085 0.7248949 0.4638130 0.6010524
+
+Residual Deviance: 9331.776 
+AIC: 9401.776 </code></pre>
+</div>
+</div>
+</section>
+<section id="testing-the-edu4-rel4-interaction" class="level4">
+<h4 class="anchored" data-anchor-id="testing-the-edu4-rel4-interaction">12. Testing the <code>edu4 * rel4</code> interaction</h4>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb105"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb105-1"><a href="#cb105-1" aria-hidden="true" tabindex="-1"></a>fit_b <span class="ot">&lt;-</span> <span class="fu">multinom</span>(<span class="fu">relevel</span>(party6, <span class="at">ref =</span> <span class="st">"1"</span>) <span class="sc">~</span> edu4 <span class="sc">*</span> rel4, <span class="at">data =</span> hin95_voting)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># weights:  102 (80 variable)
+initial  value 5473.825178 
+iter  10 value 4728.505205
+iter  20 value 4680.975841
+iter  30 value 4644.587723
+iter  40 value 4634.979523
+iter  50 value 4632.516681
+iter  60 value 4631.800200
+iter  70 value 4631.294798
+iter  80 value 4631.214147
+final  value 4631.204315 
+converged</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb107"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb107-1"><a href="#cb107-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lrtest</span>(fit_a, fit_b)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Likelihood ratio test
+
+Model 1: relevel(party6, ref = "1") ~ edu4 + rel4
+Model 2: relevel(party6, ref = "1") ~ edu4 * rel4
+  #Df  LogLik Df  Chisq Pr(&gt;Chisq)  
+1  35 -4665.9                       
+2  80 -4631.2 45 69.367    0.01131 *
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb109"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb109-1"><a href="#cb109-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Adding the interaction between edu4 and rel4 significantly improves</span></span>
+<span id="cb109-2"><a href="#cb109-2" aria-hidden="true" tabindex="-1"></a><span class="co"># the fit: LR chi2(45) = 69.37, p = 0.0113.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="what-the-significant-interaction-does-and-does-not-tell-you" class="level4">
+<h4 class="anchored" data-anchor-id="what-the-significant-interaction-does-and-does-not-tell-you">13. What the significant interaction does and does not tell you</h4>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb110"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb110-1"><a href="#cb110-1" aria-hidden="true" tabindex="-1"></a><span class="co"># There is evidence for an interaction between education and religion on</span></span>
+<span id="cb110-2"><a href="#cb110-2" aria-hidden="true" tabindex="-1"></a><span class="co"># the (log) relative-risk ratios describing party choice. This does NOT</span></span>
+<span id="cb110-3"><a href="#cb110-3" aria-hidden="true" tabindex="-1"></a><span class="co"># by itself imply that education and religion interact in their effect</span></span>
+<span id="cb110-4"><a href="#cb110-4" aria-hidden="true" tabindex="-1"></a><span class="co"># on the predicted *probabilities* of voting for each party -- a</span></span>
+<span id="cb110-5"><a href="#cb110-5" aria-hidden="true" tabindex="-1"></a><span class="co"># significant interaction in the relative-risk-ratio formulation does</span></span>
+<span id="cb110-6"><a href="#cb110-6" aria-hidden="true" tabindex="-1"></a><span class="co"># not automatically translate into a similarly interpretable interaction</span></span>
+<span id="cb110-7"><a href="#cb110-7" aria-hidden="true" tabindex="-1"></a><span class="co"># on the probability scale, because the mapping from relative risks to</span></span>
+<span id="cb110-8"><a href="#cb110-8" aria-hidden="true" tabindex="-1"></a><span class="co"># probabilities is nonlinear. If this interaction on the probability</span></span>
+<span id="cb110-9"><a href="#cb110-9" aria-hidden="true" tabindex="-1"></a><span class="co"># scale is itself of interest, a more detailed study (e.g. using</span></span>
+<span id="cb110-10"><a href="#cb110-10" aria-hidden="true" tabindex="-1"></a><span class="co"># marginal effects and their interactions) would be needed.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="all-two-way-and-three-way-interactions" class="level4">
+<h4 class="anchored" data-anchor-id="all-two-way-and-three-way-interactions">14. All two-way and three-way interactions</h4>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb111"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb111-1"><a href="#cb111-1" aria-hidden="true" tabindex="-1"></a>fit_main_full <span class="ot">&lt;-</span> <span class="fu">multinom</span>(party6 <span class="sc">~</span> education <span class="sc">+</span> rel4 <span class="sc">+</span> fem, <span class="at">data =</span> hin95_voting)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># weights:  42 (30 variable)
+initial  value 5473.825178 
+iter  10 value 4809.014143
+iter  20 value 4714.617504
+iter  30 value 4676.646356
+final  value 4671.752342 
+converged</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb113"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb113-1"><a href="#cb113-1" aria-hidden="true" tabindex="-1"></a>fit_all_interactions <span class="ot">&lt;-</span> <span class="fu">multinom</span>(party6 <span class="sc">~</span> education <span class="sc">*</span> rel4 <span class="sc">*</span> fem, <span class="at">data =</span> hin95_voting)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># weights:  102 (80 variable)
+initial  value 5473.825178 
+iter  10 value 4870.612888
+iter  20 value 4805.148239
+iter  30 value 4757.923591
+iter  40 value 4683.595713
+iter  50 value 4660.983729
+iter  60 value 4651.477741
+iter  70 value 4648.027684
+iter  80 value 4647.456539
+iter  90 value 4647.413057
+final  value 4647.405248 
+converged</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb115"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb115-1"><a href="#cb115-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lrtest</span>(fit_main_full, fit_all_interactions)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Likelihood ratio test
+
+Model 1: party6 ~ education + rel4 + fem
+Model 2: party6 ~ education * rel4 * fem
+  #Df  LogLik Df  Chisq Pr(&gt;Chisq)
+1  30 -4671.8                     
+2  80 -4647.4 50 48.694     0.5259</code></pre>
+</div>
+</div>
+
+
+</section>
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/SaSR03\.github\.io\/sasr03\.github\.io\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
