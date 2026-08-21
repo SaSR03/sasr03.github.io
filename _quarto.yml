@@ -13,16 +13,24 @@ website:
         contents:
           - text: "Get to know and summarise data"
             href: data_handling/dh_summary.qmd
-          - text: "Documenting data"
-            href: data_handling/dh_doc.qmd
           - text: "Creating new variables"
             href: data_handling/dh_variables.qmd
           - text: "Selecting cases and repeating analyses for groups"
             href: data_handling/dh_select.qmd
-          - text: "Using fuctions"
+          - text: "Using functions"
             href: data_handling/dh_functions.qmd
-          - href: data_handling/dh_missing.qmd
-            text: "Dealing with missing data"
+          - text: "Dealing with missing values"
+            href: data_handling/dh_missing.qmd
+          - text: "Restructuring data"
+            href: data_handling/dh_restructure.qmd
+          - text: "Aggregating data"
+            href: data_handling/dh_aggregate.qmd
+          - text: "Adding cases and variables"
+            href: data_handling/dh_merge.qmd
+          - text: "Factor analysis"
+            href: data_handling/factor_analysis.qmd
+          - text: "Reliability"
+            href: data_handling/reliability.qmd
       - section: "Modelling (Assignments)"
         contents:
           - text: "Simple linear regression"
@@ -39,20 +47,16 @@ website:
             href: modelling/glm_ordinal_regression.qmd
           - text: "Event history analysis"
             href: modelling/glm_eha.qmd
-      - section: "GGPlot"
-        contents:
-          - text: "Data Visualization with ggplot2"
-            href: ggplot/ggplot.qmd
       - section: "Miscellaneous"
         contents:
+          - text: "Data Visualization with ggplot2"
+            href: miscellaneous/ggplot.qmd
           - text: "Random sampling"
             href: miscellaneous/random_sampling.qmd
           - text: "Programming features in R"
             href: miscellaneous/r_programming_features.qmd
-          - text: "Factor analysis"
-            href: miscellaneous/factor_analysis.qmd
-          - text: "Reliability"
-            href: miscellaneous/reliability.qmd
+          - text: "Documenting data"
+            href: data_handling/dh_doc.qmd
 format:
   html:
     theme: lumen
