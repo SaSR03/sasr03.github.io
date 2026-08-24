@@ -4,9 +4,9 @@ title: Creating new variables
 
 In this part you will learn about the following basic tasks:
 
-- Creating a dummy (0/1) variable.
+- Creating a binary (0/1) variable.
 
-- Recoding a continuous variable.
+- Recoding a categorical variable.
 
 - Recoding a continuous variable into groups.
 
@@ -18,9 +18,19 @@ In this part you will learn about the following basic tasks:
 
 ## R
 
-Learn the following R commands to create new or modify existing variables.
+To create or modify existing variables in a dataset, we will use the function `mutate()`. 
 
-table
+The table below shows useful functions for recoding variables. These functions are normally used within `mutate()`.
+
+| Function                      | Description                                        |
+|-------------------------------|----------------------------------------------------|
+| `if_else()`                   | Create/modify based on simple logical condition    |
+| `case_when()`                 | Create/modify based on multiple logical conditions |
+| `recode_values()`             | Recode values  (`dplyr` version >= 1.2)            |
+| `replace_values()`            | Replace values (`dplyr` version >= 1.2)            |
+| `across()`                    | Applies function to multiple columns               |
+
+
 
 Examples:
 
@@ -34,7 +44,7 @@ data <- data |>
     adiff = abs(age - page),
     inc2 = inc^2
   )
-# sum, mean, absolute difference, and squared income
+# sum, mean, absolute difference, and squared income (^ denotes "power")
 ```
 
 Change negative values of an existing variable:
@@ -44,31 +54,38 @@ data <- data |>
   mutate(
     inc = if_else(inc < 0, 0, inc)
   )
-# replace negative values by 0
+# replace negative of values of inc by 0
 ```
 
-Create a dummy variable:
+Create a binary ("dummy") variable:
+```{r, eval=FALSE}
+# Create binary variable male. 
+# Suppose that sex is coded as female=1, male=2, and there are no missings
 
+# The variable can be numerical (0/1)..
+data |>
+  mutate(
+    male = if_else(sex == 2, 1, 0) # male = 1, female = 0. In thise case, we could also simply do `male = sex - 1`
+  )
+
+# or logical (TRUE/FALSE)...
+data |>
+  mutate(
+    male = (sex == 2) # male = TRUE, female = FALSE
+  )
+```
+
+For many uses in R, having a binary variable as numeric (1/0) or logical (TRUE/FALSE) makes little difference. For example, R will treat TRUE/FALSE as 1/0 if you compute the mean of a logical vector. Logical binary variables can make code a bit more succint when they are used in other operations: with logical vectors you can write e.g `filter(male, employed)` instead of `filter(male == 1, employed == 1)`. But be aware that some mathematical and modelling functions expect only numerical variables. 
+
+In the code above, we presumed thhat there were no missing values. If there were missing values, they would be coded as `0`, which is obviously wrong. To deal with with missing values:
 ```{r, eval=FALSE}
 data <- data |>
   mutate(
-    male = if_else(sex == 2, 1, 0)
+    male = recode_values(sex,
+                         1 ~ 0,
+                         2 ~ 1) # Change 1 into 0, 2 into 1
   )
-# create dummy variable male
-```
-
-Preserve missing values:
-
-```{r, eval=FALSE}
-data <- data |>
-  mutate(
-    male = if_else(
-      is.na(sex),
-      NA_real_,
-      if_else(sex == 2, 1, 0)
-    )
-  )
-# sex = NA implies male = NA
+# By default, recode_values() assigns missing (NA) to any values we did not specify. So any NAs would stay as NAs, and any values otehr than 1 and 2 would become NA).
 ```
 
 Recode a dummy variable:
@@ -84,32 +101,54 @@ data <- data |>
 Recode values into categories:
 
 ```{r, eval=FALSE}
+# create region variable
+# 71, 72, 79 = 1
+# 73 to 78 = 2
+# all other valide (non NA) codes = 3
+data <- data |>
+  mutate(
+    region = recode_values(country,
+                            c(71, 72, 79)  ~ 1,
+                            73:78          ~ 2,
+                            NA ~ NA,
+                            default = 3 # this applies to all other values not speficied above. 
+                                        # Attention: if we had nto specified NA ~ NA above, 
+                                        # NA values would also have been recoded to 3
+    )
+  )
+```
+
+You can also recode using `case_when()`, specifying logical conditions instead of original values on the lef-hand side. `case_when()` is thus more flexible (e.g. it can handle conditions based on multiple original variables, see below) but tends to more verbose.
+
+```{r, eval=FALSE}
+# Same task as above, using case_when().
+# Note that we explicitly refer to the original variable in each condition
 data <- data |>
   mutate(
     region = case_when(
       country %in% c(71, 72, 79) ~ 1,
-      between(country, 73, 78) ~ 2,
-      !is.na(country) ~ 3,
-      TRUE ~ NA_real_
+      country %in% 73:78         ~ 2,
+      !is.na(country)            ~ 3,
+      is.na(country)             ~ NA
     )
   )
-# create region variable
-```
 
-Count the number of variables equal to a specific value:
 
-```{r, eval=FALSE}
+# Recoding based on multiple existing variables
 data <- data |>
   mutate(
-    ngood = rowSums(
-      across(good01:good05, ~ .x == 2),
-      na.rm = TRUE
+    group = case_when(
+      (male==1 & age < 18)  ~ "male_minor",
+      (male==1 & age >= 18) ~ "male_adult"
+      (male==0 & age < 18)  ~ "female_minor",
+      (male==0 & age >= 18) ~ "female_adult"
+      .default              ~ NA  # Everything else as NA. Note the dot in .default.
     )
   )
-# count how many variables equal 2
 ```
 
-Create a standardized variable:
+
+Create a standardized variable (z-scores):
 
 ```{r, eval=FALSE}
 data <- data |>
@@ -130,6 +169,26 @@ data <- data |>
 # rank order statistics of income
 ```
 
+With `across()` you can repeat operations across several columns: 
+
+```{r, eval=FALSE}
+# Create a new variable counting the number of variables with value == 2:
+data <- data |>
+  mutate(
+    ngood = rowSums(
+      across(good01:good05, ~ .x == 2), # for each variable good1 to good5, check if the value is 2
+      na.rm = TRUE
+    )
+  )
+
+# Change 9999 to NA in all variables whose names start with "income" 
+data <- data |>
+  mutate(
+         across(starts_with("income"), ~if_else(.x == 9999, NA, .x))
+         )
+  
+```
+
 ## Assignments
 
 ### Create dummy variables.
@@ -138,43 +197,32 @@ In the dataset `sbs399` the variable `class` marks the respondent's social class
 
 We want to create a dummy variable for being of white collar. This variable, which we will call `white`, is 1 for subjects belonging to the white-collar class and 0 otherwise. We interpret missing values in `class` to denote "unknown". Thus, the dummy `white` should also be missing if `class` is missing.
 
-- Create this dummy variable using `if_else()`. Make sure that missing values are handled correctly.
-- Create the same dummy variable using `case_when()`.
+- Create this dummy variable using `if_else()`. Call it `white1`.
+- Create the same dummy variable using `recode_values()`. Call it `white2`.
 - Produce a cross-tabulation of the two newly created variables and verify that they are identical.
 
 ### Recoding a categorical variable.
 
 In the dataset `sbs399` the variable `polit` marks the political party the respondent intended to vote for in a national election.
 
-(a) Generate a new variable `P` in which political preference is expressed on a left-to-right scale:
+(a) Generate a new variable `pol_pref` in which political preference is expressed on a left-to-right scale:
 
 1 = SP
-
 2 = GroenLinks
-
 3 = PvdA
-
 4 = D66
-
 5 = CDA
-
 6 = VVD
-
 7 = GPV
-
 8 = RPF
-
 9 = SGP
-
 10 = Unie 55+
-
 11 = AOV
-
 12 = CD
 
 Use `case_when()` to construct the variable.
 
-(b) Recode `P` into a new variable `P3` in which political preference is expressed in three categories:
+(b) Recode `pol_pref` into a new variable `pol_pref3` in which political preference is expressed in three categories:
 
 1 = Left (SP, GroenLinks, PvdA, D66)
 
@@ -186,18 +234,18 @@ Use `case_when()` to construct the variable.
 
 We consider the hourly wage variable `hrinc`.
 
-Generate a new variable `Q` for the four quartiles of `hrinc`:
+Generate a new variable `hrinc_quart` for the four quartiles of `hrinc`:
 
-- Q = 1 for the lowest 25%
-- Q = 2 for the next 25%
-- Q = 3 for the next 25%
-- Q = 4 for the highest 25%
+- hrinc_quart = 1 for the lowest 25%
+- hrinc_quart = 2 for the next 25%
+- hrinc_quart = 3 for the next 25%
+- hrinc_quart = 4 for the highest 25%
 
 Verify that the groups contain approximately equal numbers of observations.
 
 ### Centering and standardizing variables.
 
-Use the dataset `sbs399`. We focus on `hrinc`.
+We focus on `hrinc` again.
 
 (a) Create a variable `c_hrinc` that contains the centered hourly wage rate by subtracting the sample mean of `hrinc`.
 
@@ -213,7 +261,7 @@ Check that:
 - the mean of `z_hrinc` is approximately 0;
 - the standard deviation of `z_hrinc` is approximately 1.
 
-(c) Create a variable `z2_hrinc` that standardizes hourly income separately for men and women.
+(c) Create a variable `z2_hrinc` that standardizes hourly income separately for men and women. Within each sex, the mean of `z2_hrinc` should be approximately 0 and standard deviation approximately 1.
 
 Ensure that:
 
@@ -228,17 +276,17 @@ Verify that the transformed minimum equals 0 and the transformed maximum equals 
 
 Which method do you prefer for income? And for number of hours worked per week?
 
-### Creating additive scales.
+### Creating scales
 
-We consider the five items `sexrol1` to `sexrol5` in the dataset `sbs399`.
+We consider the five items `sexrol1` to `sexrol5` in the dataset `sbs399`. These items measure attitudes towards women’s emancipation by (5 point) Likert items. We want to average the 5 items and treat it as a measurement of attitude, with a larger value indicating a more traditional attitude.
 
 (a) Explain why it is not sensible to simply add the five items.
 
-(b) One of the items should be reverse coded. Which one?
+(b) You likely want to reverse one of the items. Which one?
 
 Construct a new variable for this reversed item using:
 
-- a recoding approach with `case_when()`;
+- a recoding approach with `recode_values()` (or `case_when()`);
 - a mathematical expression.
 
 Verify that both constructed variables are identical.
@@ -251,11 +299,11 @@ What is the mean of the measure? Can you interpret this mean substantively?
 
 (d) The data used so far are complete, meaning that respondents answered all items. In many surveys, however, respondents do not answer every question. This situation is illustrated by the dataset `sbs399_sexroles`.
 
-We will now discuss a simple ad hoc method for dealing with missing values when constructing a scale. Although more advanced methods are available and will be discussed later in the course, this approach remains useful for understanding the basic idea.
+We will now discuss a simple ad hoc method to deal with this. This method is quick-and-dirty; it used to be widely used, but theoretical statistics has yielded better methods. We will discuss these more advanced methods later on.
 
-We simply take the mean of all valid item responses for each respondent. Thus, if a respondent answered items 1, 2, and 3, but not items 4 and 5, we calculate the scale score as the mean of items 1, 2, and 3. If a respondent answered all items, we take the mean across all items. If a respondent did not answer any of the items, the scale score should be missing as well.
+For now  we simply take the mean of all valid item responses for each respondent. Thus, if a respondent answered items 1, 2, and 3, but not items 4 and 5, we calculate the scale score as the mean of items 1, 2, and 3. If a respondent answered all items, we take the mean across all items. If a respondent did not answer any of the items, the scale score should be missing as well.
 
-In R, this can be accomplished using `rowMeans()` together with the argument `na.rm = TRUE`, which computes the mean using all available values while ignoring missing values.
+In R, this can be accomplished using the argument `na.rm = TRUE` in `rowMeans()` (or in `mean()` used together with `rowwise()`), which computes the mean using all available values while ignoring missing values.
 
 ## Answers
 
@@ -264,6 +312,8 @@ Make sure this file is in the same R Project as the `data` folder. Use relative 
 ```{r setup-variables}
 library(tidyverse)
 library(haven)
+library(tabyl)
+library(skimr)
 
 sbs399 <- read_dta("data/sbs399.dta")
 ```
@@ -279,11 +329,14 @@ sbs399 |>
 # number of non-missing values in class
 ```
 
-Check the categories of `class` before creating the dummy variable.
+Check the categories of `class` before creating the dummy variable. One way of doing this is using `haven::print_labels()`. Also check if there missing values
 
 ```{r}
+print_labels(sbs399$class)
+# 1 = white collar 
+
 table(sbs399$class, useNA = "ifany")
-# frequency table of class, including missing values
+# There are missing values
 ```
 
 Create the dummy variable `white` using `if_else()`.
@@ -291,35 +344,37 @@ Create the dummy variable `white` using `if_else()`.
 ```{r}
 sbs399 <- sbs399 |>
   mutate(
-    white = if_else(
+    white1 = if_else(
       is.na(class),
       NA_real_,
-      if_else(class == 2, 1, 0)
+      if_else(class == 1, 1, 0)
     )
   )
 # white = 1 for white-collar class, white = 0 otherwise, class = NA implies white = NA
 ```
 
-Create the same dummy variable using `case_when()`.
+Create the same dummy variable using `recode_values()`.
 
 ```{r}
 sbs399 <- sbs399 |>
   mutate(
-    white2 = case_when(
-      class == 2 ~ 1,
-      !is.na(class) ~ 0,
-      TRUE ~ NA_real_
-    )
+    white2 = recode_values(class,
+                           1 ~ 1,
+                           NA ~ NA,
+                           default = 0
+                          )
   )
-# same dummy variable, created with case_when()
-# change class == 2 if your frequency table shows a different code for white collar
+# same dummy variable, created with recode_values()
 ```
 
 Produce a cross-tabulation of the two newly created variables.
-
 ```{r}
-table(sbs399$white, sbs399$white2, useNA = "ifany")
-# the two variables should be identical
+sbs399  |> 
+  tabyl(white1, white2)
+
+# Also good to check against the original variable:
+sbs399  |> 
+   tabyl(white1, class)
 ```
 
 ### Recoding a categorical variable
@@ -327,105 +382,114 @@ table(sbs399$white, sbs399$white2, useNA = "ifany")
 Check the original party codes before recoding.
 
 ```{r}
-table(sbs399$polit, useNA = "ifany")
-# frequency table of polit; verify which code belongs to which party
+sbs399 |> 
+  tabyl(polit)
+print_labels(sbs399$polit)
 ```
 
-Generate a new variable `P` in which political preference is expressed on a left-to-right scale.
+Generate a new variable `pol_pref` in which political preference is expressed on a left-to-right scale.
 
 ```{r}
 sbs399 <- sbs399 |>
   mutate(
-    P = case_when(
-      polit == 1 ~ 1,   # SP
-      polit == 2 ~ 2,   # GroenLinks
-      polit == 3 ~ 3,   # PvdA
-      polit == 4 ~ 4,   # D66
-      polit == 5 ~ 5,   # CDA
-      polit == 6 ~ 6,   # VVD
-      polit == 7 ~ 7,   # GPV
-      polit == 8 ~ 8,   # RPF
-      polit == 9 ~ 9,   # SGP
-      polit == 10 ~ 10, # Unie 55+
-      polit == 11 ~ 11, # AOV
-      polit == 12 ~ 12, # CD
-      TRUE ~ NA_real_
+    pol_pref = recode_values(
+                polit,
+                1 ~ 3,   # PvdA
+                2 ~ 5,   # CDA
+                3 ~ 4,   # D66
+                4 ~ 6,   # VVD
+                5 ~ 2,   # GroenLinks
+                6 ~ 9,   # SGP
+                7 ~ 8,   # RPF
+                8 ~ 7,   # GPV
+                9 ~ 11,  # AOV
+                10 ~ 10, # Unie 55+
+                11 ~ 1,  # SP
+                12 ~ 12, # CD
+                13 ~ NA
     )
   )
-# create left-to-right political preference scale
-# here the original codes already run from left to right, so P equals polit
-# adjust the mapping if your frequency table shows a different ordering
+
+
 ```
 
 Check the new variable.
 
 ```{r}
-table(sbs399$P, useNA = "ifany")
-# frequency table of P
+sbs399 |> 
+  tabyl(pol_pref)
+
+# Compare with original variable
+sbs399 |> 
+  tabyl(polit, pol_pref)
 ```
 
-Recode `P` into a new variable `P3` with three categories.
+Recode `pol_pref` into a new variable `pol_pref3` with three categories.
 
 ```{r}
 sbs399 <- sbs399 |>
   mutate(
-    P3 = case_when(
-      P %in% c(1, 2, 3, 4) ~ 1,
-      P == 5 ~ 2,
-      !is.na(P) ~ 3,
-      TRUE ~ NA_real_
-    )
+    pol_pref3 = recode_values(pol_pref,
+                              1:4  ~ 1,
+                              5    ~ 2,
+                              6:12 ~ 3
+                              )
   )
-# P3 = 1 Left, P3 = 2 Center, P3 = 3 Right
+# pol_pref3 = 1 Left, pol_pref3 = 2 Center, pol_pref3 = 3 Right
 ```
 
 Check the new variable.
 
 ```{r}
-table(sbs399$P3, useNA = "ifany")
-# frequency table of P3
+sbs399 |> 
+  tabyl(pol_pref3)
 ```
 
 ### Recode a continuous variable into groups
 
-Generate a new variable `Q` for the four quartiles of `hrinc`.
+Generate a new variable `hrinc_quart` for the four quartiles of `hrinc`.
 
 ```{r}
 sbs399 <- sbs399 |>
   mutate(
     hrinc_rank = rank(hrinc, na.last = "keep") / sum(!is.na(hrinc)),
-    Q = case_when(
-      hrinc_rank <= .25 ~ 1,
-      hrinc_rank <= .50 ~ 2,
-      hrinc_rank <= .75 ~ 3,
-      !is.na(hrinc_rank) ~ 4,
-      TRUE ~ NA_real_
+    hrinc_quart = case_when(
+      hrinc_rank <= .25                    ~ 1,
+      hrinc_rank  > .25 & hrinc_rank <=.50 ~ 2,
+      hrinc_rank  > .50 & hrinc_rank <=.75 ~ 3,
+      hrinc_rank  > .75 ~ 4,
+      NA ~ NA
     )
   )
 # create four approximately equal groups of hrinc
-# na.last = "keep" makes sure missing values on hrinc stay missing on Q
+# na.last = "keep" makes sure missing values on hrinc stay missing on hrinc_rank
 ```
 
 Verify that the groups contain approximately equal numbers of observations.
 
 ```{r}
-table(sbs399$Q, useNA = "ifany")
-# frequency table of Q
+sbs399 |> 
+  tabyl(hrinc_quart)
 ```
 
-Remove the helper variable.
+Other solutions below. Note that they give slightly different results. The computation of quantile groups if often very ambiguous, because results differ based on how you handle ties, how you claddify cases right on the quantile value, etc. 
 
 ```{r}
-sbs399 <- sbs399 |>
-  select(-hrinc_rank)
-# hrinc_rank was only needed to construct Q
-```
+sbs399 <- sbs399  |> 
+   mutate(# Using cut() and quantile()
+          hrinc_quart2 = cut(hrinc, 
+                            breaks = quantile(hrinc,
+                                              probs = c(0, 0.25, 0.5, 0.75, 1), 
+                                              na.rm = TRUE), 
+                            include.lowest = TRUE),
 
-Note that `ntile()` does the same in one step.
+          # Using dplyr::ntile() 
+          hrinc_quart3 = ntile(hrinc, 4)
+    )  
 
-```{r}
-table(ntile(sbs399$hrinc, 4), useNA = "ifany")
-# dplyr::ntile() is a shortcut for the same quartile split
+# Compare:
+sbs399 |>  tabyl(hrinc_quart, hrinc_quart2)
+sbs399 |>  tabyl(hrinc_quart, hrinc_quart3)
 ```
 
 ### Centering and standardizing variables
@@ -444,42 +508,25 @@ Check that the mean of `c_hrinc` is approximately 0 and that the standard deviat
 
 ```{r}
 sbs399 |>
-  summarise(
-    mean_c_hrinc = mean(c_hrinc, na.rm = TRUE),
-    sd_c_hrinc = sd(c_hrinc, na.rm = TRUE),
-    sd_hrinc = sd(hrinc, na.rm = TRUE)
-  )
-# mean of c_hrinc should be approximately 0; standard deviations should be the same
+  skim(c_hrinc, hrinc)
 ```
 
-Create a variable `z_hrinc` that contains the standardized hourly wage rate.
+Create a variable `z_hrinc` that contains the standardized hourly wage rate. Remeber that we already computed the deviation from the mean as `c_hrinc`, so we can use it here. 
 
 ```{r}
 sbs399 <- sbs399 |>
   mutate(
-    z_hrinc = (hrinc - mean(hrinc, na.rm = TRUE)) /
-      sd(hrinc, na.rm = TRUE)
+    z_hrinc = c_hrinc / sd(hrinc, na.rm = TRUE)
   )
-# standardize hrinc
+
+# You can also create standardized values using the function scale()
 ```
 
 Check that the mean of `z_hrinc` is approximately 0 and the standard deviation is approximately 1.
 
 ```{r}
 sbs399 |>
-  summarise(
-    mean_z_hrinc = mean(z_hrinc, na.rm = TRUE),
-    sd_z_hrinc = sd(z_hrinc, na.rm = TRUE)
-  )
-# mean should be approximately 0; standard deviation should be approximately 1
-```
-
-Check that `sex` has no missing values before grouping.
-
-```{r}
-table(sbs399$sex, useNA = "ifany")
-# if sex were missing for some respondents, those cases would form their own group
-# and z2_hrinc would be missing for them even though hrinc is observed
+  skim(z_hrinc)
 ```
 
 Create a variable `z2_hrinc` that standardizes hourly income separately for men and women.
@@ -492,8 +539,13 @@ sbs399 <- sbs399 |>
       sd(hrinc, na.rm = TRUE)
   ) |>
   ungroup()
-# standardize hrinc separately by sex
-# this yields one variable, and it is missing only where hrinc is missing
+
+# Check missings
+sbs399 |> 
+  skim(hrinc, z2_hrinc) # same number of missing
+sbs399 |> 
+  filter(is.na(z2_hrinc), !is.na(hrinc))
+  # No cases in which z2_hrinc is missing and hrinc is not
 ```
 
 Check the means and standard deviations by sex.
@@ -501,12 +553,10 @@ Check the means and standard deviations by sex.
 ```{r}
 sbs399 |>
   group_by(sex) |>
-  summarise(
-    mean_z2_hrinc = mean(z2_hrinc, na.rm = TRUE),
-    sd_z2_hrinc = sd(z2_hrinc, na.rm = TRUE)
-  )
-# within each sex, mean should be approximately 0 and standard deviation approximately 1
+  skim(z2_hrinc) |>
+  ungroup()
 ```
+
 
 Apply a unit-range transformation to `hrinc`.
 
@@ -523,116 +573,92 @@ Verify that the transformed minimum equals 0 and the transformed maximum equals 
 
 ```{r}
 sbs399 |>
-  summarise(
-    min_u_hrinc = min(u_hrinc, na.rm = TRUE),
-    max_u_hrinc = max(u_hrinc, na.rm = TRUE)
-  )
-# minimum should be 0 and maximum should be 1
+  skim(u_hrinc)
 ```
 
-Which method do you prefer for income? And for number of hours worked per week?
+Which method do you prefer for income? And for number of hours worked per week? 
+
+### Creating  scales
+
+Which item should be reverse coded? 
 
 ```{r}
-# For income, standardization is often useful because income can be very skewed.
-# For hours worked per week, unit-range transformation can be easier to interpret.
-# The best choice depends on the goal of the analysis.
-```
-
-### Creating additive scales
-
-Explain why it is not sensible to simply add the five items.
-
-```{r}
-# It is not sensible to simply add the five items if one item is coded in the opposite direction.
-# In that case, high values do not mean the same thing for all items.
-# The reversed item should first be recoded.
-```
-
-Which item should be reverse coded?
-
-```{r}
+# Look at variable labels. We can dot it separelty for each variable using glimpse(), but it faster with var_label() from pkg labelled
 sbs399 |>
   select(sexrol1:sexrol5) |>
-  cor(use = "complete.obs")
-# the reversed item is the one correlating negatively with the other four
-# here this is sexrol5
+  labelled::var_label()
+
+# Looking at correlations between all variables is also informative
+sbs399 |>
+  select(sexrol1:sexrol5) |>
+  cor()
+# Note that item 5 correlates negatively with all the other
 ```
 
-Reverse item 5 using `case_when()`.
+Reverse item 5:
 
 ```{r}
+# Using recode_values()
 sbs399 <- sbs399 |>
   mutate(
-    sexrol5r_case = case_when(
-      sexrol5 == 1 ~ 5,
-      sexrol5 == 2 ~ 4,
-      sexrol5 == 3 ~ 3,
-      sexrol5 == 4 ~ 2,
-      sexrol5 == 5 ~ 1,
-      TRUE ~ NA_real_
-    )
+      sexrol5rev = recode_values(sexrol5, 
+                                  1 ~ 5,
+                                  2 ~ 4,
+                                  3 ~ 3,
+                                  4 ~ 2,
+                                  5 ~ 1,
+                                  default =  NA
+                                )
   )
-# reverse code sexrol5 using case_when()
-```
 
-Reverse item 5 using a mathematical expression.
-
-```{r}
 sbs399 <- sbs399 |>
   mutate(
-    sexrol5r_math = 6 - sexrol5
+    sexrol5rev_math = 6 - sexrol5
   )
-# reverse code sexrol5 using a mathematical expression
+
+# Verify that constructed variables are identical
+sbs399 |> 
+  tabyl(sexrol5rev, sexrol5rev_math)
 ```
 
-Verify that both constructed variables are identical.
-
-```{r}
-table(sbs399$sexrol5r_case, sbs399$sexrol5r_math, useNA = "ifany")
-# the two reverse-coded variables should be identical
-```
 
 Create the attitude measure from the five items.
 
 ```{r}
+# Possible solutions, all with the same result IN THIS CASE (because of no missing)
+sbs399 <- sbs399 |> 
+            mutate(sexrole_scale1 = (sexrol1 + sexrol2 + sexrol3 + sexrol4 + sexrol5rev)/5)
+
 sbs399 <- sbs399 |>
-  mutate(
-    sexrole_scale = rowMeans(
-      cbind(
-        sexrol1,
-        sexrol2,
-        sexrol3,
-        sexrol4,
-        sexrol5r_math
-      )
-    )
-  )
-# create additive scale as row mean of the five items
-# no na.rm is needed here because this dataset is complete
+            mutate(sexrole_scale2 = rowMeans(
+                                    cbind(sexrol1, sexrol2, sexrol3, sexrol4, sexrol5rev)
+                                    )
+              ) 
+sbs399 <- sbs399 |>            
+            rowwise()  |> 
+            mutate(sexrole_scale3 = 
+                        mean(
+                           c(sexrol1, sexrol2, sexrol3, sexrol4, sexrol5rev)
+                            )
+            ) |> 
+            ungroup()
+
 ```
 
 What is the mean of the measure?
 
 ```{r}
 sbs399 |>
-  summarise(
-    mean_sexrole_scale = mean(sexrole_scale, na.rm = TRUE)
-  )
-# mean of the sex role attitude scale
-```
+  skim(sexrole_scale1, 
+       sexrole_scale2,
+       sexrole_scale3)
 
-Can you interpret this mean substantively?
-
-```{r}
-# The scale mean gives the average position on the sex role attitude items.
-# A substantive interpretation depends on the direction of the item coding.
 ```
 
 Open the dataset with missing values.
 
 ```{r}
 sbs399_sexroles <- read_dta("data/sbs399_sexroles.dta")
-# open the dataset with missing values on the sex role items
 ```
 
 Create the attitude measure using all available item responses.
@@ -640,45 +666,31 @@ Create the attitude measure using all available item responses.
 ```{r}
 sbs399_sexroles <- sbs399_sexroles |>
   mutate(
-    sexrol5r_math = 6 - sexrol5,
-    n_valid = rowSums(
-      !is.na(
-        cbind(
-          sexrol1,
-          sexrol2,
-          sexrol3,
-          sexrol4,
-          sexrol5r_math
-        )
-      )
-    ),
-    sexrole_scale = if_else(
-      n_valid == 0,
-      NA_real_,
-      rowMeans(
-        cbind(
-          sexrol1,
-          sexrol2,
-          sexrol3,
-          sexrol4,
-          sexrol5r_math
-        ),
-        na.rm = TRUE
-      )
-    )
-  )
-# create scale using the mean of available item responses
-# if all items are missing, the scale is missing
+    sexrol5rev = 6 - sexrol5,
+    
+    sexrole_scale =  rowMeans(
+                          cbind(sexrol1, sexrol2, sexrol3, sexrol4, sexrol5rev),
+                            na.rm = TRUE
+                             )
+    ) 
+
+
+# OR
+sbs399_sexroles <- sbs399_sexroles |>            
+                    rowwise()  |> 
+                    mutate(sexrole_scale2 = 
+                                mean(
+                                    c(sexrol1, sexrol2, sexrol3, sexrol4, sexrol5rev),
+                                    na.rm = TRUE
+                                    ),
+                                    
+                    ) |> 
+                    ungroup()
 ```
 
 Check the scale.
 
 ```{r}
 sbs399_sexroles |>
-  summarise(
-    mean_sexrole_scale = mean(sexrole_scale, na.rm = TRUE),
-    min_sexrole_scale = min(sexrole_scale, na.rm = TRUE),
-    max_sexrole_scale = max(sexrole_scale, na.rm = TRUE)
-  )
-# summary statistics for the scale with missing values handled using rowMeans(na.rm = TRUE)
+  skim(sexrole_scale, sexrole_scale2)
 ```
