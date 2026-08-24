@@ -11,3 +11,15 @@ This site contains the syllabus for the first part of the course (data handling)
 You can find the entire course manual, the course package (with datasets and assignment answers), and slides (posted weekly) in Brightspace. 
 
 
+## Teachers
+
+- [Deni Mazrekaj](https://denimazrekaj.com/) (coordinator), Associate Professor, Department of Sociology, Utrecht University
+- [Weverthon Machado](https://www.weverthon.com/), Postdoc, Department of Sociology, Utrecht University
+
+
+
+## Acknowledgements
+
+Corrections of and comments on the syllabus text, the example scripts, and answers to selected assignments are solicited. Requests for additions are welcome as well. Future students will appreciate your input! 
+
+The syllabus and assignments for SaSR3 were originally developed by Jeroen Weesie. We acknowledge valuable contributions by former teachers Ozan Aksoy, Jos Dessens, Wim Jansen, Peter van de Heijden, Peter Ligtig, David Macro, and Vardan Barsegyan as well as by numerous students. We thank Bjarne van der Mark for assistance in translating the course materials to R. 
