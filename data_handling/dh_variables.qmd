@@ -312,7 +312,7 @@ Make sure this file is in the same R Project as the `data` folder. Use relative 
 ```{r setup-variables}
 library(tidyverse)
 library(haven)
-library(tabyl)
+library(janitor)
 library(skimr)
 
 sbs399 <- read_dta("data/sbs399.dta")
