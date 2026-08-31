@@ -100,7 +100,7 @@ data_first100 <- data |>
 # create a new dataset containing only the first 100 observations
 ```
 
-The argument `.by` is to apply a filter within groups. This is useful when you want to compare an observation with other observations in each group, and filter based on that. You will learn more about grouped operations in [Aggregating data](data_handling/dh_aggregate.qmd). Suppose each observation belongs to a household, indicated by the id variable `hh_id`:
+The argument `.by` is to apply a filter within groups. This is useful when you want to compare an observation with other observations in each group, and filter based on that. You will learn more about grouped operations in [Aggregating data](dh_aggregate.qmd). Suppose each observation belongs to a household, indicated by the id variable `hh_id`:
 
 ```{r, eval=FALSE}
 data |>   

@@ -68,7 +68,9 @@ You will learn the R functions listed below to describe and summarize data. Read
 | `summarise()`                 | Summary statistics                            |
 | `cor()`                       | Correlations (Pearson by default)             |
 | `count()`                     | Count observations by category or group       |
+| `select()`                    | Select variables                              |
 | `filter()`                    | Select observations satisfying a condition    |
+| `slice()`                     | Select observations by row number             |
 
 Examples:
 
@@ -238,7 +240,7 @@ data |>
   cor(use = "complete.obs") # Pearson correlations 
 ```
 
-Count the number of observations meeting a condition (you will practice this again in [Selecting cases](data_handling/dh_select.qmd)):
+Count the number of observations meeting a condition (you will practice this again in [Selecting cases](dh_select.qmd)):
 
 ```{r, eval=FALSE}
 # count observations with income above 50000:
