@@ -66,7 +66,7 @@ You will learn the R functions listed below to describe and summarize data. Read
 | `tabyl()`                     | Frequency tables with percentages             |
 | `chisq.test()`                | Pearson's chi-square test for independence    |
 | `summarise()`                 | Summary statistics                            |
-| `cor()`                       | correlations (Pearson by default)             |
+| `cor()`                       | Correlations (Pearson by default)             |
 | `count()`                     | Count observations by category or group       |
 | `filter()`                    | Select observations satisfying a condition    |
 
@@ -238,7 +238,7 @@ data |>
   cor(use = "complete.obs") # Pearson correlations 
 ```
 
-Count the number of observations meeting a condition:
+Count the number of observations meeting a condition (you will practice this again in [Selecting cases](data_handling/dh_select.qmd)):
 
 ```{r, eval=FALSE}
 # count observations with income above 50000:
@@ -260,16 +260,6 @@ data |>
 data |>   
   filter(income > 50000, !is.na(income)) |>   
   nrow() 
-
-# count observations with income above 50000 and sex equal to 1 
-data |>   
-  filter(income > 50000, sex == 1) |>  
-  nrow() 
-
-# count observations with income above 50000 OR sex equal to 1 
-data |>   
-  filter(income > 50000 | sex == 1) |>  
-  nrow()
 ```
 
 Check that the variable `birthd` is a key:
@@ -304,7 +294,7 @@ data <- data |>
 
 ## Assignments
 
-In these assignments we use the dataset `sbs399.dta`. Solutions can be found in the file `dh_summary_assignments.Rmd`. Be sure to start your R script in the style of the template files.
+In these assignments we use the dataset `sbs399.dta`. Solutions can be found in the file `dh_summary_assignments.Rmd`. 
 
 1. How many observations and variables the dataset contains?
 
@@ -314,9 +304,9 @@ In these assignments we use the dataset `sbs399.dta`. Solutions can be found in 
 
 4. Select the variables `hrinc` and `pres`. Adjust the syntax to show these variables only for men among the initial 40 observations. Further adjust the syntax to restrict the sample to men with below median education (see previous question) among the initial 40 observations. Finally, show the variables `hrinc` and `pres` for men and women among the initial 5 observations and arrange the results by sex.
 
-5.  List values of `age` in increasing order. Next, list just the five smallest values, and list just the five largest values. Do not read these values from the data viewer. Give syntax to display the requested cases. 
+5. List values of `age` in increasing order. Next, list just the five smallest values, and list just the five largest values. Do not read these values from the data viewer. Give syntax to display the requested cases. 
 
-6.  Create a two-way table of `feduc` rows and `meduc` columns. Add row and column percentages. Test for independence of `feduc` and `meduc` using Pearson's chi-square test.
+6. Create a two-way table of `feduc` rows and `meduc` columns. Add row and column percentages. Test for independence of `feduc` and `meduc` using Pearson's chi-square test.
 
 7. What are the mean, standard deviation, median, minimum, and maximum value of `feduc`?
 

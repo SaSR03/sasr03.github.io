@@ -1,12 +1,9 @@
 ---
-title: Selecting cases and repeating analyses for groups
+title: Selecting cases
 ---
 
-In this part you will learn about the following basic tasks:
+In this part you will learn about selecting cases (observations).
 
-- How to select cases (observations), either permanently or temporarily, for one or more commands.
-
-- How to repeat a command (or collection of commands) for various subgroups.
 
 | Function       | Description                                 |
 |----------------|---------------------------------------------|
@@ -30,95 +27,98 @@ data |>
 
 data |>   
   filter(sex == 1, edu > 3)
-# select observations for which sex equals 1 and edu is larger than 3
+# select observations for which sex equals 1 AND edu is larger than 3
 
 data |>   
   filter(sex == 1 | edu >= 3)
-# select observations for which sex equals 1 or edu is at least 3
+# select observations for which sex equals 1 OR edu is at least 3
+# the vertical bar means OR, so respondents satisfying either condition are counted
+
+
+data |> 
+  filter(edu != 3)
+# select observations in which edu is different than 3
+
+
+data |> 
+  filter((sex == 1 & edu > 3) | (sex == 0 & edu < 3))
+# select observations in which one of this is true:
+# 1. sex equals 1 and edu is larger than 3
+# OR
+# 2. sex equals 0 and education is lower than 3
+
+data |> 
+  filter(age == max(age))
+# select observation(s) whose age equals the maximum age in the dataset, i.e. the 
+# oldest person(s). Should use na.rm=TRUE is there are missing values in age
 ```
 
 Select observations based on row number:
-
-Use `slice()` to select observations by their row number.
-
 ```{r, eval=FALSE}
+data |> 
+   slice(5) 
+# select 5th row
+
 data |>   
   slice(1:20) 
-# select the first 20 observations  
+# select rows 1 to 20
 
 data |>   
-  slice((n() - 19):n()) 
+  slice_head(20)
+# select first 20 observations (same as above)
+
+data |>   
+  slice_tail(20)
 # select the last 20 observations  
 ```
 
 The same can also be done with `filter()` and `row_number()`:
-
 ```{r, eval=FALSE}
+data |>   
+  filter(row_number() == 5) 
+# select 5th row 
+
 data |>   
   filter(row_number() <= 20)  
 # select the first 20 observations
 
 data |>   
-  filter(row_number() >= n() - 19) 
+  filter(row_number() > (n() - 20))
 # select the last 20 observations 
+# n() gives the total number of rows
 ```
 
 Keep a subset of observations:
 
 ```{r, eval=FALSE}
 data_male <- data |>   
-  filter(sex == 2)  
-# create a new dataset containing only observations for which sex equals 2
+  filter(male == 1)  
+# create a new dataset containing only observations for which male==1
 
 data_first100 <- data |>   
   slice(1:100)
 # create a new dataset containing only the first 100 observations
 ```
 
-Remove observations:
-
-```{r, eval=FALSE}
-data <- data |>   
-  filter(sex != 1)
-# remove observations for which sex equals 1
-
-data <- data |>   
-  slice(-(1:100))
-# remove the first 100 observations
-```
-
-Compute statistics within groups:
+The argument `.by` is to apply a filter within groups. This is useful when you want to compare an observation with other observations in each group, and filter based on that. You will learn more about grouped operations in [Aggregating data](data_handling/dh_aggregate.qmd). Suppose each observation belongs to a household, indicated by the id variable `hh_id`:
 
 ```{r, eval=FALSE}
 data |>   
-  summarise(     
-    mean_income = mean(income, na.rm = TRUE),     
-    .by = country   ) # mean income by country 
-```
+  filter(row_number() == 1, .by = hh_id)  
+# select the first row from *each household*. It is as if we create one dataset per 
+# household, selected the first row from each of them, them put them together again
 
-Compute statistics within combinations of groups:
-
-```{r, eval=FALSE}
 data |>   
-  summarise(     
-    mean_income = mean(income, na.rm = TRUE),     
-    .by = c(country, sex)   ) # mean income by country and sex 
-```
+  filter(age == max(age), .by = hh_id)  
+# select observations where age equals the maximum age *within each household*, i.e. 
+# the oldest in each household. Note that this can be more than one person per household
+# if they have the same age.
+``` 
 
-Create variables within groups:
-
-```{r, eval=FALSE}
-data <- data |>   
-  mutate(     
-    hinc = max(income, na.rm = TRUE),     
-    .by = hrespnr   ) # highest income within household 
-```
-
-The `.by` argument is often a convenient alternative to `group_by()`. It applies the operation separately within groups without permanently changing the grouping structure of the dataset.
 
 ## Assignments
 
-In these assignments, you should use the dataset `sbs399`. Solutions can be found in `dh_select.Rmd`.
+In these assignments, you should use the dataset `sbs399`. 
 
 1.  Using `filter()` and `nrow()`, count the number of observations in `sbs399`:
 
@@ -132,27 +132,27 @@ In these assignments, you should use the dataset `sbs399`. Solutions can be foun
 
     - males over 25;
 
-    - people who are either below 68 or female, with `sex` equal to 1.
+    - people who are either below 68 or female.
 
 2.  Select the subjects with age at most 30 and store this subset in a new object. Do not overwrite the original dataset `sbs399`.
 
-    Count the number of subjects of age at least 20 in this subset.
+    - Count the number of subjects of age at least 20 in this subset.
 
-    Separately for men and women, count the number of subjects of age at least 20. Use `.by` or `group_by()` for this last question.
+    - Count how many subjects of age at least 20 in this subset are men and how many are women.
 
-3.  Reload the full dataset `sbs399`.
+3.  Using the full dataset `sbs399` again.
 
-    Create a selection variable, say `touse`, that takes the value 1 for males over 30 and 0 otherwise.
+    - Create a selection variable, say `touse`, that takes the value 1 for males over 30 and 0 otherwise.
 
-    For the selected sample:
+    - For the selected sample:
 
-    - create a two-way table;
+      - create a two-way table for the respondent's education, `educ`, and the respondent's father's education, `feduc`.
 
-    - compute the correlation between the respondent's education, `educ`, and the respondent's father's education, `feduc`.
+      - compute the correlation between `educ` and `feduc`
 
 4.  What is the difference between the following R commands?
 
-```         
+```r        
 data |>   
   select(-sex)  
 
@@ -165,42 +165,28 @@ data |>
 
 5.  Using the household identifier `hrespnr` in the dataset `sbs399`, use `.by` or `group_by()` to:
 
-    - define the number of participants in a household;
+    - Select the oldest people in households.
+      - Bonus: try to figure out in how many households there are "ties", i.e. more than one person has the same maximum age.  
 
-    - list the oldest people in households without creating a new variable;
+    - List `sex` and `age` in increasing order of age in households where the age difference between the oldest and the youngets person is larger than 5, without creating new variables;
 
-    - list the ages of the same-sex households;
-
-    - list `sex` and `age` in increasing order of age in households where the age difference is larger than 5, without creating new variables;
-
-    - drop the singles.
+    - Drop people living alone in a household. How many cases remain in the dataset?
 
 ## Answers
-
-Make sure this file is in the same R Project as the `data` folder. Use relative file paths, not full paths to your computer.
 
 ```{r setup-select}
 library(tidyverse)
 library(haven)
 library(janitor)
-library(skimr)
 
-# The file sbs399.dta should be available in your working directory.
 sbs399 <- read_dta("data/sbs399.dta")
 ```
 
 Check the coding of `sex` before using it in any condition.
 
 ```{r}
-table(sbs399$sex, useNA = "ifany")
+print_labels(sbs399$sex)
 # sex = 0 for men and sex = 1 for women
-```
-
-The dataset comes from Stata, so the variable carries value labels. `as_factor()` makes them visible.
-
-```{r}
-table(as_factor(sbs399$sex), useNA = "ifany")
-# the same table, now showing the labels instead of the codes
 ```
 
 ### 1. Counting observations with `filter()` and `nrow()`
@@ -229,7 +215,6 @@ Age between 20 and 30, boundaries included.
 sbs399 |>
   filter(age >= 20, age <= 30) |>
   nrow()
-# a comma between conditions means AND
 # between(age, 20, 30) would give the same result
 ```
 
@@ -257,7 +242,6 @@ People who are either below 68 or female.
 sbs399 |>
   filter(age < 68 | sex == 1) |>
   nrow()
-# the vertical bar means OR, so respondents satisfying either condition are counted
 ```
 
 Note that `filter()` drops rows for which the condition evaluates to `NA`. In this dataset `age` and `sex` are complete, so nothing is lost here, but with incomplete data the counts above would exclude those respondents.
@@ -286,31 +270,12 @@ The same count separately for men and women.
 ```{r}
 sbs399_young |>
   filter(age >= 20) |>
-  summarise(
-    n = n(),
-    .by = sex
-  )
+  tabyl(sex) # could also be count(sex), as well as other solutions
 # counts by sex using .by
 ```
 
-The same result with `group_by()`.
-
-```{r}
-sbs399_young |>
-  filter(age >= 20) |>
-  group_by(sex) |>
-  summarise(n = n())
-# group_by() followed by summarise() gives the same table
-```
 
 ### 3. A selection variable
-
-Reload the full dataset.
-
-```{r}
-sbs399 <- read_dta("data/sbs399.dta")
-# start again from the complete dataset
-```
 
 Create the selection variable `touse`.
 
@@ -320,44 +285,39 @@ sbs399 <- sbs399 |>
     touse = if_else(sex == 0 & age > 30, 1, 0)
   )
 # touse = 1 for men older than 30, 0 otherwise
-```
 
-Check the selection variable.
-
-```{r}
-table(sbs399$touse, useNA = "ifany")
-# how many observations are selected
+# check how many cases
+sbs399 |> 
+  tabyl(touse)
 ```
 
 Create the two-way table of education and father's education for the selected sample.
 
 ```{r}
-sbs399_selected <- sbs399 |>
-  filter(touse == 1)
-
-table(sbs399_selected$educ, sbs399_selected$feduc, useNA = "ifany")
-# cross-tabulation of educ and feduc within the selected sample
-```
-
-The same table with `janitor::tabyl()`, which adds the variable names and totals.
-
-```{r}
-sbs399_selected |>
-  tabyl(educ, feduc) |>
-  adorn_totals(c("row", "col"))
-# a more readable version of the same cross-tabulation
+sbs399 |>
+  filter(touse == 1) |> 
+  tabyl(educ, feduc)
 ```
 
 Compute the correlation between `educ` and `feduc` in the selected sample.
-
 ```{r}
-sbs399_selected |>
-  summarise(
-    r = cor(educ, feduc, use = "complete.obs")
-  )
-# use = "complete.obs" drops respondents with a missing value on either variable
-# both variables are complete here, so this argument makes no difference
+# Saving object with selected sample
+sbs399_selected <- sbs399 |>
+                    filter(touse == 1)
+
+cor(sbs399_selected$educ, sbs399_selected$feduc)  
+
+# Solutions without creating a new object
+sbs399 |>
+  filter(touse == 1) |> 
+  with(cor(educ, feduc))
+
+sbs399 |>
+  filter(touse == 1) |> 
+  summarise(r = cor(educ, feduc))
 ```
+
+
 
 ### 4. Comparing three commands
 
@@ -383,43 +343,29 @@ dim(filter(sbs399, sex == 1))
 
 ### 5. Working within households
 
-Define the number of participants in a household.
-
-```{r}
-sbs399 <- sbs399 |>
-  mutate(
-    n_household = n(),
-    .by = hrespnr
-  )
-# number of respondents sharing the same household identifier
-```
-
-Check the household sizes.
-
-```{r}
-table(sbs399$n_household, useNA = "ifany")
-# frequency table of household sizes
-```
-
-List the oldest people in households, without creating a new variable.
-
+Select the oldest people in households:
 ```{r}
 sbs399 |>
-  filter(age == max(age), .by = hrespnr) |>
-  select(hrespnr, sex, age)
-# filter() with .by compares each respondent to the maximum age in their own household
-# households with a tie return more than one row
+  filter(age == max(age), .by = hrespnr) 
 ```
 
-List the ages of the same-sex households.
-
+How many households with ties?
 ```{r}
+# Using only filter()
 sbs399 |>
-  filter(n_distinct(sex) == 1, .by = hrespnr) |>
-  select(hrespnr, sex, age)
-# keep only households in which every member has the same value on sex
-# note that single-person households satisfy this condition as well
+  filter(age == max(age), .by = hrespnr) |> # select oldest
+  filter(n() > 1, .by = hrespnr) |> # keep rows for households with more than one row
+  filter(row_number() == 1, .by = hrespnr) |> # keep only one row per household, to have the correct count |> 
+  nrow()
+
+# Another  solution
+sbs399 |>
+  filter(age == max(age), .by = hrespnr) |> 
+  filter(n() > 1, .by = hrespnr) |> 
+  select(hrespnr) |> 
+  n_distinct()
 ```
+
 
 List `sex` and `age` in increasing order of age, in households where the age difference is larger than 5.
 
@@ -428,20 +374,14 @@ sbs399 |>
   filter(max(age) - min(age) > 5, .by = hrespnr) |>
   arrange(hrespnr, age) |>
   select(hrespnr, sex, age)
-# the range of age is computed within each household without storing it
 ```
 
-Drop the singles.
+Drop people living alone. How many respondents remain?
 
 ```{r}
-sbs399 <- sbs399 |>
-  filter(n() > 1, .by = hrespnr)
-# keep only respondents living in a household with at least two participants
+sbs399 |>
+  filter(n() > 1, .by = hrespnr) |> 
+  nrow()
 ```
 
-Check the result.
 
-```{r}
-table(sbs399$n_household, useNA = "ifany")
-# households of size 1 should no longer appear
-```

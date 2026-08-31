@@ -15,7 +15,7 @@ website:
             href: data_handling/dh_summary.qmd
           - text: "Creating new variables"
             href: data_handling/dh_variables.qmd
-          - text: "Selecting cases and repeating analyses for groups"
+          - text: "Selecting cases"
             href: data_handling/dh_select.qmd
           - text: "Using functions"
             href: data_handling/dh_functions.qmd
