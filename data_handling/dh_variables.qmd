@@ -93,9 +93,10 @@ Recode a dummy variable:
 ```{r, eval=FALSE}
 data <- data |>
   mutate(
-    female = if_else(is.na(male), NA_real_, 1 - male)
+    female = 1 - male
   )
 # male = 1 becomes female = 0 and vice versa
+# NA values remain NA
 ```
 
 Recode values into categories:
