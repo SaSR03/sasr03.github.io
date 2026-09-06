@@ -291,15 +291,7 @@ The mean and the median of the untransformed variable.
 sbs399 |>
   skim(hrinc)
 # mean = 18.2
-# media = 16.1
-```
-
-Before transforming, check the range of `hrinc`. Several of the transformations below are undefined for values of zero or less.
-
-```{r}
-summary(sbs399$hrinc)
-# log() and 1/x are problematic if hrinc can be 0 or negative
-# exp() overflows to Inf for large values of hrinc
+# median = 16.1
 ```
 
 Create all eight transformations:
@@ -329,25 +321,6 @@ transformed |>
 
 transformed |>
   skewness() 
-```
-
-
-Histograms of the transformations, for the first 50 cases only.
-
-```{r}
-transformed |>
-  slice(1:50) |>
-  pivot_longer(
-    everything(),
-    names_to = "transformation",
-    values_to = "value"
-  ) |>
-  filter(is.finite(value)) |>
-  ggplot(aes(x = value)) +
-  geom_histogram(bins = 15) +
-  facet_wrap(~transformation, scales = "free") +
-  labs(x = NULL, y = "Count")
-# scales = "free" is needed because the transformations live on very different scales
 ```
 
 
