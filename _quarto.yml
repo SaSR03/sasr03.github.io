@@ -34,19 +34,19 @@ website:
       - section: "Modelling (Assignments)"
         contents:
           - text: "Simple linear regression"
-            href: modelling/glm_regression.qmd
+            href: modelling/regression.qmd
           - text: "Multiple linear regression"
-            href: modelling/glm_multiple_regression.qmd
+            href: modelling/multiple_regression.qmd
           - text: "Model testing"
-            href: modelling/glm_model_testing.qmd
+            href: modelling/model_testing.qmd
           - text: "Binary logistic regression"
-            href: modelling/glm_logistic_regression.qmd
+            href: modelling/logistic_regression.qmd
           - text: "Multinomial Logistic Regression"
-            href: modelling/glm_multinomial_regression.qmd
+            href: modelling/multinomial_regression.qmd
           - text: "Ordinal Logistic Regression"
-            href: modelling/glm_ordinal_regression.qmd
+            href: modelling/ordinal_regression.qmd
           - text: "Event history analysis"
-            href: modelling/glm_eha.qmd
+            href: modelling/eha.qmd
       - section: "Miscellaneous"
         contents:
           - text: "Data Visualization with ggplot2"
