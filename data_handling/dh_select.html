@@ -80,7 +80,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-b016e979162ad6479387e4a5c541b12b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-04f3c231a07b22a8caa6e9af7549587c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -238,43 +238,43 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../modelling/glm_regression.html" class="sidebar-item-text sidebar-link">
+  <a href="../modelling/regression.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Simple linear regression</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../modelling/glm_multiple_regression.html" class="sidebar-item-text sidebar-link">
+  <a href="../modelling/multiple_regression.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Multiple linear regression</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../modelling/glm_model_testing.html" class="sidebar-item-text sidebar-link">
+  <a href="../modelling/model_testing.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Model testing</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../modelling/glm_logistic_regression.html" class="sidebar-item-text sidebar-link">
+  <a href="../modelling/logistic_regression.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Binary logistic regression</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../modelling/glm_multinomial_regression.html" class="sidebar-item-text sidebar-link">
+  <a href="../modelling/multinomial_regression.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Multinomial Logistic Regression</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../modelling/glm_ordinal_regression.html" class="sidebar-item-text sidebar-link">
+  <a href="../modelling/ordinal_regression.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Ordinal Logistic Regression</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../modelling/glm_eha.html" class="sidebar-item-text sidebar-link">
+  <a href="../modelling/eha.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Event history analysis</span></a>
   </div>
 </li>
@@ -327,14 +327,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul>
   <li><a href="#r" id="toc-r" class="nav-link active" data-scroll-target="#r">R</a></li>
   <li><a href="#assignments" id="toc-assignments" class="nav-link" data-scroll-target="#assignments">Assignments</a></li>
-  <li><a href="#answers" id="toc-answers" class="nav-link" data-scroll-target="#answers">Answers</a>
-  <ul class="collapse">
-  <li><a href="#counting-observations-with-filter-and-nrow" id="toc-counting-observations-with-filter-and-nrow" class="nav-link" data-scroll-target="#counting-observations-with-filter-and-nrow">1. Counting observations with <code>filter()</code> and <code>nrow()</code></a></li>
-  <li><a href="#working-with-a-subset" id="toc-working-with-a-subset" class="nav-link" data-scroll-target="#working-with-a-subset">2. Working with a subset</a></li>
-  <li><a href="#a-selection-variable" id="toc-a-selection-variable" class="nav-link" data-scroll-target="#a-selection-variable">3. A selection variable</a></li>
-  <li><a href="#comparing-three-commands" id="toc-comparing-three-commands" class="nav-link" data-scroll-target="#comparing-three-commands">4. Comparing three commands</a></li>
-  <li><a href="#working-within-households" id="toc-working-within-households" class="nav-link" data-scroll-target="#working-within-households">5. Working within households</a></li>
-  </ul></li>
+  <li><a href="#answers" id="toc-answers" class="nav-link" data-scroll-target="#answers">Answers</a></li>
   </ul>
 </nav>
     </div>
@@ -492,7 +485,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="assignments">Assignments</h2>
 <p>In these assignments, you should use the dataset <code>sbs399</code>.</p>
 <ol type="1">
-<li><p>Using <code>filter()</code> and <code>nrow()</code>, count the number of observations in <code>sbs399</code>:</p>
+<li>Using <code>filter()</code> and <code>nrow()</code>, count the number of observations in <code>sbs399</code>:
 <ul>
 <li><p>with age at most 30;</p></li>
 <li><p>with age at least 20;</p></li>
@@ -501,21 +494,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p>males over 25;</p></li>
 <li><p>people who are either below 68 or female.</p></li>
 </ul></li>
-<li><p>Select the subjects with age at most 30 and store this subset in a new object. Do not overwrite the original dataset <code>sbs399</code>.</p>
+<li>Select the subjects with age at most 30 and store this subset in a new object. Do not overwrite the original dataset <code>sbs399</code>.
 <ul>
 <li><p>Count the number of subjects of age at least 20 in this subset.</p></li>
 <li><p>Count how many subjects of age at least 20 in this subset are men and how many are women.</p></li>
 </ul></li>
-<li><p>Using the full dataset <code>sbs399</code> again.</p>
+<li>Using the full dataset <code>sbs399</code> again.
 <ul>
-<li><p>Create a selection variable, say <code>touse</code>, that takes the value 1 for males over 30 and 0 otherwise.</p></li>
-<li><p>For the selected sample:</p>
+<li>Create a selection variable, say <code>touse</code>, that takes the value 1 for males over 30 and 0 otherwise.</li>
+<li>For the selected sample:
 <ul>
-<li><p>create a two-way table for the respondent’s education, <code>educ</code>, and the respondent’s father’s education, <code>feduc</code>.</p></li>
-<li><p>compute the correlation between <code>educ</code> and <code>feduc</code></p></li>
+<li>create a two-way table for the respondent’s education, <code>educ</code>, and the respondent’s father’s education, <code>feduc</code>.</li>
+<li>compute the correlation between <code>educ</code> and <code>feduc</code></li>
 </ul></li>
 </ul></li>
-<li><p>What is the difference between the following R commands?</p></li>
+<li>What is the difference between the following R commands?</li>
 </ol>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>data <span class="sc">|&gt;</span>   </span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>sex)  </span>
@@ -526,26 +519,39 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>data <span class="sc">|&gt;</span>   </span>
 <span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(sex <span class="sc">==</span> <span class="dv">1</span>) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <ol start="5" type="1">
-<li><p>Using the household identifier <code>hrespnr</code> in the dataset <code>sbs399</code>, use <code>.by</code> or <code>group_by()</code> to:</p>
+<li>Using the household identifier <code>hrespnr</code> in the dataset <code>sbs399</code>, use <code>.by</code> or <code>group_by()</code> to:
 <ul>
-<li><p>Select the oldest people in households.</p>
+<li>Select the oldest people in households.
 <ul>
-<li>Bonus: try to figure out in how many households there are “ties”, i.e.&nbsp;more than one person has the same maximum age.</li>
+<li>Bonus: try to figure out in how many households there are “ties”, i.e.&nbsp;more than one person has the same maximum age.<br>
+</li>
 </ul></li>
-<li><p>List <code>sex</code> and <code>age</code> in increasing order of age in households where the age difference between the oldest and the youngets person is larger than 5, without creating new variables;</p></li>
-<li><p>Drop people living alone in a household. How many cases remain in the dataset?</p></li>
+<li>List <code>sex</code> and <code>age</code> in increasing order of age in households where the age difference between the oldest and the youngets person is larger than 5, without creating new variables;</li>
+<li>Drop people living alone in a household. How many cases remain in the dataset?</li>
 </ul></li>
 </ol>
 </section>
 <section id="answers" class="level2">
 <h2 class="anchored" data-anchor-id="answers">Answers</h2>
+<div class="callout callout-style-simple callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>See answers
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
 ✔ dplyr     1.2.1     ✔ readr     2.2.0
 ✔ forcats   1.0.1     ✔ stringr   1.6.0
-✔ ggplot2   4.0.3     ✔ tibble    3.3.1
+✔ ggplot2   4.0.2     ✔ tibble    3.3.1
 ✔ lubridate 1.9.5     ✔ tidyr     1.3.2
 ✔ purrr     1.2.2     
 ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
@@ -849,9 +855,12 @@ Labels:
 <pre><code>[1] 3062</code></pre>
 </div>
 </div>
-
-
 </section>
+</div>
+</div>
+</div>
+
+
 </section>
 
 </main> <!-- /main -->
