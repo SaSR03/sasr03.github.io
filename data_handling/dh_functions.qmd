@@ -161,7 +161,7 @@ In the assignments below you will apply string functions to manipulate dates and
 
 There are plenty of other types of R functions. We do not expect you to remember all details of these or any of the other functions you encounter here, just that you get an understanding of the kinds of tasks that may be accomplished with functions, and how to access information about them when needed.
 
-#### a. Random number generation
+####  Random number generation
 
 - `runif(1)` draws a random number from the uniform distribution (by default, between 0 and 1). Each time you invoke `runif()`, the function returns a different value. 
 
@@ -181,7 +181,7 @@ data |>
 
 See `?Distributions` for additional random number generators.
 
-### b. Missing value handling
+#### Missing value handling
 
 The function `is.na()` returns `TRUE` if a value is missing and `FALSE` otherwise.
 
@@ -200,7 +200,7 @@ data |>
 # As always with R, other solutions are possible
 ```
 
-### c. Miscellaneous
+#### Miscellaneous
 
 
 - `row_number()` returns the observation sequence number, that is, 1 in the first observation, 2 in the second observation, etc. One common application is to generate a case identifier:
@@ -223,27 +223,25 @@ data |>
 
 
 1.  Use `sbs399.dta`. We focus on the variable `hrinc` (hourly income).
+  - What is the value of the mean and median of the untransformed variable?
 
-- What is the value of the mean and median of the untransformed variable?
+  - For each of the following transformations, find the mean and the median: `exp(hrinc)`, `hrinc*hrinc`, `sqrt(hrinc)`, `log(hrinc)`, `hrinc` (i.e., untransformed, identity), `1/sqrt(hrinc)`, `1/hrinc`, and `1/(hrinc*hrinc)`.
 
-- For each of the following transformations, find the mean and the median: `exp(hrinc)`, `hrinc*hrinc`, `sqrt(hrinc)`, `log(hrinc)`, `hrinc` (i.e., untransformed, identity), `1/sqrt(hrinc)`, `1/hrinc`, and `1/(hrinc*hrinc)`.
-
-- For which transformation, including the no-transformation, is the variable most symmetrically distributed? You may gauge the symmetry of a distribution by its skewness. Recall: a positive skewness indicates a distribution tilted to the left, a negative skewness indicates a distribution tilted to the right. Compute the skewness using the function `skewness()` from the package `parameters`.
+  - For which transformation, including the no-transformation, is the variable most symmetrically distributed? You may gauge the symmetry of a distribution by its skewness. Recall: a positive skewness indicates a distribution tilted to the left, a negative skewness indicates a distribution tilted to the right. Compute the skewness using the function `skewness()` from the package `parameters`.
 
 
 2.  We focus on the variable `hrinc` in the original `sbs399` data again. The values are decimal numbers such as 3.5. Generate transformations of this variable using functions:
+  - round `hrinc` to the nearest integer (so any value between 3.5 and 4.5 should be rounded to 4);
 
-- round `hrinc` to the nearest integer (so any value between 3.5 and 4.5 should be rounded to 4);
+  - round the variable down (so any value between 3 and 4 is rounded to 3);
 
-- round the variable down (so any value between 3 and 4 is rounded to 3);
+  - round the variable up (so any value between 3 and 4 is rounded to 4);
 
-- round the variable up (so any value between 3 and 4 is rounded to 4);
+  - round in multiples of 10 (so any value between 5 and 15 is rounded to 10);
 
-- round in multiples of 10 (so any value between 5 and 15 is rounded to 10);
+  - clip to the range \[10,50\], i.e., values below 10 are set to 10; values above 50 are set to 50; values between 10 and 50 are returned unchanged. Check the range (min and max) of the clipped variable. 
 
-- clip to the range \[10,50\], i.e., values below 10 are set to 10; values above 50 are set to 50; values between 10 and 50 are returned unchanged. Check the range (min and max) of the clipped variable. 
-
-- Inspect the first 10 values of the original variable and the above transformations. 
+  - Inspect the first 10 values of the original variable and the above transformations. 
 
 3.  The dataset `sbs399` contains the educational level of the father and mother of respondents (`feduc` and `meduc` respectively). We define the educational resources of the parents (`peduc`) as the maximum of the educational levels of the parents. Give code to create `peduc`. Do you think that this conceptualization is also appropriate if education is seen as a proxy for attitudes?
 
@@ -251,26 +249,30 @@ data |>
 
 $$d(h,w) = \sqrt{(home_x - work_x)^2 + (home_y - work_y)^2}$$
 
-(Did you dream of ever using this in the social sciences?) Round the distance in meaningful units, as locations are rounded in 1 km units, it does not make sense that distance is expressed in a finer unit, say meters.[^1]
+  (Did you dream of ever using this in the social sciences?) Round the distance in meaningful units, as locations are rounded in 1 km units, it does not make sense that distance is expressed in a finer unit, say meters.[^1]
 
 
 5.  Use the dataset `hin95_birthdates`.
+  - This dataset contains the respondent's birth date `rbirth`, a numeric variable recording the birth dates in the format `ddmmyy`. Note that the number has 5 digits if `dd < 10`, and 6 digits otherwise. Construct three variables `d_rbirth`, `m_rbirth`, and `y_rbirth` with the day, month, and year in which the respondent was born. Use the functions `%%` and `floor()`.
 
-- This dataset contains the respondent's birth date `rbirth`, a numeric variable recording the birth dates in the format `ddmmyy`. Note that the number has 5 digits if `dd < 10`, and 6 digits otherwise. Construct three variables `d_rbirth`, `m_rbirth`, and `y_rbirth` with the day, month, and year in which the respondent was born. Use the functions `%%` and `floor()`.
+  - List the first twenty observations to verify your variable construction.
 
-- List the first twenty observations to verify your variable construction.
-
-- To check your work, you may actually reconstruct the original coding from the three variables, and verify that the reconstructed variable matches the original variable.
+  - To check your work, you may actually reconstruct the original coding from the three variables, and verify that the reconstructed variable matches the original variable.
 
 6.  The file `hin95_birthdates` contains the respondent's birth date as a string variable `rbirth_str` in the format `"ddmmyy"`. The string is of length 5 if `dd < 10`, and of length 6 otherwise. Use string functions to construct three variables with the day, month, and year in which the respondent was born.
 
 7.  The dataset `hin95_naw` contains name, address, and city information. This is a random selection of address information that we purchased from the Dutch mail agency for the "Households in the Netherlands in 1995" project. In this assignment we do some manipulations of this dataset with address information.
-
-- The string variable `postcode` contains postcodes in the Dutch format `1234 AB`. Construct a new numeric variable `npcode` that contains the numeric part. Thus, from `1234 AB` we want to extract the part `1234`. This is useful to merge information that is being organized with respect to geographic information, e.g., for contextual analyses. First take the substring of the first initial characters, i.e., convert `1234 AB` to a string `1234`. Then convert this string to a number, thus the string `1234` to the number `1234`. Be sure to understand the difference. What is the mean value of `npcode`? How do you interpret this number?
+  - The string variable `postcode` contains postcodes in the Dutch format `1234 AB`. Construct a new numeric variable `npcode` that contains the numeric part. Thus, from `1234 AB` we want to extract the part `1234`. This is useful to merge information that is being organized with respect to geographic information, e.g., for contextual analyses. First take the substring of the first initial characters, i.e., convert `1234 AB` to a string `1234`. Then convert this string to a number, thus the string `1234` to the number `1234`. Be sure to understand the difference. What is the mean value of `npcode`? How do you interpret this number?
 
 [^1]: For the interested reader: How do you obtain such location information yourself? If the dataset contains address information or postal codes, it is possible to use geocoding tools to obtain geolocations. Such tools can add new variables with cleaned address information and geographic coordinates. Using these geolocations you may compute, as explained above, the distance as the crow flies assuming a flat earth. If you pedantically want to account for the curvature of the earth, R also has packages that compute distances using geographic coordinates on the surface of the earth. More advanced students can even take into account that due to its spinning, the earth has to a high degree of accuracy an ellipsoid shape, not a ball shape. Then again, for a small country as the Netherlands such fine points are fully immaterial. Additional tools and packages provide access to other map services, such as the travel distance and travel time between two locations, distinguishing travel by car, by public transportation, by bike, and walking. One can also add variables with facilities, e.g., the number of schools within a 2 km radius around a location.
 
+::: {.content-visible when-format="html"}
+
 ## Answers
+
+::: {.callout-note appearance="simple" collapse=true}
+## See answers
+
 
 Make sure this file is in the same R Project as the `data` folder. Use relative file paths, not full paths to your computer.
 
@@ -481,3 +483,6 @@ hin95_naw |>
   skim(npcode)
 # the mean of npcode is 4639. It is meaningless.
 ```
+
+:::
+:::

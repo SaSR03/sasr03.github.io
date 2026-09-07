@@ -115,42 +115,39 @@ data |>
 
 ## Assignments
 
-### 1
+1. Use the dataset `hin95_educ`.
+  - How many missing values are there in the variable `educ`?
 
-Use the dataset `hin95_educ`.
+  - Create a dummy variable indicating whether `educ` is missing.
 
-How many missing values are there in the variable `educ`?
+  - Create a copy of `educ` with missing values set to 99.
 
-Create a dummy variable indicating whether `educ` is missing.
+  - Create a new imputed variable, replacing the missing values by the unconditional mean of `educ` over the observed values.
 
-Create a copy of `educ` with missing values set to 99.
+  - Create another new imputed variable, replacing the missing values in `educ` by the gender-specific conditional means of `educ` over the observed values. Thus, for men we impute the mean of `educ` for men, and for women we impute the mean of `educ` for women.
 
-Create a new imputed variable, replacing the missing values by the unconditional mean of `educ` over the observed values.
+  - Compare the means and standard deviations of the three versions of the original variable `educ` and the two imputed versions. Reflect on eventual differences.
 
-Create another new imputed variable, replacing the missing values in `educ` by the gender-specific conditional means of `educ` over the observed values. Thus, for men we impute the mean of `educ` for men, and for women we impute the mean of `educ` for women.
+2. (Advanced, assumes you already know regression analysis) You may also replace the missing values in a variable `y` by the predicted values of `y` on some appropriate explanatory variables. As an example, perform a regression of a respondent's `educ` on the education of the respondent's father, `feduc`, the education of the respondent's mother, `meduc`, and gender, `sex`. Replace missing values in `educ` by the predicted values of this regression. Explain why `educ` still has missing values. Any suggestions how to proceed?
 
-Compare the means and standard deviations of the three versions of the original variable `educ` and the two imputed versions. Reflect on eventual differences.
+3.  Consider the variables `rs280` to `rs286` in the dataset `hin95`.
+  - Create a variable counting the number of non-missing values in this series of variables. How many observations have no missing values on any of these variables? How many observations have exactly one missing value? How many observations are always missing in this series?
 
-### 2
+  - Now select the observations without missing values. Generate a variable with the mean of these variables. What is the mean of this mean-variable?
 
-(Advanced, assumes you already know regression analysis) You may also replace the missing values in a variable `y` by the predicted values of `y` on some appropriate explanatory variables. As an example, perform a regression of a respondent's `educ` on the education of the respondent's father, `feduc`, the education of the respondent's mother, `meduc`, and gender, `sex`. Replace missing values in `educ` by the predicted values of this regression.
-Explain why `educ` still has missing values. Any suggestions how to proceed?
+  - In the original dataset, create a variable with the mean over the available values. Thus, if for an observation the variables `v1`, `v3`, and `v8` are observed and the other variables are missing, for this observation you should return `(v1 + v3 + v8) / 3`. Use `rowMeans()` with care.
 
-### 3.  
+4. In a hypothetical dataset you have variables `male` (respondent's gender, 0 = female and 1 = male), `feduc` (father's education), and `meduc` (mother's education). You want to create a variable `ssedu` that represents the level of education of the same-sex parent, i.e., for men the father and for women the mother. Provide code, and discuss what would happen if any of the three variables are missing.
 
-Consider the variables `rs280` to `rs286` in the dataset `hin95`.
 
-- Create a variable counting the number of non-missing values in this series of variables. How many observations have no missing values on any of these variables? How many observations have exactly one missing value? How many observations are always missing in this series?
-
-- Now select the observations without missing values. Generate a variable with the mean of these variables. What is the mean of this mean-variable?
-
-- In the original dataset, create a variable with the mean over the available values. Thus, if for an observation the variables `v1`, `v3`, and `v8` are observed and the other variables are missing, for this observation you should return `(v1 + v3 + v8) / 3`. Use `rowMeans()` with care.
-
-### 4.  
-
-In a hypothetical dataset you have variables `male` (respondent's gender, 0 = female and 1 = male), `feduc` (father's education), and `meduc` (mother's education). You want to create a variable `ssedu` that represents the level of education of the same-sex parent, i.e., for men the father and for women the mother. Provide code, and discuss what would happen if any of the three variables are missing.
+::: {.content-visible when-format="html"}
 
 ## Answers
+
+::: {.callout-note appearance="simple" collapse=true}
+## See answers
+
+
 ```{r setup-missing}
 library(tidyverse)
 library(haven)
@@ -335,3 +332,5 @@ data <- data |>
 # for men the father's education is taken, for women the mother's
 ```
 
+:::
+:::

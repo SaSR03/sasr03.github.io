@@ -320,6 +320,8 @@ In these assignments we use the dataset `sbs399.dta`. Solutions can be found in 
 
 11. Is `hrespnr` a key, meaning that it is never missing and all values are unique? Why? Do not rely on the data viewer. Write syntax to obtain the information on which you base your answer. What about the pair of variables `hrespnr` and `sex`? Why? What about `hrespnr`, `sex`, and `age`, and `hrespnr`, `sex`, and `fage`?
 
+::: {.content-visible when-format="html"}
+
 ## Answers
 
 ::: {.callout-note appearance="simple" collapse=true}
@@ -337,7 +339,8 @@ library(skimr)
 sbs399 <- read_dta("data/sbs399.dta")
 ```
 
-### 1. How many observations and variables the dataset contains?
+### 1
+How many observations and variables the dataset contains?
 ```{r}
 glimpse(sbs399)
 # 3,350 observations
@@ -345,13 +348,17 @@ glimpse(sbs399)
 ```
 
 
-### 2. What is the variable label of `feduc`?
+### 2
+
+What is the variable label of `feduc`?
 ```{r}
 glimpse(sbs399$feduc)
 #fathers highest education
 ```
 
-### 3. Display a frequency distribution of `educ`. What is the percentage of subjects with an education up to category 4? How many missing values are there in `educ`?
+### 3
+
+Display a frequency distribution of `educ`. What is the percentage of subjects with an education up to category 4? How many missing values are there in `educ`?
 
 ```{r}
 # frequency distribution of educ, including missing values:
@@ -366,7 +373,9 @@ sbs399 |>
 
 ```
 
-### 4. Select the variables `hrinc` and `pres`. Adjust the syntax to show these variables only for men among the initial 40 observations. Further adjust the syntax to restrict the sample to men with below median education (see previous question) among the initial 40 observations. Finally, show the variables `hrinc` and `pres` for men and women among the initial 5 observations and arrange the results by sex
+### 4
+
+Select the variables `hrinc` and `pres`. Adjust the syntax to show these variables only for men among the initial 40 observations. Further adjust the syntax to restrict the sample to men with below median education (see previous question) among the initial 40 observations. Finally, show the variables `hrinc` and `pres` for men and women among the initial 5 observations and arrange the results by sex
 
 ```{r}
 sbs399 |>
@@ -403,7 +412,9 @@ sbs399 |>
   arrange(sex)
 ```
 
-### 5. List values of `age` in increasing order. Next, list just the five smallest values, and list just the five largest values. Do not read these values from the data viewer. Give syntax to display the requested cases. 
+### 5
+
+List values of `age` in increasing order. Next, list just the five smallest values, and list just the five largest values. Do not read these values from the data viewer. Give syntax to display the requested cases. 
 
 Values of `age` in increasing order:
 
@@ -432,7 +443,9 @@ sbs399 |>
 ```
 
 
-### 6. Create a two-way table of `feduc` rows and `meduc` columns. Add row and column percentages. Test for independence of `feduc`and `meduc` using Pearson’s chi-square test.
+### 6
+
+Create a two-way table of `feduc` rows and `meduc` columns. Add row and column percentages. Test for independence of `feduc`and `meduc` using Pearson’s chi-square test.
 
 Frequency table:
 
@@ -459,7 +472,8 @@ Pearson's chi-square test:
 chisq.test(tab_feduc_meduc)
 ```
 
-### 7. What are the mean, standard deviation, median, minimum, and maximum value of `feduc`? 
+### 7
+ What are the mean, standard deviation, median, minimum, and maximum value of `feduc`? 
 
 ```{r}
 sbs399 |>
@@ -478,7 +492,9 @@ sbs399 |>
 # Maximum = 8 (university [wo])
 ```
 
-### 8. Verify that the number of subjects for whom the mother is higher educated than the father is 543. What is the count if you restrict to female subjects?
+### 8
+
+Verify that the number of subjects for whom the mother is higher educated than the father is 543. What is the count if you restrict to female subjects?
 
 ```{r}
 sbs399 |>
@@ -499,7 +515,9 @@ sbs399 |>
 # Count restricted to female subjects = 262
 ```
 
-### 9. What are the Pearson correlations of `educ`, `feduc`, and `meduc`? Use the help system to find out how to compute Spearman’s rank correlations.
+### 9
+
+What are the Pearson correlations of `educ`, `feduc`, and `meduc`? Use the help system to find out how to compute Spearman’s rank correlations.
 
 Pearson correlations:
 
@@ -517,12 +535,16 @@ sbs399 |>
   cor(use = "complete.obs", method = "spearman")
 ```
 
-### 10. Is it true that for any variable the values are above average for 50% of cases? If you are uncertain, check this with some variables. For an explanation, think about this example: what percentage of people have more than the average number of legs? 50%? Who are these people?
+### 10
+
+Is it true that for any variable the values are above average for 50% of cases? If you are uncertain, check this with some variables. For an explanation, think about this example: what percentage of people have more than the average number of legs? 50%? Who are these people?
 
 No answer provided. Think yourself, using the hint.
 
 
-### 11. Is `hrespnr` a key, meaning that it is never missing and all values are unique? Why? Do not rely on the data viewer. Write syntax to obtain the information on which you base your answer. What about the pair of variables `hrespnr` and `sex`? Why? What about`hrespnr`, `sex`, and `age`, and `hrespnr`, `sex`, and `fage`?
+### 11
+
+Is `hrespnr` a key, meaning that it is never missing and all values are unique? Why? Do not rely on the data viewer. Write syntax to obtain the information on which you base your answer. What about the pair of variables `hrespnr` and `sex`? Why? What about`hrespnr`, `sex`, and `age`, and `hrespnr`, `sex`, and `fage`?
 
 Check whether `hrespnr` is never missing:
 
@@ -575,4 +597,5 @@ sbs399 |>
 ```
 
 We conclude that  `hrespnr`, `sex`, and `fage` form a composite key. 
+:::
 :::

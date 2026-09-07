@@ -121,7 +121,6 @@ data |>
 In these assignments, you should use the dataset `sbs399`. 
 
 1.  Using `filter()` and `nrow()`, count the number of observations in `sbs399`:
-
     - with age at most 30;
 
     - with age at least 20;
@@ -135,19 +134,14 @@ In these assignments, you should use the dataset `sbs399`.
     - people who are either below 68 or female.
 
 2.  Select the subjects with age at most 30 and store this subset in a new object. Do not overwrite the original dataset `sbs399`.
-
     - Count the number of subjects of age at least 20 in this subset.
 
     - Count how many subjects of age at least 20 in this subset are men and how many are women.
 
 3.  Using the full dataset `sbs399` again.
-
     - Create a selection variable, say `touse`, that takes the value 1 for males over 30 and 0 otherwise.
-
     - For the selected sample:
-
       - create a two-way table for the respondent's education, `educ`, and the respondent's father's education, `feduc`.
-
       - compute the correlation between `educ` and `feduc`
 
 4.  What is the difference between the following R commands?
@@ -164,15 +158,18 @@ data |>
 ```
 
 5.  Using the household identifier `hrespnr` in the dataset `sbs399`, use `.by` or `group_by()` to:
-
     - Select the oldest people in households.
       - Bonus: try to figure out in how many households there are "ties", i.e. more than one person has the same maximum age.  
-
     - List `sex` and `age` in increasing order of age in households where the age difference between the oldest and the youngets person is larger than 5, without creating new variables;
-
     - Drop people living alone in a household. How many cases remain in the dataset?
 
+::: {.content-visible when-format="html"}
+
 ## Answers
+
+::: {.callout-note appearance="simple" collapse=true}
+## See answers
+
 
 ```{r setup-select}
 library(tidyverse)
@@ -385,3 +382,5 @@ sbs399 |>
 ```
 
 
+:::
+:::
