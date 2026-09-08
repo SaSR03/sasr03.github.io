@@ -84,7 +84,6 @@ Be careful when replacing missing values with numeric codes such as 99. In R, mi
 
 ## Assignments
 
-See `dh_doc.Rmd` for solutions.
 
 In these assignments we use the dataset `sbs399_unlabeled.dta`.
 

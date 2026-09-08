@@ -66,7 +66,6 @@ Note that `pivot_longer()` and `pivot_wider()` expect that variable names follow
 
 ## Assignments
 
-See `dh_restructure_assignments.Rmd` for solutions.
 
 ### 1. Longitudinal data in long and wide format
 

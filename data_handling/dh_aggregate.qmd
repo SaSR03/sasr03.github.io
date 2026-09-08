@@ -85,7 +85,6 @@ class_data <- data |>
 
 ## Assignments
 
-See `dh_aggregate_assignments.Rmd` for solutions.
 
 ### 1. People nested within neighborhoods within cities
 

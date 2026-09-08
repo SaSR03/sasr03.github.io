@@ -294,7 +294,7 @@ data <- data |>
 
 ## Assignments
 
-In these assignments we use the dataset `sbs399.dta`. Solutions can be found in the file `dh_summary_assignments.Rmd`. 
+In these assignments we use the dataset `sbs399.dta`. 
 
 1. How many observations and variables the dataset contains?
 
