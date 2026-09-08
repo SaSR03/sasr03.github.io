@@ -4,8 +4,6 @@ title:  Getting to know and summarizing data
 
 In this part you will learn about the following basic tasks:
 
-- Change your working directory/folder.
-
 - Load a dataset from disk into computer memory.
 
 - Explore the variables in the data.
