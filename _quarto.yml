@@ -61,6 +61,3 @@ format:
   html:
     theme: lumen
     toc: true
-
-execute:
-  freeze: auto
