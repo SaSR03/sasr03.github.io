@@ -326,20 +326,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#r" id="toc-r" class="nav-link active" data-scroll-target="#r">R</a></li>
-  <li><a href="#assignments" id="toc-assignments" class="nav-link" data-scroll-target="#assignments">Assignments</a>
-  <ul class="collapse">
-  <li><a href="#section" id="toc-section" class="nav-link" data-scroll-target="#section">1</a></li>
-  <li><a href="#section-1" id="toc-section-1" class="nav-link" data-scroll-target="#section-1">2</a></li>
-  <li><a href="#section-2" id="toc-section-2" class="nav-link" data-scroll-target="#section-2">3.</a></li>
-  <li><a href="#section-3" id="toc-section-3" class="nav-link" data-scroll-target="#section-3">4.</a></li>
-  </ul></li>
-  <li><a href="#answers" id="toc-answers" class="nav-link" data-scroll-target="#answers">Answers</a>
-  <ul class="collapse">
-  <li><a href="#describing-and-imputing-a-single-variable" id="toc-describing-and-imputing-a-single-variable" class="nav-link" data-scroll-target="#describing-and-imputing-a-single-variable">1. Describing and imputing a single variable</a></li>
-  <li><a href="#regression-imputation" id="toc-regression-imputation" class="nav-link" data-scroll-target="#regression-imputation">2. Regression imputation</a></li>
-  <li><a href="#a-series-of-variables" id="toc-a-series-of-variables" class="nav-link" data-scroll-target="#a-series-of-variables">3. A series of variables</a></li>
-  <li><a href="#education-of-the-same-sex-parent" id="toc-education-of-the-same-sex-parent" class="nav-link" data-scroll-target="#education-of-the-same-sex-parent">4. Education of the same-sex parent</a></li>
-  </ul></li>
+  <li><a href="#assignments" id="toc-assignments" class="nav-link" data-scroll-target="#assignments">Assignments</a></li>
+  <li><a href="#answers" id="toc-answers" class="nav-link" data-scroll-target="#answers">Answers</a></li>
   </ul>
 </nav>
     </div>
@@ -472,43 +460,51 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="assignments" class="level2">
 <h2 class="anchored" data-anchor-id="assignments">Assignments</h2>
-<section id="section" class="level3">
-<h3 class="anchored" data-anchor-id="section">1</h3>
-<p>Use the dataset <code>hin95_educ</code>.</p>
-<p>How many missing values are there in the variable <code>educ</code>?</p>
-<p>Create a dummy variable indicating whether <code>educ</code> is missing.</p>
-<p>Create a copy of <code>educ</code> with missing values set to 99.</p>
-<p>Create a new imputed variable, replacing the missing values by the unconditional mean of <code>educ</code> over the observed values.</p>
-<p>Create another new imputed variable, replacing the missing values in <code>educ</code> by the gender-specific conditional means of <code>educ</code> over the observed values. Thus, for men we impute the mean of <code>educ</code> for men, and for women we impute the mean of <code>educ</code> for women.</p>
-<p>Compare the means and standard deviations of the three versions of the original variable <code>educ</code> and the two imputed versions. Reflect on eventual differences.</p>
-</section>
-<section id="section-1" class="level3">
-<h3 class="anchored" data-anchor-id="section-1">2</h3>
-<p>(Advanced, assumes you already know regression analysis) You may also replace the missing values in a variable <code>y</code> by the predicted values of <code>y</code> on some appropriate explanatory variables. As an example, perform a regression of a respondent’s <code>educ</code> on the education of the respondent’s father, <code>feduc</code>, the education of the respondent’s mother, <code>meduc</code>, and gender, <code>sex</code>. Replace missing values in <code>educ</code> by the predicted values of this regression. Explain why <code>educ</code> still has missing values. Any suggestions how to proceed?</p>
-</section>
-<section id="section-2" class="level3">
-<h3 class="anchored" data-anchor-id="section-2">3.</h3>
-<p>Consider the variables <code>rs280</code> to <code>rs286</code> in the dataset <code>hin95</code>.</p>
+<ol type="1">
+<li>Use the dataset <code>hin95_educ</code>.</li>
+</ol>
+<ul>
+<li><p>How many missing values are there in the variable <code>educ</code>?</p></li>
+<li><p>Create a dummy variable indicating whether <code>educ</code> is missing.</p></li>
+<li><p>Create a copy of <code>educ</code> with missing values set to 99.</p></li>
+<li><p>Create a new imputed variable, replacing the missing values by the unconditional mean of <code>educ</code> over the observed values.</p></li>
+<li><p>Create another new imputed variable, replacing the missing values in <code>educ</code> by the gender-specific conditional means of <code>educ</code> over the observed values. Thus, for men we impute the mean of <code>educ</code> for men, and for women we impute the mean of <code>educ</code> for women.</p></li>
+<li><p>Compare the means and standard deviations of the three versions of the original variable <code>educ</code> and the two imputed versions. Reflect on eventual differences.</p></li>
+</ul>
+<ol start="2" type="1">
+<li><p>(Advanced, assumes you already know regression analysis) You may also replace the missing values in a variable <code>y</code> by the predicted values of <code>y</code> on some appropriate explanatory variables. As an example, perform a regression of a respondent’s <code>educ</code> on the education of the respondent’s father, <code>feduc</code>, the education of the respondent’s mother, <code>meduc</code>, and gender, <code>sex</code>. Replace missing values in <code>educ</code> by the predicted values of this regression. Explain why <code>educ</code> still has missing values. Any suggestions how to proceed?</p></li>
+<li><p>Consider the variables <code>rs280</code> to <code>rs286</code> in the dataset <code>hin95</code>.</p></li>
+</ol>
 <ul>
 <li><p>Create a variable counting the number of non-missing values in this series of variables. How many observations have no missing values on any of these variables? How many observations have exactly one missing value? How many observations are always missing in this series?</p></li>
 <li><p>Now select the observations without missing values. Generate a variable with the mean of these variables. What is the mean of this mean-variable?</p></li>
 <li><p>In the original dataset, create a variable with the mean over the available values. Thus, if for an observation the variables <code>v1</code>, <code>v3</code>, and <code>v8</code> are observed and the other variables are missing, for this observation you should return <code>(v1 + v3 + v8) / 3</code>. Use <code>rowMeans()</code> with care.</p></li>
 </ul>
-</section>
-<section id="section-3" class="level3">
-<h3 class="anchored" data-anchor-id="section-3">4.</h3>
-<p>In a hypothetical dataset you have variables <code>male</code> (respondent’s gender, 0 = female and 1 = male), <code>feduc</code> (father’s education), and <code>meduc</code> (mother’s education). You want to create a variable <code>ssedu</code> that represents the level of education of the same-sex parent, i.e., for men the father and for women the mother. Provide code, and discuss what would happen if any of the three variables are missing.</p>
-</section>
+<ol start="4" type="1">
+<li>In a hypothetical dataset you have variables <code>male</code> (respondent’s gender, 0 = female and 1 = male), <code>feduc</code> (father’s education), and <code>meduc</code> (mother’s education). You want to create a variable <code>ssedu</code> that represents the level of education of the same-sex parent, i.e., for men the father and for women the mother. Provide code, and discuss what would happen if any of the three variables are missing.</li>
+</ol>
 </section>
 <section id="answers" class="level2">
 <h2 class="anchored" data-anchor-id="answers">Answers</h2>
+<div class="callout callout-style-simple callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>See answers
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
 ✔ dplyr     1.2.1     ✔ readr     2.2.0
 ✔ forcats   1.0.1     ✔ stringr   1.6.0
-✔ ggplot2   4.0.2     ✔ tibble    3.3.1
+✔ ggplot2   4.0.3     ✔ tibble    3.3.1
 ✔ lubridate 1.9.5     ✔ tidyr     1.3.2
 ✔ purrr     1.2.2     
 ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
@@ -997,9 +993,12 @@ F-statistic: 212.2 on 3 and 3174 DF,  p-value: &lt; 2.2e-16</code></pre>
 <span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a><span class="co"># male == 1 gives NA when male is missing, so ssedu becomes NA</span></span>
 <span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a><span class="co"># for men the father's education is taken, for women the mother's</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-
-
 </section>
+</div>
+</div>
+</div>
+
+
 </section>
 
 </main> <!-- /main -->
