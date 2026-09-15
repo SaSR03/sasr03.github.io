@@ -187,7 +187,12 @@ a.  Use `pivot_longer()` to convert the data from long-long-long-wide to long-lo
 b. Use `pivot_wider()` to convert the data from the original long-long-long-wide format to long-long-wide-wide format. Explain what an observation in this dataset represents.
 c. Use `pivot_wider()` to convert the data from the original long-long-long-wide format to long-wide-wide-wide format, identifying individuals within households by `male` rather than by `iid`. What happens if you identify people within households by `iid`? Is using `male` as a person-within-household identifier correct if the data include same-sex households?
 
+::: {.content-visible when-format="html"}
+
 ## Answers
+
+::: {.callout-note appearance="simple" collapse=true}
+## See answers
 
 ```{r setup-restructure}
 library(tidyverse)
@@ -509,3 +514,6 @@ level4 |>
 ```
 
 Now `att1_1_2002` means att1 for partner 1 (i.e. the first row within the household) in 2004. Note that in this case we lost the information the who is male (parter 1 or 2).
+
+:::
+:::
