@@ -17,7 +17,7 @@ We may present panel data, data on people indicated by `id`, for different years
 
 or in wide format:
 
-| id  | inc2000 | inc2001 | inc2002 | stat2000 | stat2001 | stat2002 | male |
+| id  | inc_2000 | inc_2001 | inc_2002 | stat_2000 | stat_2001 | stat_2002 | male |
 |-----|---------|---------|---------|----------|----------|----------|------|
 | 1   | 10      | 12      | 13      | 3        | 4        | 5        | 0    |
 | 2   | 14      | 14      | 13      | 2        | 2        | 2        | 1    |
@@ -25,7 +25,7 @@ or in wide format:
 
 Be sure that you understand that these two datasets contain the same information, but only represent the information in a different way. One can translate one form into the other form. The variables `inc` and `stat` are said to be time-varying, while `male` is time-constant.
 
-In this part you practice the R functions that automatically restructure data between long format and wide format. You need to learn about this because your data may be in one format, while the data management or statistical method you want to use requires the data to be in the other format.
+In this part you practice the R functions that restructure data between long format and wide format. You need to learn about this because your data may be in one format, while the data management or statistical method you want to use requires the data to be in the other format.
 
 For instance, multilevel analysis typically requires data to be in long format, e.g., measurements at different time points are stored in different rows, while structural equation modeling often requires wide data, e.g., measurements stored in different variables. In SaSR7 you will learn about these statistical methods. For now, we only introduce how to get the data into the correct format.
 
@@ -57,9 +57,10 @@ Restructure wide to long:
 data_long <- data_wide |>
   pivot_longer(
     cols = -c(id, male),
+    names_sep = "_"
     names_to = c(".value", "year"),
-    names_pattern = "(.*)(\\d{4})"
   )
+
 ```
 
 Note that `pivot_longer()` and `pivot_wider()` expect that variable names follow a consistent naming convention. In the example above, the variables are named using a prefix, `inc` and `stat`, followed by a year, `2000`, `2001`, and `2002`, corresponding to the level of an index variable, here the year in which income and status were measured. If variables are not named consistently, you may need to rename them before restructuring the data.
@@ -71,34 +72,27 @@ Note that `pivot_longer()` and `pivot_wider()` expect that variable names follow
 
 The dataset `gpa2long.dta` contains longitudinal data, taken from the book on multilevel analysis that we use in SaSR7, in long format.
 
-`student` student identifier
+- `student` student identifier
+- `occas` measurement occasion, 0 = year 1 semester 1, 1 = year 1 semester 2, 2 = year 2 semester 1, 3 = year 2 semester 2, ...
+- `sex` 0 = male, 1 = female
+- `gpa` grade-point average
+- `job` paid work hours per week
+- `highgpa` high school GPA
+- `admitted` admitted to university, 0 = no, 1 = yes, or missing
 
-`occas` measurement occasion, 0 = year 1 semester 1, 1 = year 1 semester 2, 2 = year 2 semester 1, 3 = year 2 semester 2, ...
-
-`sex` 0 = male, 1 = female
-
-`gpa` grade-point average
-
-`job` paid work hours per week
-
-`highgpa` high school GPA
-
-`admitted` admitted to university, 0 = no, 1 = yes, or missing
-
-- Which variables are time-constant and which are time-varying?
-- How many observations are there for student 1 and student 2?
-- Use `pivot_wider()` to convert the data to wide format using `occas` as the measurement occasion.
-- Which new variables are created?
-- How many observations does the wide dataset contain?
-- Convince yourself that information was preserved across the restructuring and that only the representation of the information changed.
-- Save the created dataset as `gpa2wide.rds`.
-- Load the wide dataset and use `pivot_longer()` to convert it back to long format.
+a. Which variables are time-constant and which are time-varying?
+b. How many observations are there for student 1 and student 2?
+c. Use `pivot_wider()` to convert the data to wide format using `occas` as the measurement occasion.  Save it as a new object called `gpa2wide`.
+d. Which new variables are created?
+e. How many observations does the wide dataset contain?
+f. Convince yourself that information was preserved across the restructuring and that only the representation of the information changed.
+g. Use `pivot_longer()` to convert `gpa2wide` it back to long format.
 
 ### 2. Sex-specific country indicators
 
 In this assignment, we use the `World95` dataset. This dataset contains information for 109 countries. One observation corresponds to one country.
 
-Some variables are sex-specific, e.g., the life expectancy for men and women (`lifeexpm` and `lifeexpf` respectively) and the literacy rates of men and women (`lit_male` and `lit_female` respectively). Other variables, e.g., `populatn` and `density`, are not sex-specific.
+Some variables are sex-specific, e.g., the life expectancy for men and women (`lifeexpm` and `lifeexpf` respectively) and the literacy rates of men and women (`lit_male` and `lit_fema` respectively). Other variables, e.g., `populatn` and `density`, are not sex-specific.
 
 We want to create a dataset in which each country is represented by two observations, one describing the men and one describing the women of that country.
 
@@ -119,54 +113,31 @@ where `population` and `density` do not vary with gender, while `lifeexp` and `l
 - Rename variables if necessary so that they follow a consistent naming convention.
 - Use `pivot_longer()` to create the desired dataset.
 - Create a variable `female`.
-- Verify that the resulting dataset contains 218 observations.
+- Verify that the resulting dataset contains 218 observations and 109 countries.
 
 ### 3. Multilevel data in four formats
 
 The synthetic dataset `level4.dta` contains multilevel data on three sex-role attitude measurements over time, 2002, 2004, and 2006, for both spouses of heterosexual couples.
 
-`hhid` household id
+- `hhid` household id
+- `iid` individual id
+- `urban` urbanized
+- `male`
+- `edu` highest completed education, 1 to 10
+- `year`
+- `att1` family value: man natural breadwinner
+- `att2` family value: women are better with children
+- `att3` family value: men and women equal decision makers
 
-`iid` individual id
-
-`urban` urbanized
-
-`male`
-
-`edu` highest completed education, 1 to 10
-
-`year`
-
-`att1` family value: man natural breadwinner
-
-`att2` family value: women are better with children
-
-`att3` family value: men and women equal decision makers
-
-We say that the dataset `level4` is in long-long-long-wide format for the key variables `hhid`, `iid`, `year`, and the not-yet-existing variable `item`.
-
-The first term long refers to households, and reflects that households are stored in different observations identified by `hhid`.
-
-The second term long refers to individuals, and reflects that partners are stored as separate observations identified by `iid`; the variable `hhid` allows linking people who form a couple.
-
-The third long refers to time: measurements at different time points are stored in different observations, with time indicated by the variable `year`.
-
-The final term wide specifies that the repeated attitude measurements are stored in different variables within an observation, not as different observations.
+We say that the dataset `level4` is in long-long-long-wide format for the key variables `hhid`, `iid`, `year`, and  (not-existing) `item`. The first term *long* refers to households, and reflects that households are stored in different observations identified by `hhid`. The second term *long* refers to individuals, and reflects that partners are stored as separate observations identified by `iid`; the variable `hhid` allows linking people who form a couple. The third long refers to time: measurements at different time points are stored in different observations, with time indicated by the variable `year`. The final term wide specifies that the repeated attitude measurements are stored in different variables within an observation, not as different observations.
 
 Make sure that you understand the data well.
 
-i.  Use `pivot_longer()` to convert the data from long-long-long-wide to long-long-long-long format, i.e., the items are stored in different observations rather than in different variables indexed by a new variable `item`.
-
-ii. Use `pivot_wider()` to convert the data from the original long-long-long-wide format to long-long-wide-wide format. Explain what an observation in this dataset represents.
-
-iii. Use `pivot_wider()` to convert the data from the original long-long-long-wide format to long-wide-wide-wide format, identifying individuals within households by `male` rather than by `iid`.
-
-- What happens, or would happen, if you identify people within households by `iid`?
-- Is using `male` as a person-within-household identifier correct if the data include same-sex households?
+a.  Use `pivot_longer()` to convert the data from long-long-long-wide to long-long-long-long format, i.e., the items are stored in different observations rather than in different variables indexed by a new variable `item`.
+b. Use `pivot_wider()` to convert the data from the original long-long-long-wide format to long-long-wide-wide format. Explain what an observation in this dataset represents.
+c. Use `pivot_wider()` to convert the data from the original long-long-long-wide format to long-wide-wide-wide format, identifying individuals within households by `male` rather than by `iid`. What happens if you identify people within households by `iid`? Is using `male` as a person-within-household identifier correct if the data include same-sex households?
 
 ## Answers
-
-Make sure this file is in the same R Project as the `data` folder. Use relative file paths, not full paths to your computer.
 
 ```{r setup-restructure}
 library(tidyverse)
@@ -179,53 +150,54 @@ level4 <- read_dta("data/level4.dta")
 
 ### 1. Longitudinal data in long and wide format
 
-Inspect the data before restructuring.
+Have a look at the data before restructuring.
 
 ```{r}
-glimpse(gpa2long)
-# variable names, types, and the first few values
+gpa2long
 ```
 
-Which variables are time-constant and which are time-varying?
+Which variables are time-constant and which are time-varying? You can answer this by thinking about the meaning of the variables and looking informally at the data. 
+
+- student: a person identifier, so should be time-constant
+- occas: the time index, so it is by definition time-varying
+- sex: time-constant
+- gpa: time-varying, can change each semester
+- job: time-varying: working hours change between semesters
+- highgpa: time-constant, as it's the final high school GPA
+- admitted: time-constant, there is a single admission decision per student
+
+But to be sure we can check the number of distinct values of each variable within each student. If a variable has more than one distinct value for a student, it is time-varying; if it has only one distinct value, it is time-constant.
 
 ```{r}
+library(skimr)
+
 gpa2long |>
-  summarise(
-    across(everything(), \(x) n_distinct(x)),
+  # Compute the number of dsitinct values of each variable *within each student*
+  # You learned about the .by argument in "Selecting cases" and will practice it more in "Aggregating data")
+  # (Tip: have a look at the results of this mutate() step before running the summarise step to see what is going on)
+  mutate(
+    n_occas    = n_distinct(occas),
+    n_sex      = n_distinct(sex),
+    n_gpa      = n_distinct(gpa),
+    n_job      = n_distinct(job),
+    n_highgpa  = n_distinct(highgpa),
+    n_admitted = n_distinct(admitted),
     .by = student
-  ) |>
-  summarise(
-    across(-student, \(x) max(x))
-  )
-# for each variable, the largest number of distinct values found within a
-# single student
-# a maximum of 1 means the variable never changes within a student, so it is
-# time-constant; a larger value means it is time-varying
+  ) |> 
+  # Now let's look at the summary stats for those counts
+  skim(starts_with("n_")) 
+  # Time-constant variables should have a minimum and maximum of 1 (i.e., they have only one value per student)
 ```
 
-```{r}
-# student  identifies the unit, so it is neither
-# occas    is the time index, and varies by construction
-# gpa      time-varying: the grade-point average changes each semester
-# job      time-varying: working hours change between semesters
-# sex      time-constant
-# highgpa  time-constant: high school GPA is fixed before the study starts
-# admitted time-constant: a single admission decision per student
-```
 
 How many observations are there for student 1 and student 2?
 
 ```{r}
 gpa2long |>
   filter(student %in% c(1, 2)) |>
-  count(student)
-# number of measurement occasions for the first two students
+  count(student) # could also use tabyl()
 ```
 
-```{r}
-table(gpa2long$occas, useNA = "ifany")
-# the measurement occasions present in the data
-```
 
 Convert to wide format.
 
@@ -233,13 +205,12 @@ Convert to wide format.
 gpa2wide <- gpa2long |>
   pivot_wider(
     id_cols = c(student, sex, highgpa, admitted),
-    names_from = occas,
     values_from = c(gpa, job),
-    names_prefix = "t"
+    names_from = occas
   )
 # id_cols lists everything that identifies a student and does not vary over time
 # values_from lists the time-varying variables
-# names_prefix avoids variable names that start with a digit
+# names_from indicates that occas should be used to distinguish the new variable names
 ```
 
 Which new variables are created?
@@ -257,55 +228,22 @@ n_distinct(gpa2long$student)
 # the wide dataset has exactly one row per student
 ```
 
-Was information preserved?
+Was information preserved? Explore it yourself. 
 
+Convert back to long format:
 ```{r}
-nrow(gpa2long)
-sum(!is.na(gpa2wide |> select(starts_with("gpa"))))
-# the number of non-missing gpa cells in the wide data equals the number of
-# rows in the long data, provided gpa is never missing in the long format
-```
-
-```{r}
-gpa2long |>
-  summarise(
-    mean_gpa = mean(gpa, na.rm = TRUE),
-    n = sum(!is.na(gpa))
-  )
-
-gpa2wide |>
-  pivot_longer(
-    starts_with("gpa"),
-    values_to = "gpa"
-  ) |>
-  summarise(
-    mean_gpa = mean(gpa, na.rm = TRUE),
-    n = sum(!is.na(gpa))
-  )
-# the same mean and the same number of values: nothing was lost or invented
-```
-
-Save the wide dataset.
-
-```{r}
-write_rds(gpa2wide, "data/gpa2wide.rds")
-# .rds stores a single R object, preserving all types and attributes
-```
-
-Load it again and convert back to long format.
-
-```{r}
-gpa2wide_reloaded <- read_rds("data/gpa2wide.rds")
-
-gpa2long_again <- gpa2wide_reloaded |>
+gpa2long_again <- gpa2wide |>
   pivot_longer(
     cols = -c(student, sex, highgpa, admitted),
-    names_to = c(".value", "occas"),
-    names_pattern = "(.*)_t(.*)"
-  ) |>
-  mutate(occas = as.numeric(occas))
-# ".value" tells pivot_longer that this part of the name becomes the new
-# variable name, while the remainder becomes the value of occas
+    names_sep = "_",
+    names_to = c(".value", "occas")
+  ) 
+# cols indicates which columns we want to make long. We want all time-varying
+# variables. Note the the minus sign, we are saying "everything minus these variables here"
+# names_sep indicates that the names of the variables we want to make longer contain more than one piece of information, separated by "_" (job_0, gpa_3, etc).
+# ".value" tells pivot_longer to put the value of the old variable value in new a variable that matches the first piece of the name. The second piece should be put in a variable called "occas"
+# E.g.
+# job_0 -> the first piece is "job", so the value of "job_0" goes to a new variable called "job". The second piece is "0", so "0" goes to a new variable called "occas"
 ```
 
 Compare with the original.
@@ -320,15 +258,16 @@ gpa2long |>
   arrange(student, occas) |>
   select(student, occas, gpa, job) |>
   slice(1:10)
-# the round trip returns the data we started with
+
+# Note that in gpa2long_again, "occas" was created as a string (because we
+# got the 0 to 5 values from variable names, which are strings). We can correct
+# that:
+gpa2long_again |> 
+  mutate(occas = as.numeric(occas))
+# We still lose the labels that came with the original long dataset, but that 
+# does not affect results
 ```
 
-```{r}
-nrow(gpa2long)
-nrow(drop_na(gpa2long_again, gpa))
-# if students were measured on different numbers of occasions, the round trip
-# creates rows with missing values for the occasions a student did not have
-```
 
 ### 2. Sex-specific country indicators
 
@@ -340,12 +279,13 @@ names(world95)
 ```
 
 ```{r}
-# gender-specific: lifeexpm and lifeexpf, lit_male and lit_female
+# gender-specific: lifeexpm and lifeexpf, lit_male and lit_fema
 # not gender-specific: country, populatn, density, and the remaining variables
 #
 # The two pairs do not follow the same naming convention: one uses a suffix
 # without a separator, the other an underscore and a full word. pivot_longer()
-# needs a single consistent pattern, so we rename first.
+# needs a single consistent pattern, so we rename first. Using a separator like 
+# "_" is always a goog idea, because it makes pivoting easier.
 ```
 
 Rename to a consistent convention.
@@ -359,14 +299,11 @@ world95_renamed <- world95 |>
     lit_female = lit_fema,
     population = populatn
   )
-# all sex-specific variables now have the form stub_sex
-```
 
-```{r}
+# check
 world95_renamed |>
   select(country, population, density, starts_with("lifeexp"), starts_with("lit")) |>
   slice(1:5)
-# check the renaming before pivoting
 ```
 
 Restructure to two rows per country.
@@ -377,10 +314,8 @@ world95_long <- world95_renamed |>
   pivot_longer(
     cols = c(lifeexp_male, lifeexp_female, lit_male, lit_female),
     names_to = c(".value", "sex"),
-    names_pattern = "(.*)_(male|female)"
+    names_sep = "_"
   )
-# ".value" captures the stub, lifeexp or lit, as the new variable name
-# the second group captures male or female as the value of sex
 ```
 
 Create the dummy variable `female`.
@@ -398,32 +333,15 @@ Verify the number of observations.
 ```{r}
 nrow(world95_long)
 n_distinct(world95_long$country)
-# should be 218 rows for 109 countries
 ```
 
-```{r}
-world95_long |>
-  select(country, female, population, density, lifeexp, lit) |>
-  slice(1:6)
-# population and density are repeated across the two rows of a country,
-# lifeexp and lit differ between them
-```
-
-```{r}
-world95_long |>
-  summarise(
-    mean_lifeexp = mean(lifeexp, na.rm = TRUE),
-    .by = female
-  )
-# a first substantive use of the restructured data
-```
 
 ### 3. Multilevel data in four formats
 
 Inspect the data.
 
 ```{r}
-glimpse(level4)
+level4
 ```
 
 ```{r}
@@ -433,18 +351,8 @@ level4 |>
 # two people per household, three years per person, three items per row
 ```
 
-```{r}
-level4 |>
-  summarise(
-    households = n_distinct(hhid),
-    individuals = n_distinct(iid),
-    years = n_distinct(year),
-    rows = n()
-  )
-# rows should equal individuals times years
-```
 
-#### i. Long-long-long-long
+#### a. Long-long-long-long
 
 ```{r}
 level4_llll <- level4 |>
@@ -469,7 +377,7 @@ level4_llll |>
 # an observation is now one item, for one person, in one year
 ```
 
-#### ii. Long-long-wide-wide
+#### b. Long-long-wide-wide
 
 ```{r}
 level4_llww <- level4 |>
@@ -488,27 +396,10 @@ nrow(level4_llww)
 # one row per individual
 ```
 
-```{r}
-# What does an observation represent?
-#
-# One person. Households and individuals are still long, so partners occupy
-# separate rows linked by hhid, but all measurements of a person, across
-# both items and years, are now stored side by side in that person's row.
-# This is the format that structural equation modelling usually expects.
-#
-# Note that edu is listed in id_cols. That is only correct if edu does not
-# change over the years within a person. If it did, pivot_wider() would treat
-# each value as a separate person and produce too many rows.
-```
+What does an observation represent? One person.
 
-```{r}
-level4 |>
-  summarise(n_edu = n_distinct(edu), .by = iid) |>
-  summarise(max_n_edu = max(n_edu))
-# a value of 1 confirms that edu is constant within a person
-```
 
-#### iii. Long-wide-wide-wide
+#### c. Long-wide-wide-wide
 
 ```{r}
 level4_lwww <- level4 |>
@@ -516,69 +407,55 @@ level4_lwww <- level4 |>
     id_cols = c(hhid, urban),
     names_from = c(male, year),
     values_from = c(att1, att2, att3, edu),
-    names_prefix = "p"
   )
 # both the person and the time dimension move into the variable names
+# e.g. att1_1_2002 means att1 from the person with male=1 and year=2002
+# (we could use the argument name_preffix to get more clear names like 
+# "att1_male1_2002")
 ```
 
+We now have one row per household.
 ```{r}
 nrow(level4_lwww)
 n_distinct(level4$hhid)
 # one row per household
-```
 
-```{r}
 names(level4_lwww)
-# each variable is now indexed by partner and year
+# each variable is now indexed by male and year
 ```
 
+What would happen if we used `iid` instead of `male`? iid is unique across the whole dataset, not just within a household. Using it as the person-within-household index would create one pair of columns for every individual in the data, so the result would have as many column groups as there are people, almost all of them missing for any given
+household. The dataset would be enormous and unusable.
+
+
 ```{r}
-# What would happen if we used iid instead of male?
-#
-# iid is unique across the whole dataset, not just within a household. Using
-# it as the person-within-household index would create one pair of columns
-# for every individual in the data, so the result would have as many column
-# groups as there are people, almost all of them missing for any given
-# household. The dataset would be enormous and unusable.
-#
-# A within-household sequence number would work: number the partners 1 and 2
-# within each household, and pivot on that.
+# Using iid
+level4 |>
+  pivot_wider(
+    id_cols = c(hhid, urban),
+    names_from = c(iid, year),
+    values_from = c(att1, att2, att3, edu),
+  )
 ```
+
+
+Is male a correct person-within-household identifier? Only for heterosexual couples, which is what this synthetic dataset contains. In a same-sex household both partners share the same value of male, so the pair no longer identifies them uniquely. pivot_wider() wouldfind two values for one cell and return a list column with a warning about
+duplicate identifiers, rather than the intend two sets of columns.
+
+One solution would be creating a gender-neutral unique identifier within each houseold
+(partner 1, partner 2), and use that instead: 
 
 ```{r}
 level4 |>
   mutate(
     partner = dense_rank(iid),
     .by = hhid
-  ) |>
+  ) |> 
   pivot_wider(
     id_cols = c(hhid, urban),
     names_from = c(partner, year),
     values_from = c(att1, att2, att3, edu),
-    names_prefix = "p"
-  ) |>
-  nrow()
-# the same number of households, using a within-household index
+  ) 
 ```
 
-```{r}
-# Is male a correct person-within-household identifier?
-#
-# Only for heterosexual couples, which is what this synthetic dataset
-# contains. In a same-sex household both partners share the same value of
-# male, so the pair no longer identifies them uniquely. pivot_wider() would
-# find two values for one cell and return a list column with a warning about
-# duplicate identifiers, rather than the intended two sets of columns.
-#
-# The within-household sequence number above does not have this problem. It
-# does, however, lose the substantive meaning that "partner 1 is the man",
-# so any analysis comparing partners has to carry male along as a separate
-# variable.
-```
-
-```{r}
-level4 |>
-  summarise(n_male = n_distinct(male), .by = hhid) |>
-  count(n_male)
-# a value of 2 for every household confirms that all couples are mixed-sex
-```
+Now `att1_1_2002` means att1 for partner 1 (i.e. the first row within the household) in 2004. Note that in this case we lost the information the who is male (parter 1 or 2).
