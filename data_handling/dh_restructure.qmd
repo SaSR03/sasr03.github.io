@@ -2,7 +2,73 @@
 title: Restructuring data
 ---
 
-We may present panel data, data on people indicated by `id`, for different years indicated by `year`, in long format:
+We may present panel data, data on people indicated by `id`, for different years indicated by `year`, in long format. To keep things simple, suppose for now that we only measured one time-varying variable, income `inc`, alongside the time-constant variable `male`:
+
+| id  | year | inc | male |
+|-----|------|-----|------|
+| 1   | 2000 | 10  | 0    |
+| 1   | 2001 | 12  | 0    |
+| 1   | 2002 | 13  | 0    |
+| 2   | 2000 | 14  | 1    |
+| 2   | 2001 | 14  | 1    |
+| 2   | 2002 | 13  | 1    |
+| 3   | 2000 | 20  | 0    |
+| 3   | 2002 | 22  | 0    |
+
+or in wide format:
+
+| id  | inc_2000 | inc_2001 | inc_2002 | male |
+|-----|----------|----------|----------|------|
+| 1   | 10       | 12       | 13       | 0    |
+| 2   | 14       | 14       | 13       | 1    |
+| 3   | 20       | NA       | 22       | 0    |
+
+Be sure that you understand that these two datasets contain the same information, but only represent the information in a different way. One can translate one form into the other form. The variable `inc` is said to be time-varying, while `male` is time-constant.
+
+In this part you practice the R functions that restructure data between long format and wide format. You need to learn about this because your data may be in one format, while the data management or statistical method you want to use requires the data to be in the other format.
+
+For instance, multilevel analysis typically requires data to be in long format, e.g., measurements at different time points are stored in different rows, while structural equation modeling often requires wide data, e.g., measurements stored in different variables. In SaSR7 you will learn about these statistical methods. For now, we only introduce how to get the data into the correct format.
+
+## R
+
+You should read about the following R functions:
+
+| Function         | Description                           |
+|------------------|---------------------------------------|
+| `pivot_longer()` | Convert data from wide to long format |
+| `pivot_wider()`  | Convert data from long to wide format |
+
+Examples:
+
+### A single time-varying variable
+
+Restructure long to wide. Every `id` becomes one row, and the values of `year` become new column names, prefixed with `inc_`:
+
+```{r, eval=FALSE}
+data_wide <- data_long |>
+  pivot_wider(
+    id_cols = c(id, male),
+    names_from = year,
+    names_prefix = "inc_",
+    values_from = inc
+  )
+```
+
+Restructure wide to long. The reverse operation recovers `year` from the column names, and `inc` from the values stored in those columns:
+
+```{r, eval=FALSE}
+data_long <- data_wide |>
+  pivot_longer(
+    cols = -c(id, male),
+    names_prefix = "inc_",
+    names_to = "year",
+    values_to = "inc"
+  )
+```
+
+### Several time-varying variables
+
+Things get a little more involved when more than one variable is time-varying, for instance if we also measure a person's status `stat` every year:
 
 | id  | year | inc | stat | male |
 |-----|------|-----|------|------|
@@ -23,24 +89,7 @@ or in wide format:
 | 2   | 14      | 14      | 13      | 2        | 2        | 2        | 1    |
 | 3   | 20      | NA      | 22      | 1        | NA       | 3        | 0    |
 
-Be sure that you understand that these two datasets contain the same information, but only represent the information in a different way. One can translate one form into the other form. The variables `inc` and `stat` are said to be time-varying, while `male` is time-constant.
-
-In this part you practice the R functions that restructure data between long format and wide format. You need to learn about this because your data may be in one format, while the data management or statistical method you want to use requires the data to be in the other format.
-
-For instance, multilevel analysis typically requires data to be in long format, e.g., measurements at different time points are stored in different rows, while structural equation modeling often requires wide data, e.g., measurements stored in different variables. In SaSR7 you will learn about these statistical methods. For now, we only introduce how to get the data into the correct format.
-
-## R
-
-You should read about the following R functions:
-
-| Function         | Description                           |
-|------------------|---------------------------------------|
-| `pivot_longer()` | Convert data from wide to long format |
-| `pivot_wider()`  | Convert data from long to wide format |
-
-Examples:
-
-Restructure long to wide:
+Now a single column name, e.g. `inc_2000`, has to be split into two pieces of information: which variable (`inc` or `stat`) and which year (`2000`). `pivot_wider()` handles this by pivoting on more than one variable at once:
 
 ```{r, eval=FALSE}
 data_wide <- data_long |>
@@ -51,19 +100,20 @@ data_wide <- data_long |>
   )
 ```
 
-Restructure wide to long:
+Going back to long format, we tell `pivot_longer()` that one part of the name (`.value`) becomes the new variable name, `inc` or `stat`, and the other part becomes the value of `year`:
 
 ```{r, eval=FALSE}
 data_long <- data_wide |>
   pivot_longer(
     cols = -c(id, male),
-    names_sep = "_"
-    names_to = c(".value", "year"),
+    names_sep = "_",
+    names_to = c(".value", "year")
   )
-
 ```
 
-Note that `pivot_longer()` and `pivot_wider()` expect that variable names follow a consistent naming convention. In the example above, the variables are named using a prefix, `inc` and `stat`, followed by a year, `2000`, `2001`, and `2002`, corresponding to the level of an index variable, here the year in which income and status were measured. If variables are not named consistently, you may need to rename them before restructuring the data.
+Note that `pivot_longer()` and `pivot_wider()` expect that variable names follow a consistent naming convention. In the examples above, the variables are named using a prefix, `inc` and `stat`, followed by a year, `2000`, `2001`, and `2002`, corresponding to the level of an index variable, here the year in which income and status were measured, and `names_sep = "_"` is enough to tell R where the prefix ends and the year begins. If variables are not named consistently, you may need to rename them before restructuring the data.
+
+Sometimes a single separator is not enough, for example when a name mixes a prefix, a single-letter sex code, and a two-digit wave without any separator at all, like `inc_m01` or `lit_f02`. In such cases `names_sep` cannot locate the boundaries, and `pivot_longer()`/`pivot_wider()` instead need a *regular expression* (via the `names_pattern` argument) to describe the naming pattern. Regular expressions are a powerful but separate topic that we do not cover in this course; for now, it is enough to know that they exist for naming conventions that `names_sep` cannot handle.
 
 ## Assignments
 
