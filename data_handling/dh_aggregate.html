@@ -331,11 +331,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#people-nested-within-neighborhoods-within-cities" id="toc-people-nested-within-neighborhoods-within-cities" class="nav-link" data-scroll-target="#people-nested-within-neighborhoods-within-cities">1. People nested within neighborhoods within cities</a></li>
   <li><a href="#education-within-couples" id="toc-education-within-couples" class="nav-link" data-scroll-target="#education-within-couples">2. Education within couples</a></li>
   </ul></li>
-  <li><a href="#answers" id="toc-answers" class="nav-link" data-scroll-target="#answers">Answers</a>
-  <ul class="collapse">
-  <li><a href="#people-nested-within-neighborhoods-within-cities-1" id="toc-people-nested-within-neighborhoods-within-cities-1" class="nav-link" data-scroll-target="#people-nested-within-neighborhoods-within-cities-1">1. People nested within neighborhoods within cities</a></li>
-  <li><a href="#education-within-couples-1" id="toc-education-within-couples-1" class="nav-link" data-scroll-target="#education-within-couples-1">2. Education within couples</a></li>
-  </ul></li>
+  <li><a href="#answers" id="toc-answers" class="nav-link" data-scroll-target="#answers">Answers</a></li>
   </ul>
 </nav>
     </div>
@@ -366,7 +362,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Create a new dataset with summary statistics such as group means.</li>
 <li>Add to a dataset new variables with aggregate statistics such as group means.</li>
 </ul>
-<p>To illustrate, consider the following pet dataset with 5 pupils with respondent identifier <code>id</code>, from 2 school classes identified by the variable <code>class</code>, recording the father’s education of the pupil in the variable <code>fedu</code>.</p>
+<p>To illustrate, consider the following toy dataset with 5 pupils with respondent identifier <code>id</code>, from 2 school classes identified by the variable <code>class</code>, recording the father’s education of the pupil in the variable <code>fedu</code>.</p>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -403,13 +399,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 </tbody>
 </table>
-<p>The dataset with class-level summary statistics should contain 2 cases, one for each class, with the mean of <code>fedu</code> in the respective classes, new variable <code>mn_fedu</code>, and the number of observations, new variable <code>n</code>, in each class.</p>
+<p>The dataset with <em>class-level summary statistics</em> should contain 2 cases, one for each class, with the mean of <code>fedu</code> in the respective classes, new variable <code>mean_fedu</code>, and the number of observations, new variable <code>n</code>, in each class.</p>
 <table class="caption-top table">
 <thead>
 <tr class="header">
 <th>class</th>
 <th>n</th>
-<th>mn_fedu</th>
+<th>mean_fedu</th>
 </tr>
 </thead>
 <tbody>
@@ -425,14 +421,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 </tbody>
 </table>
-<p>The original individual-level dataset enriched with class-level summary statistics should read:</p>
+<p>The original individual-level dataset <em>enriched with class-level summary statistics</em> should read:</p>
 <table class="caption-top table">
 <thead>
 <tr class="header">
 <th>id</th>
 <th>class</th>
 <th>fedu</th>
-<th>mn_fedu</th>
+<th>mean_fedu</th>
 <th>n</th>
 </tr>
 </thead>
@@ -474,7 +470,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 </tbody>
 </table>
-<p>Thus, the variable <code>mn_fedu</code> records contextual, class-level, information in de-aggregated form: the mean education of the parents in a pupil’s class is treated as an individual attribute.</p>
+<p>Thus, the variable <code>mean_fedu</code> records contextual, class-level, information; the mean education of the parents in a pupil’s class is treated as an individual attribute.</p>
 <section id="r" class="level2">
 <h2 class="anchored" data-anchor-id="r">R</h2>
 <p>In this part you need to study the following R functions:</p>
@@ -502,77 +498,90 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td><code>n()</code></td>
 <td>Count the number of observations in a group</td>
 </tr>
-<tr class="odd">
-<td><code>mean()</code></td>
-<td>Compute group means</td>
-</tr>
-<tr class="even">
-<td><code>min()</code></td>
-<td>Compute group minimums</td>
-</tr>
-<tr class="odd">
-<td><code>max()</code></td>
-<td>Compute group maximums</td>
-</tr>
 </tbody>
 </table>
 <p>We present a short code fragment to accomplish the data manipulation described in the preamble.</p>
-<p>Add the mean of <code>fedu</code> by class as a variable, N = 5:</p>
+<p>Add the mean of <code>fedu</code> by class as a variable:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">mn_fedu =</span> <span class="fu">mean</span>(fedu, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean_fedu =</span> <span class="fu">mean</span>(fedu, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">.by =</span> class</span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+<p>Note that we could also have used the function <code>group_by()</code> to create a grouping structure, and then <code>mutate()</code> would have been applied within the groups. The <code>.by</code> argument is a convenient (and more recent) alternative that applies the operation separately within groups without permanently changing the grouping structure of the dataset. So the code below is a valid alternative to the code above:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> </span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(class) <span class="sc">|&gt;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean_fedu =</span> <span class="fu">mean</span>(fedu, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>(Read more about <code>group_by()</code> and <code>.by</code> <a href="https://dplyr.tidyverse.org/reference/dplyr_by.html">here</a>.)</p>
 <p>Add variable <code>nclass</code>: number of observations in each class:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">nclass =</span> <span class="fu">n</span>(),</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">.by =</span> class</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">nclass =</span> <span class="fu">n</span>(),</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">.by =</span> class</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Create a N = 2 contextual dataset with the N and mean of <code>fedu</code>, grouped by class:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>class_data <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">mn_fedu =</span> <span class="fu">mean</span>(fedu, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">.by =</span> class</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>class_data <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean_fedu =</span> <span class="fu">mean</span>(fedu, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">.by =</span> class</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+<p>Make sure you understand the difference between <code>mutate()</code> and <code>summarise()</code>. The former <em>enriches the individual-level dataset</em> with class-level summary statistics, while the latter reduces the dataset to one row per group, thus creating a <em>new dataset with class-level summary statistics</em>.</p>
 </section>
 <section id="assignments" class="level2">
 <h2 class="anchored" data-anchor-id="assignments">Assignments</h2>
 <section id="people-nested-within-neighborhoods-within-cities" class="level3">
 <h3 class="anchored" data-anchor-id="people-nested-within-neighborhoods-within-cities">1. People nested within neighborhoods within cities</h3>
 <p>We consider a simple synthetic dataset <code>ex_aggr.dta</code> of people nested within neighborhoods nested within cities.</p>
-<p><code>city</code> city code</p>
-<p><code>neighb</code> neighborhood code</p>
-<p><code>employ</code> employment status, 1 = employed, 0 = unemployed</p>
-<p><code>ethnic</code> 1 = native Dutch; 2 = western immigrant; 3 = nonwestern immigrant</p>
 <ul>
-<li>Create a separate dataset recording the fractions of unemployed and the ethnic composition of cities, i.e., the fractions of native Dutch, western immigrants, and nonwestern immigrants.</li>
-<li>Add variables to the original dataset with the fractions, or percentages, of unemployed and the ethnic composition of the neighborhood, i.e., the fractions, or percentages, of Dutch, western, and nonwestern people in the neighborhood. Briefly consider how to also add the information aggregated at the city level.</li>
-<li>Add a variable representing the fraction, or percentage, of ethnic ingroup in the neighborhood.</li>
+<li><code>city</code> city code</li>
+<li><code>neighb</code> neighborhood code</li>
+<li><code>employ</code> employment status, 1 = employed, 0 = unemployed</li>
+<li><code>ethnic</code> 1 = native Dutch; 2 = western immigrant; 3 = nonwestern immigrant</li>
 </ul>
+<ol type="a">
+<li>Create a separate dataset recording, for each city, the number of people, the fraction of unemployed and the ethnic composition, i.e., the frac8tions of native Dutch, western immigrants, and nonwestern immigrants.</li>
+<li>Add variables to the original dataset with the percentages of unemployed and the ethnic composition of the neighborhood, i.e., the fractions, or percentages, of Dutch, western, and nonwestern people in the neighborhood. Consider how to also add the information aggregated at the city level.</li>
+<li>Add a variable representing the percentage of ethnic ingroup in the neighborhood.</li>
+<li>What is the average percentage of ethnic ingroup in the neighborhood for native Dutch, western immigrants, and nonwestern immigrants?</li>
+</ol>
 </section>
 <section id="education-within-couples" class="level3">
 <h3 class="anchored" data-anchor-id="education-within-couples">2. Education within couples</h3>
-<p>Use <code>hin95_ext.dta</code>. The dataset contains data on couples, married or cohabiting, indicated by the household identifier <code>hrespnr</code>.</p>
-<ul>
+<p>Use <code>hin95_ext.dta</code>. The dataset contains data on couples (married or cohabiting), as well as people living alone. The households are indicated by the identifier <code>hrespnr</code>. Keep only the couples, i.e., households with exactly two members. The variable <code>educ</code> records the level of education of the respondent.</p>
+<ol type="a">
 <li>Add a variable for the mean education of the household. Thus, this variable should have the same value for both partners.</li>
 <li>Add a variable for the minimum education of the household. Add a variable for the maximum education of the household.</li>
 <li>Add a variable recording the absolute difference of the levels of education of husband and wife.</li>
-</ul>
+</ol>
 </section>
 </section>
 <section id="answers" class="level2">
 <h2 class="anchored" data-anchor-id="answers">Answers</h2>
-<p>Make sure this file is in the same R Project as the <code>data</code> folder. Use relative file paths, not full paths to your computer.</p>
+<div class="callout callout-style-simple callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>See answers
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
 ✔ dplyr     1.2.1     ✔ readr     2.2.0
@@ -585,84 +594,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 ✖ dplyr::lag()    masks stats::lag()
 ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven)</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>ex_aggr <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(<span class="st">"data/ex_aggr.dta"</span>)</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>hin95_ext <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(<span class="st">"data/hin95_ext.dta"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>ex_aggr <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(<span class="st">"data/ex_aggr.dta"</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>hin95_ext <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(<span class="st">"data/hin95_ext.dta"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <section id="people-nested-within-neighborhoods-within-cities-1" class="level3">
 <h3 class="anchored" data-anchor-id="people-nested-within-neighborhoods-within-cities-1">1. People nested within neighborhoods within cities</h3>
-<p>Inspect the data before aggregating.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(ex_aggr)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Rows: 168,008
-Columns: 4
-$ city   &lt;dbl&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, …
-$ neighb &lt;dbl&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, …
-$ employ &lt;dbl&gt; 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, …
-$ ethnic &lt;dbl+lbl&gt; 1, 3, 3, 2, 2, 1, 2, 1, 1, 1, 1, 3, 1, 3, 1, 1, 1, 1, 1, 3,…</code></pre>
-</div>
-</div>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(ex_aggr<span class="sc">$</span>employ, <span class="at">useNA =</span> <span class="st">"ifany"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-    0     1 
-86736 81272 </code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(ex_aggr<span class="sc">$</span>ethnic, <span class="at">useNA =</span> <span class="st">"ifany"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-     1      2      3 
-114049  19237  34722 </code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># check the codes and whether there are missing values</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>ex_aggr <span class="sc">|&gt;</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">cities =</span> <span class="fu">n_distinct</span>(city),</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">neighborhoods =</span> <span class="fu">n_distinct</span>(neighb),</span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">people =</span> <span class="fu">n</span>()</span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 1 × 3
-  cities neighborhoods people
-   &lt;int&gt;         &lt;int&gt;  &lt;int&gt;
-1    400          2222 168008</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># the size of each level of the hierarchy</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>Check whether neighborhood codes are unique across cities.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>ex_aggr <span class="sc">|&gt;</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n_cities =</span> <span class="fu">n_distinct</span>(city), <span class="at">.by =</span> neighb) <span class="sc">|&gt;</span></span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(n_cities)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 1 × 2
-  n_cities     n
-     &lt;int&gt; &lt;int&gt;
-1        1  2222</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># if some neighborhood codes appear in more than one city, the code is only</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="co"># unique WITHIN a city, and grouping must use c(city, neighb) rather than</span></span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="co"># neighb alone</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
 <p>Create the city-level dataset.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>city_data <span class="ot">&lt;-</span> ex_aggr <span class="sc">|&gt;</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">fr_unemployed =</span> <span class="fu">mean</span>(employ <span class="sc">==</span> <span class="dv">0</span>),</span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">fr_dutch =</span> <span class="fu">mean</span>(ethnic <span class="sc">==</span> <span class="dv">1</span>),</span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">fr_western =</span> <span class="fu">mean</span>(ethnic <span class="sc">==</span> <span class="dv">2</span>),</span>
-<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">fr_nonwestern =</span> <span class="fu">mean</span>(ethnic <span class="sc">==</span> <span class="dv">3</span>),</span>
-<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">.by =</span> city</span>
-<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(city)</span>
-<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>city_data</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>city_data <span class="ot">&lt;-</span> ex_aggr <span class="sc">|&gt;</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">fr_unemployed =</span> <span class="fu">mean</span>(employ <span class="sc">==</span> <span class="dv">0</span>),</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">fr_dutch      =</span> <span class="fu">mean</span>(ethnic <span class="sc">==</span> <span class="dv">1</span>),</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">fr_western    =</span> <span class="fu">mean</span>(ethnic <span class="sc">==</span> <span class="dv">2</span>),</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">fr_nonwestern =</span> <span class="fu">mean</span>(ethnic <span class="sc">==</span> <span class="dv">3</span>),</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">.by =</span> city</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  ) </span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>city_data</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 400 × 6
     city     n fr_unemployed fr_dutch fr_western fr_nonwestern
@@ -679,14 +630,14 @@ $ ethnic &lt;dbl+lbl&gt; 1, 3, 3, 2, 2, 1, 2, 1, 1, 1, 1, 3, 1, 3, 1, 1, 1, 1, 1
 10    10   787         0.912    0.750     0.0546        0.196 
 # ℹ 390 more rows</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># mean() of a logical condition gives the fraction for which it is TRUE,</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="co"># because TRUE counts as 1 and FALSE as 0</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># mean() of a logical condition gives the fraction for which it is TRUE,</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co"># because TRUE counts as 1 and FALSE as 0</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>city_data <span class="sc">|&gt;</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">total =</span> fr_dutch <span class="sc">+</span> fr_western <span class="sc">+</span> fr_nonwestern</span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>city_data <span class="sc">|&gt;</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">total =</span> fr_dutch <span class="sc">+</span> fr_western <span class="sc">+</span> fr_nonwestern</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 400 × 7
     city     n fr_unemployed fr_dutch fr_western fr_nonwestern total
@@ -703,473 +654,300 @@ $ ethnic &lt;dbl+lbl&gt; 1, 3, 3, 2, 2, 1, 2, 1, 1, 1, 1, 3, 1, 3, 1, 1, 1, 1, 1
 10    10   787         0.912    0.750     0.0546        0.196      1
 # ℹ 390 more rows</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># the three ethnic fractions should sum to 1 in every city</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>If <code>employ</code> or <code>ethnic</code> could be missing, the fractions have to say explicitly what the denominator is.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>ex_aggr <span class="sc">|&gt;</span></span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">fr_unemployed =</span> <span class="fu">mean</span>(employ <span class="sc">==</span> <span class="dv">0</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">n_valid_employ =</span> <span class="fu">sum</span>(<span class="sc">!</span><span class="fu">is.na</span>(employ)),</span>
-<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">.by =</span> city</span>
-<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 5 × 3
-   city fr_unemployed n_valid_employ
-  &lt;dbl&gt;         &lt;dbl&gt;          &lt;int&gt;
-1     1         0.480            356
-2     2         0.667             66
-3     3         0.729            140
-4     4         0.630            489
-5     5         0.113            629</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># na.rm = TRUE computes the fraction among those with a known status</span></span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="co"># without it, a single missing value makes the whole fraction missing</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># the three ethnic fractions should sum to 1 in every city</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Add neighborhood-level variables to the individual-level dataset.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>ex_aggr <span class="ot">&lt;-</span> ex_aggr <span class="sc">|&gt;</span></span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">n_neighb =</span> <span class="fu">n</span>(),</span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">pc_unemployed_n =</span> <span class="dv">100</span> <span class="sc">*</span> <span class="fu">mean</span>(employ <span class="sc">==</span> <span class="dv">0</span>),</span>
-<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">pc_dutch_n =</span> <span class="dv">100</span> <span class="sc">*</span> <span class="fu">mean</span>(ethnic <span class="sc">==</span> <span class="dv">1</span>),</span>
-<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">pc_western_n =</span> <span class="dv">100</span> <span class="sc">*</span> <span class="fu">mean</span>(ethnic <span class="sc">==</span> <span class="dv">2</span>),</span>
-<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">pc_nonwestern_n =</span> <span class="dv">100</span> <span class="sc">*</span> <span class="fu">mean</span>(ethnic <span class="sc">==</span> <span class="dv">3</span>),</span>
-<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">.by =</span> <span class="fu">c</span>(city, neighb)</span>
-<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a><span class="co"># mutate() keeps all rows, so every person receives the composition of their</span></span>
-<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a><span class="co"># own neighborhood</span></span>
-<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a><span class="co"># grouping by c(city, neighb) is safe even if neighborhood codes repeat</span></span>
-<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a><span class="co"># across cities</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>ex_aggr <span class="ot">&lt;-</span> ex_aggr <span class="sc">|&gt;</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">n_neighb =</span> <span class="fu">n</span>(),</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">pc_unemployed_neighb =</span> <span class="dv">100</span> <span class="sc">*</span> <span class="fu">mean</span>(employ <span class="sc">==</span> <span class="dv">0</span>),</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">pc_dutch_neighb =</span> <span class="dv">100</span> <span class="sc">*</span> <span class="fu">mean</span>(ethnic <span class="sc">==</span> <span class="dv">1</span>),</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">pc_western_neighb =</span> <span class="dv">100</span> <span class="sc">*</span> <span class="fu">mean</span>(ethnic <span class="sc">==</span> <span class="dv">2</span>),</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">pc_nonwestern_neighb =</span> <span class="dv">100</span> <span class="sc">*</span> <span class="fu">mean</span>(ethnic <span class="sc">==</span> <span class="dv">3</span>),</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">.by =</span> <span class="fu">c</span>(city, neighb)</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a><span class="co"># grouping by c(city, neighb) instead of just neighb is safe even if neighborhood codes repeat across cities</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>ex_aggr <span class="sc">|&gt;</span></span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(city, neighb, ethnic, n_neighb, pc_dutch_n, pc_western_n, pc_nonwestern_n) <span class="sc">|&gt;</span></span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>ex_aggr <span class="sc">|&gt;</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(city, neighb) <span class="sc">|&gt;</span> </span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 10 × 7
-    city neighb ethnic         n_neighb pc_dutch_n pc_western_n pc_nonwestern_n
-   &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl+lbl&gt;         &lt;int&gt;      &lt;dbl&gt;        &lt;dbl&gt;           &lt;dbl&gt;
- 1     1      1 1 [dutch]            51      80.4          9.80            9.80
- 2     2      2 3 [nonwestern]       66      54.5         16.7            28.8 
- 3     3      3 3 [nonwestern]       76      65.8          5.26           28.9 
- 4     4      4 2 [western]          52      48.1         32.7            19.2 
- 5     5      5 2 [western]          74       8.11        13.5            78.4 
- 6     6      6 1 [dutch]            69      78.3          7.25           14.5 
- 7     7      7 2 [western]          97      29.9         24.7            45.4 
- 8     8      8 1 [dutch]            97      86.6          8.25            5.15
- 9     9      9 1 [dutch]            91      47.3         29.7            23.1 
-10    10     10 1 [dutch]            52      65.4         11.5            23.1 </code></pre>
+<pre><code># A tibble: 20 × 9
+    city neighb employ ethnic      n_neighb pc_unemployed_neighb pc_dutch_neighb
+   &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl+lbl&gt;      &lt;int&gt;                &lt;dbl&gt;           &lt;dbl&gt;
+ 1     1      1      1 1 [dutch]         51                 58.8            80.4
+ 2     1      1      0 1 [dutch]         51                 58.8            80.4
+ 3     1      1      0 1 [dutch]         51                 58.8            80.4
+ 4     1      1      0 1 [dutch]         51                 58.8            80.4
+ 5     1      1      1 1 [dutch]         51                 58.8            80.4
+ 6     1      1      0 1 [dutch]         51                 58.8            80.4
+ 7     1      1      1 3 [nonwest…       51                 58.8            80.4
+ 8     1      1      1 1 [dutch]         51                 58.8            80.4
+ 9     1      1      0 1 [dutch]         51                 58.8            80.4
+10     1      1      0 1 [dutch]         51                 58.8            80.4
+11     1      1      1 1 [dutch]         51                 58.8            80.4
+12     1      1      0 1 [dutch]         51                 58.8            80.4
+13     1      1      1 1 [dutch]         51                 58.8            80.4
+14     1      1      0 1 [dutch]         51                 58.8            80.4
+15     1      1      0 3 [nonwest…       51                 58.8            80.4
+16     1      1      0 1 [dutch]         51                 58.8            80.4
+17     1      1      0 1 [dutch]         51                 58.8            80.4
+18     1      1      1 1 [dutch]         51                 58.8            80.4
+19     1      1      0 1 [dutch]         51                 58.8            80.4
+20     1      1      1 3 [nonwest…       51                 58.8            80.4
+# ℹ 2 more variables: pc_western_neighb &lt;dbl&gt;, pc_nonwestern_neighb &lt;dbl&gt;</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># the same neighborhood percentages are repeated for everyone in it</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># the same neighborhood percentages are repeated for everyone in it</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>The city-level information is added in exactly the same way, only the grouping changes.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>ex_aggr <span class="ot">&lt;-</span> ex_aggr <span class="sc">|&gt;</span></span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">n_city =</span> <span class="fu">n</span>(),</span>
-<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">pc_unemployed_c =</span> <span class="dv">100</span> <span class="sc">*</span> <span class="fu">mean</span>(employ <span class="sc">==</span> <span class="dv">0</span>),</span>
-<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">pc_dutch_c =</span> <span class="dv">100</span> <span class="sc">*</span> <span class="fu">mean</span>(ethnic <span class="sc">==</span> <span class="dv">1</span>),</span>
-<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">pc_western_c =</span> <span class="dv">100</span> <span class="sc">*</span> <span class="fu">mean</span>(ethnic <span class="sc">==</span> <span class="dv">2</span>),</span>
-<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">pc_nonwestern_c =</span> <span class="dv">100</span> <span class="sc">*</span> <span class="fu">mean</span>(ethnic <span class="sc">==</span> <span class="dv">3</span>),</span>
-<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">.by =</span> city</span>
-<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a><span class="co"># the alternative is to join city_data back onto the individual data with</span></span>
-<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a><span class="co"># left_join(ex_aggr, city_data, by = "city"), which gives the same result</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>ex_aggr <span class="sc">|&gt;</span></span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(city, neighb, pc_dutch_n, pc_dutch_c) <span class="sc">|&gt;</span></span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 10 × 4
-    city neighb pc_dutch_n pc_dutch_c
-   &lt;dbl&gt;  &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;
- 1     1      1      80.4        84.3
- 2     2      2      54.5        54.5
- 3     3      3      65.8        57.9
- 4     4      4      48.1        32.7
- 5     5      5       8.11       16.7
- 6     6      6      78.3        82.0
- 7     7      7      29.9        24.5
- 8     8      8      86.6        84.6
- 9     9      9      47.3        43.6
-10    10     10      65.4        75.0</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># the neighborhood percentage varies within a city, the city percentage does not</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>ex_aggr <span class="ot">&lt;-</span> ex_aggr <span class="sc">|&gt;</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">n_city =</span> <span class="fu">n</span>(),</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">pc_unemployed_city =</span> <span class="dv">100</span> <span class="sc">*</span> <span class="fu">mean</span>(employ <span class="sc">==</span> <span class="dv">0</span>),</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">pc_dutch_city =</span> <span class="dv">100</span> <span class="sc">*</span> <span class="fu">mean</span>(ethnic <span class="sc">==</span> <span class="dv">1</span>),</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">pc_western_city =</span> <span class="dv">100</span> <span class="sc">*</span> <span class="fu">mean</span>(ethnic <span class="sc">==</span> <span class="dv">2</span>),</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">pc_nonwestern_city =</span> <span class="dv">100</span> <span class="sc">*</span> <span class="fu">mean</span>(ethnic <span class="sc">==</span> <span class="dv">3</span>),</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">.by =</span> city</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="co"># could also have used the city_data dataset to join the information, using left_join(), which we present in the next chapter</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Add the percentage of the respondent’s own ethnic group in the neighborhood.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>ex_aggr <span class="ot">&lt;-</span> ex_aggr <span class="sc">|&gt;</span></span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">pc_ingroup =</span> <span class="fu">case_when</span>(</span>
-<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>      ethnic <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> pc_dutch_n,</span>
-<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>      ethnic <span class="sc">==</span> <span class="dv">2</span> <span class="sc">~</span> pc_western_n,</span>
-<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>      ethnic <span class="sc">==</span> <span class="dv">3</span> <span class="sc">~</span> pc_nonwestern_n,</span>
-<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>      <span class="cn">TRUE</span> <span class="sc">~</span> <span class="cn">NA_real_</span></span>
-<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a><span class="co"># the ingroup percentage depends on who the respondent is: it picks the</span></span>
-<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a><span class="co"># column matching their own ethnic category</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>ex_aggr <span class="ot">&lt;-</span> ex_aggr <span class="sc">|&gt;</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">pc_ingroup =</span> <span class="fu">recode_values</span>(ethnic,</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>                                <span class="dv">1</span> <span class="sc">~</span> pc_dutch_neighb,</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>                                <span class="dv">2</span> <span class="sc">~</span> pc_western_neighb,</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>                                <span class="dv">3</span> <span class="sc">~</span> pc_nonwestern_neighb</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>                              )</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Dutch people (ethnic == 1) get the percentage of Dutch in their neighborhood, and so on</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a><span class="co"># could of course also have used case_when()</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+<p>Average percentage of ethnic ingroup in the neighborhood, by ethnic group.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>ex_aggr <span class="sc">|&gt;</span></span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(neighb, ethnic, pc_dutch_n, pc_western_n, pc_nonwestern_n, pc_ingroup) <span class="sc">|&gt;</span></span>
-<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 10 × 6
-   neighb ethnic         pc_dutch_n pc_western_n pc_nonwestern_n pc_ingroup
-    &lt;dbl&gt; &lt;dbl+lbl&gt;           &lt;dbl&gt;        &lt;dbl&gt;           &lt;dbl&gt;      &lt;dbl&gt;
- 1      1 1 [dutch]           80.4          9.80            9.80       80.4
- 2      2 3 [nonwestern]      54.5         16.7            28.8        28.8
- 3      3 3 [nonwestern]      65.8          5.26           28.9        28.9
- 4      4 2 [western]         48.1         32.7            19.2        32.7
- 5      5 2 [western]          8.11        13.5            78.4        13.5
- 6      6 1 [dutch]           78.3          7.25           14.5        78.3
- 7      7 2 [western]         29.9         24.7            45.4        24.7
- 8      8 1 [dutch]           86.6          8.25            5.15       86.6
- 9      9 1 [dutch]           47.3         29.7            23.1        47.3
-10     10 1 [dutch]           65.4         11.5            23.1        65.4</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co"># check that pc_ingroup equals the column corresponding to ethnic</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>ex_aggr <span class="sc">|&gt;</span></span>
-<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean_ingroup =</span> <span class="fu">mean</span>(pc_ingroup, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">.by =</span> ethnic</span>
-<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(ethnic)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>ex_aggr <span class="sc">|&gt;</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean_pc_ingroup =</span> <span class="fu">mean</span>(pc_ingroup),</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">.by =</span> ethnic</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3 × 2
-  ethnic         mean_ingroup
-  &lt;dbl+lbl&gt;             &lt;dbl&gt;
-1 1 [dutch]              73.8
-2 2 [western]            19.5
-3 3 [nonwestern]         33.9</code></pre>
+  ethnic         mean_pc_ingroup
+  &lt;dbl+lbl&gt;                &lt;dbl&gt;
+1 1 [dutch]                 73.8
+2 3 [nonwestern]            33.9
+3 2 [western]               19.5</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co"># on average, members of the largest group live among more of their own,</span></span>
-<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="co"># which is a purely arithmetic consequence of group size rather than</span></span>
-<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a><span class="co"># evidence of segregation</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>A shorter route to the same variable, without needing the three separate columns first.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>ex_aggr <span class="sc">|&gt;</span></span>
-<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">pc_ingroup_alt =</span> <span class="dv">100</span> <span class="sc">*</span> <span class="fu">mean</span>(ethnic <span class="sc">==</span> <span class="fu">first</span>(ethnic)),</span>
-<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">.by =</span> <span class="fu">c</span>(city, neighb, ethnic)</span>
-<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">n_different =</span> <span class="fu">sum</span>(<span class="fu">abs</span>(pc_ingroup_alt <span class="sc">-</span> pc_ingroup) <span class="sc">&gt;</span> <span class="fl">1e-8</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 1 × 1
-  n_different
-        &lt;int&gt;
-1      168008</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co"># grouping by ethnic as well makes the comparison automatic</span></span>
-<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="co"># the count of differences should be zero</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="education-within-couples-1" class="level3">
 <h3 class="anchored" data-anchor-id="education-within-couples-1">2. Education within couples</h3>
-<p>Inspect the household structure.</p>
+<p>Select only couples.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(hin95_ext)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Rows: 3,350
-Columns: 140
-$ hrespnr    &lt;dbl&gt; 11001, 11002, 11002, 11003, 11003, 11004, 11004, 11005, 110…
-$ sex        &lt;dbl+lbl&gt; 0, 0, 1, 0, 1, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 1, 0, 1, 0…
-$ ybirth     &lt;dbl&gt; 65, 62, 69, 60, 61, 61, 65, 60, 61, 65, 59, 61, 61, 62, 69,…
-$ age        &lt;dbl&gt; 30, 33, 26, 35, 34, 34, 30, 35, 34, 30, 36, 34, 34, 33, 26,…
-$ fage       &lt;dbl&gt; 49, 27, 29, 25, 31, 33, 26, 38, 31, 26, 39, 42, 30, 20, 24,…
-$ fpres      &lt;dbl&gt; 15, 22, 37, 48, 27, 85, 29, 37, 38, 85, 23, 49, 25, 75, 85,…
-$ feduc      &lt;dbl+lbl&gt; 1, 1, 3, 2, 1, 5, 1, 1, 1, 2, 1, 3, 1, 1, 5, 3, 1, 6, 5…
-$ meduc      &lt;dbl+lbl&gt; 2, 2, 1, 2, 1, 2, 1, 1, 1, 3, 3, 2, 1, 2, 3, 3, 1, 3, 5…
-$ pardiv     &lt;dbl+lbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1…
-$ sibs       &lt;dbl&gt; 1, 0, 3, 4, 1, 2, 1, 4, 3, 2, 3, 10, 2, 1, 1, 1, 5, 3, 5, 3…
-$ ageleft    &lt;dbl+lbl&gt; NA, 25, 19, 19, 18, 27, 22, 20, 20, 23, 18, 23, 20, 20,…
-$ partner    &lt;dbl+lbl&gt; 1, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 1, 1, 1, 1, 1…
-$ agemar     &lt;dbl&gt; NA, 26, 19, 19, 18, 27, 23, 25, 24, NA, 26, 24, 20, 19, NA,…
-$ kids       &lt;dbl&gt; 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 2, 2, 2, 2, 0, 0, 0, 0, 0, 1,…
-$ contra     &lt;dbl+lbl&gt; NA,  1,  1,  1,  1,  1,  1,  1,  1, NA,  1,  0,  1,  1,…
-$ educ       &lt;dbl+lbl&gt; 6, 4, 6, 3, 3, 8, 7, 7, 3, 3, 8, 4, 2, 2, 8, 7, 6, 7, 5…
-$ course     &lt;dbl+lbl&gt; 0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1, 0, 0…
-$ work       &lt;dbl+lbl&gt; 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0…
-$ supvis     &lt;dbl+lbl&gt;  1,  1, NA, NA,  1,  2,  1,  3,  1, NA,  2,  1,  1,  5,…
-$ pres       &lt;dbl&gt; 31, 37, NA, NA, 25, 72, 65, 53, 51, NA, 33, 71, 39, 49, NA,…
-$ class      &lt;dbl+lbl&gt;  1,  1, NA, NA,  2,  1,  1,  1,  1, NA,  2,  1,  1,  1,…
-$ hrinc      &lt;dbl&gt; 12.8, 21.2, NA, NA, 14.4, 28.2, 23.0, 21.1, 17.8, NA, 28.8,…
-$ network    &lt;dbl&gt; 100, 100, 0, 0, 15, 60, 0, 0, 100, 60, 80, 0, 40, 100, 80, …
-$ clubs      &lt;dbl+lbl&gt; 2, 4, 4, 4, 4, 1, 4, 4, 4, 3, 4, 1, 3, 1, 4, 4, 4, 4, 4…
-$ sick       &lt;dbl&gt; 0, 0, 0, 0, 1, 0, 0, 0, 2, 5, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0,…
-$ reli       &lt;dbl+lbl&gt; 0, 1, 1, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 0, 1, 1…
-$ polit      &lt;dbl+lbl&gt;  1,  1,  3,  1,  7,  2,  4,  3,  4,  2,  1,  4,  3,  1,…
-$ urban      &lt;dbl+lbl&gt; 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1…
-$ good01     &lt;dbl+lbl&gt; 1, 1, 1, 1, 1, 1, 1, 2, 2, 1, 1, 1, 2, 2, 1, 1, 1, 1, 1…
-$ good02     &lt;dbl+lbl&gt; 2, 2, 2, 1, 1, 1, 1, 2, 2, 1, 2, 2, 2, 2, 2, 1, 2, 1, 1…
-$ good03     &lt;dbl+lbl&gt; 1, 1, 1, 1, 1, 1, 1, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 1, 1…
-$ good04     &lt;dbl+lbl&gt; 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 2, 1, 1, 1, 1, 2…
-$ good05     &lt;dbl+lbl&gt; 1, 1, 2, 1, 1, 2, 1, 2, 2, 1, 1, 2, 2, 1, 1, 1, 1, 1, 1…
-$ good06     &lt;dbl+lbl&gt; 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1…
-$ good07     &lt;dbl+lbl&gt; 1, 1, 1, 1, 1, 1, 2, 2, 2, 1, 2, 2, 1, 1, 1, 2, 2, 1, 1…
-$ good08     &lt;dbl+lbl&gt; 1, 1, 1, 1, 1, 1, 1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
-$ good09     &lt;dbl+lbl&gt; 1, 2, 2, 1, 1, 1, 1, 2, 2, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1…
-$ good10     &lt;dbl+lbl&gt; 1, 1, 1, 2, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1…
-$ good11     &lt;dbl+lbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1…
-$ good12     &lt;dbl+lbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1…
-$ good13     &lt;dbl+lbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
-$ good14     &lt;dbl+lbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
-$ good15     &lt;dbl+lbl&gt; 1, 2, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
-$ good16     &lt;dbl+lbl&gt; 1, 1, 1, 1, 1, 2, 1, 2, 1, 2, 1, 2, 1, 1, 1, 1, 2, 1, 1…
-$ good17     &lt;dbl+lbl&gt; 2, 1, 1, 1, 1, 1, 1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1…
-$ sexrol1    &lt;dbl+lbl&gt; 1, 1, 1, 1, 5, 1, 4, 1, 1, 5, 3, 2, 1, 4, 3, 1, 1, 2, 1…
-$ sexrol2    &lt;dbl+lbl&gt; 1, 1, 1, 1, 1, 1, 3, 1, 1, 4, 2, 2, 1, 3, 2, 2, 4, 1, 1…
-$ sexrol3    &lt;dbl+lbl&gt; 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
-$ sexrol4    &lt;dbl+lbl&gt; 1, 3, 3, 1, 1, 1, 2, 1, 1, 2, 2, 1, 1, 3, 1, 2, 1, 1, 1…
-$ sexrol5    &lt;dbl+lbl&gt; 5, 5, 5, 5, 1, 5, 4, 5, 5, 5, 2, 5, 5, 5, 5, 5, 4, 5, 5…
-$ rbirth     &lt;dbl&gt; 260265, 171262, 200269, 140660, 50961, 280961, 250765, 1511…
-$ hn08_1ad   &lt;dbl&gt; NA, 22, 22, NA, NA, 16, 16, 28, 28, NA, 13, 13, 3, 3, NA, N…
-$ hn08_1am   &lt;dbl&gt; NA, 9, 9, NA, NA, 3, 3, 6, 6, NA, 11, 11, 3, 3, NA, NA, NA,…
-$ hn08_1aj   &lt;dbl&gt; NA, 92, 92, NA, NA, 93, 93, 94, 94, NA, 91, 91, 84, 84, NA,…
-$ ho01_a     &lt;dbl+lbl&gt; NA, NA, NA, NA, NA, NA, NA,  1,  1, NA, NA, NA,  3,  3,…
-$ ho01_b     &lt;dbl+lbl&gt; NA, NA, NA, NA, NA, NA, NA,  2,  2, NA, NA, NA,  3,  3,…
-$ ho01_c     &lt;dbl+lbl&gt; NA, NA, NA, NA, NA, NA, NA,  1,  1, NA, NA, NA,  1,  1,…
-$ ho01_d     &lt;dbl+lbl&gt; NA, NA, NA, NA, NA, NA, NA,  1,  1, NA, NA, NA,  3,  3,…
-$ ho01_e     &lt;dbl+lbl&gt; NA, NA, NA, NA, NA, NA, NA,  1,  1, NA, NA, NA,  3,  3,…
-$ ho02       &lt;dbl&gt; NA, 2, 2, 1, 1, 0, 0, 0, 0, NA, 0, 0, 0, 0, NA, NA, NA, NA,…
-$ ht01_a     &lt;dbl+lbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 1, 1, 1, 1, 1…
-$ ht01_b     &lt;dbl+lbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,  2,  2,…
-$ ht01_c     &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, 4, 4, NA, N…
-$ ht02       &lt;dbl&gt; NA, 1, 1, 1, 1, 1, 1, 1, 1, NA, 2, 2, 4, 4, NA, NA, NA, NA,…
-$ ht03       &lt;dbl&gt; NA, 1, 1, 1, 1, 1, 1, 1, 1, NA, 1, 1, 5, 5, NA, NA, NA, NA,…
-$ rs001      &lt;dbl&gt; 260265, 171262, 200269, 140660, 50961, 280961, 250765, 1511…
-$ rs002      &lt;dbl+lbl&gt; 1, 1, 2, 1, 2, 1, 2, 2, 1, 1, 1, 2, 2, 1, 1, 2, 1, 2, 1…
-$ rs003      &lt;dbl+lbl&gt; 6, 4, 6, 3, 3, 8, 7, 7, 3, 3, 8, 4, 2, 2, 8, 7, 6, 7, 5…
-$ rs004      &lt;dbl+lbl&gt; 1, 2, 2, 1, 1, 2, 1, 1, 1, 4, 2, 2, 1, 1, 1, 3, 1, 3, 3…
-$ rs004x     &lt;dbl+lbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
-$ rs005      &lt;dbl+lbl&gt; 1, 2, 2, 2, 2, 1, 1, 2, 1, 4, 3, 4, 1, 1, 3, 2, 2, 2, 1…
-$ rs006      &lt;dbl+lbl&gt;  1,  1,  3,  1,  7,  2,  4,  3,  4,  2,  1,  4,  3,  1,…
-$ rs007      &lt;dbl+lbl&gt; 4, 4, 3, 1, 4, 4, 3, 3, 3, 3, 3, 4, 3, 3, 4, 4, 4, 3, 4…
-$ rs008      &lt;dbl&gt; 45805, 79101, 79201, 59906, 51701, 34401, 35505, 83802, 599…
-$ rs009      &lt;dbl&gt; 0, 0, 0, 0, 0, 60, 0, 0, 0, 0, 0, 74, 0, 0, 0, 0, 0, 0, 0, …
-$ rs010      &lt;dbl&gt; 71, 0, 0, 0, 0, 61, 0, 0, 53, 0, 0, 72, 0, 0, 0, 0, 0, 0, 0…
-$ rs011      &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 17, 0, 0, 12, 0, 0, 0, 0, 0, 4, …
-$ rs012      &lt;dbl&gt; 1, 0, 3, 1, 0, 1, 1, 2, 1, 1, 2, 4, 0, 1, 1, 0, 2, 1, 3, 1,…
-$ rs013      &lt;dbl&gt; 0, 0, 0, 3, 1, 1, 0, 2, 2, 1, 1, 6, 2, 0, 0, 1, 3, 2, 2, 2,…
-$ rs014      &lt;dbl&gt; 45805, 79101, 79201, 51701, 51701, 16402, 35505, 83802, 599…
-$ rs015      &lt;dbl+lbl&gt; 1, 1, 1, 4, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2…
-$ rs015x     &lt;dbl+lbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
-$ rs016      &lt;dbl&gt; 8101916, 8121935, 3051940, 1935, 28111930, 3041928, 2608193…
-$ rs017      &lt;dbl&gt; 17051930, 26121940, 7121937, 21081940, 13091929, 28051927, …
-$ rs018      &lt;dbl+lbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 5, 1, 1…
-$ rs019      &lt;dbl+lbl&gt; 1, 2, 2, 1, 1, 2, 1, 3, 1, 4, 2, 2, 1, 1, 2, 3, 1, 3, 1…
-$ rs019x     &lt;dbl+lbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
-$ rs020      &lt;dbl+lbl&gt; 1, 2, 4, 1, 1, 2, 1, 4, 1, 4, 4, 4, 1, 1, 3, 4, 1, 4, 1…
-$ rs021      &lt;dbl+lbl&gt; 1, 2, 2, 1, 1, 2, 3, 3, 1, 4, 2, 2, 1, 1, 2, 1, 1, 3, 3…
-$ rs021x     &lt;dbl+lbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
-$ rs022      &lt;dbl+lbl&gt; 1, 2, 4, 1, 1, 2, 1, 4, 1, 3, 4, 4, 1, 1, 3, 4, 1, 4, 3…
-$ rs023      &lt;dbl+lbl&gt;  1,  1,  3,  2,  1,  5,  1,  1,  1,  2,  1,  3,  1,  1,…
-$ rs024      &lt;dbl+lbl&gt; 2, 1, 1, 1, 1, 1, 1, 1, 5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
-$ rs025      &lt;dbl+lbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, 50, NA, NA, NA, NA, NA,…
-$ rs026      &lt;dbl+lbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 3, 1, 1, 1, 1, 1, 2, 2…
-$ rs026x     &lt;dbl+lbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
-$ rs028      &lt;dbl&gt; 7759, 4813, 3938, NA, 9523, 2199, 8424, 3914, 9211, 2120, 7…
-$ rs029      &lt;dbl+lbl&gt; 1, 1, 3, 3, 1, 2, 1, 1, 1, 3, 1, 1, 1, 4, 2, 1, 5, 1, 5…
-$ rs030      &lt;dbl+lbl&gt; 2, 2, 1, 2, 1, 2, 1, 1, 1, 3, 3, 2, 1, 2, 3, 3, 1, 3, 5…
-$ rs031      &lt;dbl+lbl&gt; 3, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 6, 3, 3, 3, 2…
-$ rs032      &lt;dbl+lbl&gt;  2, NA,  2,  2,  2,  3,  4, NA,  1,  2,  2,  2,  3,  2,…
-$ rs033      &lt;dbl+lbl&gt; NA,  2,  4,  1,  5,  4,  2,  4, NA,  2,  2,  3,  1,  1,…
-$ rs033x     &lt;dbl+lbl&gt; NA, NA, NA, NA,  6, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
-$ rs035      &lt;dbl&gt; NA, 5414, 719, 4813, NA, 4819, 5426, NA, NA, 712, 3709, 791…
-$ rs036      &lt;dbl+lbl&gt; NA,  1,  1,  1,  1,  1,  1, NA, NA,  1,  1,  1,  1,  1,…
-$ rs037      &lt;dbl&gt; 2, 1, 1, 1, 0, 2, 0, 0, 0, 0, 1, 2, 0, 2, 2, 0, 1, 1, 3, 2,…
-$ rs038      &lt;dbl+lbl&gt;  5,  4,  1,  3, NA,  3, NA, NA, NA, NA,  5,  1, NA,  4,…
-$ rs039      &lt;dbl+lbl&gt;  4,  4,  4,  4,  4,  4,  2,  4,  4,  1,  4,  4,  4,  4,…
-$ rs040      &lt;dbl+lbl&gt;  3,  2,  4,  1,  2,  4,  4,  3,  3,  3,  2,  4,  4,  4,…
-$ rs154      &lt;dbl+lbl&gt; NA,  5,  1,  3,  3,  5,  1,  1,  5, NA,  4,  1,  3,  3,…
-$ rs155      &lt;dbl+lbl&gt; NA,  2,  3,  3,  1,  2,  3,  4,  1, NA,  4,  3,  4,  1,…
-$ rs156      &lt;dbl+lbl&gt; NA,  3,  3,  4,  3,  4,  1,  3,  3, NA,  3,  4,  3,  3,…
-$ rs157      &lt;dbl+lbl&gt; NA,  3,  4,  3,  3,  3,  2,  4,  1, NA,  3,  4,  3,  3,…
-$ rs158      &lt;dbl+lbl&gt; NA,  2,  4,  4,  3,  3,  1,  4,  3, NA,  2,  4,  3,  4,…
-$ rs159      &lt;dbl+lbl&gt; NA,  3,  2,  4,  1,  5,  1,  2, NA, NA,  4,  3,  3,  3,…
-$ rs160      &lt;dbl+lbl&gt; NA,  3,  1,  1,  1,  1,  2,  1,  2, NA,  1,  1,  1,  1,…
-$ rs161      &lt;dbl+lbl&gt; NA,  2,  2,  4,  4,  4,  4,  4,  4, NA,  4,  4,  4,  4,…
-$ rs162      &lt;dbl+lbl&gt; 3, 2, 2, 2, 3, 2, 3, 2, 3, 2, 2, 3, 2, 2, 3, 3, 2, 2, 4…
-$ rs163      &lt;dbl+lbl&gt; NA,  3,  2,  2,  2,  3,  2,  2,  2, NA,  2,  3,  3,  2,…
-$ rs164      &lt;dbl&gt; NA, 1, 3, 1, 2, 1, 1, 2, 2, NA, 1, 1, 2, 2, 1, 1, NA, 2, 1,…
-$ rs165      &lt;dbl+lbl&gt; NA,  2,  3,  2,  2,  2,  2,  2,  3, NA,  2,  1,  3,  2,…
-$ rs166      &lt;dbl+lbl&gt; NA,  3,  2,  2,  2,  2,  3,  2,  3, NA,  1,  1,  3,  3,…
-$ rs167      &lt;dbl+lbl&gt; NA,  1,  1,  1,  2,  1,  3,  1,  1, NA,  1,  1,  1,  1,…
-$ rs168      &lt;dbl+lbl&gt; NA,  1,  1,  1,  2,  1,  1,  1,  1, NA,  1,  1,  1,  1,…
-$ rs169      &lt;dbl+lbl&gt; NA,  2,  1,  1,  2,  1,  3,  1,  1, NA,  1,  1,  1,  1,…
-$ rs170      &lt;dbl+lbl&gt;  3,  1,  3,  1,  1,  1,  2,  1,  2,  1,  1,  4,  1,  4,…
-$ rs171      &lt;dbl+lbl&gt; 2, 1, 4, 5, 1, 1, 2, 1, 2, 2, 1, 1, 1, 4, 3, 1, 1, 2, 3…
-$ rs172      &lt;dbl+lbl&gt; 2, 5, 5, 2, 5, 3, 4, 5, 5, 5, 4, 2, 5, 4, 4, 5, 5, 4, 2…
-$ rs173      &lt;dbl+lbl&gt; 2, 4, 4, 2, 5, 3, 2, 4, 4, 3, 2, 3, 5, 5, 4, 2, 3, 4, 1…
-$ rs174      &lt;dbl+lbl&gt; NA,  5,  5,  5,  5,  1,  2,  2,  3, NA,  4,  2,  5,  2,…
-$ rs175      &lt;dbl+lbl&gt; NA,  4,  5,  5,  5,  2,  4,  5,  5, NA,  5,  2,  5,  5,…
-$ rs176      &lt;dbl+lbl&gt; NA,  5,  5,  2,  5,  2,  2,  1,  3, NA,  5,  1,  5,  5,…
-$ rs221      &lt;dbl+lbl&gt; 4, 2, 3, 3, 3, 3, 3, 3, 3, 4, 3, 4, 3, 3, 5, 4, 5, 3, 4…
-$ rs222      &lt;dbl&gt; 0, 0, 0, 0, 1, 0, 0, 0, 2, 5, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0,…
-$ rs223      &lt;dbl&gt; 0, 0, 3, 1, 1, 0, 0, 1, 0, 3, 0, 0, 1, 6, 0, 1, 0, 0, 0, 0,…
-$ rs224      &lt;dbl&gt; 90, 72, 54, 80, 81, 65, 54, 70, 91, 70, 68, 57, 58, 87, 80,…
-$ rs225      &lt;dbl&gt; 178, 188, 178, 196, 160, 178, 167, 167, 181, 169, 170, 164,…
-$ rs226      &lt;dbl+lbl&gt; 3, 1, 0, 1, 0, 0, 2, 0, 0, 1, 1, 1, 0, 0, 1, 0, 1, 0, 1…
-$ rs227      &lt;dbl+lbl&gt; 0, 0, 0, 0, 1, 0, 0, 1, 0, 2, 0, 0, 2, 2, 0, 0, 1, 0, 0…
-$ `___merge` &lt;dbl&gt; 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,…</code></pre>
-</div>
-</div>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>hin95_ext <span class="sc">|&gt;</span></span>
-<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>(), <span class="at">.by =</span> hrespnr) <span class="sc">|&gt;</span></span>
-<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(n)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Storing counts in `nn`, as `n` already present in input
-ℹ Use `name = "new_name"` to pick a new name.</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 2 × 2
-      n    nn
-  &lt;int&gt; &lt;int&gt;
-1     1   288
-2     2  1531</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="co"># every household should contain exactly two partners</span></span>
-<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a><span class="co"># any other household size deserves a second look before aggregating</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(hin95_ext<span class="sc">$</span>educ))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 0</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="co"># missing values on education would propagate into every statistic below</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>hin95_ext_couples <span class="ot">&lt;-</span> hin95_ext <span class="sc">|&gt;</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>                     <span class="fu">filter</span>(<span class="fu">n</span>() <span class="sc">==</span> <span class="dv">2</span>, <span class="at">.by =</span> hrespnr)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Add the household mean, minimum, and maximum of education.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>hin95_ext <span class="ot">&lt;-</span> hin95_ext <span class="sc">|&gt;</span></span>
-<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">mn_educ =</span> <span class="fu">mean</span>(educ, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb56-4"><a href="#cb56-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">min_educ =</span> <span class="fu">min</span>(educ, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb56-5"><a href="#cb56-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">max_educ =</span> <span class="fu">max</span>(educ, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb56-6"><a href="#cb56-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">.by =</span> hrespnr</span>
-<span id="cb56-7"><a href="#cb56-7" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb56-8"><a href="#cb56-8" aria-hidden="true" tabindex="-1"></a><span class="co"># all three variables take the same value for both partners in a household</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>hin95_ext_couples <span class="ot">&lt;-</span> hin95_ext_couples <span class="sc">|&gt;</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>                      <span class="fu">mutate</span>(</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>                        <span class="at">mean_educ =</span> <span class="fu">mean</span>(educ, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>                        <span class="at">min_educ =</span> <span class="fu">min</span>(educ, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>                        <span class="at">max_educ =</span> <span class="fu">max</span>(educ, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>                        <span class="at">.by =</span> hrespnr</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>                      )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>hin95_ext <span class="sc">|&gt;</span></span>
-<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(hrespnr, educ, mn_educ, min_educ, max_educ) <span class="sc">|&gt;</span></span>
-<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(hrespnr) <span class="sc">|&gt;</span></span>
-<span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># all three created variables take the same value for both partners in a household</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>hin95_ext_couples <span class="sc">|&gt;</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(hrespnr, educ, mean_educ, min_educ, max_educ) <span class="sc">|&gt;</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(hrespnr) <span class="sc">|&gt;</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 10 × 5
-   hrespnr educ                     mn_educ min_educ                 max_educ   
-     &lt;dbl&gt; &lt;dbl+lbl&gt;                  &lt;dbl&gt; &lt;dbl+lbl&gt;                &lt;dbl+lbl&gt;  
- 1   11001 6 [middle vocat [mbo]]       6   6 [middle vocat [mbo]]   6 [middle …
- 2   11002 4 [middle second [havo]]     5   4 [middle second [havo]] 6 [middle …
- 3   11002 6 [middle vocat [mbo]]       5   4 [middle second [havo]] 6 [middle …
- 4   11003 3 [lower second [mavo]]      3   3 [lower second [mavo]]  3 [lower s…
- 5   11003 3 [lower second [mavo]]      3   3 [lower second [mavo]]  3 [lower s…
- 6   11004 8 [university [wo]]          7.5 7 [higher vocat [hbo]]   8 [univers…
- 7   11004 7 [higher vocat [hbo]]       7.5 7 [higher vocat [hbo]]   8 [univers…
- 8   11005 7 [higher vocat [hbo]]       5   3 [lower second [mavo]]  7 [higher …
- 9   11005 3 [lower second [mavo]]      5   3 [lower second [mavo]]  7 [higher …
-10   11006 3 [lower second [mavo]]      3   3 [lower second [mavo]]  3 [lower s…</code></pre>
+   hrespnr educ                     mean_educ min_educ                 max_educ 
+     &lt;dbl&gt; &lt;dbl+lbl&gt;                    &lt;dbl&gt; &lt;dbl+lbl&gt;                &lt;dbl+lbl&gt;
+ 1   11002 4 [middle second [havo]]       5   4 [middle second [havo]] 6 [middl…
+ 2   11002 6 [middle vocat [mbo]]         5   4 [middle second [havo]] 6 [middl…
+ 3   11003 3 [lower second [mavo]]        3   3 [lower second [mavo]]  3 [lower…
+ 4   11003 3 [lower second [mavo]]        3   3 [lower second [mavo]]  3 [lower…
+ 5   11004 8 [university [wo]]            7.5 7 [higher vocat [hbo]]   8 [unive…
+ 6   11004 7 [higher vocat [hbo]]         7.5 7 [higher vocat [hbo]]   8 [unive…
+ 7   11005 7 [higher vocat [hbo]]         5   3 [lower second [mavo]]  7 [highe…
+ 8   11005 3 [lower second [mavo]]        5   3 [lower second [mavo]]  7 [highe…
+ 9   11007 8 [university [wo]]            6   4 [middle second [havo]] 8 [unive…
+10   11007 4 [middle second [havo]]       6   4 [middle second [havo]] 8 [unive…</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="co"># each pair of rows shares the same household statistics</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Add the absolute difference in education between the partners.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>hin95_ext <span class="ot">&lt;-</span> hin95_ext <span class="sc">|&gt;</span></span>
-<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">diff_educ =</span> max_educ <span class="sc">-</span> min_educ</span>
-<span id="cb60-4"><a href="#cb60-4" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb60-5"><a href="#cb60-5" aria-hidden="true" tabindex="-1"></a><span class="co"># for a two-person household the range is exactly the absolute difference,</span></span>
-<span id="cb60-6"><a href="#cb60-6" aria-hidden="true" tabindex="-1"></a><span class="co"># so no separate abs() is needed</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>hin95_ext_couples <span class="ot">&lt;-</span> hin95_ext_couples <span class="sc">|&gt;</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>                      <span class="fu">mutate</span>(</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>                        <span class="at">diff_educ =</span> max_educ <span class="sc">-</span> min_educ</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>                      )</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="co"># no need for abs() here</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a>hin95_ext <span class="sc">|&gt;</span></span>
-<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(hrespnr, educ, min_educ, max_educ, diff_educ) <span class="sc">|&gt;</span></span>
-<span id="cb61-3"><a href="#cb61-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(hrespnr) <span class="sc">|&gt;</span></span>
-<span id="cb61-4"><a href="#cb61-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>hin95_ext_couples <span class="sc">|&gt;</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(hrespnr, educ, min_educ, max_educ, diff_educ) <span class="sc">|&gt;</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(hrespnr) <span class="sc">|&gt;</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 10 × 5
    hrespnr educ                     min_educ                 max_educ  diff_educ
      &lt;dbl&gt; &lt;dbl+lbl&gt;                &lt;dbl+lbl&gt;                &lt;dbl+lbl&gt;     &lt;dbl&gt;
- 1   11001 6 [middle vocat [mbo]]   6 [middle vocat [mbo]]   6 [middl…         0
- 2   11002 4 [middle second [havo]] 4 [middle second [havo]] 6 [middl…         2
- 3   11002 6 [middle vocat [mbo]]   4 [middle second [havo]] 6 [middl…         2
+ 1   11002 4 [middle second [havo]] 4 [middle second [havo]] 6 [middl…         2
+ 2   11002 6 [middle vocat [mbo]]   4 [middle second [havo]] 6 [middl…         2
+ 3   11003 3 [lower second [mavo]]  3 [lower second [mavo]]  3 [lower…         0
  4   11003 3 [lower second [mavo]]  3 [lower second [mavo]]  3 [lower…         0
- 5   11003 3 [lower second [mavo]]  3 [lower second [mavo]]  3 [lower…         0
- 6   11004 8 [university [wo]]      7 [higher vocat [hbo]]   8 [unive…         1
- 7   11004 7 [higher vocat [hbo]]   7 [higher vocat [hbo]]   8 [unive…         1
- 8   11005 7 [higher vocat [hbo]]   3 [lower second [mavo]]  7 [highe…         4
- 9   11005 3 [lower second [mavo]]  3 [lower second [mavo]]  7 [highe…         4
-10   11006 3 [lower second [mavo]]  3 [lower second [mavo]]  3 [lower…         0</code></pre>
+ 5   11004 8 [university [wo]]      7 [higher vocat [hbo]]   8 [unive…         1
+ 6   11004 7 [higher vocat [hbo]]   7 [higher vocat [hbo]]   8 [unive…         1
+ 7   11005 7 [higher vocat [hbo]]   3 [lower second [mavo]]  7 [highe…         4
+ 8   11005 3 [lower second [mavo]]  3 [lower second [mavo]]  7 [highe…         4
+ 9   11007 8 [university [wo]]      4 [middle second [havo]] 8 [unive…         4
+10   11007 4 [middle second [havo]] 4 [middle second [havo]] 8 [unive…         4</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="co"># diff_educ is zero for couples with equal education</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># diff_educ is zero for couples with equal education</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+<p>Summary stats for created variables:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>hin95_ext <span class="sc">|&gt;</span></span>
-<span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(hrespnr, diff_educ) <span class="sc">|&gt;</span></span>
-<span id="cb64-3"><a href="#cb64-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(diff_educ) <span class="sc">|&gt;</span></span>
-<span id="cb64-4"><a href="#cb64-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(diff_educ)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 8 × 2
-  diff_educ     n
-      &lt;dbl&gt; &lt;int&gt;
-1         0   765
-2         1   410
-3         2   191
-4         3   170
-5         4   187
-6         5    75
-7         6    18
-8         7     3</code></pre>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>hin95_ext_couples <span class="sc">|&gt;</span>  </span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  skimr<span class="sc">::</span><span class="fu">skim</span>(mean_educ, min_educ, max_educ, diff_educ)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Data summary</caption>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Name</td>
+<td style="text-align: left;">hin95_ext_couples</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Number of rows</td>
+<td style="text-align: left;">3062</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Number of columns</td>
+<td style="text-align: left;">144</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">_______________________</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Column type frequency:</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">numeric</td>
+<td style="text-align: left;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">________________________</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Group variables</td>
+<td style="text-align: left;">None</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: numeric</strong></p>
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 18%">
+<col style="width: 13%">
+<col style="width: 18%">
+<col style="width: 6%">
+<col style="width: 6%">
+<col style="width: 4%">
+<col style="width: 5%">
+<col style="width: 5%">
+<col style="width: 5%">
+<col style="width: 6%">
+<col style="width: 8%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">skim_variable</th>
+<th style="text-align: right;">n_missing</th>
+<th style="text-align: right;">complete_rate</th>
+<th style="text-align: right;">mean</th>
+<th style="text-align: right;">sd</th>
+<th style="text-align: right;">p0</th>
+<th style="text-align: right;">p25</th>
+<th style="text-align: right;">p50</th>
+<th style="text-align: right;">p75</th>
+<th style="text-align: right;">p100</th>
+<th style="text-align: left;">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">mean_educ</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">4.53</td>
+<td style="text-align: right;">1.88</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">4.5</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: left;">▅▅▇▆▃</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">min_educ</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">3.69</td>
+<td style="text-align: right;">2.10</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">3.0</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: left;">▇▃▂▃▂</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">max_educ</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">5.36</td>
+<td style="text-align: right;">2.01</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">6.0</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: left;">▃▃▂▆▇</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">diff_educ</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1.67</td>
+<td style="text-align: right;">1.64</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1.0</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: left;">▇▂▃▁▁</td>
+</tr>
+</tbody>
+</table>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="co"># the distribution of educational differences, one row per household</span></span>
-<span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a><span class="co"># distinct() prevents counting every couple twice</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>An alternative that states the intention more directly.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>hin95_ext <span class="sc">|&gt;</span></span>
-<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">n</span>() <span class="sc">==</span> <span class="dv">2</span>, <span class="at">.by =</span> hrespnr) <span class="sc">|&gt;</span></span>
-<span id="cb67-3"><a href="#cb67-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb67-4"><a href="#cb67-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">diff_educ_alt =</span> <span class="fu">abs</span>(<span class="fu">diff</span>(educ)),</span>
-<span id="cb67-5"><a href="#cb67-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">.by =</span> hrespnr</span>
-<span id="cb67-6"><a href="#cb67-6" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb67-7"><a href="#cb67-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb67-8"><a href="#cb67-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">n_different =</span> <span class="fu">sum</span>(diff_educ_alt <span class="sc">!=</span> diff_educ, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb67-9"><a href="#cb67-9" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 1 × 1
-  n_different
-        &lt;int&gt;
-1           0</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="co"># diff() only works for households with exactly two members: with one</span></span>
-<span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a><span class="co"># member it returns nothing, with three or more it returns several values</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>A note on missing values: <code>min()</code> and <code>max()</code> with <code>na.rm = TRUE</code> return <code>Inf</code> and <code>-Inf</code> for a household in which every value is missing, rather than <code>NA</code>.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb70"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a>hin95_ext <span class="sc">|&gt;</span></span>
-<span id="cb70-2"><a href="#cb70-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb70-3"><a href="#cb70-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">n_infinite =</span> <span class="fu">sum</span>(<span class="sc">!</span><span class="fu">is.finite</span>(min_educ) <span class="sc">|</span> <span class="sc">!</span><span class="fu">is.finite</span>(max_educ))</span>
-<span id="cb70-4"><a href="#cb70-4" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 1 × 1
-  n_infinite
-       &lt;int&gt;
-1          0</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb72"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="co"># if this count is not zero, convert those values to NA before using them</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-
-
 </section>
+</div>
+</div>
+</div>
+
+
 </section>
 
 </main> <!-- /main -->
