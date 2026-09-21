@@ -327,11 +327,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul>
   <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
   <li><a href="#r" id="toc-r" class="nav-link" data-scroll-target="#r">R</a></li>
-  <li><a href="#assignments" id="toc-assignments" class="nav-link" data-scroll-target="#assignments">Assignments</a></li>
-  <li><a href="#answers" id="toc-answers" class="nav-link" data-scroll-target="#answers">Answers</a>
+  <li><a href="#examine-correlation-between-items" id="toc-examine-correlation-between-items" class="nav-link" data-scroll-target="#examine-correlation-between-items">Examine correlation between items</a>
   <ul class="collapse">
-  <li><a href="#opposition-to-muslim-expressive-rights-muslimrights" id="toc-opposition-to-muslim-expressive-rights-muslimrights" class="nav-link" data-scroll-target="#opposition-to-muslim-expressive-rights-muslimrights">1. Opposition to Muslim expressive rights (muslimrights)</a></li>
-  <li><a href="#bem-sex-role-inventory-bsri" id="toc-bem-sex-role-inventory-bsri" class="nav-link" data-scroll-target="#bem-sex-role-inventory-bsri">2. Bem Sex Role Inventory (bsri)</a></li>
+  <li><a href="#assignments" id="toc-assignments" class="nav-link" data-scroll-target="#assignments">Assignments</a>
+  <ul class="collapse">
+  <li><a href="#muslim-rights" id="toc-muslim-rights" class="nav-link" data-scroll-target="#muslim-rights">Muslim rights</a></li>
+  <li><a href="#bem-sex-role-inventory" id="toc-bem-sex-role-inventory" class="nav-link" data-scroll-target="#bem-sex-role-inventory">Bem Sex Role Inventory</a></li>
+  </ul></li>
+  <li><a href="#answers" id="toc-answers" class="nav-link" data-scroll-target="#answers">Answers</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -364,7 +367,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="r" class="level2">
 <h2 class="anchored" data-anchor-id="r">R</h2>
-<p>You need to learn about the following R functions for factor analysis. Optionally you may want to check principal component analysis.</p>
+<p>You need to learn about the following R functions for factor analysis. They are part of the <code>psych</code> package, which needs to be installed and loaded. Optionally you may want to check principal component analysis.</p>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -374,153 +377,99 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </thead>
 <tbody>
 <tr class="odd">
-<td>factanal()</td>
+<td><code>fa()</code></td>
 <td>factor analysis by maximum likelihood</td>
 </tr>
 <tr class="even">
-<td>prcomp()</td>
-<td>principal component analysis</td>
-</tr>
-<tr class="odd">
-<td>screeplot()</td>
+<td><code>scree()</code></td>
 <td>plot of eigenvalues to determine number of factors</td>
-</tr>
-<tr class="even">
-<td>predict()</td>
-<td>factor scores</td>
 </tr>
 </tbody>
 </table>
-<p><code>factanal()</code> performs factor analysis using maximum likelihood estimation. The other functions can be used to inspect and interpret the factor solution.</p>
 <p>Examples:</p>
 <p>Setup data on sex role attitudes</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(<span class="st">"sbs399_sexroles.dta"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(psych)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(<span class="st">"data/sbs399_sexroles.dta"</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># this dataset contains 5 items about sex role attitudes, in a 5-point Likert format</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Determine the number of factors with a scree plot:</p>
+</section>
+<section id="examine-correlation-between-items" class="level1">
+<h1>Examine correlation between items</h1>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>cor_mat <span class="ot">&lt;-</span> <span class="fu">cor</span>(</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  data <span class="sc">|&gt;</span> <span class="fu">select</span>(sexrol1<span class="sc">:</span>sexrol5),</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  data,</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">use =</span> <span class="st">"pairwise.complete.obs"</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>eigenvalues <span class="ot">&lt;-</span> <span class="fu">eigen</span>(cor_mat)<span class="sc">$</span>values</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="fu">screeplot</span>(</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">princomp</span>(</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    data <span class="sc">|&gt;</span> <span class="fu">select</span>(sexrol1<span class="sc">:</span>sexrol5)</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  ),</span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">"lines"</span></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Determine the number of factors graphically with a scree plot.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">scree</span>(data)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Factor analysis using maximum likelihood:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>fa <span class="ot">&lt;-</span> <span class="fu">factanal</span>(</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  data <span class="sc">|&gt;</span> <span class="fu">select</span>(sexrol1<span class="sc">:</span>sexrol5),</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">factors =</span> <span class="dv">2</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>fa_fit <span class="ot">&lt;-</span> <span class="fu">fa</span>(</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  data,</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">nfactors =</span> <span class="dv">2</span>,</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">fm =</span> <span class="st">"ml"</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Rotate common factors to ease interpretation:</p>
+<p>Rotate common factors to ease interpretation.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>fa_varimax <span class="ot">&lt;-</span> <span class="fu">factanal</span>(</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  data <span class="sc">|&gt;</span> <span class="fu">select</span>(sexrol1<span class="sc">:</span>sexrol5),</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">factors =</span> <span class="dv">2</span>,</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">rotation =</span> <span class="st">"varimax"</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  fa_varimax,</span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">digits =</span> <span class="dv">2</span>,</span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">cutoff =</span> .<span class="dv">30</span></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>fa_varimax <span class="ot">&lt;-</span> <span class="fu">fa</span>(</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  data,</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">nfactors =</span> <span class="dv">2</span>,</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">fm =</span> <span class="st">"ml"</span>,</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">rotate =</span> <span class="st">"varimax"</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>fa_oblique <span class="ot">&lt;-</span> <span class="fu">fa</span>(</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  data,</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">nfactors =</span> <span class="dv">2</span>,</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">fm =</span> <span class="st">"ml"</span>,</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">rotate =</span> <span class="st">"promax"</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Oblique rotation:</p>
+<p>Get factor scores:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>fa_oblique <span class="ot">&lt;-</span> <span class="fu">factanal</span>(</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  data <span class="sc">|&gt;</span> <span class="fu">select</span>(sexrol1<span class="sc">:</span>sexrol5),</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">factors =</span> <span class="dv">2</span>,</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">rotation =</span> <span class="st">"promax"</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  fa_oblique,</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">digits =</span> <span class="dv">2</span>,</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">cutoff =</span> .<span class="dv">30</span></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>fa_scores <span class="ot">&lt;-</span> fa_varimax<span class="sc">$</span>scores</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Factor scores, estimated by regression scoring:</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>scores <span class="ot">&lt;-</span> <span class="fu">predict</span>(</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  fa_varimax,</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  data <span class="sc">|&gt;</span> <span class="fu">select</span>(sexrol1<span class="sc">:</span>sexrol5)</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-</section>
 <section id="assignments" class="level2">
 <h2 class="anchored" data-anchor-id="assignments">Assignments</h2>
-<p>Solutions are contained in <code>dh_factor_assignments.R</code>.</p>
-<ol type="1">
-<li>Use the dataset <code>muslimrights</code>. You will see that more than 1 factor is needed to obtain a good approximation of the association structure of the variables. The dataset contains two sets of items.</li>
-</ol>
-<p>Opposition towards Muslim expressive rights was measured with seven statements. Four example items were:</p>
+<section id="muslim-rights" class="level3">
+<h3 class="anchored" data-anchor-id="muslim-rights">Muslim rights</h3>
+<p>Use the dataset <code>muslimrights</code>. The dataset contains two sets of items.</p>
+<p>Attitudes towards Muslim expressive rights was measured with seven statements. Four example items were: - The right to establish Islamic schools should always exist in the Netherlands. - Some Islamic holidays should become official Dutch holidays. - Dutch TV should broadcast more programmes by and for Muslims. - In the Netherlands the wearing of a headscarf should not be forbidden.</p>
+<p>National identification was measured by six statements: - My Dutch identity is an important part of my self (iden1); - I identify strongly with the Netherlands (iden2); - I feel a strong attachment to the Netherlands (iden3); - I am proud of my Dutch background (iden4); - Being Dutch is a very important part of how I see myself (iden5); and - I feel a strong sense of belonging to the Netherlands (iden6).</p>
+<p>We will focus on the first set of items, <code>right1</code> to <code>right7</code>. a. Check the descriptives. Check the frequencies. Are the variables approximately normally distributed? Why is this important? b. Do an EFA/ML of the data, first with an unrotated solution (<code>rotate = "none"</code>). Then apply a varimax rotation. c.&nbsp;Provide interpretations: - For the moment we choose two dimensions, even though the scree plot might suggest a different number. In the unrotated solution, how much variance is explained by factor 1 and factor 2? And in the rotated solution? Verify that the sum of the variances of factors 1 and 2 is the same for the unrotated and rotated solutions. - Which variable is not very well explained by the two factors? - Interpret the two factors, using the varimax rotation. - Tip: plotting the factor loadings may help you interpret the factors. Assuming the object created with <code>fa()</code> is called <code>fa_varimax</code>, you can plot the loadings with <code>plot(fa_varimax, labels = rownames(fa_varimax$loadings))</code>. - If you would make two sum scores for the items, which variables go into sum score 1 and which in sum score 2? - Apply a promax rotation. Provide interpretations: - What is the correlation between the factors? - Interpret the two factors. - Which variables go into each of the factors? d.&nbsp;Oversee all analyses that you carried out. What is your final conclusion with respect to the number of dimensions (factors)? Assume for the moment that you choose two dimensions, what is your final conclusion with respect to the interpretation of the dimensions? e. Optional. Analyze the 6 items about national identification in the dataset.</p>
+</section>
+<section id="bem-sex-role-inventory" class="level3">
+<h3 class="anchored" data-anchor-id="bem-sex-role-inventory">Bem Sex Role Inventory</h3>
+<p>BSRI stands for the Bem Sex Role Inventory (Bem, 1974). We have data from a sample of 369 middle-class, English speaking women between the ages of 21 and 60 who were interviewed face-to-face. The data are provided by Tabacknick and Fidell (2007), <em>Using multivariate statistics</em>, 5nd ed., Boston: Pearson. The full inventory takes 60 items. Tabachnick and Fidell state that in our data there are 20 items measuring the overall trait femininity, 20 items the overall trait masculinity, and 5 items measuring the overall trait social desirability. The question format is that respondents are asked to attribute the 60 traits to themselves using scores going from 1 (“never or almost never true of me”) to 7 (“always or almost always true of me”). It turns out that the data are not thoroughly cleaned, as occasionally there appears a 0 and a 9 in the data file. We ignore this problem.</p>
 <ul>
-<li>The right to establish Islamic schools should always exist in the Netherlands.</li>
-<li>Some Islamic holidays should become official Dutch holidays.</li>
-<li>Dutch TV should broadcast more programmes by and for Muslims.</li>
-<li>In the Netherlands the wearing of a headscarf should not be forbidden.</li>
-</ul>
-<p>National identification was measured by six statements:</p>
-<ul>
-<li>My Dutch identity is an important part of my self (iden1);</li>
-<li>I identify strongly with the Netherlands (iden2);</li>
-<li>I feel a strong attachment to the Netherlands (iden3);</li>
-<li>I am proud of my Dutch background (iden4);</li>
-<li>Being Dutch is a very important part of how I see myself (iden5); and</li>
-<li>I feel a strong sense of belonging to the Netherlands (iden6).</li>
-</ul>
-<ol type="i">
-<li><p>Check the descriptives. Check the frequencies. Are the variables approximately normally distributed? Why is this important?</p></li>
-<li><p>Change the value labels of the variables. Categories run from 1 (completely disagree) to 7 (completely agree).</p></li>
-<li><p>Do an EFA/ML of the data. Apply a varimax rotation.</p></li>
-<li><p>Provide interpretations:</p></li>
-</ol>
-<ul>
-<li>You find two eigenvalues larger than 1. Check the scree plot. How many dimensions would you choose?</li>
-<li>For the moment we choose two dimensions. In the unrotated solution, how much variance is explained by factor 1 and factor 2? And in the rotated solution? Verify that the sum of the variances of factors 1 and 2 is the same for the unrotated and rotated solutions.</li>
-<li>Which variable is not very well explained by the two factors?</li>
-<li>Interpret the two factors.</li>
-<li>If you would make two sum scores for the items, which variables go into sum score 1 and which in sum score 2?</li>
-<li>Apply a promax rotation.</li>
-<li>Provide interpretations:
-<ul>
-<li>Which parts of the output are the same as with the varimax rotation and which are different?</li>
-<li>Interpret the two factors.</li>
-<li>What is the correlation between the factors?</li>
-<li>Which variables go into each of the factors?</li>
-</ul></li>
-</ul>
-<ol start="22" type="a">
-<li>Oversee all analyses that you carried out. What is your final conclusion with respect to the number of dimensions (factors)? Assume for the moment that you choose two dimensions, what is your final conclusion with respect to the interpretation of the dimensions?</li>
-</ol>
-<ol start="6" type="i">
-<li>Optional. Analyze the 6 items about national identification in the dataset. Change the variable labels and value labels before you start.</li>
-</ol>
-<ol start="2" type="1">
-<li>Use the dataset <code>bsri</code>.</li>
-</ol>
-<p>BSRI stands for the Bem Sex Role Inventory (Bem, 1974). We have data from a sample of 369 middle-class, English speaking women between the ages of 21 and 60 who were interviewed face-to-face.</p>
-<p>The full inventory takes 60 items. Tabachnick and Fidell state that in our data there are 20 items measuring the overall trait femininity, 20 items the overall trait masculinity, and 5 items measuring the overall trait social desirability.</p>
-<ul>
-<li>Do an initial check on the data using frequencies and descriptives.</li>
-<li>Do an initial EFA/ML and study the eigenvalues from the scree plot.</li>
-<li>Do a second EFA/ML with two factors with a promax rotation. Interpret the two factors.</li>
-<li>Do a third EFA/ML with five factors with a promax rotation. Interpret the five factors using only those variables that have loadings larger than .40.</li>
+<li>Do an initial check on the data using frequencies and descriptives. Notice that some of the variables are skewed. Skewness of items lowers the maximum that correlations can attain.</li>
+<li>Produce a scree plot. It is clear that that the elbow criterion is not easy to use here. Clearly there are two outstanding factors. If we take factor 3, then we should also take 4 and 5 as their eigenvalues are close to the eigenvalue of 3. We may even consider factors 6 and 7. We will have a look at two different solutions: two factors and five factors.</li>
+<li>Do an EFA/ML with two factors with a promax rotation. Notice that the correlation between the rotated factors is relatively low. Interpret the two factors.</li>
+<li>Do another EFA/ML, now with five factors and a promax rotation. Interpret the five factors using only those variables that have loadings larger than .40. You can do this by using <code>print(your_fa_object$loadings, cutoff = .40)</code>.</li>
 </ul>
 <p>We stop here. We have seen that interpreting the factor structure for such a large list of items is difficult and sometimes somewhat arbitrary. More insight could be found from validating the factors in experimental research and by correlating the factors to other variables. Of course, this is beyond the scope of this course.</p>
 </section>
+</section>
 <section id="answers" class="level2">
 <h2 class="anchored" data-anchor-id="answers">Answers</h2>
-<p>Make sure this file is in the same R Project as the <code>data</code> folder. Use relative file paths, not full paths to your computer.</p>
+<div class="callout callout-style-simple callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>See answers
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stderr">
@@ -536,313 +485,199 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven)</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>muslimrights <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(<span class="st">"data/muslimrights.dta"</span>)</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>bsri <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(<span class="st">"data/bsri.dta"</span>)</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>bsri_vars <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">"helpful"</span>, <span class="st">"reliant"</span>, <span class="st">"defbel"</span>, <span class="st">"yielding"</span>, <span class="st">"cheerful"</span>, <span class="st">"indpt"</span>, <span class="st">"athlet"</span>, <span class="st">"shy"</span>,</span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="st">"assert"</span>, <span class="st">"strpers"</span>, <span class="st">"forceful"</span>, <span class="st">"affect"</span>, <span class="st">"flatter"</span>, <span class="st">"loyal"</span>, <span class="st">"analyt"</span>, <span class="st">"feminine"</span>,</span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  <span class="st">"sympathy"</span>, <span class="st">"moody"</span>, <span class="st">"sensitiv"</span>, <span class="st">"undstand"</span>, <span class="st">"compass"</span>, <span class="st">"leaderab"</span>, <span class="st">"soothe"</span>, <span class="st">"risk"</span>,</span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>  <span class="st">"decide"</span>, <span class="st">"selfsuff"</span>, <span class="st">"conscien"</span>, <span class="st">"dominant"</span>, <span class="st">"masculin"</span>, <span class="st">"stand"</span>, <span class="st">"happy"</span>, <span class="st">"softspok"</span>,</span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>  <span class="st">"warm"</span>, <span class="st">"truthful"</span>, <span class="st">"tender"</span>, <span class="st">"gullible"</span>, <span class="st">"leadact"</span>, <span class="st">"childlik"</span>, <span class="st">"individ"</span>, <span class="st">"foullang"</span>,</span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>  <span class="st">"lovchil"</span>, <span class="st">"compete"</span>, <span class="st">"ambitiou"</span>, <span class="st">"gentle"</span></span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(psych)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'psych'
+
+The following objects are masked from 'package:ggplot2':
+
+    %+%, alpha</code></pre>
 </div>
-<section id="opposition-to-muslim-expressive-rights-muslimrights" class="level3">
-<h3 class="anchored" data-anchor-id="opposition-to-muslim-expressive-rights-muslimrights">1. Opposition to Muslim expressive rights (muslimrights)</h3>
-<p>Descriptives and frequencies:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(skimr)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<section id="muslim-rights-1" class="level3">
+<h3 class="anchored" data-anchor-id="muslim-rights-1">Muslim rights</h3>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>muslimrights <span class="sc">|&gt;</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(right1<span class="sc">:</span>right7) <span class="sc">|&gt;</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>     right1          right2          right3          right4         right5     
- Min.   :1.000   Min.   :1.000   Min.   :1.000   Min.   :1.00   Min.   :1.000  
- 1st Qu.:4.000   1st Qu.:3.000   1st Qu.:3.000   1st Qu.:2.00   1st Qu.:5.000  
- Median :5.000   Median :5.000   Median :4.000   Median :3.00   Median :6.000  
- Mean   :4.507   Mean   :4.333   Mean   :3.907   Mean   :3.36   Mean   :5.427  
- 3rd Qu.:5.000   3rd Qu.:5.000   3rd Qu.:5.000   3rd Qu.:5.00   3rd Qu.:6.000  
- Max.   :7.000   Max.   :7.000   Max.   :7.000   Max.   :7.00   Max.   :7.000  
-     right6         right7     
- Min.   :3.00   Min.   :1.000  
- 1st Qu.:5.00   1st Qu.:3.000  
- Median :6.00   Median :4.000  
- Mean   :5.64   Mean   :4.067  
- 3rd Qu.:6.00   3rd Qu.:5.000  
- Max.   :7.00   Max.   :7.000  </code></pre>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>muslimrights <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(<span class="st">"data/muslimrights.dta"</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>rights_items <span class="ot">&lt;-</span> muslimrights <span class="sc">|&gt;</span> </span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>               <span class="fu">select</span>(right1<span class="sc">:</span>right7)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>muslimrights <span class="sc">|&gt;</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(right1<span class="sc">:</span>right7) <span class="sc">|&gt;</span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span>(table)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>$right1
-
- 1  2  3  4  5  6  7 
- 2  5  8 16 27 16  1 
-
-$right2
-
- 1  2  3  4  5  6  7 
- 4  7 10 12 27 11  4 
-
-$right3
-
- 1  2  3  4  5  6  7 
- 5  8 15 19 20  5  3 
-
-$right4
-
- 1  2  3  4  5  6  7 
-12 16 14 13 10  6  4 
-
-$right5
-
- 1  2  3  4  5  6  7 
- 1  2  2  4 28 26 12 
-
-$right6
-
- 3  4  5  6  7 
- 3  9 18 27 18 
-
-$right7
-
- 1  2  3  4  5  6  7 
- 6 11  8 18 16 11  5 </code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># these are 7-point Likert items, so they are not truly continuous or</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="co"># normally distributed; ML factor analysis assumes multivariate normality,</span></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="co"># so with clearly skewed or heavily piled-up items the ML significance</span></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co"># tests should be interpreted with some caution.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>Change the value labels:</p>
+<p>Descriptives and frequencies. ML factor analysis assumes multivariate normality, so with clearly skewed the ML significance tests should be interpreted with some caution.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>muslimrights <span class="ot">&lt;-</span> muslimrights <span class="sc">|&gt;</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    right1<span class="sc">:</span>right7,</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    <span class="sc">~</span> <span class="fu">factor</span>(</span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>      .x,</span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">levels =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>,</span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">labels =</span> <span class="fu">c</span>(</span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>        <span class="st">"completely disagree"</span>, <span class="st">"mostly disagree"</span>, <span class="st">"disagree"</span>,</span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>        <span class="st">"neutral"</span>, <span class="st">"agree"</span>, <span class="st">"mostly agree"</span>, <span class="st">"completely agree"</span></span>
-<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>      )</span>
-<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>    ),</span>
-<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">.names =</span> <span class="st">"f{.col}"</span></span>
-<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>  ))</span>
-<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a><span class="co"># the ffright* factor versions are for labeled frequency tables; the</span></span>
-<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a><span class="co"># analyses below keep using the original numeric right1:right7 variables.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>Determine the number of factors with a scree plot, then fit a two-factor solution:</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>cor_mat_muslim <span class="ot">&lt;-</span> <span class="fu">cor</span>(</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  muslimrights <span class="sc">|&gt;</span> <span class="fu">select</span>(right1<span class="sc">:</span>right7),</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">use =</span> <span class="st">"pairwise.complete.obs"</span></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="fu">eigen</span>(cor_mat_muslim)<span class="sc">$</span>values</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 3.0448793 1.3494717 0.8283925 0.6046057 0.5029599 0.3471795 0.3225115</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">screeplot</span>(</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">princomp</span>(muslimrights <span class="sc">|&gt;</span> <span class="fu">select</span>(right1<span class="sc">:</span>right7) <span class="sc">|&gt;</span> <span class="fu">drop_na</span>()),</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">"lines"</span></span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>rights_items <span class="sc">|&gt;</span> </span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">skim</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="factor_analysis_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
+<table class="caption-top table table-sm table-striped small">
+<caption>Data summary</caption>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Name</td>
+<td style="text-align: left;">rights_items</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Number of rows</td>
+<td style="text-align: left;">75</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Number of columns</td>
+<td style="text-align: left;">7</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">_______________________</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Column type frequency:</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">numeric</td>
+<td style="text-align: left;">7</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">________________________</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Group variables</td>
+<td style="text-align: left;">None</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: numeric</strong></p>
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 18%">
+<col style="width: 13%">
+<col style="width: 18%">
+<col style="width: 6%">
+<col style="width: 6%">
+<col style="width: 4%">
+<col style="width: 5%">
+<col style="width: 5%">
+<col style="width: 5%">
+<col style="width: 6%">
+<col style="width: 8%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">skim_variable</th>
+<th style="text-align: right;">n_missing</th>
+<th style="text-align: right;">complete_rate</th>
+<th style="text-align: right;">mean</th>
+<th style="text-align: right;">sd</th>
+<th style="text-align: right;">p0</th>
+<th style="text-align: right;">p25</th>
+<th style="text-align: right;">p50</th>
+<th style="text-align: right;">p75</th>
+<th style="text-align: right;">p100</th>
+<th style="text-align: left;">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">right1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">4.51</td>
+<td style="text-align: right;">1.31</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: left;">▂▂▅▇▅</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">right2</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">4.33</td>
+<td style="text-align: right;">1.53</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: left;">▃▃▃▇▅</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">right3</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">3.91</td>
+<td style="text-align: right;">1.46</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: left;">▅▆▇▇▃</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">right4</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">3.36</td>
+<td style="text-align: right;">1.74</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: left;">▇▃▃▃▃</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">right5</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">5.43</td>
+<td style="text-align: right;">1.20</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: left;">▁▁▁▆▇</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">right6</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">5.64</td>
+<td style="text-align: right;">1.10</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: left;">▁▂▅▇▅</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">right7</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">4.07</td>
+<td style="text-align: right;">1.69</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: left;">▇▃▇▇▇</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># two eigenvalues clearly larger than 1, consistent with choosing a</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="co"># two-factor solution.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
+<p>Determine the number of factors with a scree plot. One should be enough, but we will use two factors for the sake of illustration.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>fa_muslim <span class="ot">&lt;-</span> <span class="fu">factanal</span>(</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  muslimrights <span class="sc">|&gt;</span> <span class="fu">select</span>(right1<span class="sc">:</span>right7) <span class="sc">|&gt;</span> <span class="fu">drop_na</span>(),</span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">factors =</span> <span class="dv">2</span>,</span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">rotation =</span> <span class="st">"varimax"</span></span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>fa_muslim</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-Call:
-factanal(x = drop_na(select(muslimrights, right1:right7)), factors = 2,     rotation = "varimax")
-
-Uniquenesses:
-right1 right2 right3 right4 right5 right6 right7 
- 0.579  0.829  0.325  0.334  0.189  0.609  0.542 
-
-Loadings:
-       Factor1 Factor2
-right1 0.605   0.235  
-right2 0.330   0.249  
-right3 0.818          
-right4 0.811          
-right5         0.899  
-right6 0.191   0.595  
-right7 0.494   0.463  
-
-               Factor1 Factor2
-SS loadings      2.084   1.509
-Proportion Var   0.298   0.216
-Cumulative Var   0.298   0.513
-
-Test of the hypothesis that 2 factors are sufficient.
-The chi square statistic is 5.14 on 8 degrees of freedom.
-The p-value is 0.743 </code></pre>
-</div>
-</div>
-<p>Compare the unrotated and rotated (varimax) solutions:</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>fa_muslim_unrotated <span class="ot">&lt;-</span> <span class="fu">factanal</span>(</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  muslimrights <span class="sc">|&gt;</span> <span class="fu">select</span>(right1<span class="sc">:</span>right7) <span class="sc">|&gt;</span> <span class="fu">drop_na</span>(),</span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">factors =</span> <span class="dv">2</span>,</span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">rotation =</span> <span class="st">"none"</span></span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>fa_muslim_unrotated</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-Call:
-factanal(x = drop_na(select(muslimrights, right1:right7)), factors = 2,     rotation = "none")
-
-Uniquenesses:
-right1 right2 right3 right4 right5 right6 right7 
- 0.579  0.829  0.325  0.334  0.189  0.609  0.542 
-
-Loadings:
-       Factor1 Factor2
-right1  0.587   0.277 
-right2  0.408         
-right3  0.616   0.544 
-right4  0.625   0.524 
-right5  0.683  -0.587 
-right6  0.563  -0.272 
-right7  0.676         
-
-               Factor1 Factor2
-SS loadings      2.521   1.072
-Proportion Var   0.360   0.153
-Cumulative Var   0.360   0.513
-
-Test of the hypothesis that 2 factors are sufficient.
-The chi square statistic is 5.14 on 8 degrees of freedom.
-The p-value is 0.743 </code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>fa_muslim</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-Call:
-factanal(x = drop_na(select(muslimrights, right1:right7)), factors = 2,     rotation = "varimax")
-
-Uniquenesses:
-right1 right2 right3 right4 right5 right6 right7 
- 0.579  0.829  0.325  0.334  0.189  0.609  0.542 
-
-Loadings:
-       Factor1 Factor2
-right1 0.605   0.235  
-right2 0.330   0.249  
-right3 0.818          
-right4 0.811          
-right5         0.899  
-right6 0.191   0.595  
-right7 0.494   0.463  
-
-               Factor1 Factor2
-SS loadings      2.084   1.509
-Proportion Var   0.298   0.216
-Cumulative Var   0.298   0.513
-
-Test of the hypothesis that 2 factors are sufficient.
-The chi square statistic is 5.14 on 8 degrees of freedom.
-The p-value is 0.743 </code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># the sum of the SS loadings (variance explained) across both factors is</span></span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="co"># the same for the unrotated and the rotated solution; varimax rotation</span></span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="co"># only redistributes how much of that total variance is attributed to</span></span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="co"># factor 1 versus factor 2, to make the loadings easier to interpret.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>fa_muslim</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-Call:
-factanal(x = drop_na(select(muslimrights, right1:right7)), factors = 2,     rotation = "varimax")
-
-Uniquenesses:
-right1 right2 right3 right4 right5 right6 right7 
- 0.579  0.829  0.325  0.334  0.189  0.609  0.542 
-
-Loadings:
-       Factor1 Factor2
-right1 0.605   0.235  
-right2 0.330   0.249  
-right3 0.818          
-right4 0.811          
-right5         0.899  
-right6 0.191   0.595  
-right7 0.494   0.463  
-
-               Factor1 Factor2
-SS loadings      2.084   1.509
-Proportion Var   0.298   0.216
-Cumulative Var   0.298   0.513
-
-Test of the hypothesis that 2 factors are sufficient.
-The chi square statistic is 5.14 on 8 degrees of freedom.
-The p-value is 0.743 </code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># the uniquenesses reported for each item show which variable is least</span></span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="co"># well explained by the two-factor solution (the item with the largest</span></span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="co"># uniqueness).</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>Oblique (promax) rotation:</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>fa_muslim_promax <span class="ot">&lt;-</span> <span class="fu">factanal</span>(</span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  muslimrights <span class="sc">|&gt;</span> <span class="fu">select</span>(right1<span class="sc">:</span>right7) <span class="sc">|&gt;</span> <span class="fu">drop_na</span>(),</span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">factors =</span> <span class="dv">2</span>,</span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">rotation =</span> <span class="st">"promax"</span></span>
-<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>fa_muslim_promax</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-Call:
-factanal(x = drop_na(select(muslimrights, right1:right7)), factors = 2,     rotation = "promax")
-
-Uniquenesses:
-right1 right2 right3 right4 right5 right6 right7 
- 0.579  0.829  0.325  0.334  0.189  0.609  0.542 
-
-Loadings:
-       Factor1 Factor2
-right1  0.608         
-right2  0.292   0.176 
-right3  0.903  -0.181 
-right4  0.888  -0.156 
-right5 -0.245   1.006 
-right6          0.614 
-right7  0.407   0.367 
-
-               Factor1 Factor2
-SS loadings      2.285   1.617
-Proportion Var   0.326   0.231
-Cumulative Var   0.326   0.557
-
-Factor Correlations:
-        Factor1 Factor2
-Factor1   1.000   0.529
-Factor2   0.529   1.000
-
-Test of the hypothesis that 2 factors are sufficient.
-The chi square statistic is 5.14 on 8 degrees of freedom.
-The p-value is 0.743 </code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># unlike varimax, promax allows the two factors to correlate with each</span></span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="co"># other; that correlation is reported separately below.</span></span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>fa_muslim_promax<span class="sc">$</span>correlation</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  rights_items,</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">use =</span> <span class="st">"pairwise.complete.obs"</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>          right1    right2    right3    right4    right5    right6    right7
 right1 1.0000000 0.2591219 0.5473819 0.4990005 0.2565616 0.2038046 0.3578015
@@ -853,156 +688,862 @@ right5 0.2565616 0.2312280 0.1000763 0.1129323 1.0000000 0.5389962 0.4400539
 right6 0.2038046 0.2980028 0.2058874 0.2025098 0.5389962 1.0000000 0.3922900
 right7 0.3578015 0.2167196 0.4131928 0.4966701 0.4400539 0.3922900 1.0000000</code></pre>
 </div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">scree</span>(rights_items)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="factor_analysis_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Optional: national identification items (iden1:iden6)</span></span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>muslimrights <span class="ot">&lt;-</span> muslimrights <span class="sc">|&gt;</span></span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(</span>
-<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>    iden1<span class="sc">:</span>iden6,</span>
-<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>    <span class="sc">~</span> <span class="fu">factor</span>(.x, <span class="at">levels =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>),</span>
-<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">.names =</span> <span class="st">"f{.col}"</span></span>
-<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>  ))</span>
-<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>fa_iden <span class="ot">&lt;-</span> <span class="fu">factanal</span>(</span>
-<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>  muslimrights <span class="sc">|&gt;</span> <span class="fu">select</span>(iden1<span class="sc">:</span>iden6) <span class="sc">|&gt;</span> <span class="fu">drop_na</span>(),</span>
-<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">factors =</span> <span class="dv">1</span></span>
-<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a>fa_iden</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>fa_muslim_unrotated <span class="ot">&lt;-</span> <span class="fu">fa</span>(</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  rights_items,</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">nfactors =</span> <span class="dv">2</span>,</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">fm =</span> <span class="st">"ml"</span>,</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">rotate =</span> <span class="st">"none"</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>fa_muslim_varimax <span class="ot">&lt;-</span> <span class="fu">fa</span>(</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>  rights_items,</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">nfactors =</span> <span class="dv">2</span>,</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">fm =</span> <span class="st">"ml"</span>,</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">rotate =</span> <span class="st">"varimax"</span></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Compare the unrotated and rotated (varimax) solutions:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>fa_muslim_unrotated</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>
-Call:
-factanal(x = drop_na(select(muslimrights, iden1:iden6)), factors = 1)
+<pre><code>Factor Analysis using method =  ml
+Call: fa(r = rights_items, nfactors = 2, rotate = "none", fm = "ml")
+Standardized loadings (pattern matrix) based upon correlation matrix
+        ML1   ML2   h2   u2 com
+right1 0.59  0.28 0.42 0.58 1.4
+right2 0.41  0.07 0.17 0.83 1.1
+right3 0.62  0.54 0.67 0.33 2.0
+right4 0.63  0.52 0.67 0.33 1.9
+right5 0.68 -0.59 0.81 0.19 2.0
+right6 0.56 -0.27 0.39 0.61 1.4
+right7 0.68  0.04 0.46 0.54 1.0
 
-Uniquenesses:
-iden1 iden2 iden3 iden4 iden5 iden6 
-0.366 0.105 0.441 0.246 0.342 0.509 
+                       ML1  ML2
+SS loadings           2.52 1.07
+Proportion Var        0.36 0.15
+Cumulative Var        0.36 0.51
+Proportion Explained  0.70 0.30
+Cumulative Proportion 0.70 1.00
 
-Loadings:
-      Factor1
-iden1 0.796  
-iden2 0.946  
-iden3 0.747  
-iden4 0.868  
-iden5 0.811  
-iden6 0.701  
+Mean item complexity =  1.5
+Test of the hypothesis that 2 factors are sufficient.
 
-               Factor1
-SS loadings      3.991
-Proportion Var   0.665
+df null model =  21  with the objective function =  2.16 with Chi Square =  152.65
+df of  the model are 8  and the objective function was  0.07 
 
-Test of the hypothesis that 1 factor is sufficient.
-The chi square statistic is 32.7 on 9 degrees of freedom.
-The p-value is 0.000151 </code></pre>
+The root mean square of the residuals (RMSR) is  0.03 
+The df corrected root mean square of the residuals is  0.05 
+
+The harmonic n.obs is  75 with the empirical chi square  1.74  with prob &lt;  0.99 
+The total n.obs was  75  with Likelihood Chi Square =  5.14  with prob &lt;  0.74 
+
+Tucker Lewis Index of factoring reliability =  1.058
+RMSEA index =  0  and the 90 % confidence intervals are  0 0.098
+BIC =  -29.4
+Fit based upon off diagonal values = 0.99
+Measures of factor score adequacy             
+                                                   ML1  ML2
+Correlation of (regression) scores with factors   0.94 0.89
+Multiple R square of scores with factors          0.87 0.79
+Minimum correlation of possible factor scores     0.75 0.58</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>fa_muslim_varimax</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Factor Analysis using method =  ml
+Call: fa(r = rights_items, nfactors = 2, rotate = "varimax", fm = "ml")
+Standardized loadings (pattern matrix) based upon correlation matrix
+        ML2  ML1   h2   u2 com
+right1 0.61 0.23 0.42 0.58 1.3
+right2 0.33 0.25 0.17 0.83 1.9
+right3 0.82 0.07 0.67 0.33 1.0
+right4 0.81 0.09 0.67 0.33 1.0
+right5 0.04 0.90 0.81 0.19 1.0
+right6 0.19 0.60 0.39 0.61 1.2
+right7 0.49 0.46 0.46 0.54 2.0
+
+                       ML2  ML1
+SS loadings           2.08 1.51
+Proportion Var        0.30 0.22
+Cumulative Var        0.30 0.51
+Proportion Explained  0.58 0.42
+Cumulative Proportion 0.58 1.00
+
+Mean item complexity =  1.3
+Test of the hypothesis that 2 factors are sufficient.
+
+df null model =  21  with the objective function =  2.16 with Chi Square =  152.65
+df of  the model are 8  and the objective function was  0.07 
+
+The root mean square of the residuals (RMSR) is  0.03 
+The df corrected root mean square of the residuals is  0.05 
+
+The harmonic n.obs is  75 with the empirical chi square  1.74  with prob &lt;  0.99 
+The total n.obs was  75  with Likelihood Chi Square =  5.14  with prob &lt;  0.74 
+
+Tucker Lewis Index of factoring reliability =  1.058
+RMSEA index =  0  and the 90 % confidence intervals are  0 0.098
+BIC =  -29.4
+Fit based upon off diagonal values = 0.99
+Measures of factor score adequacy             
+                                                   ML2  ML1
+Correlation of (regression) scores with factors   0.91 0.91
+Multiple R square of scores with factors          0.83 0.84
+Minimum correlation of possible factor scores     0.66 0.67</code></pre>
 </div>
 </div>
+<p>Note that the sum of the variances of factors 1 and 2 is the same for the unrotated and rotated solutions. Also note that item <code>right5</code> has the lowest communality (<code>h2</code>), and correspondingly the highest uniqueness (<code>u2</code>), indicating that this item is the least explained by the two factors.</p>
+<p>Plot the factor loadings for the varimax-rotated solution:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fa.plot</span>(fa_muslim_varimax, <span class="at">labels =</span> <span class="fu">rownames</span>(fa_muslim_varimax<span class="sc">$</span>loadings))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="factor_analysis_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Oblique (promax) rotation:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>fa_muslim_promax <span class="ot">&lt;-</span> <span class="fu">fa</span>(</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  rights_items,</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">nfactors =</span> <span class="dv">2</span>,</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">fm =</span> <span class="st">"ml"</span>,</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">rotate =</span> <span class="st">"promax"</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required namespace: GPArotation</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>fa_muslim_promax</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Factor Analysis using method =  ml
+Call: fa(r = rights_items, nfactors = 2, rotate = "promax", fm = "ml")
+Standardized loadings (pattern matrix) based upon correlation matrix
+         ML2   ML1   h2   u2 com
+right1  0.61  0.07 0.42 0.58 1.0
+right2  0.29  0.18 0.17 0.83 1.6
+right3  0.90 -0.18 0.67 0.33 1.1
+right4  0.89 -0.16 0.67 0.33 1.1
+right5 -0.24  1.00 0.81 0.19 1.1
+right6  0.02  0.61 0.39 0.61 1.0
+right7  0.41  0.37 0.46 0.54 2.0
+
+                       ML2  ML1
+SS loadings           2.13 1.46
+Proportion Var        0.30 0.21
+Cumulative Var        0.30 0.51
+Proportion Explained  0.59 0.41
+Cumulative Proportion 0.59 1.00
+
+ With factor correlations of 
+     ML2  ML1
+ML2 1.00 0.53
+ML1 0.53 1.00
+
+Mean item complexity =  1.3
+Test of the hypothesis that 2 factors are sufficient.
+
+df null model =  21  with the objective function =  2.16 with Chi Square =  152.65
+df of  the model are 8  and the objective function was  0.07 
+
+The root mean square of the residuals (RMSR) is  0.03 
+The df corrected root mean square of the residuals is  0.05 
+
+The harmonic n.obs is  75 with the empirical chi square  1.74  with prob &lt;  0.99 
+The total n.obs was  75  with Likelihood Chi Square =  5.14  with prob &lt;  0.74 
+
+Tucker Lewis Index of factoring reliability =  1.058
+RMSEA index =  0  and the 90 % confidence intervals are  0 0.098
+BIC =  -29.4
+Fit based upon off diagonal values = 0.99
+Measures of factor score adequacy             
+                                                   ML2  ML1
+Correlation of (regression) scores with factors   0.93 0.99
+Multiple R square of scores with factors          0.87 0.99
+Minimum correlation of possible factor scores     0.75 0.97</code></pre>
+</div>
+</div>
+<p>Correlation between factors is 0.53</p>
 </section>
-<section id="bem-sex-role-inventory-bsri" class="level3">
-<h3 class="anchored" data-anchor-id="bem-sex-role-inventory-bsri">2. Bem Sex Role Inventory (bsri)</h3>
-<p>Initial check of the data:</p>
+<section id="bem-sex-role-inventory-1" class="level3">
+<h3 class="anchored" data-anchor-id="bem-sex-role-inventory-1">Bem Sex Role Inventory</h3>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>bsri <span class="sc">|&gt;</span></span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">all_of</span>(bsri_vars)) <span class="sc">|&gt;</span></span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>    helpful         reliant         defbel         yielding        cheerful    
- Min.   :1.000   Min.   :1.00   Min.   :1.000   Min.   :1.000   Min.   :1.000  
- 1st Qu.:5.000   1st Qu.:5.00   1st Qu.:5.000   1st Qu.:4.000   1st Qu.:5.000  
- Median :6.000   Median :6.00   Median :6.000   Median :4.000   Median :6.000  
- Mean   :6.049   Mean   :5.93   Mean   :5.905   Mean   :4.531   Mean   :5.813  
- 3rd Qu.:7.000   3rd Qu.:7.00   3rd Qu.:7.000   3rd Qu.:5.000   3rd Qu.:7.000  
- Max.   :7.000   Max.   :9.00   Max.   :7.000   Max.   :9.000   Max.   :9.000  
-     indpt           athlet           shy        assert        strpers     
- Min.   :1.000   Min.   :1.000   Min.   :1   Min.   :1.00   Min.   :1.000  
- 1st Qu.:5.000   1st Qu.:2.000   1st Qu.:2   1st Qu.:4.00   1st Qu.:4.000  
- Median :6.000   Median :3.000   Median :3   Median :5.00   Median :5.000  
- Mean   :5.854   Mean   :3.634   Mean   :3   Mean   :4.65   Mean   :5.076  
- 3rd Qu.:7.000   3rd Qu.:5.000   3rd Qu.:4   3rd Qu.:6.00   3rd Qu.:6.000  
- Max.   :7.000   Max.   :7.000   Max.   :7   Max.   :9.00   Max.   :9.000  
-    forceful         affect        flatter          loyal           analyt     
- Min.   :1.000   Min.   :1.00   Min.   :1.000   Min.   :1.000   Min.   :1.000  
- 1st Qu.:3.000   1st Qu.:5.00   1st Qu.:3.000   1st Qu.:6.000   1st Qu.:4.000  
- Median :4.000   Median :6.00   Median :5.000   Median :7.000   Median :6.000  
- Mean   :3.951   Mean   :5.94   Mean   :4.431   Mean   :6.593   Mean   :5.374  
- 3rd Qu.:5.000   3rd Qu.:7.00   3rd Qu.:6.000   3rd Qu.:7.000   3rd Qu.:7.000  
- Max.   :7.000   Max.   :7.00   Max.   :9.000   Max.   :7.000   Max.   :9.000  
-    feminine        sympathy         moody          sensitiv    
- Min.   :1.000   Min.   :1.000   Min.   :1.000   Min.   :1.000  
- 1st Qu.:5.000   1st Qu.:5.000   1st Qu.:2.000   1st Qu.:5.000  
- Median :6.000   Median :6.000   Median :3.000   Median :6.000  
- Mean   :5.585   Mean   :5.976   Mean   :3.209   Mean   :5.827  
- 3rd Qu.:7.000   3rd Qu.:7.000   3rd Qu.:4.000   3rd Qu.:7.000  
- Max.   :9.000   Max.   :7.000   Max.   :7.000   Max.   :9.000  
-    undstand        compass         leaderab         soothe     
- Min.   :3.000   Min.   :1.000   Min.   :1.000   Min.   :1.000  
- 1st Qu.:5.000   1st Qu.:5.000   1st Qu.:3.000   1st Qu.:5.000  
- Median :6.000   Median :6.000   Median :5.000   Median :6.000  
- Mean   :5.913   Mean   :5.856   Mean   :4.599   Mean   :5.775  
- 3rd Qu.:7.000   3rd Qu.:7.000   3rd Qu.:6.000   3rd Qu.:7.000  
- Max.   :7.000   Max.   :7.000   Max.   :7.000   Max.   :7.000  
-      risk           decide         selfsuff        conscien    
- Min.   :1.000   Min.   :1.000   Min.   :1.000   Min.   :3.000  
- 1st Qu.:3.000   1st Qu.:4.000   1st Qu.:5.000   1st Qu.:6.000  
- Median :4.000   Median :5.000   Median :6.000   Median :6.000  
- Mean   :4.171   Mean   :4.645   Mean   :5.786   Mean   :6.214  
- 3rd Qu.:5.000   3rd Qu.:6.000   3rd Qu.:7.000   3rd Qu.:7.000  
- Max.   :7.000   Max.   :7.000   Max.   :9.000   Max.   :7.000  
-    dominant        masculin         stand           happy      
- Min.   :1.000   Min.   :1.000   Min.   :1.000   Min.   :0.000  
- 1st Qu.:3.000   1st Qu.:1.000   1st Qu.:4.000   1st Qu.:5.000  
- Median :4.000   Median :1.000   Median :6.000   Median :6.000  
- Mean   :4.119   Mean   :1.734   Mean   :5.298   Mean   :5.724  
- 3rd Qu.:5.000   3rd Qu.:2.000   3rd Qu.:6.000   3rd Qu.:7.000  
- Max.   :7.000   Max.   :9.000   Max.   :7.000   Max.   :7.000  
-    softspok          warm          truthful         tender     
- Min.   :1.000   Min.   :1.000   Min.   :0.000   Min.   :2.000  
- 1st Qu.:3.000   1st Qu.:5.000   1st Qu.:6.000   1st Qu.:5.000  
- Median :5.000   Median :6.000   Median :7.000   Median :6.000  
- Mean   :4.558   Mean   :5.653   Mean   :6.379   Mean   :5.515  
- 3rd Qu.:6.000   3rd Qu.:6.000   3rd Qu.:7.000   3rd Qu.:6.000  
- Max.   :7.000   Max.   :7.000   Max.   :7.000   Max.   :7.000  
-    gullible        leadact         childlik        individ     
- Min.   :0.000   Min.   :1.000   Min.   :0.000   Min.   :1.000  
- 1st Qu.:2.000   1st Qu.:3.000   1st Qu.:1.000   1st Qu.:5.000  
- Median :4.000   Median :4.000   Median :2.000   Median :5.000  
- Mean   :3.721   Mean   :4.236   Mean   :2.374   Mean   :5.331  
- 3rd Qu.:5.000   3rd Qu.:6.000   3rd Qu.:3.000   3rd Qu.:6.000  
- Max.   :9.000   Max.   :7.000   Max.   :7.000   Max.   :9.000  
-    foullang        lovchil         compete         ambitiou    
- Min.   :1.000   Min.   :1.000   Min.   :1.000   Min.   :1.000  
- 1st Qu.:2.000   1st Qu.:6.000   1st Qu.:3.000   1st Qu.:4.000  
- Median :4.000   Median :7.000   Median :4.000   Median :5.000  
- Mean   :4.233   Mean   :6.154   Mean   :4.447   Mean   :5.054  
- 3rd Qu.:6.000   3rd Qu.:7.000   3rd Qu.:6.000   3rd Qu.:6.000  
- Max.   :7.000   Max.   :7.000   Max.   :9.000   Max.   :7.000  
-     gentle     
- Min.   :2.000  
- 1st Qu.:5.000  
- Median :6.000  
- Mean   :5.726  
- 3rd Qu.:7.000  
- Max.   :7.000  </code></pre>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>bsri <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(<span class="st">"data/bsri.dta"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-</div>
-<p>Initial factor analysis; use a scree plot to judge how many factors to retain:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>cor_mat_bsri <span class="ot">&lt;-</span> <span class="fu">cor</span>(</span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>  bsri <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="fu">all_of</span>(bsri_vars)),</span>
-<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">use =</span> <span class="st">"pairwise.complete.obs"</span></span>
-<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a><span class="fu">eigen</span>(cor_mat_bsri)<span class="sc">$</span>values</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code> [1] 7.5322763 5.0201939 2.4040225 2.0703282 1.6983000 1.4122439 1.3437244
- [8] 1.1629231 1.1474816 1.1004286 1.0784543 1.0030481 0.9555839 0.9158025
-[15] 0.8625846 0.8512396 0.8205770 0.7724068 0.7526868 0.7101285 0.6909753
-[22] 0.6490663 0.6237117 0.6099740 0.6061028 0.5620481 0.5496426 0.5233610
-[29] 0.5106146 0.4950339 0.4764138 0.4288432 0.4100353 0.3991693 0.3802218
-[36] 0.3628917 0.3249289 0.3145884 0.2896048 0.2811943 0.2625237 0.2556944
-[43] 0.2307971 0.1481278</code></pre>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>bsri <span class="sc">|&gt;</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">skim</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Data summary</caption>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Name</td>
+<td style="text-align: left;">bsri</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Number of rows</td>
+<td style="text-align: left;">369</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Number of columns</td>
+<td style="text-align: left;">45</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">_______________________</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Column type frequency:</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">numeric</td>
+<td style="text-align: left;">45</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">________________________</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Group variables</td>
+<td style="text-align: left;">None</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: numeric</strong></p>
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 17%">
+<col style="width: 12%">
+<col style="width: 17%">
+<col style="width: 8%">
+<col style="width: 8%">
+<col style="width: 3%">
+<col style="width: 5%">
+<col style="width: 5%">
+<col style="width: 5%">
+<col style="width: 6%">
+<col style="width: 7%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">skim_variable</th>
+<th style="text-align: right;">n_missing</th>
+<th style="text-align: right;">complete_rate</th>
+<th style="text-align: right;">mean</th>
+<th style="text-align: right;">sd</th>
+<th style="text-align: right;">p0</th>
+<th style="text-align: right;">p25</th>
+<th style="text-align: right;">p50</th>
+<th style="text-align: right;">p75</th>
+<th style="text-align: right;">p100</th>
+<th style="text-align: left;">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">subno</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">323.61</td>
+<td style="text-align: right;">196.79</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">144</td>
+<td style="text-align: right;">317</td>
+<td style="text-align: right;">489</td>
+<td style="text-align: right;">758</td>
+<td style="text-align: left;">▇▆▆▇▂</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">helpful</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">6.05</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: left;">▁▁▁▂▇</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">reliant</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">5.93</td>
+<td style="text-align: right;">1.21</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: left;">▁▁▂▇▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">defbel</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">5.91</td>
+<td style="text-align: right;">1.34</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: left;">▁▁▁▂▇</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">yielding</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">4.53</td>
+<td style="text-align: right;">1.33</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: left;">▁▇▅▅▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">cheerful</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">5.81</td>
+<td style="text-align: right;">1.07</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: left;">▁▁▃▇▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">indpt</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">5.85</td>
+<td style="text-align: right;">1.36</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: left;">▁▁▁▂▇</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">athlet</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">3.63</td>
+<td style="text-align: right;">1.93</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: left;">▇▅▅▃▅</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">shy</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">3.00</td>
+<td style="text-align: right;">1.59</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: left;">▇▅▃▂▂</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">assert</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">4.65</td>
+<td style="text-align: right;">1.50</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: left;">▂▇▆▇▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">strpers</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">5.08</td>
+<td style="text-align: right;">1.54</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: left;">▁▅▅▇▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">forceful</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">3.95</td>
+<td style="text-align: right;">1.71</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: left;">▇▆▇▅▇</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">affect</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">5.94</td>
+<td style="text-align: right;">1.16</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: left;">▁▁▁▂▇</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">flatter</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">4.43</td>
+<td style="text-align: right;">1.72</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: left;">▃▇▅▇▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">loyal</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">6.59</td>
+<td style="text-align: right;">0.72</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: left;">▁▁▁▁▇</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">analyt</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">5.37</td>
+<td style="text-align: right;">1.55</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: left;">▁▃▃▇▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">feminine</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">5.59</td>
+<td style="text-align: right;">1.30</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: left;">▁▂▃▇▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">sympathy</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">5.98</td>
+<td style="text-align: right;">1.09</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: left;">▁▁▁▂▇</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">moody</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">3.21</td>
+<td style="text-align: right;">1.61</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: left;">▇▃▆▂▂</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">sensitiv</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">5.83</td>
+<td style="text-align: right;">1.16</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: left;">▁▂▂▇▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">undstand</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">5.91</td>
+<td style="text-align: right;">0.95</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: left;">▁▁▅▇▆</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">compass</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">5.86</td>
+<td style="text-align: right;">0.98</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: left;">▁▁▁▂▇</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">leaderab</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">4.60</td>
+<td style="text-align: right;">1.75</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: left;">▃▂▃▃▇</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">soothe</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">5.78</td>
+<td style="text-align: right;">1.20</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: left;">▁▁▁▃▇</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">risk</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">4.17</td>
+<td style="text-align: right;">1.66</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: left;">▆▆▇▆▇</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">decide</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">4.64</td>
+<td style="text-align: right;">1.65</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: left;">▃▃▅▅▇</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">selfsuff</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">5.79</td>
+<td style="text-align: right;">1.25</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: left;">▁▂▂▇▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">conscien</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">6.21</td>
+<td style="text-align: right;">0.89</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: left;">▁▁▂▆▇</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">dominant</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">4.12</td>
+<td style="text-align: right;">1.74</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: left;">▆▅▇▅▇</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">masculin</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1.73</td>
+<td style="text-align: right;">1.32</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: left;">▇▂▁▁▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">stand</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">5.30</td>
+<td style="text-align: right;">1.42</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: left;">▁▁▂▃▇</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">happy</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">5.72</td>
+<td style="text-align: right;">1.18</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: left;">▁▁▂▂▇</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">softspok</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">4.56</td>
+<td style="text-align: right;">1.65</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: left;">▃▂▃▅▇</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">warm</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">5.65</td>
+<td style="text-align: right;">1.05</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: left;">▁▁▁▃▇</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">truthful</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">6.38</td>
+<td style="text-align: right;">0.82</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: left;">▁▁▁▁▇</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">tender</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">5.51</td>
+<td style="text-align: right;">1.12</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: left;">▁▃▆▇▅</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">gullible</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">3.72</td>
+<td style="text-align: right;">1.90</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: left;">▃▇▇▅▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">leadact</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">4.24</td>
+<td style="text-align: right;">1.75</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: left;">▅▅▆▅▇</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">childlik</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2.37</td>
+<td style="text-align: right;">1.39</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: left;">▇▆▇▁▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">individ</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">5.33</td>
+<td style="text-align: right;">1.29</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: left;">▁▃▅▇▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">foullang</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">4.23</td>
+<td style="text-align: right;">2.11</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: left;">▆▂▃▁▇</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">lovchil</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">6.15</td>
+<td style="text-align: right;">1.22</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: left;">▁▁▁▁▇</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">compete</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">4.45</td>
+<td style="text-align: right;">1.78</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: left;">▅▇▃▇▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">ambitiou</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">5.05</td>
+<td style="text-align: right;">1.54</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: left;">▂▁▃▃▇</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">gentle</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">5.73</td>
+<td style="text-align: right;">1.05</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: left;">▁▂▅▇▆</td>
+</tr>
+</tbody>
+</table>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">screeplot</span>(</span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">princomp</span>(bsri <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="fu">all_of</span>(bsri_vars)) <span class="sc">|&gt;</span> <span class="fu">drop_na</span>()),</span>
-<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">"lines"</span></span>
-<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Use a scree plot to judge how many factors to retain:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">scree</span>(bsri)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1013,187 +1554,168 @@ The p-value is 0.000151 </code></pre>
 </div>
 <p>Two-factor solution with a promax rotation:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>fa_bsri_2 <span class="ot">&lt;-</span> <span class="fu">factanal</span>(</span>
-<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>  bsri <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="fu">all_of</span>(bsri_vars)) <span class="sc">|&gt;</span> <span class="fu">drop_na</span>(),</span>
-<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">factors =</span> <span class="dv">2</span>,</span>
-<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">rotation =</span> <span class="st">"promax"</span></span>
-<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(fa_bsri_2, <span class="at">digits =</span> <span class="dv">2</span>, <span class="at">cutoff =</span> .<span class="dv">30</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>fa_bsri_2 <span class="ot">&lt;-</span> <span class="fu">fa</span>(</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  bsri,</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">nfactors =</span> <span class="dv">2</span>,</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">fm =</span> <span class="st">"ml"</span>,</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">rotate =</span> <span class="st">"promax"</span></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>fa_bsri_2</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>
-Call:
-factanal(x = drop_na(select(bsri, all_of(bsri_vars))), factors = 2,     rotation = "promax")
+<pre><code>Factor Analysis using method =  ml
+Call: fa(r = bsri, nfactors = 2, rotate = "promax", fm = "ml")
+Standardized loadings (pattern matrix) based upon correlation matrix
+           ML1   ML2     h2   u2 com
+subno    -0.10  0.02 0.0096 0.99 1.1
+helpful   0.27  0.35 0.2402 0.76 1.9
+reliant   0.45  0.08 0.2191 0.78 1.1
+defbel    0.42  0.15 0.2263 0.77 1.3
+yielding -0.18  0.36 0.1315 0.87 1.5
+cheerful  0.11  0.36 0.1605 0.84 1.2
+indpt     0.53 -0.04 0.2711 0.73 1.0
+athlet    0.26  0.05 0.0771 0.92 1.1
+shy      -0.41 -0.03 0.1761 0.82 1.0
+assert    0.61 -0.03 0.3687 0.63 1.0
+strpers   0.67 -0.04 0.4336 0.57 1.0
+forceful  0.68 -0.19 0.4374 0.56 1.2
+affect    0.11  0.55 0.3383 0.66 1.1
+flatter   0.07  0.22 0.0591 0.94 1.2
+loyal     0.10  0.41 0.1965 0.80 1.1
+analyt    0.28  0.10 0.1033 0.90 1.2
+feminine  0.07  0.32 0.1171 0.88 1.1
+sympathy -0.04  0.53 0.2768 0.72 1.0
+moody     0.00 -0.16 0.0270 0.97 1.0
+sensitiv  0.08  0.42 0.1981 0.80 1.1
+undstand  0.02  0.61 0.3804 0.62 1.0
+compass   0.04  0.63 0.4061 0.59 1.0
+leaderab  0.77  0.00 0.5895 0.41 1.0
+soothe   -0.01  0.59 0.3403 0.66 1.0
+risk      0.43  0.12 0.2209 0.78 1.2
+decide    0.54  0.06 0.3054 0.69 1.0
+selfsuff  0.50  0.09 0.2781 0.72 1.1
+conscien  0.29  0.28 0.2022 0.80 2.0
+dominant  0.71 -0.31 0.5056 0.49 1.4
+masculin  0.32 -0.31 0.1554 0.84 2.0
+stand     0.60  0.12 0.3984 0.60 1.1
+happy     0.07  0.43 0.1992 0.80 1.0
+softspok -0.28  0.37 0.1670 0.83 1.9
+warm     -0.01  0.73 0.5235 0.48 1.0
+truthful  0.07  0.31 0.1110 0.89 1.1
+tender   -0.04  0.72 0.5073 0.49 1.0
+gullible -0.17  0.15 0.0419 0.96 2.0
+leadact   0.78 -0.11 0.5809 0.42 1.0
+childlik -0.09 -0.09 0.0199 0.98 2.0
+individ   0.44  0.05 0.2061 0.79 1.0
+foullang -0.02  0.14 0.0179 0.98 1.1
+lovchil  -0.07  0.34 0.1074 0.89 1.1
+compete   0.45  0.01 0.2063 0.79 1.0
+ambitiou  0.40  0.10 0.1898 0.81 1.1
+gentle   -0.11  0.72 0.4935 0.51 1.0
 
-Uniquenesses:
- helpful  reliant   defbel yielding cheerful    indpt   athlet      shy 
-    0.76     0.78     0.77     0.87     0.84     0.73     0.92     0.82 
-  assert  strpers forceful   affect  flatter    loyal   analyt feminine 
-    0.63     0.57     0.56     0.66     0.94     0.80     0.90     0.88 
-sympathy    moody sensitiv undstand  compass leaderab   soothe     risk 
-    0.72     0.97     0.80     0.62     0.59     0.41     0.66     0.78 
-  decide selfsuff conscien dominant masculin    stand    happy softspok 
-    0.69     0.72     0.80     0.49     0.85     0.60     0.80     0.83 
-    warm truthful   tender gullible  leadact childlik  individ foullang 
-    0.48     0.89     0.49     0.96     0.42     0.98     0.79     0.98 
- lovchil  compete ambitiou   gentle 
-    0.89     0.79     0.81     0.51 
+                       ML1  ML2
+SS loadings           6.07 5.15
+Proportion Var        0.13 0.11
+Cumulative Var        0.13 0.25
+Proportion Explained  0.54 0.46
+Cumulative Proportion 0.54 1.00
 
-Loadings:
-         Factor1 Factor2
-helpful           0.36  
-reliant   0.44          
-defbel    0.41          
-yielding          0.36  
-cheerful          0.37  
-indpt     0.53          
-athlet                  
-shy      -0.41          
-assert    0.61          
-strpers   0.67          
-forceful  0.69          
-affect            0.56  
-flatter                 
-loyal             0.42  
-analyt                  
-feminine          0.32  
-sympathy          0.54  
-moody                   
-sensitiv          0.43  
-undstand          0.62  
-compass           0.64  
-leaderab  0.77          
-soothe            0.60  
-risk      0.42          
-decide    0.53          
-selfsuff  0.50          
-conscien                
-dominant  0.73   -0.32  
-masculin  0.34   -0.32  
-stand     0.59          
-happy             0.44  
-softspok -0.30    0.37  
-warm              0.74  
-truthful          0.32  
-tender            0.73  
-gullible                
-leadact   0.79          
-childlik                
-individ   0.44          
-foullang                
-lovchil           0.34  
-compete   0.45          
-ambitiou  0.40          
-gentle            0.73  
+ With factor correlations of 
+     ML1  ML2
+ML1 1.00 0.21
+ML2 0.21 1.00
 
-               Factor1 Factor2
-SS loadings       6.12    5.36
-Proportion Var    0.14    0.12
-Cumulative Var    0.14    0.26
-
-Factor Correlations:
-        Factor1 Factor2
-Factor1    1.00    0.29
-Factor2    0.29    1.00
-
+Mean item complexity =  1.2
 Test of the hypothesis that 2 factors are sufficient.
-The chi square statistic is 2434.88 on 859 degrees of freedom.
-The p-value is 1.46e-150 </code></pre>
+
+df null model =  990  with the objective function =  16.5 with Chi Square =  5809.28
+df of  the model are 901  and the objective function was  7.06 
+
+The root mean square of the residuals (RMSR) is  0.07 
+The df corrected root mean square of the residuals is  0.07 
+
+The harmonic n.obs is  369 with the empirical chi square  1695.13  with prob &lt;  3.4e-51 
+The total n.obs was  369  with Likelihood Chi Square =  2475.49  with prob &lt;  7.5e-147 
+
+Tucker Lewis Index of factoring reliability =  0.639
+RMSEA index =  0.069  and the 90 % confidence intervals are  0.066 0.072
+BIC =  -2850.14
+Fit based upon off diagonal values = 0.87
+Measures of factor score adequacy             
+                                                   ML1  ML2
+Correlation of (regression) scores with factors   0.95 0.94
+Multiple R square of scores with factors          0.91 0.88
+Minimum correlation of possible factor scores     0.81 0.77</code></pre>
 </div>
 </div>
 <p>Five-factor solution with a promax rotation, showing only loadings larger than .40:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>fa_bsri_5 <span class="ot">&lt;-</span> <span class="fu">factanal</span>(</span>
-<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>  bsri <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="fu">all_of</span>(bsri_vars)) <span class="sc">|&gt;</span> <span class="fu">drop_na</span>(),</span>
-<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">factors =</span> <span class="dv">5</span>,</span>
-<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">rotation =</span> <span class="st">"promax"</span></span>
-<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(fa_bsri_5, <span class="at">digits =</span> <span class="dv">2</span>, <span class="at">cutoff =</span> .<span class="dv">40</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>fa_bsri_5 <span class="ot">&lt;-</span> <span class="fu">fa</span>(</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  bsri,</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">nfactors =</span> <span class="dv">5</span>,</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">fm =</span> <span class="st">"ml"</span>,</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">rotate =</span> <span class="st">"promax"</span></span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(fa_bsri_5<span class="sc">$</span>loadings, <span class="at">cutoff =</span> .<span class="dv">40</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
-Call:
-factanal(x = drop_na(select(bsri, all_of(bsri_vars))), factors = 5,     rotation = "promax")
-
-Uniquenesses:
- helpful  reliant   defbel yielding cheerful    indpt   athlet      shy 
-    0.74     0.63     0.73     0.85     0.69     0.60     0.86     0.80 
-  assert  strpers forceful   affect  flatter    loyal   analyt feminine 
-    0.55     0.44     0.47     0.47     0.79     0.75     0.88     0.86 
-sympathy    moody sensitiv undstand  compass leaderab   soothe     risk 
-    0.54     0.76     0.60     0.44     0.37     0.40     0.60     0.70 
-  decide selfsuff conscien dominant masculin    stand    happy softspok 
-    0.61     0.43     0.66     0.47     0.81     0.60     0.57     0.70 
-    warm truthful   tender gullible  leadact childlik  individ foullang 
-    0.43     0.84     0.44     0.77     0.42     0.83     0.77     0.96 
- lovchil  compete ambitiou   gentle 
-    0.87     0.55     0.60     0.46 
-
 Loadings:
-         Factor1 Factor2 Factor3 Factor4 Factor5
-helpful                                         
-reliant                           0.53          
-defbel    0.41                                  
-yielding                                        
-cheerful          0.54                          
-indpt                             0.53          
-athlet                                          
-shy                                             
-assert    0.65                                  
-strpers   0.74                                  
-forceful  0.73                                  
-affect            0.68                          
-flatter           0.44                          
-loyal             0.44                          
-analyt                                          
-feminine                                        
-sympathy                  0.69                  
-moody                            -0.41          
-sensitiv                  0.66                  
-undstand                  0.69                  
-compass                   0.75                  
-leaderab  0.52                                  
-soothe                    0.51                  
-risk                                            
-decide                            0.42          
-selfsuff                          0.71          
-conscien                          0.46          
-dominant  0.66                                  
-masculin                                        
-stand     0.50                                  
-happy             0.66                          
-softspok -0.49                                  
-warm              0.65                          
-truthful                                        
-tender            0.63                          
-gullible                         -0.42          
-leadact   0.56                                  
-childlik                         -0.44          
-individ                                         
-foullang                                        
-lovchil                                         
-compete                                   0.56  
-ambitiou                                  0.55  
-gentle            0.56                          
+         ML1    ML2    ML4    ML3    ML5   
+subno                                      
+helpful                                    
+reliant                        0.537       
+defbel    0.414                            
+yielding                                   
+cheerful         0.568                     
+indpt                          0.532       
+athlet                                     
+shy                                        
+assert    0.611                            
+strpers   0.695                            
+forceful  0.675                            
+affect           0.676                     
+flatter          0.432                     
+loyal            0.463                     
+analyt                                     
+feminine                                   
+sympathy                0.709              
+moody                                      
+sensitiv                0.681              
+undstand                0.716              
+compass                 0.770              
+leaderab                              0.476
+soothe                  0.533              
+risk                                  0.472
+decide                                     
+selfsuff                       0.689       
+conscien                       0.434       
+dominant  0.541                            
+masculin                                   
+stand     0.441                            
+happy            0.681                     
+softspok -0.505                            
+warm             0.612                     
+truthful                                   
+tender           0.577                     
+gullible                      -0.463       
+leadact                               0.468
+childlik                      -0.428       
+individ                                    
+foullang                                   
+lovchil                                    
+compete                               0.670
+ambitiou                              0.635
+gentle           0.498                     
 
-               Factor1 Factor2 Factor3 Factor4 Factor5
-SS loadings       4.33    3.50    2.78    2.69    1.47
-Proportion Var    0.10    0.08    0.06    0.06    0.03
-Cumulative Var    0.10    0.18    0.24    0.30    0.34
-
-Factor Correlations:
-        Factor1 Factor2 Factor3 Factor4 Factor5
-Factor1   1.000   0.072   0.056    0.29    0.19
-Factor2   0.072   1.000   0.474    0.30    0.19
-Factor3   0.056   0.474   1.000    0.21    0.23
-Factor4   0.285   0.303   0.212    1.00    0.22
-Factor5   0.191   0.188   0.230    0.22    1.00
-
-Test of the hypothesis that 5 factors are sufficient.
-The chi square statistic is 1448.64 on 736 degrees of freedom.
-The p-value is 6.38e-49 </code></pre>
+                 ML1   ML2   ML4   ML3   ML5
+SS loadings    3.413 3.368 2.963 2.634 2.299
+Proportion Var 0.076 0.075 0.066 0.059 0.051
+Cumulative Var 0.076 0.151 0.217 0.275 0.326</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co"># interpret each factor from the items that load above .40 on it; with 42</span></span>
-<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="co"># items spread over 5 factors, some items may fail to load cleanly on any</span></span>
-<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a><span class="co"># single factor.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+</div>
+</div>
 </div>
 
 

@@ -325,9 +325,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#task-1-adding-cases" id="toc-task-1-adding-cases" class="nav-link active" data-scroll-target="#task-1-adding-cases">*Task 1**: adding cases</a></li>
-  <li><a href="#task-2-one-to-one-merge" id="toc-task-2-one-to-one-merge" class="nav-link" data-scroll-target="#task-2-one-to-one-merge">*Task 2**: one-to-one merge</a></li>
-  <li><a href="#task-2-many-to-one-merge" id="toc-task-2-many-to-one-merge" class="nav-link" data-scroll-target="#task-2-many-to-one-merge">*Task 2**: many-to-one merge</a></li>
+  <li><a href="#task-1-adding-cases" id="toc-task-1-adding-cases" class="nav-link active" data-scroll-target="#task-1-adding-cases">Task 1: adding cases</a></li>
+  <li><a href="#task-2-one-to-one-merge" id="toc-task-2-one-to-one-merge" class="nav-link" data-scroll-target="#task-2-one-to-one-merge">Task 2: one-to-one merge</a></li>
+  <li><a href="#task-2-many-to-one-merge" id="toc-task-2-many-to-one-merge" class="nav-link" data-scroll-target="#task-2-many-to-one-merge">Task 2: many-to-one merge</a></li>
   <li><a href="#task-4-many-to-many-merge" id="toc-task-4-many-to-many-merge" class="nav-link" data-scroll-target="#task-4-many-to-many-merge">Task 4: many-to-many merge</a></li>
   <li><a href="#r" id="toc-r" class="nav-link" data-scroll-target="#r">R</a>
   <ul class="collapse">
@@ -386,7 +386,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>A crucial concept in merging is a key. A key comprises one or more variables used to match observations from the two datasets. In the example of one-to-one merging, the key is likely a country identifier. In the example on many-to-one merging, the key is the city identifier. The key variable or variables should occur in both datasets. In R, key variables do not necessarily need to have the same name in both datasets, but using the same name is usually clearer and less error-prone.</p>
 <p>PS: The first type of merge is also possible without a key variable or key variables, and strictly on sequential order of the files: the first record of file A with the first record of file B, the second record of file A with the second record of file B, etc. This type of merging is very error prone. We urge you never to merge without keys.</p>
 <section id="task-1-adding-cases" class="level3">
-<h3 class="anchored" data-anchor-id="task-1-adding-cases">*Task 1**: adding cases</h3>
+<h3 class="anchored" data-anchor-id="task-1-adding-cases">Task 1: adding cases</h3>
 <p>As a pet example of adding cases, we consider two datasets. The dataset <code>world95_oecd_eu</code> describes the population size of a selection of 4 European OECD members:</p>
 <table class="caption-top table">
 <thead>
@@ -478,7 +478,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </table>
 </section>
 <section id="task-2-one-to-one-merge" class="level3">
-<h3 class="anchored" data-anchor-id="task-2-one-to-one-merge">*Task 2**: one-to-one merge</h3>
+<h3 class="anchored" data-anchor-id="task-2-one-to-one-merge">Task 2: one-to-one merge</h3>
 <p>As a pet example of 1:1 merging, we consider two datasets with characteristics of a collection of countries, namely the population size, dataset <code>world95_3_pop</code>:</p>
 <table class="caption-top table">
 <thead>
@@ -551,7 +551,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Note that in the combined dataset, Armenia is included, but the religion of Armenia is missing.</p>
 </section>
 <section id="task-2-many-to-one-merge" class="level3">
-<h3 class="anchored" data-anchor-id="task-2-many-to-one-merge">*Task 2**: many-to-one merge</h3>
+<h3 class="anchored" data-anchor-id="task-2-many-to-one-merge">Task 2: many-to-one merge</h3>
 <p>A paradigmatic example of many-to-one merging involves adding contextual data to information on individual subjects. We consider a pet example with 4 individuals from various countries:</p>
 <table class="caption-top table">
 <thead>
