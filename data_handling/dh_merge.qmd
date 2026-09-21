@@ -24,7 +24,7 @@ A crucial concept in merging is a key. A key comprises one or more variables use
 
 PS: The first type of merge is also possible without a key variable or key variables, and strictly on sequential order of the files: the first record of file A with the first record of file B, the second record of file A with the second record of file B, etc. This type of merging is very error prone. We urge you never to merge without keys.
 
-### *Task 1**: adding cases
+### Task 1: adding cases
 
 As a pet example of adding cases, we consider two datasets. The dataset `world95_oecd_eu` describes the population size of a selection of 4 European OECD members:
 
@@ -56,7 +56,7 @@ The first task that we want you to master is to create a new dataset that contai
 | USA         | 260800 |
 
 
-### *Task 2**: one-to-one merge
+### Task 2: one-to-one merge
 
 As a pet example of 1:1 merging, we consider two datasets with characteristics of a collection of countries, namely the population size, dataset `world95_3_pop`:
 
@@ -83,7 +83,7 @@ Note that the second dataset does not contain Armenia; Armenia is missing in the
 
 Note that in the combined dataset, Armenia is included, but the religion of Armenia is missing.
 
-### *Task 2**: many-to-one merge
+### Task 2: many-to-one merge
 
 A paradigmatic example of many-to-one merging involves adding contextual data to information on individual subjects. We consider a pet example with 4 individuals from various countries:
 
