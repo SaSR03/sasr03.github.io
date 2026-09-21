@@ -27,7 +27,7 @@ data <- read_dta("data/sbs399_sexroles.dta")
 # this dataset contains 5 items about sex role attitudes, in a 5-point Likert format
 ```
 
-# Examine correlation between items
+Examine correlation between items
 
 ```{r, eval=FALSE}
 cor(
