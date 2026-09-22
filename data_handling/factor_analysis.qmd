@@ -22,12 +22,15 @@ Setup data on sex role attitudes
 
 ```{r, eval=FALSE}
 library(psych)
+library(haven)
 
 data <- read_dta("data/sbs399_sexroles.dta")
 # this dataset contains 5 items about sex role attitudes, in a 5-point Likert format
+# Important: in the code below we use the entire data object because it already contains only the 5 items. 
+# If you have a larger dataset, you need to select the relevant items first.
 ```
 
-Examine correlation between items
+Examine correlation between items:
 
 ```{r, eval=FALSE}
 cor(
@@ -36,7 +39,7 @@ cor(
 )
 ```
 
-Determine the number of factors graphically with a scree plot.
+Determine the number of factors graphically with a scree plot:
 
 ```{r, eval=FALSE}
 scree(data)
@@ -71,6 +74,16 @@ fa_oblique <- fa(
 
 ```
 
+Print the factor loadings (pattern matrix):
+```{r, eval=FALSE}
+fa_varimax$loadings
+```
+
+Print the structure matrix:
+```{r, eval=FALSE}
+fa_varimax$Structure
+```
+
 Get factor scores: 
 ```{r, eval=FALSE}
 fa_scores <- fa_varimax$scores
@@ -84,12 +97,14 @@ fa_scores <- fa_varimax$scores
 Use the dataset `muslimrights`. The dataset contains two sets of items.
 
 Attitudes towards Muslim expressive rights was measured with seven statements. Four example items were:
+
 - The right to establish Islamic schools should always exist in the Netherlands.
 - Some Islamic holidays should become official Dutch holidays.
 - Dutch TV should broadcast more programmes by and for Muslims.
 - In the Netherlands the wearing of a headscarf should not be forbidden.
 
 National identification was measured by six statements:
+
 - My Dutch identity is an important part of my self (iden1);
 - I identify strongly with the Netherlands (iden2);
 - I feel a strong attachment to the Netherlands (iden3);
@@ -98,6 +113,7 @@ National identification was measured by six statements:
 - I feel a strong sense of belonging to the Netherlands (iden6).
 
 We will focus on the first set of items, `right1` to `right7`.
+
 a. Check the descriptives. Check the frequencies. Are the variables approximately normally distributed? Why is this important?
 b. Do an EFA/ML of the data, first with an unrotated solution (`rotate = "none"`). Then apply a varimax rotation.
 c. Provide interpretations:
@@ -155,7 +171,7 @@ rights_items |>
   skim()
 ```
 
-Determine the number of factors with a scree plot. One should be enough, but we will use two factors for the sake of illustration.
+Determine the number of factors with a scree plot. One might be enough by the eigenvalue > 1 criterion, but we will use two factors for the sake of illustration.
 
 ```{r}
 cor(
