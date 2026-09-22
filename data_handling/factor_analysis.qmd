@@ -84,7 +84,7 @@ Print the structure matrix:
 fa_varimax$Structure
 ```
 
-Get factor scores: 
+Get factor scores (default is regression method, can be changed with argument `scores` in `fa()`):
 ```{r, eval=FALSE}
 fa_scores <- fa_varimax$scores
 ```
