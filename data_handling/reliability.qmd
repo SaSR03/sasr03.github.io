@@ -2,6 +2,8 @@
 title: Reliability
 ---
 
+## Introduction
+
 See slides.
 
 ## R
@@ -12,208 +14,167 @@ You need to learn about the following R functions:
 |---|---|
 | alpha() | Cronbach's alpha |
 
-The function `alpha()` is part of the `psych` package.
+The function `alpha()` is part of the `psych` package. Note that there is also a function `alpha()`, with a completely different purpose, in the package `ggplot2` (which is also loaded when we load `tidyverse`). So be aware that R will use whatever you loaded last. To avoid ambiguity, you might want to explicitly refer to the package when calling the function: `psych::alpha()`. 
 
 Examples:
 
-Cronbach's alpha coefficient for unstandardized items `item1-item10`:
+Cronbach's alpha coefficient for variables `item1`to `item10`:
 
 ```{r, eval=FALSE}
-psych::alpha(
-  data |> select(item1:item10)
-)
+library(psych)
+library(dplyr)
+
+alpha_results <- data |> 
+                  select(item1:item10) |> 
+                  alpha()
 ```
 
-Standardized items, sign of each item as is:
+
+If you print the object `alpha_results` you will see lots of results. The most important are:
+
+- `raw_alpha`: Cronbach's alpha for items as they are
+- `std.alpha`: Cronbach's alpha for standardized items
+- The panel `Reliability if an item is dropped` shows, as the name suggets, the results we would obatin if we dropped each item.
+- Panel `Item statistics`: 
+  - `raw.r`: correlation of the item with the total scale
+  - `std.r`: same as above, if items were all standardized
+  - `r.drop`: correlation of the item with a scale formed by all the other items
+
+If we set the argument `check.keys` to `TRUE` in `alpha()`, the function will try to detect and automatically reverse items that seem to be in the opposite direction of the rest of the scale (for example, an item capturing negative attitudes when all other items capture positive attitudes):
 
 ```{r, eval=FALSE}
-psych::alpha(
-  data |> select(item1:item10),
-  check.keys = FALSE
-)
+data |> 
+  select(item1:item10) |> 
+  alpha(check.keys = TRUE)
 ```
 
-Store a scale as a new variable:
+After we check the reliability and decide which items to include (and with which coding), we probably want to create a scale by taking the average of items. `alpha()` does this automatically, and you can get the computed scale with `alpha_results$scores`. But make sure you understand which variables (and with coding) were used for this computation. For example, if you decide to drop an item, you have to use the results from a call to `alpha()` using only the remnaining items. When in doubt, it is better to compute the scale by yourself. 
 
-```{r, eval=FALSE}
-data <- data |>
-  mutate(
-    SR = rowMeans(
-      select(., item1:item10),
-      na.rm = TRUE
-    )
-  )
-```
-
-Display item statistics and alpha if item deleted:
-
-```{r, eval=FALSE}
-psych::alpha(
-  data |> select(item1:item10)
-)
-```
-
-The output includes Cronbach's alpha, item-total correlations, and the value of alpha if each item is deleted in turn.
 
 ## Assignments
 
 1. Use the dataset `sbs399_sexroles`. We assess the reliability for the sex role items in this dataset.
 
 - Check the descriptives of the sex role items `sexrol1-sexrol5`, including the number of missing values for each of the variables.
-
-- Do a reliability analysis of the standardized items, keeping the items directed as in the data. What is the value (estimate) of Cronbach's alpha?
-
+- Do a reliability analysis of the items, keeping the items directed as in the data. What is the value of the Cronbach's alpha for standardized items?
 - Check the alpha's if each item is deleted from the scale in turn. The deletion of which item will increase the reliability? Why?
-
-Hint: Verify that it is negatively correlated to the other items and should be recoded first.
-
-- Reverse item 5 and redo the analysis. What is the value of Cronbach's alpha now?
-
+  - Hint: Verify that it is negatively correlated to the other items and should be recoded first.
+- Reverse item 5 and redo the analysis. What is the value of (standardized) Cronbach's alpha now?
 - Check the alpha's if items are deleted. The deletion of which item will increase the reliability? Is this increase large? Discuss the advantage and drawback of deleting this item. For instance, one drawback of deleting an item is the decrease in the range of attitude measures.
-
 - What is the sample size in the data and what is the sample size in the analysis?
 
-- Replace the missing values for a variable with the mean of this variable. Do again a reliability analysis. Notice that the reliability goes down. Why will this be the case? What would be a better imputation for the missing values?
 
-2. Use the dataset `muslimrights`. We now assess the reliability for scales in this dataset. Refer to your results in the section on factor analysis. We want to assess the reliability of the two factors of the two-dimensional solution and the reliability of the unidimensional solution.
+2. Use the dataset `muslimrights`, items `right1` to `right7`. We now assess the reliability for scales in this dataset. Refer to your results in the section on factor analysis. We want to assess the reliability of the two factors of the two-dimensional solution and the reliability of the unidimensional solution.
 
-- Do again the factor analysis with an oblique rotation. Notice that two items are difficult to place: items 2 and 7.
-
+- Do again the maximum likelihhod factor analysis with an oblique (promax) rotation. Notice that two items are difficult to place: items 2 and 7.
 - Assess reliability separately for items 1 to 4 and for items 5 to 7. What happens to the reliability if you delete items 2 and 7?
-
 - Do a reliability analysis for items 1 to 7 together. What happens if you delete items 2 and 7?
+
+::: {.content-visible when-format="html"}
 
 ## Answers
 
-Make sure this file is in the same R Project as the `data` folder. Use relative file paths, not full paths to your computer.
+::: {.callout-note appearance="simple" collapse=true}
+## See answers
+
 
 ```{r setup-reliability}
-library(tidyverse)
+library(dplyr)
 library(haven)
 library(psych)
-
-sexroles <- read_dta("data/sbs399_sexroles.dta")
-muslimrights <- read_dta("data/muslimrights.dta")
 ```
 
 ### 1. Sex role items (sbs399_sexroles)
 
 ```{r}
+sexroles <- read_dta("data/sbs399_sexroles.dta")
+```
+
+Descriptives:
+```{r}
+# No need to select variables here, because dataset contains only teh 5 items
 sexroles |>
-  select(sexrol1:sexrol5) |>
   summary()
-
-sexroles |>
-  summarise(across(sexrol1:sexrol5, ~ sum(is.na(.x)), .names = "n_missing_{.col}"))
-```
-
-Reliability of the standardized items, keeping the items directed as in the data (`check.keys = FALSE` stops `psych::alpha()` from auto-reversing any item, matching Stata's `asis` option):
-
-```{r}
-psych::alpha(
-  sexroles |> select(sexrol1:sexrol5),
-  check.keys = FALSE
-)
-
-# read off std.alpha for the reliability of the standardized items.
-# the "reliability if an item is dropped" table in the same output shows
-# which item's removal would raise alpha the most.
 ```
 
 ```{r}
-sexroles |>
-  summarise(across(sexrol1:sexrol4, ~ cor(.x, sexrol5, use = "pairwise.complete.obs")))
+alpha_sexroles <- sexroles |> 
+                  alpha()
 
-# sexrol5 correlates negatively with the other four items, dragging alpha
-# down; it should be reverse coded before combining the items into a scale.
+alpha_sexroles
 ```
 
-Reverse item 5 (on a 1-5 scale, the reversal is `max + min - x = 6 - x`) and redo the analysis:
+The Cronbach's alpha for standardized items is `{r} round(alpha_sexroles$total$std.alpha, 2)`.
+
+The reliability would increase if we dropped `sexrol5`. We can see in the column `r.drop` that `sexrol5` is negatively correlated with the scale formed by all the other items. We can also look at the pairwise correlations:
+
+```{r}
+cor(sexroles, use="pairwise")
+```
+
+Reverse item 5 and redo analysis. We know that these items are on a 1-5 scale, so the reverse is `6 - x`. 
 
 ```{r}
 sexroles <- sexroles |>
-  mutate(Rsexrol5 = 6 - sexrol5)
+             mutate(sexrol5_rev = 6 - sexrol5)
 
-psych::alpha(
-  sexroles |> select(sexrol1, sexrol2, sexrol3, sexrol4, Rsexrol5)
-)
 
-# alpha should now be noticeably higher than in the "asis" analysis, since
-# the reversed item correlates positively with the rest of the scale.
+alpha_sexroles_rev <- sexroles |> 
+                      select(c(sexrol1:sexrol4, sexrol5_rev)) |> 
+                      alpha()
+
+alpha_sexroles_rev
 ```
 
-```{r}
-psych::alpha(
-  sexroles |> select(sexrol1, sexrol2, sexrol3, sexrol4, Rsexrol5)
-)
+Now the alpha is  `{r} round(alpha_sexroles_rev$total$std.alpha, 2)`. Dropping `sexrol5_rev` would still increase reliability, but by a small amount. 
 
-# check the "reliability if an item is dropped" column again: any further
-# gain from dropping an item should now be small, since the main problem
-# (the unreversed item) is already fixed. Weigh a small reliability gain
-# against the cost of shortening the scale and narrowing what it measures.
-```
+The number of observations varies by item. The computation of Cronbach's alhpa relies on the underlying covariance (or correlation) matrix. The default is to discard missing values and use all available pairwise correlations. 
 
-```{r}
-nrow(sexroles)
 
-sexroles |>
-  select(sexrol1, sexrol2, sexrol3, sexrol4, Rsexrol5) |>
-  drop_na() |>
-  nrow()
-
-# psych::alpha() drops any case with a missing value on at least one item
-# (casewise/listwise deletion), so the analysis sample is smaller than the
-# full dataset.
-```
-
-Replace missing values with the variable mean, and redo the reliability analysis:
-
-```{r}
-sexroles <- sexroles |>
-  mutate(across(
-    c(sexrol1, sexrol2, sexrol3, sexrol4, Rsexrol5),
-    ~ if_else(is.na(.x), mean(.x, na.rm = TRUE), .x),
-    .names = "i{.col}"
-  ))
-
-psych::alpha(
-  sexroles |> select(isexrol1, isexrol2, isexrol3, isexrol4, iRsexrol5)
-)
-
-# mean imputation replaces every missing value with the same constant, so
-# it removes real variation in the imputed items and weakens their
-# covariance with the other items; alpha therefore drops rather than
-# rises with the larger sample. Regression imputation or, better, multiple
-# imputation preserves more of the association between items than a
-# single mean substitution does.
-```
 
 ### 2. Muslim expressive rights and national identification (muslimrights)
 
-Reliability of the two factors found in the factor analysis of this dataset (items 1-4 and items 5-7), using casewise (listwise) deletion of missing values:
-
 ```{r}
-psych::alpha(muslimrights |> select(right1:right4) |> drop_na())
-psych::alpha(muslimrights |> select(right5:right7) |> drop_na())
-
-# items 2 and 7 were the items that did not load cleanly on either factor
-# in the factor analysis; check whether dropping them raises alpha for
-# their respective scale.
+rights <- read_dta("data/muslimrights.dta") |> 
+            select(right1:right7)
 ```
 
 ```{r}
-psych::alpha(muslimrights |> select(right1, right3, right4) |> drop_na())
-psych::alpha(muslimrights |> select(right5, right6) |> drop_na())
+fa_promax <- rights |> 
+              fa(nfactors = 2,
+                 fm = "ml",
+                 rotate = "promax")
+
+fa_promax$loadings
+fa_promax$Structure
 ```
+
+Items 2 and 7 were the items that did not load cleanly on either factor.
+
+Reliability for the two sets of items:
+```{r}
+rights |> 
+  select(right1:right4) |> 
+  alpha()
+
+rights |> 
+  select(right5:right7) |> 
+  alpha()
+```
+
+The reliability of the first scale would clearly increase by dropping item 2. Results for the second scale are less clear: dropping item 7 would increase the raw alpha just a bit, but would actually decrease the standardized alpha.
 
 Reliability for all seven items together, with and without items 2 and 7:
-
 ```{r}
-psych::alpha(muslimrights |> select(right1:right7) |> drop_na())
-psych::alpha(muslimrights |> select(right1, right3, right4, right5, right6) |> drop_na())
+rights |> 
+  alpha()
 
-# compare alpha for the combined 7-item scale to the two separate
-# subscales above: a single alpha for all items together is only
-# meaningful if the items form one dimension, which the factor analysis
-# suggests they do not.
+rights |> 
+  select(-right2, -right7) |> 
+  alpha()
 ```
+
+The reliability with all items is higher than either of the two subscales, and decreases if we drop items 2 and 7. Remember, however, than Cronbach's alhpa tends to mechanically increase with larger numbers of items. 
+
+:::
+:::
