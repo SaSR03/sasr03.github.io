@@ -325,13 +325,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#r" id="toc-r" class="nav-link active" data-scroll-target="#r">R</a></li>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#r" id="toc-r" class="nav-link" data-scroll-target="#r">R</a></li>
   <li><a href="#assignments" id="toc-assignments" class="nav-link" data-scroll-target="#assignments">Assignments</a></li>
-  <li><a href="#answers" id="toc-answers" class="nav-link" data-scroll-target="#answers">Answers</a>
-  <ul class="collapse">
-  <li><a href="#sex-role-items-sbs399_sexroles" id="toc-sex-role-items-sbs399_sexroles" class="nav-link" data-scroll-target="#sex-role-items-sbs399_sexroles">1. Sex role items (sbs399_sexroles)</a></li>
-  <li><a href="#muslim-expressive-rights-and-national-identification-muslimrights" id="toc-muslim-expressive-rights-and-national-identification-muslimrights" class="nav-link" data-scroll-target="#muslim-expressive-rights-and-national-identification-muslimrights">2. Muslim expressive rights and national identification (muslimrights)</a></li>
-  </ul></li>
+  <li><a href="#answers" id="toc-answers" class="nav-link" data-scroll-target="#answers">Answers</a></li>
   </ul>
 </nav>
     </div>
@@ -357,7 +354,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
 <p>See slides.</p>
+</section>
 <section id="r" class="level2">
 <h2 class="anchored" data-anchor-id="r">R</h2>
 <p>You need to learn about the following R functions:</p>
@@ -375,38 +375,36 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 </tbody>
 </table>
-<p>The function <code>alpha()</code> is part of the <code>psych</code> package.</p>
+<p>The function <code>alpha()</code> is part of the <code>psych</code> package. Note that there is also a function <code>alpha()</code>, with a completely different purpose, in the package <code>ggplot2</code> (which is also loaded when we load <code>tidyverse</code>). So be aware that R will use whatever you loaded last. To avoid ambiguity, you might want to explicitly refer to the package when calling the function: <code>psych::alpha()</code>.</p>
 <p>Examples:</p>
-<p>Cronbach’s alpha coefficient for unstandardized items <code>item1-item10</code>:</p>
+<p>Cronbach’s alpha coefficient for variables <code>item1</code>to <code>item10</code>:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>psych<span class="sc">::</span><span class="fu">alpha</span>(</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  data <span class="sc">|&gt;</span> <span class="fu">select</span>(item1<span class="sc">:</span>item10)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(psych)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>alpha_results <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> </span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">select</span>(item1<span class="sc">:</span>item10) <span class="sc">|&gt;</span> </span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">alpha</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Standardized items, sign of each item as is:</p>
+<p>If you print the object <code>alpha_results</code> you will see lots of results. The most important are:</p>
+<ul>
+<li><code>raw_alpha</code>: Cronbach’s alpha for items as they are</li>
+<li><code>std.alpha</code>: Cronbach’s alpha for standardized items</li>
+<li>The panel <code>Reliability if an item is dropped</code> shows, as the name suggets, the results we would obatin if we dropped each item.</li>
+<li>Panel <code>Item statistics</code>:
+<ul>
+<li><code>raw.r</code>: correlation of the item with the total scale</li>
+<li><code>std.r</code>: same as above, if items were all standardized</li>
+<li><code>r.drop</code>: correlation of the item with a scale formed by all the other items</li>
+</ul></li>
+</ul>
+<p>If we set the argument <code>check.keys</code> to <code>TRUE</code> in <code>alpha()</code>, the function will try to detect and automatically reverse items that seem to be in the opposite direction of the rest of the scale (for example, an item capturing negative attitudes when all other items capture positive attitudes):</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>psych<span class="sc">::</span><span class="fu">alpha</span>(</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  data <span class="sc">|&gt;</span> <span class="fu">select</span>(item1<span class="sc">:</span>item10),</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">check.keys =</span> <span class="cn">FALSE</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>data <span class="sc">|&gt;</span> </span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(item1<span class="sc">:</span>item10) <span class="sc">|&gt;</span> </span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">alpha</span>(<span class="at">check.keys =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Store a scale as a new variable:</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">SR =</span> <span class="fu">rowMeans</span>(</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>      <span class="fu">select</span>(., item1<span class="sc">:</span>item10),</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>      <span class="at">na.rm =</span> <span class="cn">TRUE</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>Display item statistics and alpha if item deleted:</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>psych<span class="sc">::</span><span class="fu">alpha</span>(</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  data <span class="sc">|&gt;</span> <span class="fu">select</span>(item1<span class="sc">:</span>item10)</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>The output includes Cronbach’s alpha, item-total correlations, and the value of alpha if each item is deleted in turn.</p>
+<p>After we check the reliability and decide which items to include (and with which coding), we probably want to create a scale by taking the average of items. <code>alpha()</code> does this automatically, and you can get the computed scale with <code>alpha_results$scores</code>. But make sure you understand which variables (and with coding) were used for this computation. For example, if you decide to drop an item, you have to use the results from a call to <code>alpha()</code> using only the remnaining items. When in doubt, it is better to compute the scale by yourself.</p>
 </section>
 <section id="assignments" class="level2">
 <h2 class="anchored" data-anchor-id="assignments">Assignments</h2>
@@ -414,62 +412,68 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Use the dataset <code>sbs399_sexroles</code>. We assess the reliability for the sex role items in this dataset.</li>
 </ol>
 <ul>
-<li><p>Check the descriptives of the sex role items <code>sexrol1-sexrol5</code>, including the number of missing values for each of the variables.</p></li>
-<li><p>Do a reliability analysis of the standardized items, keeping the items directed as in the data. What is the value (estimate) of Cronbach’s alpha?</p></li>
-<li><p>Check the alpha’s if each item is deleted from the scale in turn. The deletion of which item will increase the reliability? Why?</p></li>
-</ul>
-<p>Hint: Verify that it is negatively correlated to the other items and should be recoded first.</p>
+<li>Check the descriptives of the sex role items <code>sexrol1-sexrol5</code>, including the number of missing values for each of the variables.</li>
+<li>Do a reliability analysis of the items, keeping the items directed as in the data. What is the value of the Cronbach’s alpha for standardized items?</li>
+<li>Check the alpha’s if each item is deleted from the scale in turn. The deletion of which item will increase the reliability? Why?
 <ul>
-<li><p>Reverse item 5 and redo the analysis. What is the value of Cronbach’s alpha now?</p></li>
-<li><p>Check the alpha’s if items are deleted. The deletion of which item will increase the reliability? Is this increase large? Discuss the advantage and drawback of deleting this item. For instance, one drawback of deleting an item is the decrease in the range of attitude measures.</p></li>
-<li><p>What is the sample size in the data and what is the sample size in the analysis?</p></li>
-<li><p>Replace the missing values for a variable with the mean of this variable. Do again a reliability analysis. Notice that the reliability goes down. Why will this be the case? What would be a better imputation for the missing values?</p></li>
+<li>Hint: Verify that it is negatively correlated to the other items and should be recoded first.</li>
+</ul></li>
+<li>Reverse item 5 and redo the analysis. What is the value of (standardized) Cronbach’s alpha now?</li>
+<li>Check the alpha’s if items are deleted. The deletion of which item will increase the reliability? Is this increase large? Discuss the advantage and drawback of deleting this item. For instance, one drawback of deleting an item is the decrease in the range of attitude measures.</li>
+<li>What is the sample size in the data and what is the sample size in the analysis?</li>
 </ul>
 <ol start="2" type="1">
-<li>Use the dataset <code>muslimrights</code>. We now assess the reliability for scales in this dataset. Refer to your results in the section on factor analysis. We want to assess the reliability of the two factors of the two-dimensional solution and the reliability of the unidimensional solution.</li>
+<li>Use the dataset <code>muslimrights</code>, items <code>right1</code> to <code>right7</code>. We now assess the reliability for scales in this dataset. Refer to your results in the section on factor analysis. We want to assess the reliability of the two factors of the two-dimensional solution and the reliability of the unidimensional solution.</li>
 </ol>
 <ul>
-<li><p>Do again the factor analysis with an oblique rotation. Notice that two items are difficult to place: items 2 and 7.</p></li>
-<li><p>Assess reliability separately for items 1 to 4 and for items 5 to 7. What happens to the reliability if you delete items 2 and 7?</p></li>
-<li><p>Do a reliability analysis for items 1 to 7 together. What happens if you delete items 2 and 7?</p></li>
+<li>Do again the maximum likelihhod factor analysis with an oblique (promax) rotation. Notice that two items are difficult to place: items 2 and 7.</li>
+<li>Assess reliability separately for items 1 to 4 and for items 5 to 7. What happens to the reliability if you delete items 2 and 7?</li>
+<li>Do a reliability analysis for items 1 to 7 together. What happens if you delete items 2 and 7?</li>
 </ul>
 </section>
 <section id="answers" class="level2">
 <h2 class="anchored" data-anchor-id="answers">Answers</h2>
-<p>Make sure this file is in the same R Project as the <code>data</code> folder. Use relative file paths, not full paths to your computer.</p>
+<div class="callout callout-style-simple callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>See answers
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-✔ dplyr     1.2.1     ✔ readr     2.2.0
-✔ forcats   1.0.1     ✔ stringr   1.6.0
-✔ ggplot2   4.0.3     ✔ tibble    3.3.1
-✔ lubridate 1.9.5     ✔ tidyr     1.3.2
-✔ purrr     1.2.2     
-── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-✖ dplyr::filter() masks stats::filter()
-✖ dplyr::lag()    masks stats::lag()
-ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+<pre><code>
+Attaching package: 'dplyr'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:stats':
+
+    filter, lag</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven)</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(psych)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>
-Attaching package: 'psych'
-
-The following objects are masked from 'package:ggplot2':
-
-    %+%, alpha</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>sexroles <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(<span class="st">"data/sbs399_sexroles.dta"</span>)</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>muslimrights <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(<span class="st">"data/muslimrights.dta"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <section id="sex-role-items-sbs399_sexroles" class="level3">
 <h3 class="anchored" data-anchor-id="sex-role-items-sbs399_sexroles">1. Sex role items (sbs399_sexroles)</h3>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>sexroles <span class="sc">|&gt;</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(sexrol1<span class="sc">:</span>sexrol5) <span class="sc">|&gt;</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>sexroles <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(<span class="st">"data/sbs399_sexroles.dta"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Descriptives:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># No need to select variables here, because dataset contains only teh 5 items</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>sexroles <span class="sc">|&gt;</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>    sexrol1         sexrol2         sexrol3         sexrol4     
  Min.   :1.000   Min.   :1.000   Min.   :1.000   Min.   :1.000  
@@ -488,24 +492,12 @@ The following objects are masked from 'package:ggplot2':
  Max.   :5.000  
  NAs    :416    </code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>sexroles <span class="sc">|&gt;</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">across</span>(sexrol1<span class="sc">:</span>sexrol5, <span class="sc">~</span> <span class="fu">sum</span>(<span class="fu">is.na</span>(.x)), <span class="at">.names =</span> <span class="st">"n_missing_{.col}"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 1 × 5
-  n_missing_sexrol1 n_missing_sexrol2 n_missing_sexrol3 n_missing_sexrol4
-              &lt;int&gt;             &lt;int&gt;             &lt;int&gt;             &lt;int&gt;
-1               444               377               416               411
-# ℹ 1 more variable: n_missing_sexrol5 &lt;int&gt;</code></pre>
 </div>
-</div>
-<p>Reliability of the standardized items, keeping the items directed as in the data (<code>check.keys = FALSE</code> stops <code>psych::alpha()</code> from auto-reversing any item, matching Stata’s <code>asis</code> option):</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>psych<span class="sc">::</span><span class="fu">alpha</span>(</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  sexroles <span class="sc">|&gt;</span> <span class="fu">select</span>(sexrol1<span class="sc">:</span>sexrol5),</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">check.keys =</span> <span class="cn">FALSE</span></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>alpha_sexroles <span class="ot">&lt;-</span> sexroles <span class="sc">|&gt;</span> </span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">alpha</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>Warning in psych::alpha(select(sexroles, sexrol1:sexrol5), check.keys = FALSE): Some items were negatively correlated with the first principal component and probably 
+<pre><code>Warning in alpha(sexroles): Some items were negatively correlated with the first principal component and probably 
 should be reversed.  
 To do this, run the function again with the 'check.keys=TRUE' option</code></pre>
 </div>
@@ -514,10 +506,11 @@ To do this, run the function again with the 'check.keys=TRUE' option</code></pre
 probably should be reversed.  
 To do this, run the function again with the 'check.keys=TRUE' option</code></pre>
 </div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>alpha_sexroles</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Reliability analysis   
-Call: psych::alpha(x = select(sexroles, sexrol1:sexrol5), check.keys = FALSE)
+Call: alpha(x = sexroles)
 
   raw_alpha std.alpha G6(smc) average_r S/N   ase mean   sd median_r
       0.51      0.44     0.5      0.14 0.8 0.012  2.6 0.76     0.29
@@ -551,35 +544,35 @@ sexrol3 0.78 0.11 0.05 0.03 0.03 0.12
 sexrol4 0.50 0.20 0.18 0.06 0.07 0.12
 sexrol5 0.03 0.03 0.09 0.16 0.70 0.12</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># read off std.alpha for the reliability of the standardized items.</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="co"># the "reliability if an item is dropped" table in the same output shows</span></span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="co"># which item's removal would raise alpha the most.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+<p>The Cronbach’s alpha for standardized items is 0.44.</p>
+<p>The reliability would increase if we dropped <code>sexrol5</code>. We can see in the column <code>r.drop</code> that <code>sexrol5</code> is negatively correlated with the scale formed by all the other items. We can also look at the pairwise correlations:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>sexroles <span class="sc">|&gt;</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">across</span>(sexrol1<span class="sc">:</span>sexrol4, <span class="sc">~</span> <span class="fu">cor</span>(.x, sexrol5, <span class="at">use =</span> <span class="st">"pairwise.complete.obs"</span>)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(sexroles, <span class="at">use=</span><span class="st">"pairwise"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 1 × 4
-  sexrol1 sexrol2 sexrol3 sexrol4
-    &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
-1  -0.166  -0.223  -0.238  -0.205</code></pre>
+<pre><code>           sexrol1    sexrol2    sexrol3    sexrol4    sexrol5
+sexrol1  1.0000000  0.4675948  0.2542611  0.3551616 -0.1658329
+sexrol2  0.4675948  1.0000000  0.3207603  0.4370961 -0.2225637
+sexrol3  0.2542611  0.3207603  1.0000000  0.3779146 -0.2382164
+sexrol4  0.3551616  0.4370961  0.3779146  1.0000000 -0.2052813
+sexrol5 -0.1658329 -0.2225637 -0.2382164 -0.2052813  1.0000000</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># sexrol5 correlates negatively with the other four items, dragging alpha</span></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="co"># down; it should be reverse coded before combining the items into a scale.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Reverse item 5 (on a 1-5 scale, the reversal is <code>max + min - x = 6 - x</code>) and redo the analysis:</p>
+<p>Reverse item 5 and redo analysis. We know that these items are on a 1-5 scale, so the reverse is <code>6 - x</code>.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>sexroles <span class="ot">&lt;-</span> sexroles <span class="sc">|&gt;</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Rsexrol5 =</span> <span class="dv">6</span> <span class="sc">-</span> sexrol5)</span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>psych<span class="sc">::</span><span class="fu">alpha</span>(</span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  sexroles <span class="sc">|&gt;</span> <span class="fu">select</span>(sexrol1, sexrol2, sexrol3, sexrol4, Rsexrol5)</span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>sexroles <span class="ot">&lt;-</span> sexroles <span class="sc">|&gt;</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>             <span class="fu">mutate</span>(<span class="at">sexrol5_rev =</span> <span class="dv">6</span> <span class="sc">-</span> sexrol5)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>alpha_sexroles_rev <span class="ot">&lt;-</span> sexroles <span class="sc">|&gt;</span> </span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>                      <span class="fu">select</span>(<span class="fu">c</span>(sexrol1<span class="sc">:</span>sexrol4, sexrol5_rev)) <span class="sc">|&gt;</span> </span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>                      <span class="fu">alpha</span>()</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>alpha_sexroles_rev</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Reliability analysis   
-Call: psych::alpha(x = select(sexroles, sexrol1, sexrol2, sexrol3, 
-    sexrol4, Rsexrol5))
+Call: alpha(x = select(sexroles, c(sexrol1:sexrol4, sexrol5_rev)))
 
   raw_alpha std.alpha G6(smc) average_r S/N   ase mean   sd median_r
       0.69      0.69    0.65       0.3 2.2 0.008    2 0.83     0.29
@@ -590,168 +583,94 @@ Feldt     0.67  0.69  0.71
 Duhachek  0.67  0.69  0.71
 
  Reliability if an item is dropped:
-         raw_alpha std.alpha G6(smc) average_r S/N alpha se  var.r med.r
-sexrol1       0.63      0.63    0.57      0.30 1.7   0.0098 0.0088  0.28
-sexrol2       0.59      0.59    0.53      0.27 1.5   0.0113 0.0070  0.25
-sexrol3       0.65      0.64    0.59      0.31 1.8   0.0092 0.0165  0.29
-sexrol4       0.61      0.61    0.55      0.28 1.5   0.0103 0.0111  0.25
-Rsexrol5      0.70      0.70    0.65      0.37 2.3   0.0081 0.0060  0.37
+            raw_alpha std.alpha G6(smc) average_r S/N alpha se  var.r med.r
+sexrol1          0.63      0.63    0.57      0.30 1.7   0.0098 0.0088  0.28
+sexrol2          0.59      0.59    0.53      0.27 1.5   0.0113 0.0070  0.25
+sexrol3          0.65      0.64    0.59      0.31 1.8   0.0092 0.0165  0.29
+sexrol4          0.61      0.61    0.55      0.28 1.5   0.0103 0.0111  0.25
+sexrol5_rev      0.70      0.70    0.65      0.37 2.3   0.0081 0.0060  0.37
 
  Item statistics 
-            n raw.r std.r r.cor r.drop mean   sd
-sexrol1  2906  0.73  0.67  0.56   0.47  2.5 1.40
-sexrol2  2973  0.78  0.74  0.66   0.56  2.3 1.40
-sexrol3  2934  0.61  0.66  0.52   0.43  1.4 0.94
-sexrol4  2939  0.73  0.71  0.61   0.51  2.0 1.24
-Rsexrol5 2934  0.51  0.55  0.34   0.28  1.5 0.96
+               n raw.r std.r r.cor r.drop mean   sd
+sexrol1     2906  0.73  0.67  0.56   0.47  2.5 1.40
+sexrol2     2973  0.78  0.74  0.66   0.56  2.3 1.40
+sexrol3     2934  0.61  0.66  0.52   0.43  1.4 0.94
+sexrol4     2939  0.73  0.71  0.61   0.51  2.0 1.24
+sexrol5_rev 2934  0.51  0.55  0.34   0.28  1.5 0.96
 
 Non missing response frequency for each item
-            1    2    3    4    5 miss
-sexrol1  0.34 0.19 0.20 0.16 0.12 0.13
-sexrol2  0.41 0.17 0.18 0.12 0.11 0.11
-sexrol3  0.78 0.11 0.05 0.03 0.03 0.12
-sexrol4  0.50 0.20 0.18 0.06 0.07 0.12
-Rsexrol5 0.70 0.16 0.09 0.03 0.03 0.12</code></pre>
+               1    2    3    4    5 miss
+sexrol1     0.34 0.19 0.20 0.16 0.12 0.13
+sexrol2     0.41 0.17 0.18 0.12 0.11 0.11
+sexrol3     0.78 0.11 0.05 0.03 0.03 0.12
+sexrol4     0.50 0.20 0.18 0.06 0.07 0.12
+sexrol5_rev 0.70 0.16 0.09 0.03 0.03 0.12</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># alpha should now be noticeably higher than in the "asis" analysis, since</span></span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="co"># the reversed item correlates positively with the rest of the scale.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>psych<span class="sc">::</span><span class="fu">alpha</span>(</span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  sexroles <span class="sc">|&gt;</span> <span class="fu">select</span>(sexrol1, sexrol2, sexrol3, sexrol4, Rsexrol5)</span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-Reliability analysis   
-Call: psych::alpha(x = select(sexroles, sexrol1, sexrol2, sexrol3, 
-    sexrol4, Rsexrol5))
-
-  raw_alpha std.alpha G6(smc) average_r S/N   ase mean   sd median_r
-      0.69      0.69    0.65       0.3 2.2 0.008    2 0.83     0.29
-
-    95% confidence boundaries 
-         lower alpha upper
-Feldt     0.67  0.69  0.71
-Duhachek  0.67  0.69  0.71
-
- Reliability if an item is dropped:
-         raw_alpha std.alpha G6(smc) average_r S/N alpha se  var.r med.r
-sexrol1       0.63      0.63    0.57      0.30 1.7   0.0098 0.0088  0.28
-sexrol2       0.59      0.59    0.53      0.27 1.5   0.0113 0.0070  0.25
-sexrol3       0.65      0.64    0.59      0.31 1.8   0.0092 0.0165  0.29
-sexrol4       0.61      0.61    0.55      0.28 1.5   0.0103 0.0111  0.25
-Rsexrol5      0.70      0.70    0.65      0.37 2.3   0.0081 0.0060  0.37
-
- Item statistics 
-            n raw.r std.r r.cor r.drop mean   sd
-sexrol1  2906  0.73  0.67  0.56   0.47  2.5 1.40
-sexrol2  2973  0.78  0.74  0.66   0.56  2.3 1.40
-sexrol3  2934  0.61  0.66  0.52   0.43  1.4 0.94
-sexrol4  2939  0.73  0.71  0.61   0.51  2.0 1.24
-Rsexrol5 2934  0.51  0.55  0.34   0.28  1.5 0.96
-
-Non missing response frequency for each item
-            1    2    3    4    5 miss
-sexrol1  0.34 0.19 0.20 0.16 0.12 0.13
-sexrol2  0.41 0.17 0.18 0.12 0.11 0.11
-sexrol3  0.78 0.11 0.05 0.03 0.03 0.12
-sexrol4  0.50 0.20 0.18 0.06 0.07 0.12
-Rsexrol5 0.70 0.16 0.09 0.03 0.03 0.12</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># check the "reliability if an item is dropped" column again: any further</span></span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="co"># gain from dropping an item should now be small, since the main problem</span></span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="co"># (the unreversed item) is already fixed. Weigh a small reliability gain</span></span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="co"># against the cost of shortening the scale and narrowing what it measures.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(sexroles)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 3350</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>sexroles <span class="sc">|&gt;</span></span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(sexrol1, sexrol2, sexrol3, sexrol4, Rsexrol5) <span class="sc">|&gt;</span></span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>() <span class="sc">|&gt;</span></span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nrow</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 1720</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># psych::alpha() drops any case with a missing value on at least one item</span></span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="co"># (casewise/listwise deletion), so the analysis sample is smaller than the</span></span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="co"># full dataset.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>Replace missing values with the variable mean, and redo the reliability analysis:</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>sexroles <span class="ot">&lt;-</span> sexroles <span class="sc">|&gt;</span></span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(</span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">c</span>(sexrol1, sexrol2, sexrol3, sexrol4, Rsexrol5),</span>
-<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>    <span class="sc">~</span> <span class="fu">if_else</span>(<span class="fu">is.na</span>(.x), <span class="fu">mean</span>(.x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), .x),</span>
-<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">.names =</span> <span class="st">"i{.col}"</span></span>
-<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>  ))</span>
-<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>psych<span class="sc">::</span><span class="fu">alpha</span>(</span>
-<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>  sexroles <span class="sc">|&gt;</span> <span class="fu">select</span>(isexrol1, isexrol2, isexrol3, isexrol4, iRsexrol5)</span>
-<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-Reliability analysis   
-Call: psych::alpha(x = select(sexroles, isexrol1, isexrol2, isexrol3, 
-    isexrol4, iRsexrol5))
-
-  raw_alpha std.alpha G6(smc) average_r S/N    ase mean   sd median_r
-      0.65      0.65    0.61      0.27 1.8 0.0091    2 0.73     0.25
-
-    95% confidence boundaries 
-         lower alpha upper
-Feldt     0.63  0.65  0.67
-Duhachek  0.63  0.65  0.67
-
- Reliability if an item is dropped:
-          raw_alpha std.alpha G6(smc) average_r S/N alpha se  var.r med.r
-isexrol1       0.59      0.59    0.53      0.27 1.4   0.0110 0.0069  0.25
-isexrol2       0.54      0.55    0.48      0.23 1.2   0.0125 0.0052  0.22
-isexrol3       0.61      0.60    0.54      0.27 1.5   0.0104 0.0128  0.25
-isexrol4       0.57      0.56    0.51      0.25 1.3   0.0115 0.0085  0.22
-iRsexrol5      0.66      0.66    0.60      0.32 1.9   0.0094 0.0047  0.32
-
- Item statistics 
-             n raw.r std.r r.cor r.drop mean   sd
-isexrol1  3350  0.69  0.65  0.51   0.42  2.5 1.31
-isexrol2  3350  0.75  0.71  0.62   0.51  2.3 1.32
-isexrol3  3350  0.58  0.64  0.48   0.39  1.4 0.88
-isexrol4  3350  0.69  0.69  0.57   0.46  2.0 1.16
-iRsexrol5 3350  0.48  0.54  0.32   0.26  1.5 0.90
-
-Non missing response frequency for each item
-             1 1.42297205180641 1.52760736196319    2 2.00272201429057
-isexrol1  0.29             0.00             0.00 0.16             0.00
-isexrol2  0.37             0.00             0.00 0.15             0.00
-isexrol3  0.68             0.12             0.00 0.10             0.00
-isexrol4  0.44             0.00             0.00 0.17             0.12
-iRsexrol5 0.61             0.00             0.12 0.14             0.00
-          2.34712411705348 2.53819683413627    3    4    5 miss
-isexrol1              0.00             0.13 0.17 0.13 0.11    0
-isexrol2              0.11             0.00 0.16 0.11 0.10    0
-isexrol3              0.00             0.00 0.05 0.02 0.03    0
-isexrol4              0.00             0.00 0.16 0.05 0.06    0
-iRsexrol5             0.00             0.00 0.08 0.02 0.03    0</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># mean imputation replaces every missing value with the same constant, so</span></span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="co"># it removes real variation in the imputed items and weakens their</span></span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="co"># covariance with the other items; alpha therefore drops rather than</span></span>
-<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a><span class="co"># rises with the larger sample. Regression imputation or, better, multiple</span></span>
-<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a><span class="co"># imputation preserves more of the association between items than a</span></span>
-<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a><span class="co"># single mean substitution does.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
+<p>Now the alpha is 0.69. Dropping <code>sexrol5_rev</code> would still increase reliability, but by a small amount.</p>
+<p>The number of observations varies by item. The computation of Cronbach’s alhpa relies on the underlying covariance (or correlation) matrix. The default is to discard missing values and use all available pairwise correlations.</p>
 </section>
 <section id="muslim-expressive-rights-and-national-identification-muslimrights" class="level3">
 <h3 class="anchored" data-anchor-id="muslim-expressive-rights-and-national-identification-muslimrights">2. Muslim expressive rights and national identification (muslimrights)</h3>
-<p>Reliability of the two factors found in the factor analysis of this dataset (items 1-4 and items 5-7), using casewise (listwise) deletion of missing values:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>psych<span class="sc">::</span><span class="fu">alpha</span>(muslimrights <span class="sc">|&gt;</span> <span class="fu">select</span>(right1<span class="sc">:</span>right4) <span class="sc">|&gt;</span> <span class="fu">drop_na</span>())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>rights <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(<span class="st">"data/muslimrights.dta"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>            <span class="fu">select</span>(right1<span class="sc">:</span>right7)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>fa_promax <span class="ot">&lt;-</span> rights <span class="sc">|&gt;</span> </span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>              <span class="fu">fa</span>(<span class="at">nfactors =</span> <span class="dv">2</span>,</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">fm =</span> <span class="st">"ml"</span>,</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">rotate =</span> <span class="st">"promax"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required namespace: GPArotation</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>fa_promax<span class="sc">$</span>loadings</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Loadings:
+       ML2    ML1   
+right1  0.609       
+right2  0.293  0.175
+right3  0.903 -0.183
+right4  0.889 -0.158
+right5 -0.242  1.005
+right6         0.613
+right7  0.409  0.365
+
+                 ML2   ML1
+SS loadings    2.289 1.613
+Proportion Var 0.327 0.230
+Cumulative Var 0.327 0.557</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>fa_promax<span class="sc">$</span>Structure</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Loadings:
+       ML2   ML1  
+right1 0.646 0.393
+right2 0.385 0.330
+right3 0.806 0.295
+right4 0.805 0.312
+right5 0.290 0.877
+right6 0.347 0.625
+right7 0.602 0.581
+
+                 ML2   ML1
+SS loadings    2.431 1.945
+Proportion Var 0.347 0.278
+Cumulative Var 0.347 0.625</code></pre>
+</div>
+</div>
+<p>Items 2 and 7 were the items that did not load cleanly on either factor.</p>
+<p>Reliability for the two sets of items:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>rights <span class="sc">|&gt;</span> </span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(right1<span class="sc">:</span>right4) <span class="sc">|&gt;</span> </span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">alpha</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Reliability analysis   
-Call: psych::alpha(x = drop_na(select(muslimrights, right1:right4)))
+Call: alpha(x = select(rights, right1:right4))
 
   raw_alpha std.alpha G6(smc) average_r S/N   ase mean  sd median_r
       0.74      0.75    0.72      0.43   3 0.048    4 1.1      0.4
@@ -782,11 +701,13 @@ right2 0.05 0.09 0.13 0.16 0.36 0.15 0.05    0
 right3 0.07 0.11 0.20 0.25 0.27 0.07 0.04    0
 right4 0.16 0.21 0.19 0.17 0.13 0.08 0.05    0</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>psych<span class="sc">::</span><span class="fu">alpha</span>(muslimrights <span class="sc">|&gt;</span> <span class="fu">select</span>(right5<span class="sc">:</span>right7) <span class="sc">|&gt;</span> <span class="fu">drop_na</span>())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>rights <span class="sc">|&gt;</span> </span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(right5<span class="sc">:</span>right7) <span class="sc">|&gt;</span> </span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">alpha</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Reliability analysis   
-Call: psych::alpha(x = drop_na(select(muslimrights, right5:right7)))
+Call: alpha(x = select(rights, right5:right7))
 
   raw_alpha std.alpha G6(smc) average_r S/N   ase mean  sd median_r
       0.69      0.72    0.63      0.46 2.5 0.061    5 1.1     0.44
@@ -814,81 +735,16 @@ right5 0.01 0.03 0.03 0.05 0.37 0.35 0.16    0
 right6 0.00 0.00 0.04 0.12 0.24 0.36 0.24    0
 right7 0.08 0.15 0.11 0.24 0.21 0.15 0.07    0</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co"># items 2 and 7 were the items that did not load cleanly on either factor</span></span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="co"># in the factor analysis; check whether dropping them raises alpha for</span></span>
-<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="co"># their respective scale.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>psych<span class="sc">::</span><span class="fu">alpha</span>(muslimrights <span class="sc">|&gt;</span> <span class="fu">select</span>(right1, right3, right4) <span class="sc">|&gt;</span> <span class="fu">drop_na</span>())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-Reliability analysis   
-Call: psych::alpha(x = drop_na(select(muslimrights, right1, right3, 
-    right4)))
-
-  raw_alpha std.alpha G6(smc) average_r S/N  ase mean  sd median_r
-      0.79       0.8    0.73      0.57   4 0.04  3.9 1.3     0.55
-
-    95% confidence boundaries 
-         lower alpha upper
-Feldt     0.70  0.79  0.86
-Duhachek  0.72  0.79  0.87
-
- Reliability if an item is dropped:
-       raw_alpha std.alpha G6(smc) average_r S/N alpha se var.r med.r
-right1      0.79      0.79    0.66      0.66 3.9    0.048    NA  0.66
-right3      0.65      0.67    0.50      0.50 2.0    0.077    NA  0.50
-right4      0.70      0.71    0.55      0.55 2.4    0.068    NA  0.55
-
- Item statistics 
-        n raw.r std.r r.cor r.drop mean  sd
-right1 75  0.78  0.81  0.64   0.57  4.5 1.3
-right3 75  0.87  0.87  0.79   0.70  3.9 1.5
-right4 75  0.88  0.85  0.75   0.66  3.4 1.7
-
-Non missing response frequency for each item
-          1    2    3    4    5    6    7 miss
-right1 0.03 0.07 0.11 0.21 0.36 0.21 0.01    0
-right3 0.07 0.11 0.20 0.25 0.27 0.07 0.04    0
-right4 0.16 0.21 0.19 0.17 0.13 0.08 0.05    0</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>psych<span class="sc">::</span><span class="fu">alpha</span>(muslimrights <span class="sc">|&gt;</span> <span class="fu">select</span>(right5, right6) <span class="sc">|&gt;</span> <span class="fu">drop_na</span>())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-Reliability analysis   
-Call: psych::alpha(x = drop_na(select(muslimrights, right5, right6)))
-
-  raw_alpha std.alpha G6(smc) average_r S/N   ase mean sd median_r
-       0.7       0.7    0.54      0.54 2.3 0.069  5.5  1     0.54
-
-    95% confidence boundaries 
-         lower alpha upper
-Feldt     0.52   0.7  0.81
-Duhachek  0.56   0.7  0.83
-
- Reliability if an item is dropped:
-       raw_alpha std.alpha G6(smc) average_r S/N alpha se var.r med.r
-right5      0.59      0.54    0.29      0.54 1.2       NA     0  0.54
-right6      0.49      0.54    0.29      0.54 1.2       NA     0  0.54
-
- Item statistics 
-        n raw.r std.r r.cor r.drop mean  sd
-right5 75  0.89  0.88  0.64   0.54  5.4 1.2
-right6 75  0.87  0.88  0.64   0.54  5.6 1.1
-
-Non missing response frequency for each item
-          1    2    3    4    5    6    7 miss
-right5 0.01 0.03 0.03 0.05 0.37 0.35 0.16    0
-right6 0.00 0.00 0.04 0.12 0.24 0.36 0.24    0</code></pre>
-</div>
-</div>
+<p>The reliability of the first scale would clearly increase by dropping item 2. Results for the second scale are less clear: dropping item 7 would increase the raw alpha just a bit, but would actually decrease the standardized alpha.</p>
 <p>Reliability for all seven items together, with and without items 2 and 7:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>psych<span class="sc">::</span><span class="fu">alpha</span>(muslimrights <span class="sc">|&gt;</span> <span class="fu">select</span>(right1<span class="sc">:</span>right7) <span class="sc">|&gt;</span> <span class="fu">drop_na</span>())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>rights <span class="sc">|&gt;</span> </span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">alpha</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Reliability analysis   
-Call: psych::alpha(x = drop_na(select(muslimrights, right1:right7)))
+Call: alpha(x = rights)
 
   raw_alpha std.alpha G6(smc) average_r S/N   ase mean   sd median_r
       0.78      0.78     0.8      0.33 3.5 0.038  4.5 0.95      0.3
@@ -928,12 +784,13 @@ right5 0.01 0.03 0.03 0.05 0.37 0.35 0.16    0
 right6 0.00 0.00 0.04 0.12 0.24 0.36 0.24    0
 right7 0.08 0.15 0.11 0.24 0.21 0.15 0.07    0</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>psych<span class="sc">::</span><span class="fu">alpha</span>(muslimrights <span class="sc">|&gt;</span> <span class="fu">select</span>(right1, right3, right4, right5, right6) <span class="sc">|&gt;</span> <span class="fu">drop_na</span>())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>rights <span class="sc">|&gt;</span> </span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>right2, <span class="sc">-</span>right7) <span class="sc">|&gt;</span> </span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">alpha</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Reliability analysis   
-Call: psych::alpha(x = drop_na(select(muslimrights, right1, right3, 
-    right4, right5, right6)))
+Call: alpha(x = select(rights, -right2, -right7))
 
   raw_alpha std.alpha G6(smc) average_r S/N  ase mean   sd median_r
       0.72      0.71    0.74      0.33 2.5 0.05  4.6 0.95     0.23
@@ -967,14 +824,14 @@ right4 0.16 0.21 0.19 0.17 0.13 0.08 0.05    0
 right5 0.01 0.03 0.03 0.05 0.37 0.35 0.16    0
 right6 0.00 0.00 0.04 0.12 0.24 0.36 0.24    0</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="co"># compare alpha for the combined 7-item scale to the two separate</span></span>
-<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a><span class="co"># subscales above: a single alpha for all items together is only</span></span>
-<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a><span class="co"># meaningful if the items form one dimension, which the factor analysis</span></span>
-<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a><span class="co"># suggests they do not.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The reliability with all items is higher than either of the two subscales, and decreases if we drop items 2 and 7. Remember, however, than Cronbach’s alhpa tends to mechanically increase with larger numbers of items.</p>
+</section>
+</div>
+</div>
 </div>
 
 
-</section>
 </section>
 
 </main> <!-- /main -->
