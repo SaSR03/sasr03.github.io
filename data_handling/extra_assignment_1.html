@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Some programming features in R – SaSR03</title>
+<title>Extra assignment 1 – SaSR03</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -25,41 +25,6 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
-}
-/* CSS for syntax highlighting */
-html { -webkit-text-size-adjust: 100%; }
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -144,7 +109,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../miscellaneous/ggplot.html">Miscellaneous</a></li><li class="breadcrumb-item"><a href="../miscellaneous/r_programming_features.html">Programming features in R</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../data_handling/extra_assignment_1.html">Extra assignments</a></li><li class="breadcrumb-item"><a href="../data_handling/extra_assignment_1.html">Extra assignment !</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -291,7 +256,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../data_handling/extra_assignment_1.html" class="sidebar-item-text sidebar-link">
+  <a href="../data_handling/extra_assignment_1.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Extra assignment !</span></a>
   </div>
 </li>
@@ -320,7 +285,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../miscellaneous/r_programming_features.html" class="sidebar-item-text sidebar-link active">
+  <a href="../miscellaneous/r_programming_features.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Programming features in R</span></a>
   </div>
 </li>
@@ -342,18 +307,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#objects" id="toc-objects" class="nav-link active" data-scroll-target="#objects">Objects</a></li>
-  <li><a href="#repeating-commands" id="toc-repeating-commands" class="nav-link" data-scroll-target="#repeating-commands">Repeating commands</a></li>
-  <li><a href="#writing-your-own-functions" id="toc-writing-your-own-functions" class="nav-link" data-scroll-target="#writing-your-own-functions">Writing your own functions</a></li>
+  <li><a href="#assignment-a1-schools" id="toc-assignment-a1-schools" class="nav-link active" data-scroll-target="#assignment-a1-schools">Assignment A1: Schools</a></li>
+  <li><a href="#assignment-a2-european-social-survey" id="toc-assignment-a2-european-social-survey" class="nav-link" data-scroll-target="#assignment-a2-european-social-survey">Assignment A2: European Social Survey</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../miscellaneous/ggplot.html">Miscellaneous</a></li><li class="breadcrumb-item"><a href="../miscellaneous/r_programming_features.html">Programming features in R</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../data_handling/extra_assignment_1.html">Extra assignments</a></li><li class="breadcrumb-item"><a href="../data_handling/extra_assignment_1.html">Extra assignment !</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Some programming features in R</h1>
+<h1 class="title">Extra assignment 1</h1>
 </div>
 
 
@@ -370,100 +334,113 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="objects" class="level2">
-<h2 class="anchored" data-anchor-id="objects">Objects</h2>
-<p>Objects allow you to abbreviate commands considerably, making code more readable, and improving consistency. For instance, we can define an object <code>C</code> with a set of variables to be used as controls in a series of models. Using an object ensures you use the same control variables everywhere; changing the controls in all models is accomplished by editing one line of code.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>C <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"sex"</span>, <span class="st">"age"</span>, <span class="st">"married"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-</section>
-<section id="repeating-commands" class="level2">
-<h2 class="anchored" data-anchor-id="repeating-commands">Repeating commands</h2>
-<p>Often, you want to apply the same operation to several variables. You can write out the commands by hand, but this is repetitive and easy to mistype.</p>
-<p>1a. Repeat a variable construction for multiple variables</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">rgood1 =</span> <span class="dv">1</span> <span class="sc">-</span> good1,</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">rgood2 =</span> <span class="dv">1</span> <span class="sc">-</span> good2,</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">rgood3 =</span> <span class="dv">1</span> <span class="sc">-</span> good3,</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">rgood4 =</span> <span class="dv">1</span> <span class="sc">-</span> good4,</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">rgood5 =</span> <span class="dv">1</span> <span class="sc">-</span> good5</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>This works, but it is not very efficient. If you later discover that the transformation should be different, you have to change five lines of code.</p>
-<p>1b. Equivalent, using <code>across()</code></p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">across</span>(</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>      good1<span class="sc">:</span>good5,</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>      <span class="sc">~</span> <span class="dv">1</span> <span class="sc">-</span> .x,</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">.names =</span> <span class="st">"r{.col}"</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>The function <code>across()</code> applies the same operation to several variables. Here, <code>good1:good5</code> selects the variables from <code>good1</code> to <code>good5</code>. The expression <code>~ 1 - .x</code> means: take each selected variable and compute <code>1 - variable</code>. The argument <code>.names = "r{.col}"</code> creates new variable names by adding <code>r</code> before the original variable name.</p>
-<p>1c. Equivalent, selecting variables by name pattern</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">across</span>(</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>      <span class="fu">starts_with</span>(<span class="st">"good"</span>),</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>      <span class="sc">~</span> <span class="dv">1</span> <span class="sc">-</span> .x,</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">.names =</span> <span class="st">"r{.col}"</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>This does the same thing, but selects variables by name. All variables whose names start with good are transformed. This is useful when there are many variables with a shared naming pattern.</p>
-<p>1d. Equivalent, looping over a numerical range</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>) {</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  data[[<span class="fu">paste0</span>(<span class="st">"rgood"</span>, i)]] <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> data[[<span class="fu">paste0</span>(<span class="st">"good"</span>, i)]]</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>This loop repeats the same command for <code>i = 1, 2, 3, 4, 5</code>. The function <code>paste0()</code> creates variable names such as <code>good1</code> and <code>rgood1</code>. This approach is useful, but for data manipulation in the tidyverse, <code>across()</code> is often easier to read.</p>
-<ol start="2" type="1">
-<li></li>
+<section id="assignment-a1-schools" class="level2">
+<h2 class="anchored" data-anchor-id="assignment-a1-schools">Assignment A1: Schools</h2>
+<p>This assignment uses two datasets. The first dataset is <code>dh_pupil.dta</code>. It includes 199 pupils in the highest grade of primary education from 8 elementary schools, with the following variables:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 34%">
+<col style="width: 65%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>varname</th>
+<th>variable label</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>classid</td>
+<td>class identifier</td>
+</tr>
+<tr class="even">
+<td>cbirth</td>
+<td>country of birth: 1 Netherlands, 2 Suriname, 3 Antilles, 4 Morocco, 5 Turkey, 6 Somalia, 7 Iraq, 8 Other western, 9 Other non-western</td>
+</tr>
+<tr class="odd">
+<td>male</td>
+<td>1 = male, 0 = female</td>
+</tr>
+<tr class="even">
+<td>age</td>
+<td>age (in years)</td>
+</tr>
+<tr class="odd">
+<td>fedu</td>
+<td>father’s education; 1 = low, 2 = medium, 3 = high</td>
+</tr>
+<tr class="even">
+<td>medu</td>
+<td>mother’s education; 1 = low, 2 = medium, 3 = high</td>
+</tr>
+</tbody>
+</table>
+<p>The second dataset is <code>dh_teacher.dta</code>. It includes 10 teachers from 10 classes.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>varname</th>
+<th>variable label</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>cid</td>
+<td>class identifier</td>
+</tr>
+<tr class="even">
+<td>cbirth</td>
+<td>country of birth (coded as in dh_pupil)</td>
+</tr>
+<tr class="odd">
+<td>male</td>
+<td>1 = male, 0 = female</td>
+</tr>
+</tbody>
+</table>
+<p>For your convenience, both datasets do not contain missing values, and your syntax may reflect this.</p>
+<ol type="1">
+<li>Recode the variable <code>cbirth</code> (country of birth of pupils) to the new variable <code>ethnicity</code>:</li>
 </ol>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>) {</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  data <span class="sc">|&gt;</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(country <span class="sc">==</span> i) <span class="sc">|&gt;</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">mean_income =</span> <span class="fu">mean</span>(income, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  data <span class="sc">|&gt;</span></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(country <span class="sc">==</span> i) <span class="sc">|&gt;</span></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">count</span>(religion)</span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>This loop repeats two analyses for each value of <code>country</code> from 1 to 5. For each country, it computes the mean income and creates a frequency table of religion. This is useful when you want to run the same checks separately for multiple groups.</p>
+<ul>
+<li>1 = Dutch;</li>
+<li>2 = Former colony: Suriname, Antilles;</li>
+<li>3 = Islamic: Morocco, Turkey, Somalia, Iraq;</li>
+<li>4 = Other: other western and other nonwestern.</li>
+</ul>
+<ol start="2" type="1">
+<li><p>Create appropriate two-way tables from which you can directly read off the percentage of Islamic pupils among the male pupils, and the percentage of female pupils among the Islamic pupils. What are these percentages?</p></li>
+<li><p>Create a new variable <code>pedu</code> representing “the education of the parents” based on the education of the father <code>fedu</code> and of the mother <code>medu</code>, to be interpreted as parental resources. Describe what you would do if parents are of unequal education. There are multiple reasonable ways of dealing with this; explain clearly in your syntax file what <code>pedu</code> measures! Report and interpret the mean of <code>pedu</code>.</p></li>
+<li><p>Create a new dummy variable <code>mhigher</code> representing whether (1) or not (0) the mother’s level of education is at least as high as that of the father.</p></li>
+<li><p>Add a new variable representing the class size (i.e., the number of pupils in the class). Remember that the variable <code>classid</code> identifies pupils belonging to the same class.</p></li>
+<li><p>Add class-level fractions of the ethnic groups. Said otherwise, what percentage of each ethnic group is included within each class?</p></li>
+<li><p>Create a variable representing the fraction of ethnic in-group — the fraction of students with the same ethnicity as the respondent — in the class. Thus, for Dutch pupils, it is the percentage of Dutch pupils in class; for Islamic pupils, it is the percentage of Islamic pupils in the class, etc.</p></li>
+<li><p>Merge in the ethnicity of the teacher (use the recoded scheme in question 1).</p></li>
+<li><p>Generate a variable showing the fraction of pupils with a teacher of the same gender as the pupil. What is this fraction? Generate a variable showing the fraction of pupils with a teacher who is maximally different, i.e., both of different gender and of different ethnicity. What is this fraction?</p></li>
+</ol>
 </section>
-<section id="writing-your-own-functions" class="level2">
-<h2 class="anchored" data-anchor-id="writing-your-own-functions">Writing your own functions</h2>
-<p>If you repeat the same block of code many times, it can be useful to write your own function. A function takes inputs, does something with them, and returns an output.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>rob_regress <span class="ot">&lt;-</span> <span class="cf">function</span>(formula, data) {</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lm</span>(</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">formula =</span> formula,</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> data</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>This function is called <code>rob_regress</code>. It takes two inputs: a model formula and a dataset. Inside the function, <code>lm()</code> estimates a linear regression model.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rob_regress</span>(</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  inc <span class="sc">~</span> edu <span class="sc">+</span> age,</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> data</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>This runs the function with income as the dependent variable and education and age as explanatory variables.</p>
+<section id="assignment-a2-european-social-survey" class="level2">
+<h2 class="anchored" data-anchor-id="assignment-a2-european-social-survey">Assignment A2: European Social Survey</h2>
+<p>We use the European Social Survey (ESS), a bi-annual survey conducted in about 25 European countries since 2008. This assignment uses data for round 8, contained in file <code>ESS8e02.dta</code>.</p>
+<ol type="1">
+<li><p>The datafile is quite large. Restrict your data analyses to one randomly selected country in the dataset. Make sure that your analyses are replicable by setting the seed to the number 987654 (<code>set.seed(987654)</code>).</p></li>
+<li><p>Focus on the full dataset again. Filter it to keep only the respondents from the Netherlands, and continue with this new, smaller dataset for the following questions.</p></li>
+</ol>
+<p>The data contain many different scales. We focus on the construct “Political Trust”, described as follows:</p>
+<blockquote class="blockquote">
+<p>People’s trust in central institutions in a society is important to the state of democracy as well as to the functioning of broader social and economic processes. High levels of political trust signify institutions that function effectively and facilitate social and economic exchange. Trust also reduces the need for control and supervision, which saves money for the government as well as for firms and other actors in the private sector (Listhaug &amp; Ringdal 2008). Political trust can be explained by a combination of individual, cultural and institutional factors. Trust in political institutions is the result of early-life socialization and interpersonal trust, and a consequence of the performance of the institutions themselves (Mishler &amp; Rose 200)</p>
+</blockquote>
+<p>Political Trust is measured with the following 7 items: <code>trstprl</code> <code>trstlgl</code> <code>trstplc</code> <code>trstplt</code> <code>trstprt</code> <code>trstep</code> <code>trstun</code></p>
+<ol type="a">
+<li>Perform a factor analysis by maximum likelihood on these 7 items and determine the number of factors.</li>
+<li>Carry out an oblique (promax) rotation. Which item(s) seem to be unimportant for which factor(s)? Name the factors. What is the correlation between the (rotated) factors?</li>
+<li>Discuss 2 advantages and 2 disadvantages of using a factor analysis.</li>
+<li>Interpret how the items are influenced by the rotated factors. Which matrix in the output should you look at? How does this matrix differ from the matrix printed by default?</li>
+</ol>
+<ol start="3" type="1">
+<li><p>Conduct reliability analyses for the scale consisting of all items, as well as separate scales for all the factors that you identified in the previous question. Are there items you would like to delete from the scale(s)?</p></li>
+<li><p>Generate a new variable with the factor score(s) for the factor(s) you identified in questions 4 and 5, using the regression method.</p></li>
+</ol>
 
 
 </section>
