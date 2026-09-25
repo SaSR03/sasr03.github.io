@@ -1,0 +1,73 @@
+---
+title: "Extra assignment 1"
+
+---
+
+## Assignment A1: Schools 
+
+This assignment uses two datasets. The first dataset is `dh_pupil.dta`. It includes 199 pupils in the highest grade of primary education from 8 elementary schools, with the following variables:
+
+| varname | variable label |
+|---------|-----------------|
+| classid | class identifier |
+| cbirth  | country of birth: 1 Netherlands, 2 Suriname, 3 Antilles, 4 Morocco, 5 Turkey, 6 Somalia, 7 Iraq, 8 Other western, 9 Other non-western |
+| male    | 1 = male, 0 = female |
+| age     | age (in years) |
+| fedu    | father's education; 1 = low, 2 = medium, 3 = high |
+| medu    | mother's education; 1 = low, 2 = medium, 3 = high |
+
+The second dataset is `dh_teacher.dta`. It includes 10 teachers from 10 classes.
+
+| varname | variable label                            |
+|---------|-------------------------------------------|
+| cid     | class identifier                          |
+| cbirth  | country of birth (coded as in dh_pupil)   |
+| male    | 1 = male, 0 = female                      |
+
+For your convenience, both datasets do not contain missing values, and your syntax may reflect this.
+
+1. Recode the variable `cbirth` (country of birth of pupils) to the new variable `ethnicity`: 
+  - 1 = Dutch; 
+  - 2 = Former colony: Suriname, Antilles; 
+  - 3 = Islamic: Morocco, Turkey, Somalia, Iraq; 
+  - 4 = Other: other western and other nonwestern. 
+
+2. Create appropriate two-way tables from which you can directly read off the percentage of Islamic pupils among the male pupils, and the percentage of female pupils among the Islamic pupils. What are these percentages?
+
+3. Create a new variable `pedu` representing "the education of the parents" based on the education of the father `fedu` and of the mother `medu`, to be interpreted as parental resources. Describe what you would do if parents are of unequal education. There are multiple reasonable ways of dealing with this; explain clearly in your syntax file what `pedu` measures! Report and interpret the mean of `pedu`. 
+
+4. Create a new dummy variable `mhigher` representing whether (1) or not (0) the mother's level of education is at least as high as that of the father. 
+
+5. Add a new variable representing the class size (i.e., the number of pupils in the class). Remember that the variable `classid` identifies pupils belonging to the same class. 
+
+6. Add class-level fractions of the ethnic groups. Said otherwise, what percentage of each ethnic group is included within each class? 
+
+7. Create a variable representing the fraction of ethnic in-group — the fraction of students with the same ethnicity as the respondent — in the class. Thus, for Dutch pupils, it is the percentage of Dutch pupils in class; for Islamic pupils, it is the percentage of Islamic pupils in the class, etc. 
+
+8. Merge in the ethnicity of the teacher (use the recoded scheme in question 1). 
+
+9. Generate a variable showing the fraction of pupils with a teacher of the same gender as the pupil. What is this fraction? Generate a variable showing the fraction of pupils with a teacher who is maximally different, i.e., both of different gender and of different ethnicity. What is this fraction? 
+
+
+## Assignment A2: European Social Survey 
+
+We use the European Social Survey (ESS), a bi-annual survey conducted in about 25 European countries since 2008. This assignment uses data for round 8, contained in file `ESS8e02.dta`.
+
+1. The datafile is quite large. Restrict your data analyses to one randomly selected country in the dataset. Make sure that your analyses are replicable by setting the seed to the number 987654 (`set.seed(987654)`).
+
+2. Focus on the full dataset again. Filter it to keep only the respondents from the Netherlands, and continue with this new, smaller dataset for the following questions. 
+
+The data contain many different scales. We focus on the construct "Political Trust", described as follows:
+
+> People's trust in central institutions in a society is important to the state of democracy as well as to the functioning of broader social and economic processes. High levels of political trust signify institutions that function effectively and facilitate social and economic exchange. Trust also reduces the need for control and supervision, which saves money for the government as well as for firms and other actors in the private sector (Listhaug & Ringdal 2008). Political trust can be explained by a combination of individual, cultural and institutional factors. Trust in political institutions is the result of early-life socialization and interpersonal trust, and a consequence of the performance of the institutions themselves (Mishler & Rose 200)
+
+Political Trust is measured with the following 7 items: `trstprl` `trstlgl` `trstplc` `trstplt` `trstprt` `trstep` `trstun`
+
+a. Perform a factor analysis by maximum likelihood on these 7 items and determine the number of factors.
+b. Carry out an oblique (promax) rotation. Which item(s) seem to be unimportant for which factor(s)? Name the factors. What is the correlation between the (rotated) factors? 
+c. Discuss 2 advantages and 2 disadvantages of using a factor analysis. 
+d. Interpret how the items are influenced by the rotated factors. Which matrix in the output should you look at? How does this matrix differ from the matrix printed by default?
+
+3. Conduct reliability analyses for the scale consisting of all items, as well as separate scales for all the factors that you identified in the previous question. Are there items you would like to delete from the scale(s)? 
+
+5. Generate a new variable with the factor score(s) for the factor(s) you identified in questions 4 and 5, using the regression method. 

@@ -47,6 +47,10 @@ website:
             href: modelling/ordinal_regression.qmd
           - text: "Event history analysis"
             href: modelling/eha.qmd
+      - section: "Extra assignments"
+        contents:
+          - text: "Extra assignment !"
+            href: data_handling\extra_assignment_1.qmd
       - section: "Miscellaneous"
         contents:
           - text: "Data Visualization with ggplot2"
