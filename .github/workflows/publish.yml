@@ -36,11 +36,11 @@ jobs:
             any::emmeans
             any::sandwich
             any::skimr
-            any::visdat
             any::survminer
             any::psych
             any::labelled
             any::parameters
+            any::modelsummary
 
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2
