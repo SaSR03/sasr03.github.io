@@ -230,7 +230,7 @@ The null hypothesis of no relation between peabody and postnumb is rejected. Not
 
 ```{r}
 fit_sex <- lm(postnumb ~ sex, data = sesam)
-summary(fit_female)
+summary(fit_sex)
 ```
 
 Difference is 0.02, not significant. There is no evidence that the average postnumb scores for boys and girls differ. 
