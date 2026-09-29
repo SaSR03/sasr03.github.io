@@ -82,7 +82,7 @@ modelsummary(list(fit1, fit2, fit3, fit4), stars = TRUE)
 
 # Tip: modelsummary allows for a lot of customization
 # If you want to show the p.value in the table, use:
-# modelsummary(list(fit1, fit2, fit3, fit4), stars = TRUE, statistic = c("std.error", "p.value"))W
+# modelsummary(list(fit1, fit2, fit3, fit4), stars = TRUE, statistic = c("std.error", "p.value"))
 ```
 
 Coefficients, standard errors, and R-squared are (essentially) identical
