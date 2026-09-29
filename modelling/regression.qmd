@@ -78,8 +78,11 @@ fit2 <- lm(y2 ~ x2, data = anscombe)
 fit3 <- lm(y3 ~ x3, data = anscombe)
 fit4 <- lm(y4 ~ x4, data = anscombe)
 
-modelsummary(list(fit1, fit2, fit3, fit4))
+modelsummary(list(fit1, fit2, fit3, fit4), stars = TRUE)
 
+# Tip: modelsummary allows for a lot of customization
+# If you want to show the p.value in the table, use:
+# modelsummary(list(fit1, fit2, fit3, fit4), stars = TRUE, statistic = c("std.error", "p.value"))W
 ```
 
 Coefficients, standard errors, and R-squared are (essentially) identical
@@ -111,7 +114,7 @@ anscombe |>
 
 ```
 
-The actual data patterns as quite different!
+The actual data patterns are quite different!
 
 
 ### Crime and poverty
