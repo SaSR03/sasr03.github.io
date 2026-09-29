@@ -158,7 +158,7 @@ fit_crime_no_dc <- lm(murder ~ poverty, data = state_crime |> filter(state != "D
 summary(fit_crime_no_dc)
 
 # The two models side by side
-modelsummary(list(fit_crime, fit_crime_no_dc))
+modelsummary(list(fit_crime, fit_crime_no_dc), stars = TRUE)
 
 # E(murder) = -0.86 + 0.58 poverty        (SE = 0.10)
 ```
