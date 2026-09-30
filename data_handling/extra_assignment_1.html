@@ -26,6 +26,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -309,6 +344,7 @@ ul.task-list li input[type="checkbox"] {
   <ul>
   <li><a href="#assignment-a1-schools" id="toc-assignment-a1-schools" class="nav-link active" data-scroll-target="#assignment-a1-schools">Assignment A1: Schools</a></li>
   <li><a href="#assignment-a2-european-social-survey" id="toc-assignment-a2-european-social-survey" class="nav-link" data-scroll-target="#assignment-a2-european-social-survey">Assignment A2: European Social Survey</a></li>
+  <li><a href="#answers" id="toc-answers" class="nav-link" data-scroll-target="#answers">Answers</a></li>
   </ul>
 </nav>
     </div>
@@ -416,7 +452,7 @@ ul.task-list li input[type="checkbox"] {
 <li><p>Add class-level fractions of the ethnic groups. Said otherwise, what percentage of each ethnic group is included within each class?</p></li>
 <li><p>Create a variable representing the fraction of ethnic in-group — the fraction of students with the same ethnicity as the respondent — in the class. Thus, for Dutch pupils, it is the percentage of Dutch pupils in class; for Islamic pupils, it is the percentage of Islamic pupils in the class, etc.</p></li>
 <li><p>Merge in the ethnicity of the teacher (use the recoded scheme in question 1).</p></li>
-<li><p>Generate a variable showing the fraction of pupils with a teacher of the same gender as the pupil. What is this fraction? Generate a variable showing the fraction of pupils with a teacher who is maximally different, i.e., both of different gender and of different ethnicity. What is this fraction?</p></li>
+<li><p>Compute the fraction of pupils with a teacher of the same gender as the pupil. What is this fraction? Compute thefraction of pupils with a teacher who is maximally different, i.e., both of different gender and of different ethnicity. What is this fraction?</p></li>
 </ol>
 </section>
 <section id="assignment-a2-european-social-survey" class="level2">
@@ -432,6 +468,7 @@ ul.task-list li input[type="checkbox"] {
 </blockquote>
 <p>Political Trust is measured with the following 7 items: <code>trstprl</code> <code>trstlgl</code> <code>trstplc</code> <code>trstplt</code> <code>trstprt</code> <code>trstep</code> <code>trstun</code></p>
 <ol type="a">
+<li>The valid responses in these items range from 0 (No trust at all) to 10 (Complete trust). Check if other values are present and handle them as needed.</li>
 <li>Perform a factor analysis by maximum likelihood on these 7 items and determine the number of factors.</li>
 <li>Carry out an oblique (promax) rotation. Which item(s) seem to be unimportant for which factor(s)? Name the factors. What is the correlation between the (rotated) factors?</li>
 <li>Discuss 2 advantages and 2 disadvantages of using a factor analysis.</li>
@@ -439,8 +476,1680 @@ ul.task-list li input[type="checkbox"] {
 </ol>
 <ol start="3" type="1">
 <li><p>Conduct reliability analyses for the scale consisting of all items, as well as separate scales for all the factors that you identified in the previous question. Are there items you would like to delete from the scale(s)?</p></li>
-<li><p>Generate a new variable with the factor score(s) for the factor(s) you identified in questions 4 and 5, using the regression method.</p></li>
+<li><p>Generate a new variable with the factor score(s) for the factor(s) you identified before, using the regression method.</p></li>
 </ol>
+</section>
+<section id="answers" class="level2">
+<h2 class="anchored" data-anchor-id="answers">Answers</h2>
+<div class="callout callout-style-simple callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>See answers
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<section id="assignment-a1-schools-1" class="level2">
+<h2 class="anchored" data-anchor-id="assignment-a1-schools-1">Assignment A1: Schools</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.2.1     ✔ readr     2.2.0
+✔ forcats   1.0.1     ✔ stringr   1.6.0
+✔ ggplot2   4.0.3     ✔ tibble    3.3.1
+✔ lubridate 1.9.5     ✔ tidyr     1.3.2
+✔ purrr     1.2.2     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(labelled)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(janitor)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'janitor'
+
+The following objects are masked from 'package:stats':
+
+    chisq.test, fisher.test</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(skimr)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>pupil <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(<span class="st">"data/dh_pupil.dta"</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>teacher <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(<span class="st">"data/dh_teacher.dta"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Inspect both datasets before starting.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(pupil)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 199
+Columns: 6
+$ classid &lt;dbl&gt; 7, 9, 13, 11, 11, 5, 3, 13, 9, 5, 3, 3, 9, 11, 17, 9, 7, 3, 3,…
+$ cbirth  &lt;dbl+lbl&gt; 6, 1, 4, 5, 9, 4, 3, 4, 8, 2, 3, 1, 1, 1, 4, 2, 6, 5, 5, 9…
+$ male    &lt;dbl&gt; 0, 1, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0,…
+$ age     &lt;dbl&gt; 12, 12, 12, 11, 11, 11, 11, 11, 12, 11, 11, 12, 12, 11, 11, 11…
+$ fedu    &lt;dbl+lbl&gt; 3, 3, 2, 3, 3, 1, 2, 3, 2, 3, 1, 3, 2, 1, 1, 1, 2, 3, 3, 3…
+$ medu    &lt;dbl+lbl&gt; 3, 2, 2, 2, 1, 3, 1, 2, 3, 2, 2, 1, 3, 3, 1, 2, 1, 2, 1, 1…</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(teacher)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 10
+Columns: 3
+$ cid    &lt;dbl&gt; 3, 5, 7, 9, 11, 13, 15, 17, 19, 21
+$ cbirth &lt;dbl+lbl&gt; 3, 6, 9, 7, 2, 2, 9, 3, 8, 5
+$ male   &lt;dbl&gt; 1, 1, 1, 1, 1, 0, 0, 1, 1, 0</code></pre>
+</div>
+</div>
+<section id="recoding-cbirth-into-ethnicity" class="level3">
+<h3 class="anchored" data-anchor-id="recoding-cbirth-into-ethnicity">1. Recoding <code>cbirth</code> into <code>ethnicity</code></h3>
+<p>Check the categories of <code>cbirth</code> before recoding.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>pupil <span class="sc">|&gt;</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tabyl</span>(cbirth)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> cbirth  n    percent
+      1 22 0.11055276
+      2 26 0.13065327
+      3 24 0.12060302
+      4 26 0.13065327
+      5 20 0.10050251
+      6 20 0.10050251
+      7 19 0.09547739
+      8 19 0.09547739
+      9 23 0.11557789</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print_labels</span>(pupil<span class="sc">$</span>cbirth)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Labels:
+ value             label
+     1       netherlands
+     2          suriname
+     3          antilles
+     4           marocco
+     5            turkey
+     6           somalia
+     7              iraq
+     8     other western
+     9 other non-western
+    10   extraterrestial</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>pupil <span class="ot">&lt;-</span> pupil <span class="sc">|&gt;</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">ethnicity =</span> <span class="fu">recode_values</span>(</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>      cbirth,</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>      <span class="dv">1</span>       <span class="sc">~</span> <span class="dv">1</span>,</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>      <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">3</span>) <span class="sc">~</span> <span class="dv">2</span>,</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>      <span class="dv">4</span><span class="sc">:</span><span class="dv">7</span>     <span class="sc">~</span> <span class="dv">3</span>,</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>      <span class="fu">c</span>(<span class="dv">8</span>, <span class="dv">9</span>) <span class="sc">~</span> <span class="dv">4</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Optional: convert to factor</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">ethnicity =</span> <span class="fu">factor</span>(</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>      ethnicity,</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>      <span class="at">levels =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>,</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>      <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Dutch"</span>, <span class="st">"Former colony"</span>, <span class="st">"Islamic"</span>, <span class="st">"Other"</span>)</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>pupil <span class="sc">|&gt;</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tabyl</span>(ethnicity)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     ethnicity  n   percent
+         Dutch 22 0.1105528
+ Former colony 50 0.2512563
+       Islamic 85 0.4271357
+         Other 42 0.2110553</code></pre>
+</div>
+</div>
+</section>
+<section id="two-way-tables" class="level3">
+<h3 class="anchored" data-anchor-id="two-way-tables">2. Two-way tables</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>tab_gender_eth <span class="ot">&lt;-</span> pupil <span class="sc">|&gt;</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tabyl</span>(male, ethnicity)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>tab_gender_eth</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> male Dutch Former colony Islamic Other
+    0    15            25      49    17
+    1     7            25      36    25</code></pre>
+</div>
+</div>
+<p>Row percentages give the ethnic composition within each gender, column percentages give the gender composition within each ethnic group.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>tab_gender_eth <span class="sc">|&gt;</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">adorn_percentages</span>(<span class="st">"row"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">adorn_pct_formatting</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> male Dutch Former colony Islamic Other
+    0 14.2%         23.6%   46.2% 16.0%
+    1  7.5%         26.9%   38.7% 26.9%</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>tab_gender_eth <span class="sc">|&gt;</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">adorn_percentages</span>(<span class="st">"col"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">adorn_pct_formatting</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> male Dutch Former colony Islamic Other
+    0 68.2%         50.0%   57.6% 40.5%
+    1 31.8%         50.0%   42.4% 59.5%</code></pre>
+</div>
+</div>
+</section>
+<section id="parental-education-resources-pedu" class="level3">
+<h3 class="anchored" data-anchor-id="parental-education-resources-pedu">3. Parental education resources (<code>pedu</code>)</h3>
+<p>One possibility is to use th maximum of <code>fedu</code> and <code>medu</code>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>pupil <span class="ot">&lt;-</span> pupil <span class="sc">|&gt;</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">pedu =</span> <span class="fu">pmax</span>(fedu, medu, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>pupil <span class="sc">|&gt;</span></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">skim</span>(pedu)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Data summary</caption>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Name</td>
+<td style="text-align: left;">pupil</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Number of rows</td>
+<td style="text-align: left;">199</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Number of columns</td>
+<td style="text-align: left;">8</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">_______________________</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Column type frequency:</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">numeric</td>
+<td style="text-align: left;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">________________________</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Group variables</td>
+<td style="text-align: left;">None</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: numeric</strong></p>
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 18%">
+<col style="width: 13%">
+<col style="width: 18%">
+<col style="width: 6%">
+<col style="width: 6%">
+<col style="width: 4%">
+<col style="width: 5%">
+<col style="width: 5%">
+<col style="width: 5%">
+<col style="width: 6%">
+<col style="width: 8%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">skim_variable</th>
+<th style="text-align: right;">n_missing</th>
+<th style="text-align: right;">complete_rate</th>
+<th style="text-align: right;">mean</th>
+<th style="text-align: right;">sd</th>
+<th style="text-align: right;">p0</th>
+<th style="text-align: right;">p25</th>
+<th style="text-align: right;">p50</th>
+<th style="text-align: right;">p75</th>
+<th style="text-align: right;">p100</th>
+<th style="text-align: left;">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">pedu</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2.52</td>
+<td style="text-align: right;">0.63</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: left;">▁▁▅▁▇</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>An alternative would be the mean of <code>fedu</code> and <code>medu</code>:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>pupil <span class="ot">&lt;-</span> pupil <span class="sc">|&gt;</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">pedu_mean =</span> <span class="fu">rowMeans</span>(<span class="fu">pick</span>(fedu, medu), <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>pupil <span class="sc">|&gt;</span></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">skim</span>(pedu_mean)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Data summary</caption>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Name</td>
+<td style="text-align: left;">pupil</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Number of rows</td>
+<td style="text-align: left;">199</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Number of columns</td>
+<td style="text-align: left;">9</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">_______________________</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Column type frequency:</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">numeric</td>
+<td style="text-align: left;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">________________________</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Group variables</td>
+<td style="text-align: left;">None</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: numeric</strong></p>
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 18%">
+<col style="width: 13%">
+<col style="width: 18%">
+<col style="width: 6%">
+<col style="width: 6%">
+<col style="width: 4%">
+<col style="width: 5%">
+<col style="width: 5%">
+<col style="width: 5%">
+<col style="width: 6%">
+<col style="width: 8%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">skim_variable</th>
+<th style="text-align: right;">n_missing</th>
+<th style="text-align: right;">complete_rate</th>
+<th style="text-align: right;">mean</th>
+<th style="text-align: right;">sd</th>
+<th style="text-align: right;">p0</th>
+<th style="text-align: right;">p25</th>
+<th style="text-align: right;">p50</th>
+<th style="text-align: right;">p75</th>
+<th style="text-align: right;">p100</th>
+<th style="text-align: left;">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">pedu_mean</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2.06</td>
+<td style="text-align: right;">0.55</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1.5</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">2.5</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: left;">▂▆▇▇▂</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="mhigher-mother-at-least-as-educated-as-father" class="level3">
+<h3 class="anchored" data-anchor-id="mhigher-mother-at-least-as-educated-as-father">4. <code>mhigher</code>: mother at least as educated as father</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>pupil <span class="ot">&lt;-</span> pupil <span class="sc">|&gt;</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">mhigher =</span> <span class="fu">if_else</span>(medu <span class="sc">&gt;=</span> fedu, <span class="dv">1</span>, <span class="dv">0</span>)</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Also ok (logical dummy):</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a><span class="co"># mhigher = medu &gt;= fedu</span></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>pupil <span class="sc">|&gt;</span></span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tabyl</span>(mhigher)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> mhigher   n   percent
+       0  63 0.3165829
+       1 136 0.6834171</code></pre>
+</div>
+</div>
+</section>
+<section id="class-size" class="level3">
+<h3 class="anchored" data-anchor-id="class-size">5. Class size</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>pupil <span class="ot">&lt;-</span> pupil <span class="sc">|&gt;</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">n_class =</span> <span class="fu">n</span>(),</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">.by =</span> classid</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>pupil <span class="sc">|&gt;</span></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tabyl</span>(n_class) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> n_class  n    percent
+      17 17 0.08542714
+      18 18 0.09045226
+      23 23 0.11557789
+      24 24 0.12060302
+      25 25 0.12562814
+      28 28 0.14070352
+      29 29 0.14572864
+      35 35 0.17587940</code></pre>
+</div>
+</div>
+<p>Class sizes range from 17 (class 7) to 35 (class 9).</p>
+</section>
+<section id="class-level-ethnic-fractions" class="level3">
+<h3 class="anchored" data-anchor-id="class-level-ethnic-fractions">6. Class-level ethnic fractions</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>pupil <span class="ot">&lt;-</span> pupil <span class="sc">|&gt;</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">pc_dutch =</span> <span class="dv">100</span> <span class="sc">*</span> <span class="fu">mean</span>(ethnicity <span class="sc">==</span> <span class="st">"Dutch"</span>),</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">pc_colony =</span> <span class="dv">100</span> <span class="sc">*</span> <span class="fu">mean</span>(ethnicity <span class="sc">==</span> <span class="st">"Former colony"</span>),</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">pc_islamic =</span> <span class="dv">100</span> <span class="sc">*</span> <span class="fu">mean</span>(ethnicity <span class="sc">==</span> <span class="st">"Islamic"</span>),</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">pc_other =</span> <span class="dv">100</span> <span class="sc">*</span> <span class="fu">mean</span>(ethnicity <span class="sc">==</span> <span class="st">"Other"</span>),</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">.by =</span> classid</span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>pupil <span class="sc">|&gt;</span></span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">skim</span>(<span class="fu">starts_with</span>(<span class="st">"pc_"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Data summary</caption>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Name</td>
+<td style="text-align: left;">pupil</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Number of rows</td>
+<td style="text-align: left;">199</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Number of columns</td>
+<td style="text-align: left;">15</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">_______________________</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Column type frequency:</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">numeric</td>
+<td style="text-align: left;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">________________________</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Group variables</td>
+<td style="text-align: left;">None</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: numeric</strong></p>
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 16%">
+<col style="width: 11%">
+<col style="width: 16%">
+<col style="width: 6%">
+<col style="width: 6%">
+<col style="width: 6%">
+<col style="width: 6%">
+<col style="width: 6%">
+<col style="width: 6%">
+<col style="width: 6%">
+<col style="width: 6%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">skim_variable</th>
+<th style="text-align: right;">n_missing</th>
+<th style="text-align: right;">complete_rate</th>
+<th style="text-align: right;">mean</th>
+<th style="text-align: right;">sd</th>
+<th style="text-align: right;">p0</th>
+<th style="text-align: right;">p25</th>
+<th style="text-align: right;">p50</th>
+<th style="text-align: right;">p75</th>
+<th style="text-align: right;">p100</th>
+<th style="text-align: left;">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">pc_dutch</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">11.06</td>
+<td style="text-align: right;">5.19</td>
+<td style="text-align: right;">5.88</td>
+<td style="text-align: right;">7.14</td>
+<td style="text-align: right;">8.70</td>
+<td style="text-align: right;">17.14</td>
+<td style="text-align: right;">20.83</td>
+<td style="text-align: left;">▇▁▁▂▂</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">pc_colony</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">25.13</td>
+<td style="text-align: right;">7.45</td>
+<td style="text-align: right;">16.67</td>
+<td style="text-align: right;">20.83</td>
+<td style="text-align: right;">22.86</td>
+<td style="text-align: right;">28.00</td>
+<td style="text-align: right;">41.38</td>
+<td style="text-align: left;">▆▇▂▁▃</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">pc_islamic</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">42.71</td>
+<td style="text-align: right;">8.50</td>
+<td style="text-align: right;">34.29</td>
+<td style="text-align: right;">36.00</td>
+<td style="text-align: right;">38.89</td>
+<td style="text-align: right;">53.57</td>
+<td style="text-align: right;">58.33</td>
+<td style="text-align: left;">▇▂▁▁▃</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">pc_other</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">21.11</td>
+<td style="text-align: right;">10.38</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">13.79</td>
+<td style="text-align: right;">25.71</td>
+<td style="text-align: right;">29.41</td>
+<td style="text-align: right;">33.33</td>
+<td style="text-align: left;">▂▁▆▃▇</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Note that the averages reported above correspond to the ethnic fractions experienced, on average,by pupils. In other words, the fractions are computed at the class level, but then averaged at the pupil level.</p>
+</section>
+<section id="fraction-of-ethnic-in-group" class="level3">
+<h3 class="anchored" data-anchor-id="fraction-of-ethnic-in-group">7. Fraction of ethnic in-group</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>pupil <span class="ot">&lt;-</span> pupil <span class="sc">|&gt;</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">pc_ingroup =</span> <span class="fu">case_when</span>(</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>      ethnicity <span class="sc">==</span> <span class="st">"Dutch"</span> <span class="sc">~</span> pc_dutch,</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>      ethnicity <span class="sc">==</span> <span class="st">"Former colony"</span> <span class="sc">~</span> pc_colony,</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>      ethnicity <span class="sc">==</span> <span class="st">"Islamic"</span> <span class="sc">~</span> pc_islamic,</span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>      ethnicity <span class="sc">==</span> <span class="st">"Other"</span> <span class="sc">~</span> pc_other</span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>pupil <span class="sc">|&gt;</span></span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">skim</span>(pc_ingroup)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Data summary</caption>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Name</td>
+<td style="text-align: left;">pupil</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Number of rows</td>
+<td style="text-align: left;">199</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Number of columns</td>
+<td style="text-align: left;">16</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">_______________________</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Column type frequency:</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">numeric</td>
+<td style="text-align: left;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">________________________</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Group variables</td>
+<td style="text-align: left;">None</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: numeric</strong></p>
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 16%">
+<col style="width: 11%">
+<col style="width: 16%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 5%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">skim_variable</th>
+<th style="text-align: right;">n_missing</th>
+<th style="text-align: right;">complete_rate</th>
+<th style="text-align: right;">mean</th>
+<th style="text-align: right;">sd</th>
+<th style="text-align: right;">p0</th>
+<th style="text-align: right;">p25</th>
+<th style="text-align: right;">p50</th>
+<th style="text-align: right;">p75</th>
+<th style="text-align: right;">p100</th>
+<th style="text-align: left;">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">pc_ingroup</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">32.85</td>
+<td style="text-align: right;">13.44</td>
+<td style="text-align: right;">5.88</td>
+<td style="text-align: right;">22.86</td>
+<td style="text-align: right;">33.33</td>
+<td style="text-align: right;">39.13</td>
+<td style="text-align: right;">58.33</td>
+<td style="text-align: left;">▃▇▇▇▅</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>On average, 32.8% of a pupil’s classmates share their own ethnicity.</p>
+</section>
+<section id="merging-in-the-teachers-ethnicity" class="level3">
+<h3 class="anchored" data-anchor-id="merging-in-the-teachers-ethnicity">8. Merging in the teacher’s ethnicity</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>teacher <span class="ot">&lt;-</span> teacher <span class="sc">|&gt;</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">ethnicity_teacher =</span> <span class="fu">recode_values</span>(</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>      cbirth,</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>      <span class="dv">1</span>       <span class="sc">~</span> <span class="dv">1</span>,</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>      <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">3</span>) <span class="sc">~</span> <span class="dv">2</span>,</span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>      <span class="dv">4</span><span class="sc">:</span><span class="dv">7</span>     <span class="sc">~</span> <span class="dv">3</span>,</span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>      <span class="fu">c</span>(<span class="dv">8</span>, <span class="dv">9</span>) <span class="sc">~</span> <span class="dv">4</span></span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">ethnicity_teacher =</span> <span class="fu">factor</span>(</span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>      ethnicity_teacher,</span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a>      <span class="at">levels =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>,</span>
+<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a>      <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Dutch"</span>, <span class="st">"Former colony"</span>, <span class="st">"Islamic"</span>, <span class="st">"Other"</span>)</span>
+<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a>pupil <span class="ot">&lt;-</span> pupil <span class="sc">|&gt;</span></span>
+<span id="cb31-18"><a href="#cb31-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(</span>
+<span id="cb31-19"><a href="#cb31-19" aria-hidden="true" tabindex="-1"></a>    teacher <span class="sc">|&gt;</span></span>
+<span id="cb31-20"><a href="#cb31-20" aria-hidden="true" tabindex="-1"></a>      <span class="fu">select</span>(<span class="at">classid =</span> cid, ethnicity_teacher, <span class="at">male_teacher =</span> male),</span>
+<span id="cb31-21"><a href="#cb31-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">by =</span> <span class="st">"classid"</span></span>
+<span id="cb31-22"><a href="#cb31-22" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb31-23"><a href="#cb31-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-24"><a href="#cb31-24" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(pupil)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 199
+Columns: 18
+$ classid           &lt;dbl&gt; 7, 9, 13, 11, 11, 5, 3, 13, 9, 5, 3, 3, 9, 11, 17, 9…
+$ cbirth            &lt;dbl+lbl&gt; 6, 1, 4, 5, 9, 4, 3, 4, 8, 2, 3, 1, 1, 1, 4, 2, …
+$ male              &lt;dbl&gt; 0, 1, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1, 0…
+$ age               &lt;dbl&gt; 12, 12, 12, 11, 11, 11, 11, 11, 12, 11, 11, 12, 12, …
+$ fedu              &lt;dbl+lbl&gt; 3, 3, 2, 3, 3, 1, 2, 3, 2, 3, 1, 3, 2, 1, 1, 1, …
+$ medu              &lt;dbl+lbl&gt; 3, 2, 2, 2, 1, 3, 1, 2, 3, 2, 2, 1, 3, 3, 1, 2, …
+$ ethnicity         &lt;fct&gt; Islamic, Dutch, Islamic, Islamic, Other, Islamic, Fo…
+$ pedu              &lt;dbl+lbl&gt; 3, 3, 2, 3, 3, 3, 2, 3, 3, 3, 2, 3, 3, 3, 1, 2, …
+$ pedu_mean         &lt;dbl&gt; 3.0, 2.5, 2.0, 2.5, 2.0, 2.0, 1.5, 2.5, 2.5, 2.5, 1.…
+$ mhigher           &lt;dbl&gt; 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 0…
+$ n_class           &lt;int&gt; 17, 35, 24, 18, 18, 23, 28, 24, 35, 23, 28, 28, 35, …
+$ pc_dutch          &lt;dbl&gt; 5.882353, 17.142857, 20.833333, 11.111111, 11.111111…
+$ pc_colony         &lt;dbl&gt; 17.64706, 22.85714, 20.83333, 16.66667, 16.66667, 21…
+$ pc_islamic        &lt;dbl&gt; 47.05882, 34.28571, 58.33333, 38.88889, 38.88889, 39…
+$ pc_other          &lt;dbl&gt; 29.41176, 25.71429, 0.00000, 33.33333, 33.33333, 30.…
+$ pc_ingroup        &lt;dbl&gt; 47.058824, 17.142857, 58.333333, 38.888889, 33.33333…
+$ ethnicity_teacher &lt;fct&gt; Other, Islamic, Former colony, Former colony, Former…
+$ male_teacher      &lt;dbl&gt; 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…</code></pre>
+</div>
+</div>
+</section>
+<section id="fractions-of-same-gender-and-maximally-different-teachers" class="level3">
+<h3 class="anchored" data-anchor-id="fractions-of-same-gender-and-maximally-different-teachers">9. Fractions of same-gender and maximally-different teachers</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>pupil <span class="ot">&lt;-</span> pupil <span class="sc">|&gt;</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">same_gender_teacher =</span> (male <span class="sc">==</span> male_teacher),</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">max_diff_teacher =</span> (male <span class="sc">!=</span> male_teacher) <span class="sc">&amp;</span> (ethnicity <span class="sc">!=</span> ethnicity_teacher)</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>pupil <span class="sc">|&gt;</span></span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">skim</span>(same_gender_teacher, max_diff_teacher)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Data summary</caption>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Name</td>
+<td style="text-align: left;">pupil</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Number of rows</td>
+<td style="text-align: left;">199</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Number of columns</td>
+<td style="text-align: left;">20</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">_______________________</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Column type frequency:</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">logical</td>
+<td style="text-align: left;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">________________________</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Group variables</td>
+<td style="text-align: left;">None</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: logical</strong></p>
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 29%">
+<col style="width: 14%">
+<col style="width: 20%">
+<col style="width: 7%">
+<col style="width: 26%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">skim_variable</th>
+<th style="text-align: right;">n_missing</th>
+<th style="text-align: right;">complete_rate</th>
+<th style="text-align: right;">mean</th>
+<th style="text-align: left;">count</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">same_gender_teacher</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.49</td>
+<td style="text-align: left;">FAL: 101, TRU: 98</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">max_diff_teacher</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.33</td>
+<td style="text-align: left;">FAL: 133, TRU: 66</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>49.2% of pupils have a teacher of the same gender, and 33.2% of pupils have a teacher who is both a different gender and a different ethnicity.</p>
+</section>
+</section>
+<section id="assignment-a2-european-social-survey-1" class="level2">
+<h2 class="anchored" data-anchor-id="assignment-a2-european-social-survey-1">Assignment A2: European Social Survey</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(psych)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'psych'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:ggplot2':
+
+    %+%, alpha</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>ess <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(<span class="st">"data/ESS8e02.dta"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<section id="replicable-country-selection" class="level3">
+<h3 class="anchored" data-anchor-id="replicable-country-selection">1. Replicable country selection</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">987654</span>)</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>countries <span class="ot">&lt;-</span> <span class="fu">unique</span>(ess<span class="sc">$</span>cntry)</span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>selected_country <span class="ot">&lt;-</span> <span class="fu">sample</span>(countries, <span class="dv">1</span>)</span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>selected_country</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "SE"</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>ess_sample <span class="ot">&lt;-</span> ess <span class="sc">|&gt;</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(cntry <span class="sc">==</span> selected_country)</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(ess_sample)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1551</code></pre>
+</div>
+</div>
+<p>With <code>set.seed(987654)</code>, <code>sample()</code> always draws <code>cntry == "SE"</code> (Sweden); the resulting sample has 1,551 respondents. A different seed value would select a different country; the point of <code>set.seed()</code> is only that the same seed always reproduces the same draw.</p>
+</section>
+<section id="restricting-to-the-netherlands-and-factor-analysis" class="level3">
+<h3 class="anchored" data-anchor-id="restricting-to-the-netherlands-and-factor-analysis">2. Restricting to the Netherlands and factor analysis</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>ess_nl <span class="ot">&lt;-</span> ess <span class="sc">|&gt;</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(cntry <span class="sc">==</span> <span class="st">"NL"</span>)</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(ess_nl)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1681</code></pre>
+</div>
+</div>
+<p>We will focus on the 7 political trust items.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>trust_vars <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"trstprl"</span>, <span class="st">"trstlgl"</span>, <span class="st">"trstplc"</span>, <span class="st">"trstplt"</span>, <span class="st">"trstprt"</span>, <span class="st">"trstep"</span>, <span class="st">"trstun"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Check values:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>ess_nl <span class="sc">|&gt;</span> </span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">skim</span>(<span class="fu">all_of</span>(trust_vars))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Data summary</caption>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Name</td>
+<td style="text-align: left;">ess_nl</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Number of rows</td>
+<td style="text-align: left;">1681</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Number of columns</td>
+<td style="text-align: left;">536</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">_______________________</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Column type frequency:</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">numeric</td>
+<td style="text-align: left;">7</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">________________________</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Group variables</td>
+<td style="text-align: left;">None</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: numeric</strong></p>
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 18%">
+<col style="width: 13%">
+<col style="width: 18%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 3%">
+<col style="width: 5%">
+<col style="width: 5%">
+<col style="width: 5%">
+<col style="width: 6%">
+<col style="width: 7%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">skim_variable</th>
+<th style="text-align: right;">n_missing</th>
+<th style="text-align: right;">complete_rate</th>
+<th style="text-align: right;">mean</th>
+<th style="text-align: right;">sd</th>
+<th style="text-align: right;">p0</th>
+<th style="text-align: right;">p25</th>
+<th style="text-align: right;">p50</th>
+<th style="text-align: right;">p75</th>
+<th style="text-align: right;">p100</th>
+<th style="text-align: left;">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">trstprl</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">6.40</td>
+<td style="text-align: right;">8.89</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">88</td>
+<td style="text-align: left;">▇▁▁▁▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">trstlgl</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">7.17</td>
+<td style="text-align: right;">9.10</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">88</td>
+<td style="text-align: left;">▇▁▁▁▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">trstplc</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">6.96</td>
+<td style="text-align: right;">5.14</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">88</td>
+<td style="text-align: left;">▇▁▁▁▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">trstplt</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">5.76</td>
+<td style="text-align: right;">8.05</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">88</td>
+<td style="text-align: left;">▇▁▁▁▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">trstprt</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">6.22</td>
+<td style="text-align: right;">9.82</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">88</td>
+<td style="text-align: left;">▇▁▁▁▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">trstep</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">8.57</td>
+<td style="text-align: right;">17.89</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">88</td>
+<td style="text-align: left;">▇▁▁▁▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">trstun</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">10.57</td>
+<td style="text-align: right;">19.57</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">88</td>
+<td style="text-align: left;">▇▁▁▁▁</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>ess_nl <span class="sc">|&gt;</span> </span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tabyl</span>(trstprl)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> trstprl   n     percent
+       0  52 0.030933968
+       1  29 0.017251636
+       2  75 0.044616300
+       3 115 0.068411660
+       4 155 0.092207020
+       5 267 0.158834027
+       6 386 0.229625223
+       7 396 0.235574063
+       8 158 0.093991672
+       9  18 0.010707912
+      10  11 0.006543724
+      77   1 0.000594884
+      88  18 0.010707912</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print_labels</span>(ess_nl<span class="sc">$</span>trstlgl)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Labels:
+ value           label
+     0 No trust at all
+     1               1
+     2               2
+     3               3
+     4               4
+     5               5
+     6               6
+     7               7
+     8               8
+     9               9
+    10  Complete trust
+    77         Refusal
+    88      Don't know
+    99       No answer</code></pre>
+</div>
+</div>
+<p>ESS uses 77 = Refusal, 88 = Don’t know, 99 = No answer on these items. Let’s recode them to NA (there are of course many ways of doing this, just make sure you get the same results):</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="co">#  Note that, since we ar only updating a few values and want to keep the rest (1 to 10) untouched, </span></span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a><span class="co">#  replace_values() is better than recode_values()</span></span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Solution 1: recode variables one by one</span></span>
+<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a><span class="co"># ess_nl |&gt; </span></span>
+<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a><span class="co">#   mutate(trstprl = replace_values(trstprl, </span></span>
+<span id="cb50-8"><a href="#cb50-8" aria-hidden="true" tabindex="-1"></a><span class="co">#                                   c(77, 88, 99) ~ NA),</span></span>
+<span id="cb50-9"><a href="#cb50-9" aria-hidden="true" tabindex="-1"></a><span class="co">#          # Could also be:</span></span>
+<span id="cb50-10"><a href="#cb50-10" aria-hidden="true" tabindex="-1"></a><span class="co">#          # trstprl = if_else(trstprl &gt; 10, NA, trstprl)                        </span></span>
+<span id="cb50-11"><a href="#cb50-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-12"><a href="#cb50-12" aria-hidden="true" tabindex="-1"></a><span class="co">#          trstlgl = replace_values(trstlgl, </span></span>
+<span id="cb50-13"><a href="#cb50-13" aria-hidden="true" tabindex="-1"></a><span class="co">#                                   c(77, 88, 99) ~ NA),</span></span>
+<span id="cb50-14"><a href="#cb50-14" aria-hidden="true" tabindex="-1"></a>         </span>
+<span id="cb50-15"><a href="#cb50-15" aria-hidden="true" tabindex="-1"></a><span class="co">#          trstplc = replace_values(trstplc, </span></span>
+<span id="cb50-16"><a href="#cb50-16" aria-hidden="true" tabindex="-1"></a><span class="co">#                                   c(77, 88, 99) ~ NA),</span></span>
+<span id="cb50-17"><a href="#cb50-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-18"><a href="#cb50-18" aria-hidden="true" tabindex="-1"></a>          <span class="co"># etc, for all 7 variables</span></span>
+<span id="cb50-19"><a href="#cb50-19" aria-hidden="true" tabindex="-1"></a>                                  </span>
+<span id="cb50-20"><a href="#cb50-20" aria-hidden="true" tabindex="-1"></a><span class="co">#         ) </span></span>
+<span id="cb50-21"><a href="#cb50-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-22"><a href="#cb50-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-23"><a href="#cb50-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Solution 2: more succint, but perhaps harder to understand</span></span>
+<span id="cb50-24"><a href="#cb50-24" aria-hidden="true" tabindex="-1"></a><span class="co"># across() applies the same operation for a list of variables </span></span>
+<span id="cb50-25"><a href="#cb50-25" aria-hidden="true" tabindex="-1"></a>ess_nl <span class="ot">&lt;-</span> ess_nl <span class="sc">|&gt;</span></span>
+<span id="cb50-26"><a href="#cb50-26" aria-hidden="true" tabindex="-1"></a>          <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">all_of</span>(trust_vars), </span>
+<span id="cb50-27"><a href="#cb50-27" aria-hidden="true" tabindex="-1"></a>                        <span class="sc">~</span><span class="fu">replace_values</span>(.x, </span>
+<span id="cb50-28"><a href="#cb50-28" aria-hidden="true" tabindex="-1"></a>                                        <span class="fu">c</span>(<span class="dv">77</span>, <span class="dv">88</span>, <span class="dv">99</span>) <span class="sc">~</span> <span class="cn">NA</span>)</span>
+<span id="cb50-29"><a href="#cb50-29" aria-hidden="true" tabindex="-1"></a>                       )</span>
+<span id="cb50-30"><a href="#cb50-30" aria-hidden="true" tabindex="-1"></a>                )</span>
+<span id="cb50-31"><a href="#cb50-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-32"><a href="#cb50-32" aria-hidden="true" tabindex="-1"></a>ess_nl <span class="sc">|&gt;</span> </span>
+<span id="cb50-33"><a href="#cb50-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">skim</span>(<span class="fu">all_of</span>(trust_vars))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Data summary</caption>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Name</td>
+<td style="text-align: left;">ess_nl</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Number of rows</td>
+<td style="text-align: left;">1681</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Number of columns</td>
+<td style="text-align: left;">536</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">_______________________</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Column type frequency:</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">numeric</td>
+<td style="text-align: left;">7</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">________________________</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Group variables</td>
+<td style="text-align: left;">None</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: numeric</strong></p>
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 18%">
+<col style="width: 13%">
+<col style="width: 18%">
+<col style="width: 6%">
+<col style="width: 6%">
+<col style="width: 4%">
+<col style="width: 5%">
+<col style="width: 5%">
+<col style="width: 5%">
+<col style="width: 6%">
+<col style="width: 8%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">skim_variable</th>
+<th style="text-align: right;">n_missing</th>
+<th style="text-align: right;">complete_rate</th>
+<th style="text-align: right;">mean</th>
+<th style="text-align: right;">sd</th>
+<th style="text-align: right;">p0</th>
+<th style="text-align: right;">p25</th>
+<th style="text-align: right;">p50</th>
+<th style="text-align: right;">p75</th>
+<th style="text-align: right;">p100</th>
+<th style="text-align: left;">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">trstprl</td>
+<td style="text-align: right;">19</td>
+<td style="text-align: right;">0.99</td>
+<td style="text-align: right;">5.48</td>
+<td style="text-align: right;">2.00</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: left;">▂▃▇▇▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">trstlgl</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">0.99</td>
+<td style="text-align: right;">6.20</td>
+<td style="text-align: right;">2.02</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: left;">▁▂▆▇▂</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">trstplc</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">6.67</td>
+<td style="text-align: right;">1.71</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: left;">▁▁▃▇▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">trstplt</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">0.99</td>
+<td style="text-align: right;">5.02</td>
+<td style="text-align: right;">1.96</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: left;">▂▃▇▃▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">trstprt</td>
+<td style="text-align: right;">23</td>
+<td style="text-align: right;">0.99</td>
+<td style="text-align: right;">5.09</td>
+<td style="text-align: right;">1.94</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: left;">▂▃▇▃▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">trstep</td>
+<td style="text-align: right;">80</td>
+<td style="text-align: right;">0.95</td>
+<td style="text-align: right;">4.60</td>
+<td style="text-align: right;">2.18</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: left;">▃▅▇▃▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">trstun</td>
+<td style="text-align: right;">100</td>
+<td style="text-align: right;">0.94</td>
+<td style="text-align: right;">5.67</td>
+<td style="text-align: right;">1.92</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: left;">▂▂▇▇▁</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Let’s select only the items to use in the next steps:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>trust_items <span class="ot">&lt;-</span> ess_nl <span class="sc">|&gt;</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>              <span class="fu">select</span>(<span class="fu">all_of</span>(trust_vars))</span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a><span class="fu">scree</span>(trust_items)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="extra_assignment_1_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Strictly applying the eigenvalues-greater-than-1 rule points to a <em>single</em> factor. The next questions mention multiple factors, so we specify 2 factors for illustration:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>fa_trust <span class="ot">&lt;-</span> <span class="fu">fa</span>(</span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>  trust_items,</span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">nfactors =</span> <span class="dv">2</span>,</span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">fm =</span> <span class="st">"ml"</span>,</span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">rotate =</span> <span class="st">"none"</span></span>
+<span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb52-7"><a href="#cb52-7" aria-hidden="true" tabindex="-1"></a>fa_trust</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Factor Analysis using method =  ml
+Call: fa(r = trust_items, nfactors = 2, rotate = "none", fm = "ml")
+Standardized loadings (pattern matrix) based upon correlation matrix
+         ML1   ML2   h2   u2 com
+trstprl 0.84  0.10 0.71 0.29 1.0
+trstlgl 0.81 -0.49 0.89 0.11 1.6
+trstplc 0.59 -0.23 0.40 0.60 1.3
+trstplt 0.89  0.25 0.86 0.14 1.2
+trstprt 0.87  0.27 0.84 0.16 1.2
+trstep  0.76  0.23 0.62 0.38 1.2
+trstun  0.62  0.12 0.40 0.60 1.1
+
+                       ML1  ML2
+SS loadings           4.22 0.50
+Proportion Var        0.60 0.07
+Cumulative Var        0.60 0.67
+Proportion Explained  0.89 0.11
+Cumulative Proportion 0.89 1.00
+
+Mean item complexity =  1.2
+Test of the hypothesis that 2 factors are sufficient.
+
+df null model =  21  with the objective function =  4.74 with Chi Square =  7950.69
+df of  the model are 8  and the objective function was  0.08 
+
+The root mean square of the residuals (RMSR) is  0.03 
+The df corrected root mean square of the residuals is  0.04 
+
+The harmonic n.obs is  1617 with the empirical chi square  21.84  with prob &lt;  0.0052 
+The total n.obs was  1681  with Likelihood Chi Square =  138.35  with prob &lt;  5.2e-26 
+
+Tucker Lewis Index of factoring reliability =  0.957
+RMSEA index =  0.098  and the 90 % confidence intervals are  0.084 0.113
+BIC =  78.94
+Fit based upon off diagonal values = 1
+Measures of factor score adequacy             
+                                                   ML1  ML2
+Correlation of (regression) scores with factors   0.98 0.88
+Multiple R square of scores with factors          0.96 0.77
+Minimum correlation of possible factor scores     0.91 0.55</code></pre>
+</div>
+</div>
+<p>This confirms that the second factor explains very little of the variation.</p>
+<p>Question c also assumes multiple factors, so let’s keep working with two:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>fa_trust_promax <span class="ot">&lt;-</span> <span class="fu">fa</span>(</span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>  trust_items,</span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">nfactors =</span> <span class="dv">2</span>,</span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">fm =</span> <span class="st">"ml"</span>,</span>
+<span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">rotate =</span> <span class="st">"promax"</span></span>
+<span id="cb54-6"><a href="#cb54-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required namespace: GPArotation</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>fa_trust_promax</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Factor Analysis using method =  ml
+Call: fa(r = trust_items, nfactors = 2, rotate = "promax", fm = "ml")
+Standardized loadings (pattern matrix) based upon correlation matrix
+          ML1   ML2   h2   u2 com
+trstprl  0.70  0.19 0.71 0.29 1.1
+trstlgl -0.07  0.99 0.89 0.11 1.0
+trstplc  0.10  0.55 0.40 0.60 1.1
+trstplt  0.93  0.00 0.86 0.14 1.0
+trstprt  0.94 -0.03 0.84 0.16 1.0
+trstep   0.80 -0.02 0.62 0.38 1.0
+trstun   0.58  0.07 0.40 0.60 1.0
+
+                       ML1  ML2
+SS loadings           3.31 1.42
+Proportion Var        0.47 0.20
+Cumulative Var        0.47 0.67
+Proportion Explained  0.70 0.30
+Cumulative Proportion 0.70 1.00
+
+ With factor correlations of 
+     ML1  ML2
+ML1 1.00 0.72
+ML2 0.72 1.00
+
+Mean item complexity =  1
+Test of the hypothesis that 2 factors are sufficient.
+
+df null model =  21  with the objective function =  4.74 with Chi Square =  7950.69
+df of  the model are 8  and the objective function was  0.08 
+
+The root mean square of the residuals (RMSR) is  0.03 
+The df corrected root mean square of the residuals is  0.04 
+
+The harmonic n.obs is  1617 with the empirical chi square  21.84  with prob &lt;  0.0052 
+The total n.obs was  1681  with Likelihood Chi Square =  138.35  with prob &lt;  5.2e-26 
+
+Tucker Lewis Index of factoring reliability =  0.957
+RMSEA index =  0.098  and the 90 % confidence intervals are  0.084 0.113
+BIC =  78.94
+Fit based upon off diagonal values = 1
+Measures of factor score adequacy             
+                                                   ML1  ML2
+Correlation of (regression) scores with factors   0.90 0.94
+Multiple R square of scores with factors          0.81 0.88
+Minimum correlation of possible factor scores     0.63 0.76</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>fa_trust_promax<span class="sc">$</span>Structure</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Loadings:
+        ML1   ML2  
+trstprl 0.835 0.691
+trstlgl 0.646 0.944
+trstplc 0.500 0.626
+trstplt 0.928 0.668
+trstprt 0.914 0.642
+trstep  0.790 0.558
+trstun  0.629 0.486
+
+                 ML1   ML2
+SS loadings    4.082 3.166
+Proportion Var 0.583 0.452
+Cumulative Var 0.583 1.035</code></pre>
+</div>
+</div>
+<p>With this rotation, every item loads cleanly on exactly one factor:</p>
+<ul>
+<li><strong>Factor 1</strong>. <code>trstprl</code>, <code>trstplt</code>, <code>trstprt</code>, <code>trstep</code>, <code>trstun</code>: trust in the national parliament, politicians, political parties, the European Parliament, and the UN. We might call this <strong>trust in political institutions</strong>.</li>
+<li><strong>Factor 2</strong>. <code>trstlgl</code>, <code>trstplc</code>: trust in the legal system and the police. We might call this <strong>trust in law-enforcement institutions</strong>.</li>
+</ul>
+<p>The correlation between the two rotated factors is 0.72.</p>
+<p>Advantages and disadvantages: see slides.</p>
+<p>The matrix printed by default is the pattern matrix. You should also look at the structure matrix. See slides for the differences.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="co"># pattern matrix (printed in the default output)</span></span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>fa_trust_promax<span class="sc">$</span>loadings</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Loadings:
+        ML1    ML2   
+trstprl  0.701  0.187
+trstlgl         0.991
+trstplc  0.104  0.552
+trstplt  0.927       
+trstprt  0.936       
+trstep   0.803       
+trstun   0.578       
+
+                 ML1   ML2
+SS loadings    3.222 1.328
+Proportion Var 0.460 0.190
+Cumulative Var 0.460 0.650</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="co"># structure matrix</span></span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a>fa_trust_promax<span class="sc">$</span>Structure</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Loadings:
+        ML1   ML2  
+trstprl 0.835 0.691
+trstlgl 0.646 0.944
+trstplc 0.500 0.626
+trstplt 0.928 0.668
+trstprt 0.914 0.642
+trstep  0.790 0.558
+trstun  0.629 0.486
+
+                 ML1   ML2
+SS loadings    4.082 3.166
+Proportion Var 0.583 0.452
+Cumulative Var 0.583 1.035</code></pre>
+</div>
+</div>
+<p>Note that in the structure matrix the separation of items between factors is not as clear as in the pattern matrix. But <code>trstlgl</code> and <code>trstplc</code> are still the only two items with higher loadings on the second factor.</p>
+</section>
+<section id="reliability" class="level3">
+<h3 class="anchored" data-anchor-id="reliability">4. Reliability</h3>
+<p>Reliability with all items:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>trust_items <span class="sc">|&gt;</span></span>
+<span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">alpha</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Number of categories should be increased  in order to count frequencies. </code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Reliability analysis   
+Call: alpha(x = trust_items)
+
+  raw_alpha std.alpha G6(smc) average_r S/N    ase mean  sd median_r
+      0.91      0.91    0.91      0.58 9.7 0.0034  5.5 1.6     0.58
+
+    95% confidence boundaries 
+         lower alpha upper
+Feldt      0.9  0.91  0.91
+Duhachek   0.9  0.91  0.91
+
+ Reliability if an item is dropped:
+        raw_alpha std.alpha G6(smc) average_r  S/N alpha se var.r med.r
+trstprl      0.88      0.88    0.89      0.56  7.6   0.0044 0.018  0.56
+trstlgl      0.90      0.90    0.89      0.59  8.7   0.0038 0.023  0.56
+trstplc      0.91      0.91    0.91      0.63 10.4   0.0034 0.013  0.60
+trstplt      0.88      0.88    0.88      0.55  7.3   0.0045 0.014  0.56
+trstprt      0.88      0.88    0.88      0.55  7.5   0.0044 0.014  0.55
+trstep       0.89      0.89    0.89      0.57  8.1   0.0041 0.019  0.56
+trstun       0.90      0.90    0.91      0.61  9.4   0.0036 0.019  0.60
+
+ Item statistics 
+           n raw.r std.r r.cor r.drop mean  sd
+trstprl 1662  0.87  0.86  0.84   0.80  5.5 2.0
+trstlgl 1661  0.77  0.77  0.72   0.68  6.2 2.0
+trstplc 1675  0.65  0.66  0.58   0.54  6.7 1.7
+trstplt 1666  0.89  0.89  0.89   0.84  5.0 2.0
+trstprt 1658  0.87  0.87  0.87   0.82  5.1 1.9
+trstep  1601  0.83  0.82  0.79   0.75  4.6 2.2
+trstun  1581  0.72  0.72  0.65   0.62  5.7 1.9</code></pre>
+</div>
+</div>
+<p>Reliability with separate scales:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>trust_items <span class="sc">|&gt;</span></span>
+<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(trstprl, trstplt, trstprt, trstep, trstun) <span class="sc">|&gt;</span></span>
+<span id="cb67-3"><a href="#cb67-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">alpha</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Number of categories should be increased  in order to count frequencies. </code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Reliability analysis   
+Call: alpha(x = select(trust_items, trstprl, trstplt, trstprt, trstep, 
+    trstun))
+
+  raw_alpha std.alpha G6(smc) average_r S/N    ase mean  sd median_r
+      0.91      0.91     0.9      0.68  10 0.0035  5.2 1.7     0.69
+
+    95% confidence boundaries 
+         lower alpha upper
+Feldt      0.9  0.91  0.92
+Duhachek   0.9  0.91  0.92
+
+ Reliability if an item is dropped:
+        raw_alpha std.alpha G6(smc) average_r  S/N alpha se  var.r med.r
+trstprl      0.89      0.89    0.88      0.67  8.0   0.0045 0.0138  0.66
+trstplt      0.87      0.88    0.85      0.64  7.1   0.0050 0.0070  0.63
+trstprt      0.88      0.88    0.86      0.64  7.2   0.0049 0.0088  0.63
+trstep       0.89      0.89    0.88      0.68  8.3   0.0044 0.0186  0.66
+trstun       0.92      0.92    0.90      0.75 11.9   0.0033 0.0042  0.74
+
+ Item statistics 
+           n raw.r std.r r.cor r.drop mean  sd
+trstprl 1662  0.87  0.87  0.83   0.79  5.5 2.0
+trstplt 1666  0.91  0.91  0.90   0.85  5.0 2.0
+trstprt 1658  0.90  0.90  0.89   0.84  5.1 1.9
+trstep  1601  0.87  0.86  0.81   0.77  4.6 2.2
+trstun  1581  0.76  0.76  0.65   0.62  5.7 1.9</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb70"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a>trust_items <span class="sc">|&gt;</span></span>
+<span id="cb70-2"><a href="#cb70-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(trstlgl, trstplc) <span class="sc">|&gt;</span></span>
+<span id="cb70-3"><a href="#cb70-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">alpha</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Number of categories should be increased  in order to count frequencies. </code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Reliability analysis   
+Call: alpha(x = select(trust_items, trstlgl, trstplc))
+
+  raw_alpha std.alpha G6(smc) average_r S/N   ase mean  sd median_r
+      0.73      0.74    0.59      0.59 2.9 0.013  6.4 1.7     0.59
+
+    95% confidence boundaries 
+         lower alpha upper
+Feldt     0.71  0.73  0.76
+Duhachek  0.71  0.73  0.76
+
+ Reliability if an item is dropped:
+        raw_alpha std.alpha G6(smc) average_r S/N alpha se var.r med.r
+trstlgl      0.69      0.59    0.35      0.59 1.4       NA     0  0.59
+trstplc      0.50      0.59    0.35      0.59 1.4       NA     0  0.59
+
+ Item statistics 
+           n raw.r std.r r.cor r.drop mean  sd
+trstlgl 1661  0.91  0.89  0.68   0.59  6.2 2.0
+trstplc 1675  0.87  0.89  0.68   0.59  6.7 1.7</code></pre>
+</div>
+</div>
+<p>Dropping an item does not clearly improve reliability in the full scale or in the separate scales. Dropping <code>trstun</code> in the firsdt subscale would improve it very little (from 0.91 to 0.92).</p>
+</section>
+<section id="factor-scores" class="level3">
+<h3 class="anchored" data-anchor-id="factor-scores">5. Factor scores</h3>
+<p><code>fa()</code> already computes the scores with the regression method by default. So we can get them from the object returned by the function. The scores are provided as matrix, with one row per respondnet and one column per factor.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb73"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a>scores <span class="ot">&lt;-</span> fa_trust_promax<span class="sc">$</span>scores</span>
+<span id="cb73-2"><a href="#cb73-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb73-3"><a href="#cb73-3" aria-hidden="true" tabindex="-1"></a>ess_nl <span class="ot">&lt;-</span> ess_nl <span class="sc">|&gt;</span></span>
+<span id="cb73-4"><a href="#cb73-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb73-5"><a href="#cb73-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">trust_political =</span> scores[, <span class="dv">1</span>],      <span class="co"># [, 1] = select all rows from first column of the matrix</span></span>
+<span id="cb73-6"><a href="#cb73-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">trust_lawenforcement =</span> scores[, <span class="dv">2</span>]  <span class="co"># [, 2] = select all rows from second column of the matrix</span></span>
+<span id="cb73-7"><a href="#cb73-7" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb73-8"><a href="#cb73-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb73-9"><a href="#cb73-9" aria-hidden="true" tabindex="-1"></a>ess_nl <span class="sc">|&gt;</span></span>
+<span id="cb73-10"><a href="#cb73-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">skim</span>(trust_political, trust_lawenforcement)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Data summary</caption>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Name</td>
+<td style="text-align: left;">ess_nl</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Number of rows</td>
+<td style="text-align: left;">1681</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Number of columns</td>
+<td style="text-align: left;">538</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">_______________________</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Column type frequency:</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">numeric</td>
+<td style="text-align: left;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">________________________</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Group variables</td>
+<td style="text-align: left;">None</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: numeric</strong></p>
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 23%">
+<col style="width: 11%">
+<col style="width: 15%">
+<col style="width: 5%">
+<col style="width: 5%">
+<col style="width: 6%">
+<col style="width: 6%">
+<col style="width: 5%">
+<col style="width: 5%">
+<col style="width: 5%">
+<col style="width: 6%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">skim_variable</th>
+<th style="text-align: right;">n_missing</th>
+<th style="text-align: right;">complete_rate</th>
+<th style="text-align: right;">mean</th>
+<th style="text-align: right;">sd</th>
+<th style="text-align: right;">p0</th>
+<th style="text-align: right;">p25</th>
+<th style="text-align: right;">p50</th>
+<th style="text-align: right;">p75</th>
+<th style="text-align: right;">p100</th>
+<th style="text-align: left;">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">trust_political</td>
+<td style="text-align: right;">164</td>
+<td style="text-align: right;">0.9</td>
+<td style="text-align: right;">0.02</td>
+<td style="text-align: right;">0.96</td>
+<td style="text-align: right;">-2.85</td>
+<td style="text-align: right;">-0.50</td>
+<td style="text-align: right;">0.25</td>
+<td style="text-align: right;">0.69</td>
+<td style="text-align: right;">2.56</td>
+<td style="text-align: left;">▁▂▇▇▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">trust_lawenforcement</td>
+<td style="text-align: right;">164</td>
+<td style="text-align: right;">0.9</td>
+<td style="text-align: right;">0.03</td>
+<td style="text-align: right;">0.94</td>
+<td style="text-align: right;">-3.22</td>
+<td style="text-align: right;">-0.49</td>
+<td style="text-align: right;">0.25</td>
+<td style="text-align: right;">0.75</td>
+<td style="text-align: right;">2.08</td>
+<td style="text-align: left;">▁▁▃▇▂</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+</section>
+</div>
+</div>
+</div>
 
 
 </section>
