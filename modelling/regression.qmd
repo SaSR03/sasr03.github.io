@@ -60,8 +60,6 @@ The data `sesam` are part of a larger data set that evaluates the impact of the 
 ::: {.callout-note appearance="simple" collapse=true}
 ## See answers
 
-Make sure this file is in the same R Project as the `data` folder. Use relative file paths, not full paths to your computer.
-
 ```{r setup-regression}
 library(tidyverse)
 library(haven)
