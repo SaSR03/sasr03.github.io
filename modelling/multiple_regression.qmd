@@ -56,11 +56,13 @@ Use the dataset `gss91_extended`. @e want to investigate whether the effect of e
 15. Using the coefficients for `educ` and `educ`$^2$, compute the turning point of the curve: the value of `educ` at which expected prestige is at its minimum or maximum. Is the curve U-shaped or inverted-U shaped? Check how many observations in the data actually fall at or below this turning point, and discuss whether the turning point should be interpreted, or whether it is more appropriate to describe the relationship only over the range where most of the data lie.
 
 
+::: {.content-visible when-format="html"}
 
 ## Answers
 
 ::: {.callout-note appearance="simple" collapse=true}
 ## See answers
+
 
 
 ```{r setup-multiple-regression}
@@ -264,7 +266,7 @@ summary(fit_quad)
 The educ-squared term is significant, so there is evidence of a quadratic relationship, controlling for race, region, and sex.
 
 
-#### 15. The turning point
+#### 15. Turning point
 
 
 ```{r}
