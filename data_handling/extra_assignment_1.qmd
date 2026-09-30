@@ -38,7 +38,7 @@ For your convenience, both datasets do not contain missing values, and your synt
 
 4. Create a new dummy variable `mhigher` representing whether (1) or not (0) the mother's level of education is at least as high as that of the father. 
 
-5. Add a new variable representing the class size (i.e., the number of pupils in the class). Remember that the variable `classid` identifies pupils belonging to the same class. 
+5. Add a new variable representing the class size (i.e., the number of pupils in the class). Remember that the variable `classid` identifies pupils belonging to the same class.  
 
 6. Add class-level fractions of the ethnic groups. Said otherwise, what percentage of each ethnic group is included within each class? 
 
@@ -46,7 +46,7 @@ For your convenience, both datasets do not contain missing values, and your synt
 
 8. Merge in the ethnicity of the teacher (use the recoded scheme in question 1). 
 
-9. Generate a variable showing the fraction of pupils with a teacher of the same gender as the pupil. What is this fraction? Generate a variable showing the fraction of pupils with a teacher who is maximally different, i.e., both of different gender and of different ethnicity. What is this fraction? 
+9. Compute the fraction of pupils with a teacher of the same gender as the pupil. What is this fraction? Compute thefraction of pupils with a teacher who is maximally different, i.e., both of different gender and of different ethnicity. What is this fraction? 
 
 
 ## Assignment A2: European Social Survey 
@@ -63,11 +63,425 @@ The data contain many different scales. We focus on the construct "Political Tru
 
 Political Trust is measured with the following 7 items: `trstprl` `trstlgl` `trstplc` `trstplt` `trstprt` `trstep` `trstun`
 
-a. Perform a factor analysis by maximum likelihood on these 7 items and determine the number of factors.
-b. Carry out an oblique (promax) rotation. Which item(s) seem to be unimportant for which factor(s)? Name the factors. What is the correlation between the (rotated) factors? 
-c. Discuss 2 advantages and 2 disadvantages of using a factor analysis. 
-d. Interpret how the items are influenced by the rotated factors. Which matrix in the output should you look at? How does this matrix differ from the matrix printed by default?
+a. The valid responses in these items range from 0 (No trust at all) to 10 (Complete trust). Check if other values are present and handle them as needed. 
+b. Perform a factor analysis by maximum likelihood on these 7 items and determine the number of factors.
+c. Carry out an oblique (promax) rotation. Which item(s) seem to be unimportant for which factor(s)? Name the factors. What is the correlation between the (rotated) factors? 
+d. Discuss 2 advantages and 2 disadvantages of using a factor analysis. 
+e. Interpret how the items are influenced by the rotated factors. Which matrix in the output should you look at? How does this matrix differ from the matrix printed by default?
 
 3. Conduct reliability analyses for the scale consisting of all items, as well as separate scales for all the factors that you identified in the previous question. Are there items you would like to delete from the scale(s)? 
 
-5. Generate a new variable with the factor score(s) for the factor(s) you identified in questions 4 and 5, using the regression method. 
+4. Generate a new variable with the factor score(s) for the factor(s) you identified before, using the regression method. 
+
+::: {.content-visible when-format="html"}
+
+## Answers
+
+::: {.callout-note appearance="simple" collapse=true}
+## See answers
+
+## Assignment A1: Schools
+
+```{r setup-ga1}
+library(tidyverse)
+library(haven)
+library(labelled)
+library(janitor)
+library(skimr)
+
+pupil <- read_dta("data/dh_pupil.dta")
+teacher <- read_dta("data/dh_teacher.dta")
+```
+
+Inspect both datasets before starting.
+
+```{r}
+glimpse(pupil)
+glimpse(teacher)
+```
+
+### 1. Recoding `cbirth` into `ethnicity`
+
+Check the categories of `cbirth` before recoding.
+
+```{r}
+pupil |>
+  tabyl(cbirth)
+
+print_labels(pupil$cbirth)
+```
+
+```{r}
+pupil <- pupil |>
+  mutate(
+    ethnicity = recode_values(
+      cbirth,
+      1       ~ 1,
+      c(2, 3) ~ 2,
+      4:7     ~ 3,
+      c(8, 9) ~ 4
+    ),
+    # Optional: convert to factor
+    ethnicity = factor(
+      ethnicity,
+      levels = 1:4,
+      labels = c("Dutch", "Former colony", "Islamic", "Other")
+    )
+  )
+
+```
+
+```{r}
+pupil |>
+  tabyl(ethnicity)
+```
+
+### 2. Two-way tables
+
+```{r}
+tab_gender_eth <- pupil |>
+  tabyl(male, ethnicity)
+
+tab_gender_eth
+```
+
+Row percentages give the ethnic composition within each gender, column percentages give the gender composition within each ethnic group.
+
+```{r}
+tab_gender_eth |>
+  adorn_percentages("row") |>
+  adorn_pct_formatting()
+
+tab_gender_eth |>
+  adorn_percentages("col") |>
+  adorn_pct_formatting()
+```
+
+### 3. Parental education resources (`pedu`)
+
+One possibility is to use th maximum of `fedu` and `medu`. 
+
+```{r}
+pupil <- pupil |>
+  mutate(
+    pedu = pmax(fedu, medu, na.rm = TRUE)
+  )
+
+pupil |>
+  skim(pedu)
+```
+
+An alternative would be the mean of `fedu` and `medu`:
+
+```{r}
+pupil <- pupil |>
+  mutate(
+    pedu_mean = rowMeans(pick(fedu, medu), na.rm = TRUE)
+  )
+
+pupil |>
+  skim(pedu_mean)
+```
+
+### 4. `mhigher`: mother at least as educated as father
+
+```{r}
+pupil <- pupil |>
+  mutate(
+    mhigher = if_else(medu >= fedu, 1, 0)
+  )
+# Also ok (logical dummy):
+# mhigher = medu >= fedu
+
+pupil |>
+  tabyl(mhigher)
+```
+
+
+### 5. Class size
+
+```{r}
+pupil <- pupil |>
+  mutate(
+    n_class = n(),
+    .by = classid
+  )
+
+pupil |>
+  tabyl(n_class) 
+```
+
+Class sizes range from 17 (class 7) to 35 (class 9).
+
+### 6. Class-level ethnic fractions
+
+```{r}
+pupil <- pupil |>
+  mutate(
+    pc_dutch = 100 * mean(ethnicity == "Dutch"),
+    pc_colony = 100 * mean(ethnicity == "Former colony"),
+    pc_islamic = 100 * mean(ethnicity == "Islamic"),
+    pc_other = 100 * mean(ethnicity == "Other"),
+    .by = classid
+  )
+
+pupil |>
+  skim(starts_with("pc_"))
+```
+
+Note that the averages reported above correspond to the ethnic fractions experienced, on average,by pupils. In other words, the fractions are computed at the class level, but then averaged at the pupil level.
+
+### 7. Fraction of ethnic in-group
+
+```{r}
+pupil <- pupil |>
+  mutate(
+    pc_ingroup = case_when(
+      ethnicity == "Dutch" ~ pc_dutch,
+      ethnicity == "Former colony" ~ pc_colony,
+      ethnicity == "Islamic" ~ pc_islamic,
+      ethnicity == "Other" ~ pc_other
+    )
+  )
+
+pupil |>
+  skim(pc_ingroup)
+```
+
+On average, 32.8% of a pupil's classmates share their own ethnicity.
+
+### 8. Merging in the teacher's ethnicity
+
+```{r}
+teacher <- teacher |>
+  mutate(
+    ethnicity_teacher = recode_values(
+      cbirth,
+      1       ~ 1,
+      c(2, 3) ~ 2,
+      4:7     ~ 3,
+      c(8, 9) ~ 4
+    ),
+    ethnicity_teacher = factor(
+      ethnicity_teacher,
+      levels = 1:4,
+      labels = c("Dutch", "Former colony", "Islamic", "Other")
+    )
+  )
+
+pupil <- pupil |>
+  left_join(
+    teacher |>
+      select(classid = cid, ethnicity_teacher, male_teacher = male),
+    by = "classid"
+  )
+
+glimpse(pupil)
+```
+
+### 9. Fractions of same-gender and maximally-different teachers
+
+```{r}
+pupil <- pupil |>
+  mutate(
+    same_gender_teacher = (male == male_teacher),
+    max_diff_teacher = (male != male_teacher) & (ethnicity != ethnicity_teacher)
+  )
+
+pupil |>
+  skim(same_gender_teacher, max_diff_teacher)
+```
+
+49.2% of pupils have a teacher of the same gender, and 33.2% of pupils have a teacher who is both a different gender and a different ethnicity.
+
+## Assignment A2: European Social Survey
+
+```{r setup-ga2}
+library(psych)
+
+ess <- read_dta("data/ESS8e02.dta")
+```
+
+### 1. Replicable country selection
+
+```{r}
+set.seed(987654)
+
+countries <- unique(ess$cntry)
+selected_country <- sample(countries, 1)
+
+selected_country
+
+ess_sample <- ess |>
+  filter(cntry == selected_country)
+
+nrow(ess_sample)
+```
+
+With `set.seed(987654)`, `sample()` always draws `cntry == "SE"` (Sweden); the resulting sample has 1,551 respondents. A different seed value would select a different country; the point of `set.seed()` is only that the same seed always reproduces the same draw.
+
+### 2. Restricting to the Netherlands and factor analysis
+
+```{r}
+ess_nl <- ess |>
+  filter(cntry == "NL")
+
+nrow(ess_nl)
+```
+
+We will focus on the 7 political trust items. 
+
+```{r}
+trust_vars <- c("trstprl", "trstlgl", "trstplc", "trstplt", "trstprt", "trstep", "trstun")
+```
+
+Check values: 
+```{r}
+ess_nl |> 
+  skim(all_of(trust_vars))
+
+ess_nl |> 
+  tabyl(trstprl)
+
+print_labels(ess_nl$trstlgl)
+```
+
+ESS uses 77 = Refusal, 88 = Don't know, 99 = No answer on these items. Let's recode them to NA (there are of course many ways of doing this, just make sure you get the same results):
+
+```{r}
+#  Note that, since we ar only updating a few values and want to keep the rest (1 to 10) untouched, 
+#  replace_values() is better than recode_values()
+
+
+# Solution 1: recode variables one by one
+# ess_nl |> 
+#   mutate(trstprl = replace_values(trstprl, 
+#                                   c(77, 88, 99) ~ NA),
+#          # Could also be:
+#          # trstprl = if_else(trstprl > 10, NA, trstprl)                        
+
+#          trstlgl = replace_values(trstlgl, 
+#                                   c(77, 88, 99) ~ NA),
+         
+#          trstplc = replace_values(trstplc, 
+#                                   c(77, 88, 99) ~ NA),
+
+          # etc, for all 7 variables
+                                  
+#         ) 
+
+
+# Solution 2: more succint, but perhaps harder to understand
+# across() applies the same operation for a list of variables 
+ess_nl <- ess_nl |>
+          mutate(across(all_of(trust_vars), 
+                        ~replace_values(.x, 
+                                        c(77, 88, 99) ~ NA)
+                       )
+                )
+
+ess_nl |> 
+  skim(all_of(trust_vars))
+```
+
+
+Let's select only the items to use in the next steps:
+```{r}
+trust_items <- ess_nl |>
+              select(all_of(trust_vars))
+
+
+scree(trust_items)
+```
+
+Strictly applying the eigenvalues-greater-than-1 rule points to a *single* factor. The next questions mention multiple factors, so we specify 2 factors for illustration: 
+
+```{r}
+fa_trust <- fa(
+  trust_items,
+  nfactors = 2,
+  fm = "ml",
+  rotate = "none"
+)
+fa_trust
+```
+
+This confirms that the second factor explains very little of the variation.
+
+Question c also assumes multiple factors, so let's keep working with two:
+
+```{r}
+fa_trust_promax <- fa(
+  trust_items,
+  nfactors = 2,
+  fm = "ml",
+  rotate = "promax"
+)
+fa_trust_promax
+
+fa_trust_promax$Structure
+```
+
+With this rotation, every item loads cleanly on exactly one factor:
+
+- **Factor 1**.  `trstprl`, `trstplt`, `trstprt`, `trstep`, `trstun`: trust in the national parliament, politicians, political parties, the European Parliament, and the UN. We might call this **trust in political institutions**.
+- **Factor 2**. `trstlgl`, `trstplc`: trust in the legal system and the police. We might call this **trust in law-enforcement institutions**.
+
+The correlation between the two rotated factors is `{r} round(fa_trust_promax$Phi[1, 2], 2)`.
+
+Advantages and disadvantages: see slides. 
+
+The matrix printed by default is the pattern matrix. You should also look at the structure matrix. See slides for the differences. 
+```{r}
+# pattern matrix (printed in the default output)
+fa_trust_promax$loadings
+
+# structure matrix
+fa_trust_promax$Structure
+```
+
+Note that in the structure matrix the separation of items between factors is not as clear as in the pattern matrix. But `trstlgl` and `trstplc` are still the only two items with higher loadings on the second factor. 
+
+
+
+### 4. Reliability
+
+Reliability with all items:
+```{r}
+trust_items |>
+  alpha()
+```
+
+Reliability with separate scales:
+```{r}
+trust_items |>
+  select(trstprl, trstplt, trstprt, trstep, trstun) |>
+  alpha()
+
+trust_items |>
+  select(trstlgl, trstplc) |>
+  alpha()
+```
+
+
+Dropping an item does not clearly improve reliability in the full scale or in the separate scales. Dropping `trstun` in the firsdt subscale would improve it very little (from 0.91 to 0.92).
+
+
+### 5. Factor scores
+
+`fa()` already computes the scores with the regression method by default. So we can get them from the object returned by the function. The scores are provided as matrix, with one row per respondnet and one column per factor.
+```{r}
+scores <- fa_trust_promax$scores
+
+ess_nl <- ess_nl |>
+  mutate(
+    trust_political = scores[, 1],      # [, 1] = select all rows from first column of the matrix
+    trust_lawenforcement = scores[, 2]  # [, 2] = select all rows from second column of the matrix
+  )
+
+ess_nl |>
+  skim(trust_political, trust_lawenforcement)
+```
+
+:::
+:::
