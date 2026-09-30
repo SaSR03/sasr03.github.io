@@ -33,7 +33,6 @@ jobs:
             any::survminer
             any::brant
             any::marginaleffects
-            any::emmeans
             any::sandwich
             any::skimr
             any::survminer
