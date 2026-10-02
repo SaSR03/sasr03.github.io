@@ -51,6 +51,8 @@ website:
         contents:
           - text: "Extra assignment 1"
             href: data_handling\extra_assignment_1.qmd
+          - text: "Extra assignment 2"
+            href: data_handling\extra_assignment_2.qmd
       - section: "Miscellaneous"
         contents:
           - text: "Data Visualization with ggplot2"

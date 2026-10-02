@@ -1,0 +1,59 @@
+---
+title: "Extra assignment 2"
+---
+'
+'
+## Assignment B1: Media Consumption 
+
+The dataset `mediacons.dta` contains data on the TV consumption of Dutch individuals. The variable `tvtime` measures the time (in minutes) an individual watches TV on an average weekday. In this assignment you investigate whether and how `tvtime` varies with the respondent's age (`age`; in years), level of education (`educ`; a categorical variable with 3 categories: 0 = vocational education or below, 1 = higher vocational education, 2 = university education), and social capital (`soccap`; number of close friends).
+
+### 1. Simple linear regression analysis
+
+a. Fit a regression model with `tvtime` as the dependent variable, predicted from the independent variable `educ`, treated as a categorical variable. 
+
+b. Write down the fitted regression equation. 
+
+c. Interpret the sign, magnitude and significance of the estimated coefficient(s), including the constant. Is the interpretation of the constant useful, and why? 
+
+d. Test whether people with university education watch significantly more TV than people with higher vocational education. 
+
+e. Assess the model fit with the F-test and the R². 
+
+
+### 2. Multiple linear regression analysis
+
+a. Fit a second regression model, including `age` and social capital as predictors in addition to education. 
+
+b. Interpret the sign, magnitude and significance of the estimated coefficient(s), including the constant. Is the interpretation of the constant useful, and why? 
+
+c. Test whether including `age` and social capital as predictors (a joint hypothesis) improves the fit of the previous model. 
+
+d. How many minutes do people with university education who are 25 years old and have 8 friends spend watching TV according to the model? 
+
+## Assignment B2: Welfare Attitudes 
+
+The dataset `attitude_welfare.dta` contains individual level data on attitudes towards welfare provisions and other political issues. The variable `govspend` is a constructed scale that measures the respondent's attitude towards spending money on various welfare provisions (the higher the value, the more the respondent is in favor of government spending for a variety of collective goods). We want to predict this attitude from the respondent's age (`age`; in years), political orientation (`polor`; 1 = right, 40 = left), and gender (`gender`; 1 = male, 0 = female).
+
+A researcher expects that the attitude towards government spending increases with a person's liberalism, i.e., the more left-wing oriented, the more support for government spending. Moreover, it is expected that this relation is moderated by age: the relation is weaker (less positive) for younger respondents than for older respondents. In this assignment, you will test whether this hypothesis is supported by the data.
+
+a. Run a regression analysis, comparing the following two models: 
+  - M1: a linear regression of `govspend` on `age`, `polor`, and `gender`; 
+  - M2: M1 + an interaction term for the hypothesized moderation. 
+  
+  How does the effect of political orientation on the attitudes toward government spending in the model with the interaction term vary with age? Provide a Wald test and a likelihood ratio test for the moderation hypothesis. What do you conclude? What is the average marginal effect of political orientation? 
+
+b. Interpret all the coefficients in the model with the interaction term. 
+
+c. Interpret the R² and the adjusted R². What's the difference between these two measures? 
+
+d. Calculate and interpret the effect of political orientation on the attitude towards government spending for respondents aged 20, 40, and 60 years. Also give a suitable plot for the effect of political orientation on `govspend` versus age. 
+
+e. No longer consider the moderation of political orientation. Now study whether the effect of age on `govspend` varies with gender. Include `polor` as a control variable. Fit an appropriate regression model. What is the effect of age for men and for women? Test (univariately) the hypotheses that each of these effects is 0. Also test the hypothesis that the effect of age is the same for men and women. 
+
+f. Disregard the previous model. Now study whether the effect of age on `govspend` varies with age. Include `polor` as a control variable.
+
+g. Interpret the effect of age on government spending in this new model. 
+
+h. Continue with this model. Calculate and discuss the age and the corresponding attitude on government spending at which the attitude on government spending is minimal or maximal as a function of age.
+
+i. Give a plot of predicted `govspend` vs age, and for the effect of age on `govspend` vs age, using the same model as in the previous question. Use the age range 18 to 70. 
