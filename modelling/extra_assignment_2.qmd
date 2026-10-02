@@ -1,8 +1,7 @@
 ---
 title: "Extra assignment 2"
 ---
-'
-'
+
 ## Assignment B1: Media Consumption 
 
 The dataset `mediacons.dta` contains data on the TV consumption of Dutch individuals. The variable `tvtime` measures the time (in minutes) an individual watches TV on an average weekday. In this assignment you investigate whether and how `tvtime` varies with the respondent's age (`age`; in years), level of education (`educ`; a categorical variable with 3 categories: 0 = vocational education or below, 1 = higher vocational education, 2 = university education), and social capital (`soccap`; number of close friends).
