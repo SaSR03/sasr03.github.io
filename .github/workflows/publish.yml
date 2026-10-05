@@ -40,6 +40,7 @@ jobs:
             any::labelled
             any::parameters
             any::modelsummary
+            tdmize/suest
 
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2

@@ -4,43 +4,39 @@ title: Model testing
 
 ## Assignments
 
-### Improvement in fit: sesam
+### sesam
 
 Use the dataset `sesam`.
 
-1. Fit a restricted model of `postnumb` on `age` and `prenumb`, and a full model that adds `prelet`, `prerelat`, and `peabody`. Compare the two models with an F-test (`anova()`). Does adding this set of three predictors significantly improve the fit? How large is the change in $R^2$? Is this change of much practical relevance?
+1. Fit a restricted model of `postnumb` on `age` and `prenumb`, and a full model that adds `prelet`, `prerelat`, and `peabody`. Does adding this set of three predictors significantly improve the overall fit? Test this in two ways:
+  a. A Wald test using the F-statistic. There are several ways to do this in R:
+    - `anova(fit_restricted, fit_full)` 
+    - `car::linearHypothesis(fit_full, c("prelet = 0", "prerelat = 0", "peabody = 0"))`
+    - `marginaleffects::hypotheses(fit_full, joint = c("prelet", "prerelat", "peabody"))`
+    - Any of the three will work, but we recommend the third one because `marginaleffects` is a super useful package, so it is worth getting acquainted with it.
+  b. A likelihood ratio test comparing the two models using `lmtest::lrtest()`.
 
-2. Repeat the same test using a Wald test (`car::linearHypothesis()`) on the full model. Do you reach the same conclusion as with the F-test?
+2. Test whether the effect of `prenumb` on `postnumb` while controlling for `age` is significantly different for boys and girls. (Hint: it's an interaction)
 
-3. Repeat the same test again using a likelihood ratio test (`lmtest::lrtest()`) comparing the restricted and full models. Do all three methods agree?
 
-4. Which of the three added predictors (`prelet`, `prerelat`, `peabody`) is mainly responsible for the improvement in fit? Is this predictor's effect of much substantive importance, even though it is statistically significant?
+### donations
 
-5. Fit the model `postnumb ~ prenumb + age` separately for boys and for girls (`sex == 1` and `sex == 2`). Compare the coefficient for `prenumb` between the two groups. Is the effect of `prenumb` on `postnumb`, controlling for age, significantly different for boys and girls? (Hint: refit the model as a single regression with an interaction between `prenumb` and `sex`, and test the interaction term, rather than comparing the two separate models informally.)
+Use the dataset `donations`. As before, treat the "miscellaneous" category of `religion` as missing. Construct `propdon`, the proportion of monthly income donated, and `percdon`, this proportion expressed as a percentage. Use the latter as outcome variable. Construct a dummy variable `old` for subjects older than 40.
 
-### Building a model step by step: donations
+3. Is there evidence that older people (over 40) donate a larger share of their income than younger people, controlling for religion?
 
-Use the dataset `donations`. As before, treat the "miscellaneous" category of `religion` as missing and exclude these observations permanently. Construct `propdon`, the proportion of monthly income donated, and `percdon`, this proportion expressed as a percentage. Construct a dummy variable `old` for subjects older than 40.
+4. Is there evidence that men donate a larger share of their income than women, controlling for religion? 
 
-6. Fit a regression of `percdon` on `old` and `religion` (as a factor, with "none" as reference category). Is there evidence that older people (over 40) donate a larger share of their income than younger people, controlling for religion?
+5. Using the model from the previous question, test whether religion as a whole contributes to explaining `percdon`, controlling for gender. Note that this amounts to testing the  hypothesis that all religion coefficients are zero. 
 
-7. Fit a regression of `percdon` on `male` and `religion`. Is there evidence that men donate a larger share of their income than women, controlling for religion? Comment on the strength of the evidence if the p-value is close to, but not below, 0.05.
 
-8. Using the model from the previous question, test whether `religion` as a whole contributes to explaining `percdon`, controlling for gender. Do this in at least two ways: (a) a joint test of all religion coefficients in the full model (e.g. `car::linearHypothesis()` or `anova()` on a single model with `drop1()`), and (b) comparing a restricted model without `religion` to the full model with `religion`, using `anova()`. Do the two approaches agree?
-
-9. Fit a regression of `percdon` on social integration (`socint`) alone. Is there evidence that donations increase with social integration? Now add `religion` to the model. What happens to the coefficient for `socint`? What does this tell you about the relationship between social integration, religion, and donations?
-
-10. Fit a restricted model of `percdon` on `lifevent` alone, and a full model that adds `religion`. Compare the two models with an F-test. Is there evidence that people who experienced a serious health problem (`lifevent = 1`) donate a larger share of their income than those who did not, controlling for religion?
-
-11. Fit a regression of `percdon` on `inc` alone, and then on `inc` together with `religion`. Is there evidence that donations increase with income, even after controlling for religion? Interpret the size of the effect.
-
-12. Construct the interaction between `male` and `socint`. Fit a regression of `percdon` on `male`, `socint`, and their interaction. Is the effect of social integration on donations different for men and women? Use `margins`-style predictions (e.g., compute the predicted slope of `socint` separately for each value of `male` from the fitted coefficients) to describe the effect separately for men and women.
-
-13. Fit a regression of `percdon` on `male`, years of education (`edu`), and their interaction. Is there evidence that the effect of education on donations differs between men and women?
-
-14. Fit a regression of `percdon` on `male`, `lifevent`, and their interaction. Is there evidence that the effect of having experienced a serious health problem on donations differs between men and women?
+::: {.content-visible when-format="html"}
 
 ## Answers
+
+::: {.callout-note appearance="simple" collapse=true}
+## See answers
+
 
 Make sure this file is in the same R Project as the `data` folder. Use relative file paths, not full paths to your computer.
 
@@ -49,231 +45,115 @@ library(tidyverse)
 library(haven)
 library(car)
 library(lmtest)
+library(modelsummary)
+library(marginaleffects)
 
 sesam <- read_dta("data/sesam.dta")
-donations <- read_dta("data/donations.dta")
 ```
 
-### Improvement in fit: sesam
+### sesam
 
-#### 1. F-test comparing a restricted and a full model
+#### 1
 
+Let's fit and have a look at the the restricted and full models.
 ```{r}
 fit_restricted <- lm(postnumb ~ age + prenumb, data = sesam)
 fit_full <- lm(postnumb ~ age + prenumb + prelet + prerelat + peabody, data = sesam)
 
+modelsummary(list("Restricted" = fit_restricted, "Full" = fit_full), stars = TRUE)
+```
+
+The increase in R-squared from the restricted to the full model is small. Let's formally test it:
+
+```{r}
+# a. Wald test using an F-statistic. All the same results:
 anova(fit_restricted, fit_full)
-summary(fit_full)
+linearHypothesis(fit_full, c("prelet = 0", "prerelat = 0", "peabody = 0")) 
+hypotheses(fit_full, joint = c("prelet", "prerelat", "peabody")) 
 
-# Adding the triplet (prelet, prerelat, peabody) significantly improves the
-# fit of the model. The R-squared change is very small (0.0213), but still
-# significant: F(3, 234) = 3.21, p = 0.0239.
-#
-# E(postnumb) = 3.58 + 0.08 age + 0.56 prenumb + 0.09 prelet
-#                     + 0.33 prerelat + 0.13 peabody
-#               (SE: 0.11, 0.11, 0.10, 0.30, 0.05)
-#
-# The increase in R-squared is mainly due to adding peabody, the score on
-# a general intelligence test for children. The effect is significant,
-# but the change in R-squared is small, so not very relevant in practice.
-```
-
-#### 2. The same test as a Wald test
-
-```{r}
-linearHypothesis(fit_full, c("prelet = 0", "prerelat = 0", "peabody = 0"))
-
-# The Wald test gives the same conclusion as the F-test: the joint null
-# hypothesis that prelet, prerelat, and peabody are all zero is rejected.
-```
-
-#### 3. The same test as a likelihood ratio test
-
-```{r}
+# b. Likelihood ratio test
 lrtest(fit_restricted, fit_full)
-
-# The likelihood ratio test gives the same conclusion: the full model
-# fits significantly better than the restricted model. All three
-# methods (F-test, Wald test, LR test) agree.
 ```
 
-#### 4. Which predictor drives the improvement?
+We conclude that the full model fits significantly better than the restricted model. The joint null hypothesis that prelet, prerelat, and peabody are all zero is rejected.
 
-```{r}
-summary(fit_full)
+#### 2
 
-# Peabody (a general intelligence test score) has the largest and most
-# clearly significant coefficient among the three added predictors, and
-# is mainly responsible for the improvement in fit. The effect is
-# statistically significant, but the increase in R-squared it produces
-# is small, so it is not very relevant in practice.
-```
-
-#### 5. Comparing the effect of `prenumb` between boys and girls
-
+We can of course informally compare the coefficients for prenumb in the two separate models for males and females, but this does not give us a formal test of whether the difference is significant. We should simply fit a model with an interaction between prenumb and sex, controlling for age. 
 ```{r}
 fit_male <- lm(postnumb ~ prenumb + age, data = sesam |> filter(sex == 1))
 fit_female <- lm(postnumb ~ prenumb + age, data = sesam |> filter(sex == 2))
-
-summary(fit_male)
-summary(fit_female)
-
-# The effect of prenumb appears higher for females (about 0.90) than for
-# males (about 0.67). Fitting the two models separately does not directly
-# give a significance test for this difference.
-
 fit_interaction <- lm(postnumb ~ prenumb * factor(sex) + age, data = sesam)
-summary(fit_interaction)
 
-# Testing the interaction between prenumb and sex directly (equivalent to
-# Stata's suest + test of equal coefficients) shows that the difference
-# in the effect of prenumb between males and females is not significant
-# at the 5% level (though it approaches significance at the 10% level).
-# We cannot reject the null hypothesis that the effect of prenumb on
-# postnumb, controlling for age, is the same for males and females.
+modelsummary(list("Males" = fit_male, "Females" = fit_female, "Interaction" = fit_interaction), stars = TRUE)
 ```
 
-### Building a model step by step: donations
+The interaction coefficient is not significant at the 5% level, so we conclude that there is no evidence that the effect of prenumb on postnumb differs between boys and girls.
 
-#### 6. Donations by age group, controlling for religion
+::: {.callout-tip}
+There is way of combining estimates from separate models and then formally comparing coefficients across models. It is called "seemingly unrelated estimation" (suest) and was originaly developed in a Stata package by a former SaSR03 teacher, Jeroen Weesie. (see [here](https://www.stata.com/products/stb/journals/stb52.pdf), p. 34). There is a [R package](https://www.trentonmize.com/software/suest_r/), which must be installed from Github, implementing this method. We are skiping suest in the course, but provide the relevant code below for illustration. Nte that it also uses function from the `marginaleffects` package the we previously loaded. 
 
 ```{r}
-donations <- donations |>
-  filter(religion != 6) |>
-  mutate(
-    religion = factor(religion),
-    old = as.integer(age > 40),
-    propdon = ((donation * 1000) / 12) / (inc * 1000),
-    percdon = propdon * 100
-  )
+# The lines below are commented out for technical reasons, but you can run this code in your own R session if you want to try it out. 
+# install.packages("remotes")
+# remotes::install_github("tdmize/suest")
+library(suest)
 
-fit_old <- lm(percdon ~ old + religion, data = donations)
-summary(fit_old)
-
-# Older people (over 40) donate a larger share of their income than
-# younger people. Controlling for religion, the regression coefficient
-# for old is positive (about 0.82) and significant.
+combined <- suest(fit_male, fit_female, model_names = c("Male", "Female"))
+effects <- avg_comparisons(combined, variables = "prenumb")
+hypotheses(effects, hypothesis = difference ~ pairwise)
 ```
 
-#### 7. Donations by gender, controlling for religion
+We conclude the same thing with this method: the different between the effect of prenumb on postnumb for boys and girls is not significant at the 5% level.
+:::
+
+
+### donations
+
+Prepare data:
+ ```{r}
+ donations <- read_dta("data/donations.dta")
+
+ donations <- donations |>
+  mutate(
+    religion = na_if(religion, 6),
+    religion = factor(religion,
+                      levels = 1:5,
+                      labels = c("none", "catholic", "reformed",
+                                "rereformed", "islam")),
+    old = age > 40,
+    propdon = (donation / 12) / inc,
+    percdon = propdon * 100
+  )
+ ```
+
+#### 3
+
+```{r}
+fit_old <- lm(percdon ~ old + religion, data = donations)
+summary(fit_old)
+```
+
+Older people (over 40) donate a larger share of their income than younger people. Controlling for religion, the regression coefficient for old is positive (about 0.82) and significant.
+
+#### 4
 
 ```{r}
 fit_male_don <- lm(percdon ~ male + religion, data = donations)
 summary(fit_male_don)
-
-# Controlling for religion, men donate a larger share of their income
-# than women: the coefficient for male is positive (about 0.32), but not
-# significant at the 5% level. It is significant at about the 6.5%
-# level. There is therefore no strong evidence that men donate
-# significantly more than women; this result should be interpreted with
-# caution rather than treated as a clear null result.
 ```
 
-#### 8. Testing religion as a whole
+Controlling for religion, men donate a larger share of their income than women: the coefficient for male is positive (about 0.32), but not significant at the 5% level. It is significant at about the 6.5% level. There is therefore no strong evidence that men donate significantly more than women; this result should be interpreted with caution.
 
+
+#### 5
+
+As in question 1, there are multiple ways of doing this. Here we will do a Wald test using the F-statistic using `marginaleffects::hypotheses()`. Note that we need to use the coefficient names as they appear in the model summary.
 ```{r}
-# (a) Joint test of all religion coefficients in the full model:
-linearHypothesis(fit_male_don, c(
-  "religion2 = 0", "religion3 = 0", "religion4 = 0", "religion5 = 0"
-))
-
-# (b) Comparison of a restricted model (male only) to the full model:
-fit_male_only <- lm(percdon ~ male, data = donations)
-anova(fit_male_only, fit_male_don)
-
-# Both approaches agree: religion significantly influences donations,
-# even after controlling for gender.
+hypotheses(fit_male_don, joint = c("religioncatholic", "religionreformed", "religionrereformed", "religionislam"))
 ```
 
-#### 9. Social integration and religion
+The F-statistic is significant, which means that the fit improves between a model without religion and a model with religion. We conclude that religion as a whole does significantly contribute to explaining `percdon`, controlling for gender.
 
-```{r}
-fit_socint <- lm(percdon ~ socint, data = donations)
-summary(fit_socint)
-
-fit_socint_religion <- lm(percdon ~ socint + religion, data = donations)
-summary(fit_socint_religion)
-
-# Donations increase with the extent to which people are socially
-# integrated: the coefficient for socint is positive and significant in
-# the simple model. Once religion is included as a control variable,
-# however, this is no longer the case -- the coefficient for socint
-# becomes negative. This suggests that the marginal (positive)
-# relationship between social integration and donations runs largely
-# through religion (religious people tend to be both more socially
-# integrated and to donate more).
-```
-
-#### 10. A serious health problem, controlling for religion
-
-```{r}
-fit_lifevent <- lm(percdon ~ lifevent, data = donations)
-fit_lifevent_religion <- lm(percdon ~ lifevent + religion, data = donations)
-
-anova(fit_lifevent, fit_lifevent_religion)
-summary(fit_lifevent_religion)
-
-# People who experienced a serious health problem (lifevent = 1) donate
-# more than those who did not, controlling for religion
-# (b = 1.96, t = 11.2, p < 0.001).
-```
-
-#### 11. Income, controlling for religion
-
-```{r}
-fit_inc <- lm(percdon ~ inc, data = donations)
-summary(fit_inc)
-
-fit_inc_religion <- lm(percdon ~ inc + religion, data = donations)
-summary(fit_inc_religion)
-
-# There is evidence that donations increase with income, even
-# controlling for religion (b = 0.424, t = 5.49, p < 0.001). For each
-# 1000 (currency units) per month more, the percentage of income donated
-# increases by about 0.4.
-```
-
-#### 12. Social integration by gender
-
-```{r}
-fit_male_socint <- lm(percdon ~ male * socint, data = donations)
-summary(fit_male_socint)
-
-# The effect of social integration on donations is significantly
-# different for men and women. The slope for socint applies to women
-# (the reference group, male = 0); the interaction term male:socint
-# gives the difference in slope for men.
-
-b <- coef(fit_male_socint)
-slope_women <- b["socint"]
-slope_men <- b["socint"] + b["male:socint"]
-
-slope_women
-slope_men
-
-# The effect of social integration on donations is larger for women
-# (about 0.62) than for men (about 0.62 - 0.51 = 0.11): the difference
-# is about -0.51 (t(521) = 2.08, p = 0.038).
-```
-
-#### 13. Education by gender
-
-```{r}
-fit_male_edu <- lm(percdon ~ male * edu, data = donations)
-summary(fit_male_edu)
-
-# There is no evidence that the effect of years of education on
-# donations differs for men and women
-# (b = -0.024, t(521) = -0.25, p = 0.803).
-```
-
-#### 14. A serious health problem by gender
-
-```{r}
-fit_male_lifevent <- lm(percdon ~ male * lifevent, data = donations)
-summary(fit_male_lifevent)
-
-# There is no evidence that the effect of having experienced a serious
-# health problem on donations is greater for women than for men
-# (b = 0.039, t(521) = 0.09, p = 0.925).
-```
+:::
+:::

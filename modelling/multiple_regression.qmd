@@ -31,7 +31,7 @@ theoretical terms, charity is a "luxury good"). Fit a regression model to test t
 
 7. Fit a regression of `propdon` on `male`, `religion`, and their interaction. Is there evidence that the effect of religion on donations differs between men and women?
 
-8. Fit a regression of `percdon` on `inc`, `religion`, and their interaction. Is there evidence that the effect of income on donations varies between religious denominations?
+8. Fit a regression of `propdon` on `inc`, `religion`, and their interaction. Is there evidence that the effect of income on donations varies between religious denominations?
 
 9. Consider whether life events (`lifevent`) have a larger effect on charity among older people than among younger people. Beware: this formulation does not mean that we want you to 
 dichotomize age. It is just an informal way of expressing that the effect of life events 
@@ -167,7 +167,7 @@ avg_comparisons(fit_propdon, variables = list(religion = "pairwise"))
 
 No significant differences are found between islam and none, and between catholics and reformed (the 95% confidence interval for these pairwise differences includes 0). There is evidence of difference for all other comparisons. 
 
-#### 6. Percentage donated and income
+#### 6. Proportion donated and income
 
 ```{r}
 fit_propdon_inc_rel <- lm(propdon ~ inc + religion, data = donations)
