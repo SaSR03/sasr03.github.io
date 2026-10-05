@@ -4,230 +4,181 @@ title: Binary logistic regression
 
 ## Assignments
 
-Use the dataset `unemploy`. Construct the outcome `work`, coded 1 if `studytim` (the unemployment spell length) is less than 53 (weeks), and 0 otherwise. Human capital is captured by `edu` (education), `age`, and `exp` (number of previous unemployment spells).
+Sociologists often claim that labor market outcomes (e.g., income, promotion, reentry after unemployment, ...) depend not only on human capital factors (formal qualifications, labor market experience, ...), but also on social capital: it is not only what you know, but also who you know.
 
-### 1. The linear probability model
+Use the dataset `unemploy`. Construct the outcome `work`, coded 1 (or TRUE) if `studytim` (the unemployment spell length) is less than 53 (weeks), and 0 (or FALSE) otherwise. Human capital is captured by `edu` (education), `age`, and `exp` (number of previous unemployment spells).
 
-Fit a linear probability model of `work` on `age`, `edu`, and `exp`. Interpret each coefficient in terms of percentage-point changes in the probability of re-employment.
+1. Fit a linear probability model of `work` on `age`, `edu`, and `exp` and interpret all 
+coefficients. 
 
-### 2. Robust standard errors
+2. Compute heteroskedasticity-consistent (robust) standard errors for the previous models. You can do that using `modelsummary(your_model_object, vcov = "robust")`. Are the substantive conclusions affected?
 
-Refit the same model with heteroskedasticity-consistent (robust) standard errors. Compare the coefficients and standard errors to the previous model. Are the substantive conclusions affected?
+3. Obtain the predicted probabilities from the linear probability model (use the `predict()` from base R, or the values from `your_model_object$fitted.values`). Count how many predicted probabilities fall outside the range 0 to 1. 
 
-### 3. Predicted probabilities outside 0 and 1
 
-Obtain the predicted probabilities from the linear probability model. Count how many predicted probabilities fall outside the range 0 to 1. What does this tell you about the linear probability model in this particular dataset, and about the model in general?
+4. Fit a logistic regression of `work` on `age`, `edu`, and `exp`. (Use `glm`, which has the basically the same syntax as `lm()`. But you should specify the argument `family = binomial()`.) Interpret each coefficient:
+  a. in terms of log-odds
+  b. in terms of odds-ratios/odds
+  c. in terms of marginal effects (on the probability scale). You can compute marginal effects using `marginaleffects::avg_slopes()`.  Compare these effects, and the substantive conclusions they imply, to the coefficients of the linear probability model from question 1.
 
-### 4. Logistic regression: log odds
+5. Compute the marginal effect of `age` for a person with the lowest education level (`edu = 1`) and the largest number of prior unemployment spells (`exp = 3`). Use `marginaleffects::slopes()` with the `newdata` argument to specify the values of `edu` and `exp` (see example [here](https://marginaleffects.com/chapters/slopes.html#adjustment-variables)). Interpret this effect.
 
-Fit a logistic regression of `work` on `age`, `edu`, and `exp`. Interpret each coefficient in terms of log odds.
+6. Compute the marginal effect of `age` at the means of `edu` and `exp`. (Use `newdata = "mean"` in `marginaleffects::slopes()`.) Compare this to the average marginal effect of `age` found in question 4c. Why can these two values differ?
 
-### 5. Odds ratios
+7. The dataset comprises measures for three forms of social recourses (strong, medium, and weak ties): `scweak`, `scmedium`, and `scstrong`. Fit a logit model of `work` on `age`, `edu`, `exp`, and the three social capital measures.
+  a. Test, using a Wald test and a likelihood ratio test, whether social capital as a set significantly contributes to explaining re-employment.
+  b. Test whether the coefficients for `scweak` and `scstrong` are different. (Hint: use `marginaleffects::hypotheses()`)
 
-Exponentiate the coefficients from the previous model to obtain odds ratios. Interpret each odds ratio as a percentage change in the odds of re-employment. Why is the odds ratio interpretation valid for every subject, regardless of the specific values of the predictors, unlike a marginal effect?
+8. Fit a probit regression of `work` on `age`, `edu`, and `exp`. (The code is almost the same as for the logit model, but with `family = binomial(link = "probit")`) Compare the estimates of this model with the estimates of the linear probability model question 1 and the average marginal effects using the logistic regression model estimated in 4c. What do you find? 
 
-### 6. Average marginal effects
 
-Compute the average marginal effects for all predictors in the logistic model, on the probability scale. Compare these effects, and the substantive conclusions they imply, to the coefficients of the linear probability model from question 1.
-
-### 7. Marginal effect at chosen values
-
-Compute the marginal effect of `age` for a person with the lowest education level (`edu = 1`) and the largest number of prior unemployment spells (`exp = 3`). Interpret this effect.
-
-### 8. Marginal effect at the means
-
-Compute the marginal effect of `age` at the means of `edu` and `exp`. Compare this to the average marginal effect of `age` found in question 6. Why can these two values differ?
-
-### 9. Does social capital contribute?
-
-Fit a logistic regression of `work` on `age`, `edu`, and `exp` (human capital only), and a second model that adds three measures of social capital: `scweak`, `scmedium`, and `scstrong`. Test, using both a Wald test and a likelihood ratio test, whether social capital as a set significantly contributes to explaining re-employment, controlling for human capital. Do the two tests agree?
-
-### 10. Are the three forms of social capital equal?
-
-Using the full model from the previous question, test whether the three forms of social capital (`scweak`, `scmedium`, `scstrong`) have equal effects on re-employment. What do you conclude?
-
-### 11. Logit versus probit
-
-Fit a probit regression of `work` on `age`, `edu`, and `exp`. Compare the coefficients to the logistic regression from question 4. Are the substantive conclusions the same, even though the coefficients themselves are not directly comparable in size?
+::: {.content-visible when-format="html"}
 
 ## Answers
 
-Make sure this file is in the same R Project as the `data` folder. Use relative file paths, not full paths to your computer.
+::: {.callout-note appearance="simple" collapse=true}
+## See answers
+
 
 ```{r setup-logistic}
 library(tidyverse)
 library(haven)
+library(modelsummary)
 library(lmtest)
-library(sandwich)
-library(car)
 library(marginaleffects)
 
 unemploy <- read_dta("data/unemploy.dta")
 
 unemploy <- unemploy |>
-  mutate(work = as.integer(studytim < 53))
+  mutate(work = studytim < 53)
 ```
 
-### 1. The linear probability model
+### 1
 
 ```{r}
 fit_lpm <- lm(work ~ age + edu + exp, data = unemploy)
 summary(fit_lpm)
-
-# If age increases by one year, the probability of re-employment
-# significantly decreases by 3.25 percentage points.
-# If education increases, the probability of re-employment significantly
-# increases by 5.6 percentage points per unit of education.
-# If the number of previous unemployment spells (exp) is higher, the
-# probability of re-employment does not decrease significantly at the
-# 5% level, but does decrease significantly at the 7.7% level (by about
-# 4.8 percentage points per additional spell).
 ```
 
-### 2. Robust standard errors
+If age increases by one year, the probability of re-employment significantly decreases by 3.25 percentage points. If education increases, the probability of re-employment significantly increases by 5.6 percentage points per unit of education. If the number of previous unemployment spells (exp) is higher, the probability of re-employment does not decrease significantly at the 5% level, but does decrease significantly at the 7.7% level (by about 4.8 percentage points per additional spell).
+
+### 2
+
+Model with robust SEs:
+```{r}
+modelsummary(fit_lpm, vcov = "robust", stars=TRUE)
+```
+
+We can also compare the model with and without robust SEs side by side:
+```{r}
+modelsummary(list("original" = fit_lpm, "robust SES" = fit_lpm), 
+vcov = list("classical", "robust"), stars=TRUE)
+```
+
+The coefficients are exactly the same (as they should); only the standard errors change very slightly. The substantive conclusions are robust to this correction. Note that it never hurts to use robust SEs, even if the model is homoskedastic, because they are valid in both cases. So it is a good idea to use robust SEs by default.
+
+### 3
 
 ```{r}
-coeftest(fit_lpm, vcov = vcovHC(fit_lpm, type = "HC1"))
+pred_probs <- predict(fit_lpm)
 
-# The coefficients are exactly the same as in the OLS model; only the
-# standard errors change slightly. The substantive conclusions are
-# robust to this correction.
+sum(pred_probs < 0 | pred_probs > 1)
 ```
 
-### 3. Predicted probabilities outside 0 and 1
+None of the observations have predicted probabilities outside the  range 0 to 1. In practice, this is very often the case, even though the linear probability model does not guarantee it in general.
 
-```{r}
-unemploy <- unemploy |>
-  mutate(prob_lpm = predict(fit_lpm))
-
-unemploy |>
-  summarise(n_out_of_range = sum(prob_lpm < 0 | prob_lpm > 1))
-
-# None of the observations have predicted probabilities outside the
-# range 0 to 1. In practice, this is very often the case, even though
-# the linear probability model does not guarantee it in general.
-```
-
-### 4. Logistic regression: log odds
-
+### 4
 ```{r}
 fit_logit <- glm(work ~ age + edu + exp, data = unemploy, family = binomial)
 summary(fit_logit)
-
-# If age increases by one year, the log odds of re-employment
-# significantly go down by 0.143.
-# If education increases, the log odds of re-employment significantly
-# increase by 0.259.
-# If the number of previous unemployment spells is higher, the log odds
-# of re-employment do not decrease significantly at the 5% level, but do
-# decrease significantly at the 7.4% level (by 0.216).
 ```
 
-### 5. Odds ratios
+a. Logg odds:  If age increases by one year, the log odds of re-employment significantly go down by 0.143. If education increases, the log odds of re-employment significantly
+increase by 0.259. If the number of previous unemployment spells is higher, the log odds
+of re-employment do not decrease significantly at the 5% level, but do decrease significantly at the 7.4% level (by 0.216).
 
+b. Odds ratios. We need to exponentiate the coefficients:
 ```{r}
+# Solution 1:
 exp(coef(fit_logit))
 
-# The odds of getting a job within a year (the probability of getting a
-# job divided by the probability of not getting a job) change by
-# (exp(b) - 1) * 100% for a one-unit increase in x:
-#   - the odds increase by (exp(0.259) - 1) * 100 = 29.5% for one unit
-#     of education
-#   - the odds change by (exp(-0.143) - 1) * 100 = -13.3%, i.e. decrease
-#     by 13.3%, for each year older
-#   - the odds decrease by about 19.5% for each previous unemployment
-#     spell (exp(-0.216))
-#
-# The advantage of the odds ratio interpretation is that it applies
-# exactly for every subject, irrespective of the value of the focal
-# variable and of the values of the other predictors -- unlike a
-# marginal effect, which depends on the specific values of all
-# predictors.
+# Solution 2
+modelsummary(fit_logit, exponentiate = TRUE, stars = TRUE)
 ```
 
-### 6. Average marginal effects
+The odds of getting a job within a year (the probability of getting a job divided by the probability of not getting a job) change by (exp(b) - 1) * 100% for a one-unit increase in x:
+  - the odds increase by (exp(0.259) - 1) * 100 = 29.5% for one unit
+    of education
+  - the odds change by (exp(-0.143) - 1) * 100 = -13.3%, i.e. decrease
+    by 13.3%, for each year older
+  - the odds decrease by about 19.5% for each previous unemployment
+    spell (exp(-0.216))
+The advantage of the odds ratio interpretation is that it applies exactly for every subject, irrespective of the value of the focal variable and of the values of the other predictors -- unlike a marginal effect, which depends on the specific values of all predictors.
 
+
+c. Marginal effects
 ```{r}
 avg_slopes(fit_logit)
-
-# variable | coefficient (log odds) |  odds ratio | average marginal effect
-# ---------+-------------------------+-------------+--------------------------
-#      age |          -0.143         |    0.867    |        -0.031
-#      edu |           0.259         |    1.295    |         0.057
-#      exp |          -0.216         |    0.805    |        -0.0475
-#
-# With each year of age, the probability of re-employment decreases on
-# average by about 3.1 percentage points. The effects of the other
-# predictors follow similarly. These average marginal effects are very
-# close to the coefficients of the linear probability model in question
-# 1. In practice, this is very often the case.
 ```
 
-### 7. Marginal effect at chosen values
+With each year of age, the probability of re-employment decreases on average by about 3.1 percentage points. The effects of the other predictors follow similarly. These average marginal effects are very close to the coefficients of the linear probability model in question 1. In practice, this is very often the case.
+
+We can even compare the average marginal effects to the coefficients of the linear probability model side by side usign `modelsummary()`:
 
 ```{r}
-slopes(fit_logit, variables = "age", newdata = datagrid(edu = 1, exp = 3))
-
-# For the lowest educated people with the largest number of prior
-# unemployment spells, a one-year increase in age is associated with a
-# significant decrease in the probability of re-employment of about
-# 3.0 percentage points.
+modelsummary(list("LPM"= fit_lpm, 
+                   "Logit - Marginal Effects" = avg_slopes(fit_logit)), 
+              stars = TRUE) 
 ```
 
-### 8. Marginal effect at the means
+### 7
+```{r}
+slopes(fit_logit, variables = "age", newdata = datagrid(edu = 1, exp = 3))
+```
+
+For the lowest educated people with the largest number of prior unemployment spells, a one-year increase in age is associated with a significant decrease in the probability of re-employment of about 3.0 percentage points.
+
+### 8
 
 ```{r}
 slopes(fit_logit, variables = "age", newdata = "mean")
-
-# For a person with average education and an average number of prior
-# unemployment spells, a one-year increase in age is associated with a
-# significant decrease in the probability of re-employment of about
-# 3.6 percentage points. This differs from the average marginal effect
-# in question 6, because there we averaged the marginal effect over all
-# observed combinations of education and prior unemployment spells,
-# rather than evaluating the effect once at the mean values of these
-# predictors.
 ```
 
-### 9. Does social capital contribute?
+For a person with average education and an average number of prior unemployment spells, a one-year increase in age is associated with a significant decrease in the probability of re-employment of about 3.6 percentage points. This differs from the average marginal effect in question 4c because there we averaged the marginal effect over all observed combinations of education and prior unemployment spells, rather than evaluating the effect once at the mean values of these predictors.
+
+
+### 7.
 
 ```{r}
-fit_hc <- glm(work ~ age + edu + exp, data = unemploy, family = binomial)
-fit_hsc <- glm(work ~ age + edu + exp + scweak + scmedium + scstrong,
+fit_soccap <- glm(work ~ age + edu + exp + scweak + scmedium + scstrong,
                 data = unemploy, family = binomial)
 
-# Wald test on relevance of social capital
-linearHypothesis(fit_hsc, c("scweak = 0", "scmedium = 0", "scstrong = 0"))
+# Wald test 
+hypotheses(fit_soccap, joint = c("scweak", "scmedium", "scstrong"))
 
-# Likelihood ratio test on relevance of social capital
-lrtest(fit_hc, fit_hsc)
-
-# We find weak evidence that social capital affects re-employment,
-# controlling for human capital (LR chi2(3) = 7.6, p = 0.053). The Wald
-# test gives a similar conclusion.
+# Likelihood ratio test 
+lrtest(fit_logit, fit_soccap)
 ```
 
-### 10. Are the three forms of social capital equal?
+At a 5% significance level,there is no evidence that social capital affects re-employment, controlling for human capital.
+
+Are the effects of `scweak` and `scstrong` different?
 
 ```{r}
-linearHypothesis(fit_hsc, c("scweak = scmedium", "scmedium = scstrong"))
-
-# We can reject the null hypothesis that, controlling for human capital,
-# the three forms of social capital affect re-employment to the same
-# degree (chi2(2) = 6.11, p = 0.047).
+hypotheses(fit_soccap, "scweak = scstrong")
 ```
+We have evidence that the effects of `scweak` and `scstrong` are indeed different.
 
-### 11. Logit versus probit
+
+### 8
 
 ```{r}
 fit_probit <- glm(work ~ age + edu + exp, data = unemploy, family = binomial(link = "probit"))
-summary(fit_probit)
 
-# The probit coefficients are smaller in absolute size than the logit
-# coefficients (as expected, since the two models are scaled
-# differently), but the signs, significance, and substantive
-# conclusions are the same. Indeed, conclusions from the linear
-# probability model, the logit model, and the probit model are very
-# often similar in practice, even though the models differ in their
-# assumptions and in how coefficients are scaled.
+modelsummary(list("LPM"= fit_lpm, 
+                   "Logit - Marginal Effects" = avg_slopes(fit_logit), 
+                   "Probit" = fit_probit),
+              stars = TRUE) 
 ```
+
+The coefficients are larger, but the conclusions are the same. Indeed, the conclusions between the three models are very often very similar.
