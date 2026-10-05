@@ -348,34 +348,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#assignments" id="toc-assignments" class="nav-link active" data-scroll-target="#assignments">Assignments</a>
-  <ul class="collapse">
-  <li><a href="#the-linear-probability-model" id="toc-the-linear-probability-model" class="nav-link" data-scroll-target="#the-linear-probability-model">1. The linear probability model</a></li>
-  <li><a href="#robust-standard-errors" id="toc-robust-standard-errors" class="nav-link" data-scroll-target="#robust-standard-errors">2. Robust standard errors</a></li>
-  <li><a href="#predicted-probabilities-outside-0-and-1" id="toc-predicted-probabilities-outside-0-and-1" class="nav-link" data-scroll-target="#predicted-probabilities-outside-0-and-1">3. Predicted probabilities outside 0 and 1</a></li>
-  <li><a href="#logistic-regression-log-odds" id="toc-logistic-regression-log-odds" class="nav-link" data-scroll-target="#logistic-regression-log-odds">4. Logistic regression: log odds</a></li>
-  <li><a href="#odds-ratios" id="toc-odds-ratios" class="nav-link" data-scroll-target="#odds-ratios">5. Odds ratios</a></li>
-  <li><a href="#average-marginal-effects" id="toc-average-marginal-effects" class="nav-link" data-scroll-target="#average-marginal-effects">6. Average marginal effects</a></li>
-  <li><a href="#marginal-effect-at-chosen-values" id="toc-marginal-effect-at-chosen-values" class="nav-link" data-scroll-target="#marginal-effect-at-chosen-values">7. Marginal effect at chosen values</a></li>
-  <li><a href="#marginal-effect-at-the-means" id="toc-marginal-effect-at-the-means" class="nav-link" data-scroll-target="#marginal-effect-at-the-means">8. Marginal effect at the means</a></li>
-  <li><a href="#does-social-capital-contribute" id="toc-does-social-capital-contribute" class="nav-link" data-scroll-target="#does-social-capital-contribute">9. Does social capital contribute?</a></li>
-  <li><a href="#are-the-three-forms-of-social-capital-equal" id="toc-are-the-three-forms-of-social-capital-equal" class="nav-link" data-scroll-target="#are-the-three-forms-of-social-capital-equal">10. Are the three forms of social capital equal?</a></li>
-  <li><a href="#logit-versus-probit" id="toc-logit-versus-probit" class="nav-link" data-scroll-target="#logit-versus-probit">11. Logit versus probit</a></li>
-  </ul></li>
-  <li><a href="#answers" id="toc-answers" class="nav-link" data-scroll-target="#answers">Answers</a>
-  <ul class="collapse">
-  <li><a href="#the-linear-probability-model-1" id="toc-the-linear-probability-model-1" class="nav-link" data-scroll-target="#the-linear-probability-model-1">1. The linear probability model</a></li>
-  <li><a href="#robust-standard-errors-1" id="toc-robust-standard-errors-1" class="nav-link" data-scroll-target="#robust-standard-errors-1">2. Robust standard errors</a></li>
-  <li><a href="#predicted-probabilities-outside-0-and-1-1" id="toc-predicted-probabilities-outside-0-and-1-1" class="nav-link" data-scroll-target="#predicted-probabilities-outside-0-and-1-1">3. Predicted probabilities outside 0 and 1</a></li>
-  <li><a href="#logistic-regression-log-odds-1" id="toc-logistic-regression-log-odds-1" class="nav-link" data-scroll-target="#logistic-regression-log-odds-1">4. Logistic regression: log odds</a></li>
-  <li><a href="#odds-ratios-1" id="toc-odds-ratios-1" class="nav-link" data-scroll-target="#odds-ratios-1">5. Odds ratios</a></li>
-  <li><a href="#average-marginal-effects-1" id="toc-average-marginal-effects-1" class="nav-link" data-scroll-target="#average-marginal-effects-1">6. Average marginal effects</a></li>
-  <li><a href="#marginal-effect-at-chosen-values-1" id="toc-marginal-effect-at-chosen-values-1" class="nav-link" data-scroll-target="#marginal-effect-at-chosen-values-1">7. Marginal effect at chosen values</a></li>
-  <li><a href="#marginal-effect-at-the-means-1" id="toc-marginal-effect-at-the-means-1" class="nav-link" data-scroll-target="#marginal-effect-at-the-means-1">8. Marginal effect at the means</a></li>
-  <li><a href="#does-social-capital-contribute-1" id="toc-does-social-capital-contribute-1" class="nav-link" data-scroll-target="#does-social-capital-contribute-1">9. Does social capital contribute?</a></li>
-  <li><a href="#are-the-three-forms-of-social-capital-equal-1" id="toc-are-the-three-forms-of-social-capital-equal-1" class="nav-link" data-scroll-target="#are-the-three-forms-of-social-capital-equal-1">10. Are the three forms of social capital equal?</a></li>
-  <li><a href="#logit-versus-probit-1" id="toc-logit-versus-probit-1" class="nav-link" data-scroll-target="#logit-versus-probit-1">11. Logit versus probit</a></li>
-  </ul></li>
+  <li><a href="#assignments" id="toc-assignments" class="nav-link active" data-scroll-target="#assignments">Assignments</a></li>
+  <li><a href="#answers" id="toc-answers" class="nav-link" data-scroll-target="#answers">Answers</a></li>
   </ul>
 </nav>
     </div>
@@ -403,55 +377,46 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="assignments" class="level2">
 <h2 class="anchored" data-anchor-id="assignments">Assignments</h2>
-<p>Use the dataset <code>unemploy</code>. Construct the outcome <code>work</code>, coded 1 if <code>studytim</code> (the unemployment spell length) is less than 53 (weeks), and 0 otherwise. Human capital is captured by <code>edu</code> (education), <code>age</code>, and <code>exp</code> (number of previous unemployment spells).</p>
-<section id="the-linear-probability-model" class="level3">
-<h3 class="anchored" data-anchor-id="the-linear-probability-model">1. The linear probability model</h3>
-<p>Fit a linear probability model of <code>work</code> on <code>age</code>, <code>edu</code>, and <code>exp</code>. Interpret each coefficient in terms of percentage-point changes in the probability of re-employment.</p>
-</section>
-<section id="robust-standard-errors" class="level3">
-<h3 class="anchored" data-anchor-id="robust-standard-errors">2. Robust standard errors</h3>
-<p>Refit the same model with heteroskedasticity-consistent (robust) standard errors. Compare the coefficients and standard errors to the previous model. Are the substantive conclusions affected?</p>
-</section>
-<section id="predicted-probabilities-outside-0-and-1" class="level3">
-<h3 class="anchored" data-anchor-id="predicted-probabilities-outside-0-and-1">3. Predicted probabilities outside 0 and 1</h3>
-<p>Obtain the predicted probabilities from the linear probability model. Count how many predicted probabilities fall outside the range 0 to 1. What does this tell you about the linear probability model in this particular dataset, and about the model in general?</p>
-</section>
-<section id="logistic-regression-log-odds" class="level3">
-<h3 class="anchored" data-anchor-id="logistic-regression-log-odds">4. Logistic regression: log odds</h3>
-<p>Fit a logistic regression of <code>work</code> on <code>age</code>, <code>edu</code>, and <code>exp</code>. Interpret each coefficient in terms of log odds.</p>
-</section>
-<section id="odds-ratios" class="level3">
-<h3 class="anchored" data-anchor-id="odds-ratios">5. Odds ratios</h3>
-<p>Exponentiate the coefficients from the previous model to obtain odds ratios. Interpret each odds ratio as a percentage change in the odds of re-employment. Why is the odds ratio interpretation valid for every subject, regardless of the specific values of the predictors, unlike a marginal effect?</p>
-</section>
-<section id="average-marginal-effects" class="level3">
-<h3 class="anchored" data-anchor-id="average-marginal-effects">6. Average marginal effects</h3>
-<p>Compute the average marginal effects for all predictors in the logistic model, on the probability scale. Compare these effects, and the substantive conclusions they imply, to the coefficients of the linear probability model from question 1.</p>
-</section>
-<section id="marginal-effect-at-chosen-values" class="level3">
-<h3 class="anchored" data-anchor-id="marginal-effect-at-chosen-values">7. Marginal effect at chosen values</h3>
-<p>Compute the marginal effect of <code>age</code> for a person with the lowest education level (<code>edu = 1</code>) and the largest number of prior unemployment spells (<code>exp = 3</code>). Interpret this effect.</p>
-</section>
-<section id="marginal-effect-at-the-means" class="level3">
-<h3 class="anchored" data-anchor-id="marginal-effect-at-the-means">8. Marginal effect at the means</h3>
-<p>Compute the marginal effect of <code>age</code> at the means of <code>edu</code> and <code>exp</code>. Compare this to the average marginal effect of <code>age</code> found in question 6. Why can these two values differ?</p>
-</section>
-<section id="does-social-capital-contribute" class="level3">
-<h3 class="anchored" data-anchor-id="does-social-capital-contribute">9. Does social capital contribute?</h3>
-<p>Fit a logistic regression of <code>work</code> on <code>age</code>, <code>edu</code>, and <code>exp</code> (human capital only), and a second model that adds three measures of social capital: <code>scweak</code>, <code>scmedium</code>, and <code>scstrong</code>. Test, using both a Wald test and a likelihood ratio test, whether social capital as a set significantly contributes to explaining re-employment, controlling for human capital. Do the two tests agree?</p>
-</section>
-<section id="are-the-three-forms-of-social-capital-equal" class="level3">
-<h3 class="anchored" data-anchor-id="are-the-three-forms-of-social-capital-equal">10. Are the three forms of social capital equal?</h3>
-<p>Using the full model from the previous question, test whether the three forms of social capital (<code>scweak</code>, <code>scmedium</code>, <code>scstrong</code>) have equal effects on re-employment. What do you conclude?</p>
-</section>
-<section id="logit-versus-probit" class="level3">
-<h3 class="anchored" data-anchor-id="logit-versus-probit">11. Logit versus probit</h3>
-<p>Fit a probit regression of <code>work</code> on <code>age</code>, <code>edu</code>, and <code>exp</code>. Compare the coefficients to the logistic regression from question 4. Are the substantive conclusions the same, even though the coefficients themselves are not directly comparable in size?</p>
-</section>
+<p>Sociologists often claim that labor market outcomes (e.g., income, promotion, reentry after unemployment, …) depend not only on human capital factors (formal qualifications, labor market experience, …), but also on social capital: it is not only what you know, but also who you know.</p>
+<p>Use the dataset <code>unemploy</code>. Construct the outcome <code>work</code>, coded 1 (or TRUE) if <code>studytim</code> (the unemployment spell length) is less than 53 (weeks), and 0 (or FALSE) otherwise. Human capital is captured by <code>edu</code> (education), <code>age</code>, and <code>exp</code> (number of previous unemployment spells).</p>
+<ol type="1">
+<li><p>Fit a linear probability model of <code>work</code> on <code>age</code>, <code>edu</code>, and <code>exp</code> and interpret all coefficients.</p></li>
+<li><p>Compute heteroskedasticity-consistent (robust) standard errors for the previous models. You can do that using <code>modelsummary(your_model_object, vcov = "robust")</code>. Are the substantive conclusions affected?</p></li>
+<li><p>Obtain the predicted probabilities from the linear probability model (use the <code>predict()</code> from base R, or the values from <code>your_model_object$fitted.values</code>). Count how many predicted probabilities fall outside the range 0 to 1.</p></li>
+<li><p>Fit a logistic regression of <code>work</code> on <code>age</code>, <code>edu</code>, and <code>exp</code>. (Use <code>glm</code>, which has the basically the same syntax as <code>lm()</code>. But you should specify the argument <code>family = binomial()</code>.) Interpret each coefficient:</p></li>
+</ol>
+<ol type="a">
+<li>in terms of log-odds</li>
+<li>in terms of odds-ratios/odds</li>
+<li>in terms of marginal effects (on the probability scale). You can compute marginal effects using <code>marginaleffects::avg_slopes()</code>. Compare these effects, and the substantive conclusions they imply, to the coefficients of the linear probability model from question 1.</li>
+</ol>
+<ol start="5" type="1">
+<li><p>Compute the marginal effect of <code>age</code> for a person with the lowest education level (<code>edu = 1</code>) and the largest number of prior unemployment spells (<code>exp = 3</code>). Use <code>marginaleffects::slopes()</code> with the <code>newdata</code> argument to specify the values of <code>edu</code> and <code>exp</code> (see example <a href="https://marginaleffects.com/chapters/slopes.html#adjustment-variables">here</a>). Interpret this effect.</p></li>
+<li><p>Compute the marginal effect of <code>age</code> at the means of <code>edu</code> and <code>exp</code>. (Use <code>newdata = "mean"</code> in <code>marginaleffects::slopes()</code>.) Compare this to the average marginal effect of <code>age</code> found in question 4c. Why can these two values differ?</p></li>
+<li><p>The dataset comprises measures for three forms of social recourses (strong, medium, and weak ties): <code>scweak</code>, <code>scmedium</code>, and <code>scstrong</code>. Fit a logit model of <code>work</code> on <code>age</code>, <code>edu</code>, <code>exp</code>, and the three social capital measures.</p></li>
+</ol>
+<ol type="a">
+<li>Test, using a Wald test and a likelihood ratio test, whether social capital as a set significantly contributes to explaining re-employment.</li>
+<li>Test whether the coefficients for <code>scweak</code> and <code>scstrong</code> are different. (Hint: use <code>marginaleffects::hypotheses()</code>)</li>
+</ol>
+<ol start="8" type="1">
+<li>Fit a probit regression of <code>work</code> on <code>age</code>, <code>edu</code>, and <code>exp</code>. (The code is almost the same as for the logit model, but with <code>family = binomial(link = "probit")</code>) Compare the estimates of this model with the estimates of the linear probability model question 1 and the average marginal effects using the logistic regression model estimated in 4c. What do you find?</li>
+</ol>
 </section>
 <section id="answers" class="level2">
 <h2 class="anchored" data-anchor-id="answers">Answers</h2>
-<p>Make sure this file is in the same R Project as the <code>data</code> folder. Use relative file paths, not full paths to your computer.</p>
+<div class="callout callout-style-simple callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>See answers
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stderr">
@@ -467,7 +432,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lmtest)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(modelsummary)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lmtest)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Loading required package: zoo
 
@@ -477,33 +443,18 @@ The following objects are masked from 'package:base':
 
     as.Date, as.Date.numeric</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sandwich)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(car)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Loading required package: carData
-
-Attaching package: 'car'
-
-The following object is masked from 'package:dplyr':
-
-    recode
-
-The following object is masked from 'package:purrr':
-
-    some</code></pre>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(marginaleffects)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>unemploy <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(<span class="st">"data/unemploy.dta"</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>unemploy <span class="ot">&lt;-</span> unemploy <span class="sc">|&gt;</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">work =</span> studytim <span class="sc">&lt;</span> <span class="dv">53</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(marginaleffects)</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>unemploy <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(<span class="st">"data/unemploy.dta"</span>)</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>unemploy <span class="ot">&lt;-</span> unemploy <span class="sc">|&gt;</span></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">work =</span> <span class="fu">as.integer</span>(studytim <span class="sc">&lt;</span> <span class="dv">53</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<section id="the-linear-probability-model-1" class="level3">
-<h3 class="anchored" data-anchor-id="the-linear-probability-model-1">1. The linear probability model</h3>
+<section id="section" class="level3">
+<h3 class="anchored" data-anchor-id="section">1</h3>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>fit_lpm <span class="ot">&lt;-</span> <span class="fu">lm</span>(work <span class="sc">~</span> age <span class="sc">+</span> edu <span class="sc">+</span> exp, <span class="at">data =</span> unemploy)</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit_lpm)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>fit_lpm <span class="ot">&lt;-</span> <span class="fu">lm</span>(work <span class="sc">~</span> age <span class="sc">+</span> edu <span class="sc">+</span> exp, <span class="at">data =</span> unemploy)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit_lpm)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -526,61 +477,307 @@ Residual standard error: 0.4725 on 238 degrees of freedom
 Multiple R-squared:  0.1207,    Adjusted R-squared:  0.1096 
 F-statistic: 10.89 on 3 and 238 DF,  p-value: 9.97e-07</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># If age increases by one year, the probability of re-employment</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co"># significantly decreases by 3.25 percentage points.</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co"># If education increases, the probability of re-employment significantly</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co"># increases by 5.6 percentage points per unit of education.</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co"># If the number of previous unemployment spells (exp) is higher, the</span></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co"># probability of re-employment does not decrease significantly at the</span></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 5% level, but does decrease significantly at the 7.7% level (by about</span></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="co"># 4.8 percentage points per additional spell).</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+<p>If age increases by one year, the probability of re-employment significantly decreases by 3.25 percentage points. If education increases, the probability of re-employment significantly increases by 5.6 percentage points per unit of education. If the number of previous unemployment spells (exp) is higher, the probability of re-employment does not decrease significantly at the 5% level, but does decrease significantly at the 7.7% level (by about 4.8 percentage points per additional spell).</p>
 </section>
-<section id="robust-standard-errors-1" class="level3">
-<h3 class="anchored" data-anchor-id="robust-standard-errors-1">2. Robust standard errors</h3>
+<section id="section-1" class="level3">
+<h3 class="anchored" data-anchor-id="section-1">2</h3>
+<p>Model with robust SEs:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">coeftest</span>(fit_lpm, <span class="at">vcov =</span> <span class="fu">vcovHC</span>(fit_lpm, <span class="at">type =</span> <span class="st">"HC1"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-t test of coefficients:
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">modelsummary</span>(fit_lpm, <span class="at">vcov =</span> <span class="st">"robust"</span>, <span class="at">stars=</span><span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<script src="https://cdn.jsdelivr.net/gh/vincentarelbundock/tinytable@main/inst/tinytable.js"></script>
 
-              Estimate Std. Error t value  Pr(&gt;|t|)    
-(Intercept)  1.9923848  0.3286256  6.0628 5.208e-09 ***
-age         -0.0325075  0.0065741 -4.9448 1.440e-06 ***
-edu          0.0556019  0.0249057  2.2325   0.02651 *  
-exp         -0.0476368  0.0269259 -1.7692   0.07814 .  
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+    <script>
+      // Create table-specific functions using external factory
+      const tableFns_q6sbfhhsef84j5uz0nh3 = TinyTable.createTableFunctions("tinytable_q6sbfhhsef84j5uz0nh3");
+      // tinytable span after
+      window.addEventListener('load', function () {
+          var cellsToStyle = [
+            // tinytable style arrays after
+          { positions: [ { i: '17', j: 2 } ], css_id: 'tinytable_css_kawd2656cnefnzkim906',}, 
+          { positions: [ { i: '8', j: 2 } ], css_id: 'tinytable_css_j59l9outbpsz2jo4srsh',}, 
+          { positions: [ { i: '1', j: 2 }, { i: '2', j: 2 }, { i: '3', j: 2 }, { i: '4', j: 2 }, { i: '5', j: 2 }, { i: '6', j: 2 }, { i: '7', j: 2 }, { i: '9', j: 2 }, { i: '10', j: 2 }, { i: '11', j: 2 }, { i: '12', j: 2 }, { i: '13', j: 2 }, { i: '14', j: 2 }, { i: '15', j: 2 }, { i: '16', j: 2 } ], css_id: 'tinytable_css_n9ump9njth8q4imy29jc',}, 
+          { positions: [ { i: '0', j: 2 } ], css_id: 'tinytable_css_ao5rjwro7fdshah45ydu',}, 
+          { positions: [ { i: '17', j: 1 } ], css_id: 'tinytable_css_om17swze8u7apz6eecmn',}, 
+          { positions: [ { i: '8', j: 1 } ], css_id: 'tinytable_css_c33o5ovqud4f4qdvuksg',}, 
+          { positions: [ { i: '1', j: 1 }, { i: '2', j: 1 }, { i: '3', j: 1 }, { i: '4', j: 1 }, { i: '5', j: 1 }, { i: '6', j: 1 }, { i: '7', j: 1 }, { i: '9', j: 1 }, { i: '10', j: 1 }, { i: '11', j: 1 }, { i: '12', j: 1 }, { i: '13', j: 1 }, { i: '14', j: 1 }, { i: '15', j: 1 }, { i: '16', j: 1 } ], css_id: 'tinytable_css_zsppvugj5ldv16pchvgo',}, 
+          { positions: [ { i: '0', j: 1 } ], css_id: 'tinytable_css_ha3ezzekajg4cgfwuvs1',}, 
+          ];
+
+          // Loop over the arrays to style the cells
+          cellsToStyle.forEach(function (group) {
+              group.positions.forEach(function (cell) {
+                  tableFns_q6sbfhhsef84j5uz0nh3.styleCell(cell.i, cell.j, group.css_id);
+              });
+          });
+      });
+    </script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/vincentarelbundock/tinytable@main/inst/tinytable.css">
+    <style>
+    /* tinytable css entries after */
+    #tinytable_q6sbfhhsef84j5uz0nh3 td.tinytable_css_kawd2656cnefnzkim906, #tinytable_q6sbfhhsef84j5uz0nh3 th.tinytable_css_kawd2656cnefnzkim906 {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.08em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --line-type-bottom: solid; --line-type-left: solid; --line-type-right: solid; --line-type-top: solid; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: center }
+    #tinytable_q6sbfhhsef84j5uz0nh3 td.tinytable_css_j59l9outbpsz2jo4srsh, #tinytable_q6sbfhhsef84j5uz0nh3 th.tinytable_css_j59l9outbpsz2jo4srsh {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --line-type-bottom: solid; --line-type-left: solid; --line-type-right: solid; --line-type-top: solid; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: center }
+    #tinytable_q6sbfhhsef84j5uz0nh3 td.tinytable_css_n9ump9njth8q4imy29jc, #tinytable_q6sbfhhsef84j5uz0nh3 th.tinytable_css_n9ump9njth8q4imy29jc { text-align: center }
+    #tinytable_q6sbfhhsef84j5uz0nh3 td.tinytable_css_ao5rjwro7fdshah45ydu, #tinytable_q6sbfhhsef84j5uz0nh3 th.tinytable_css_ao5rjwro7fdshah45ydu {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 1; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.08em; --line-type-bottom: solid; --line-type-left: solid; --line-type-right: solid; --line-type-top: solid; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: center }
+    #tinytable_q6sbfhhsef84j5uz0nh3 td.tinytable_css_om17swze8u7apz6eecmn, #tinytable_q6sbfhhsef84j5uz0nh3 th.tinytable_css_om17swze8u7apz6eecmn {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.08em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --line-type-bottom: solid; --line-type-left: solid; --line-type-right: solid; --line-type-top: solid; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
+    #tinytable_q6sbfhhsef84j5uz0nh3 td.tinytable_css_c33o5ovqud4f4qdvuksg, #tinytable_q6sbfhhsef84j5uz0nh3 th.tinytable_css_c33o5ovqud4f4qdvuksg {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --line-type-bottom: solid; --line-type-left: solid; --line-type-right: solid; --line-type-top: solid; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
+    #tinytable_q6sbfhhsef84j5uz0nh3 td.tinytable_css_zsppvugj5ldv16pchvgo, #tinytable_q6sbfhhsef84j5uz0nh3 th.tinytable_css_zsppvugj5ldv16pchvgo { text-align: left }
+    #tinytable_q6sbfhhsef84j5uz0nh3 td.tinytable_css_ha3ezzekajg4cgfwuvs1, #tinytable_q6sbfhhsef84j5uz0nh3 th.tinytable_css_ha3ezzekajg4cgfwuvs1 {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 1; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.08em; --line-type-bottom: solid; --line-type-left: solid; --line-type-right: solid; --line-type-top: solid; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
+    </style>
+    <div class="container">
+      <table class="tinytable" id="tinytable_q6sbfhhsef84j5uz0nh3" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing="true">
+        
+        <thead>
+              <tr>
+                <th scope="col" data-row="0" data-col="1"> </th>
+                <th scope="col" data-row="0" data-col="2">(1)</th>
+              </tr>
+        </thead>
+        <tfoot><tr><td colspan="2">+ p &lt; 0.1, * p &lt; 0.05, ** p &lt; 0.01, *** p &lt; 0.001</td></tr></tfoot>
+        <tbody>
+                <tr>
+                  <td data-row="1" data-col="1">(Intercept)</td>
+                  <td data-row="1" data-col="2">1.992***</td>
+                </tr>
+                <tr>
+                  <td data-row="2" data-col="1"></td>
+                  <td data-row="2" data-col="2">(0.332)</td>
+                </tr>
+                <tr>
+                  <td data-row="3" data-col="1">age</td>
+                  <td data-row="3" data-col="2">-0.033***</td>
+                </tr>
+                <tr>
+                  <td data-row="4" data-col="1"></td>
+                  <td data-row="4" data-col="2">(0.007)</td>
+                </tr>
+                <tr>
+                  <td data-row="5" data-col="1">edu</td>
+                  <td data-row="5" data-col="2">0.056*</td>
+                </tr>
+                <tr>
+                  <td data-row="6" data-col="1"></td>
+                  <td data-row="6" data-col="2">(0.025)</td>
+                </tr>
+                <tr>
+                  <td data-row="7" data-col="1">exp</td>
+                  <td data-row="7" data-col="2">-0.048+</td>
+                </tr>
+                <tr>
+                  <td data-row="8" data-col="1"></td>
+                  <td data-row="8" data-col="2">(0.027)</td>
+                </tr>
+                <tr>
+                  <td data-row="9" data-col="1">Num.Obs.</td>
+                  <td data-row="9" data-col="2">242</td>
+                </tr>
+                <tr>
+                  <td data-row="10" data-col="1">R2</td>
+                  <td data-row="10" data-col="2">0.121</td>
+                </tr>
+                <tr>
+                  <td data-row="11" data-col="1">R2 Adj.</td>
+                  <td data-row="11" data-col="2">0.110</td>
+                </tr>
+                <tr>
+                  <td data-row="12" data-col="1">AIC</td>
+                  <td data-row="12" data-col="2">329.9</td>
+                </tr>
+                <tr>
+                  <td data-row="13" data-col="1">BIC</td>
+                  <td data-row="13" data-col="2">347.3</td>
+                </tr>
+                <tr>
+                  <td data-row="14" data-col="1">Log.Lik.</td>
+                  <td data-row="14" data-col="2">-159.948</td>
+                </tr>
+                <tr>
+                  <td data-row="15" data-col="1">F</td>
+                  <td data-row="15" data-col="2">11.568</td>
+                </tr>
+                <tr>
+                  <td data-row="16" data-col="1">RMSE</td>
+                  <td data-row="16" data-col="2">0.47</td>
+                </tr>
+                <tr>
+                  <td data-row="17" data-col="1">Std.Errors</td>
+                  <td data-row="17" data-col="2">HC3</td>
+                </tr>
+        </tbody>
+      </table>
+    </div>
+<!-- hack to avoid NA insertion in last line -->
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The coefficients are exactly the same as in the OLS model; only the</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="co"># standard errors change slightly. The substantive conclusions are</span></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co"># robust to this correction.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-</section>
-<section id="predicted-probabilities-outside-0-and-1-1" class="level3">
-<h3 class="anchored" data-anchor-id="predicted-probabilities-outside-0-and-1-1">3. Predicted probabilities outside 0 and 1</h3>
+<p>We can also compare the model with and without robust SEs side by side:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>unemploy <span class="ot">&lt;-</span> unemploy <span class="sc">|&gt;</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">prob_lpm =</span> <span class="fu">predict</span>(fit_lpm))</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>unemploy <span class="sc">|&gt;</span></span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n_out_of_range =</span> <span class="fu">sum</span>(prob_lpm <span class="sc">&lt;</span> <span class="dv">0</span> <span class="sc">|</span> prob_lpm <span class="sc">&gt;</span> <span class="dv">1</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">modelsummary</span>(<span class="fu">list</span>(<span class="st">"original"</span> <span class="ot">=</span> fit_lpm, <span class="st">"robust SES"</span> <span class="ot">=</span> fit_lpm), </span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="at">vcov =</span> <span class="fu">list</span>(<span class="st">"classical"</span>, <span class="st">"robust"</span>), <span class="at">stars=</span><span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<script src="https://cdn.jsdelivr.net/gh/vincentarelbundock/tinytable@main/inst/tinytable.js"></script>
+
+    <script>
+      // Create table-specific functions using external factory
+      const tableFns_c2ubvw7d9xlic5z92glg = TinyTable.createTableFunctions("tinytable_c2ubvw7d9xlic5z92glg");
+      // tinytable span after
+      window.addEventListener('load', function () {
+          var cellsToStyle = [
+            // tinytable style arrays after
+          { positions: [ { i: '17', j: 2 }, { i: '17', j: 3 } ], css_id: 'tinytable_css_sfthdmc2okslvb1jbbbs',}, 
+          { positions: [ { i: '8', j: 2 }, { i: '8', j: 3 } ], css_id: 'tinytable_css_ziumo4w56qhz5y7l685w',}, 
+          { positions: [ { i: '1', j: 2 }, { i: '2', j: 2 }, { i: '3', j: 2 }, { i: '4', j: 2 }, { i: '5', j: 2 }, { i: '6', j: 2 }, { i: '7', j: 2 }, { i: '9', j: 2 }, { i: '10', j: 2 }, { i: '11', j: 2 }, { i: '12', j: 2 }, { i: '13', j: 2 }, { i: '14', j: 2 }, { i: '15', j: 2 }, { i: '16', j: 2 }, { i: '1', j: 3 }, { i: '2', j: 3 }, { i: '3', j: 3 }, { i: '4', j: 3 }, { i: '5', j: 3 }, { i: '6', j: 3 }, { i: '7', j: 3 }, { i: '9', j: 3 }, { i: '10', j: 3 }, { i: '11', j: 3 }, { i: '12', j: 3 }, { i: '13', j: 3 }, { i: '14', j: 3 }, { i: '15', j: 3 }, { i: '16', j: 3 } ], css_id: 'tinytable_css_s6flu62jd7hphkux95wu',}, 
+          { positions: [ { i: '0', j: 2 }, { i: '0', j: 3 } ], css_id: 'tinytable_css_ckk54007v7tei9d8njgm',}, 
+          { positions: [ { i: '17', j: 1 } ], css_id: 'tinytable_css_59cg6au2ep5kd1b2kvvz',}, 
+          { positions: [ { i: '8', j: 1 } ], css_id: 'tinytable_css_3auu84hmd8rjqoic29ab',}, 
+          { positions: [ { i: '1', j: 1 }, { i: '2', j: 1 }, { i: '3', j: 1 }, { i: '4', j: 1 }, { i: '5', j: 1 }, { i: '6', j: 1 }, { i: '7', j: 1 }, { i: '9', j: 1 }, { i: '10', j: 1 }, { i: '11', j: 1 }, { i: '12', j: 1 }, { i: '13', j: 1 }, { i: '14', j: 1 }, { i: '15', j: 1 }, { i: '16', j: 1 } ], css_id: 'tinytable_css_w3xhch5xndasyx1i95rn',}, 
+          { positions: [ { i: '0', j: 1 } ], css_id: 'tinytable_css_l4y46eyh69lpox9gs6zu',}, 
+          ];
+
+          // Loop over the arrays to style the cells
+          cellsToStyle.forEach(function (group) {
+              group.positions.forEach(function (cell) {
+                  tableFns_c2ubvw7d9xlic5z92glg.styleCell(cell.i, cell.j, group.css_id);
+              });
+          });
+      });
+    </script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/vincentarelbundock/tinytable@main/inst/tinytable.css">
+    <style>
+    /* tinytable css entries after */
+    #tinytable_c2ubvw7d9xlic5z92glg td.tinytable_css_sfthdmc2okslvb1jbbbs, #tinytable_c2ubvw7d9xlic5z92glg th.tinytable_css_sfthdmc2okslvb1jbbbs {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.08em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --line-type-bottom: solid; --line-type-left: solid; --line-type-right: solid; --line-type-top: solid; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: center }
+    #tinytable_c2ubvw7d9xlic5z92glg td.tinytable_css_ziumo4w56qhz5y7l685w, #tinytable_c2ubvw7d9xlic5z92glg th.tinytable_css_ziumo4w56qhz5y7l685w {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --line-type-bottom: solid; --line-type-left: solid; --line-type-right: solid; --line-type-top: solid; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: center }
+    #tinytable_c2ubvw7d9xlic5z92glg td.tinytable_css_s6flu62jd7hphkux95wu, #tinytable_c2ubvw7d9xlic5z92glg th.tinytable_css_s6flu62jd7hphkux95wu { text-align: center }
+    #tinytable_c2ubvw7d9xlic5z92glg td.tinytable_css_ckk54007v7tei9d8njgm, #tinytable_c2ubvw7d9xlic5z92glg th.tinytable_css_ckk54007v7tei9d8njgm {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 1; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.08em; --line-type-bottom: solid; --line-type-left: solid; --line-type-right: solid; --line-type-top: solid; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: center }
+    #tinytable_c2ubvw7d9xlic5z92glg td.tinytable_css_59cg6au2ep5kd1b2kvvz, #tinytable_c2ubvw7d9xlic5z92glg th.tinytable_css_59cg6au2ep5kd1b2kvvz {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.08em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --line-type-bottom: solid; --line-type-left: solid; --line-type-right: solid; --line-type-top: solid; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
+    #tinytable_c2ubvw7d9xlic5z92glg td.tinytable_css_3auu84hmd8rjqoic29ab, #tinytable_c2ubvw7d9xlic5z92glg th.tinytable_css_3auu84hmd8rjqoic29ab {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --line-type-bottom: solid; --line-type-left: solid; --line-type-right: solid; --line-type-top: solid; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
+    #tinytable_c2ubvw7d9xlic5z92glg td.tinytable_css_w3xhch5xndasyx1i95rn, #tinytable_c2ubvw7d9xlic5z92glg th.tinytable_css_w3xhch5xndasyx1i95rn { text-align: left }
+    #tinytable_c2ubvw7d9xlic5z92glg td.tinytable_css_l4y46eyh69lpox9gs6zu, #tinytable_c2ubvw7d9xlic5z92glg th.tinytable_css_l4y46eyh69lpox9gs6zu {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 1; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.08em; --line-type-bottom: solid; --line-type-left: solid; --line-type-right: solid; --line-type-top: solid; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
+    </style>
+    <div class="container">
+      <table class="tinytable" id="tinytable_c2ubvw7d9xlic5z92glg" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing="true">
+        
+        <thead>
+              <tr>
+                <th scope="col" data-row="0" data-col="1"> </th>
+                <th scope="col" data-row="0" data-col="2">original</th>
+                <th scope="col" data-row="0" data-col="3">robust SES</th>
+              </tr>
+        </thead>
+        <tfoot><tr><td colspan="3">+ p &lt; 0.1, * p &lt; 0.05, ** p &lt; 0.01, *** p &lt; 0.001</td></tr></tfoot>
+        <tbody>
+                <tr>
+                  <td data-row="1" data-col="1">(Intercept)</td>
+                  <td data-row="1" data-col="2">1.992***</td>
+                  <td data-row="1" data-col="3">1.992***</td>
+                </tr>
+                <tr>
+                  <td data-row="2" data-col="1"></td>
+                  <td data-row="2" data-col="2">(0.331)</td>
+                  <td data-row="2" data-col="3">(0.332)</td>
+                </tr>
+                <tr>
+                  <td data-row="3" data-col="1">age</td>
+                  <td data-row="3" data-col="2">-0.033***</td>
+                  <td data-row="3" data-col="3">-0.033***</td>
+                </tr>
+                <tr>
+                  <td data-row="4" data-col="1"></td>
+                  <td data-row="4" data-col="2">(0.007)</td>
+                  <td data-row="4" data-col="3">(0.007)</td>
+                </tr>
+                <tr>
+                  <td data-row="5" data-col="1">edu</td>
+                  <td data-row="5" data-col="2">0.056*</td>
+                  <td data-row="5" data-col="3">0.056*</td>
+                </tr>
+                <tr>
+                  <td data-row="6" data-col="1"></td>
+                  <td data-row="6" data-col="2">(0.026)</td>
+                  <td data-row="6" data-col="3">(0.025)</td>
+                </tr>
+                <tr>
+                  <td data-row="7" data-col="1">exp</td>
+                  <td data-row="7" data-col="2">-0.048+</td>
+                  <td data-row="7" data-col="3">-0.048+</td>
+                </tr>
+                <tr>
+                  <td data-row="8" data-col="1"></td>
+                  <td data-row="8" data-col="2">(0.027)</td>
+                  <td data-row="8" data-col="3">(0.027)</td>
+                </tr>
+                <tr>
+                  <td data-row="9" data-col="1">Num.Obs.</td>
+                  <td data-row="9" data-col="2">242</td>
+                  <td data-row="9" data-col="3">242</td>
+                </tr>
+                <tr>
+                  <td data-row="10" data-col="1">R2</td>
+                  <td data-row="10" data-col="2">0.121</td>
+                  <td data-row="10" data-col="3">0.121</td>
+                </tr>
+                <tr>
+                  <td data-row="11" data-col="1">R2 Adj.</td>
+                  <td data-row="11" data-col="2">0.110</td>
+                  <td data-row="11" data-col="3">0.110</td>
+                </tr>
+                <tr>
+                  <td data-row="12" data-col="1">AIC</td>
+                  <td data-row="12" data-col="2">329.9</td>
+                  <td data-row="12" data-col="3">329.9</td>
+                </tr>
+                <tr>
+                  <td data-row="13" data-col="1">BIC</td>
+                  <td data-row="13" data-col="2">347.3</td>
+                  <td data-row="13" data-col="3">347.3</td>
+                </tr>
+                <tr>
+                  <td data-row="14" data-col="1">Log.Lik.</td>
+                  <td data-row="14" data-col="2">-159.948</td>
+                  <td data-row="14" data-col="3">-159.948</td>
+                </tr>
+                <tr>
+                  <td data-row="15" data-col="1">F</td>
+                  <td data-row="15" data-col="2">10.888</td>
+                  <td data-row="15" data-col="3">11.568</td>
+                </tr>
+                <tr>
+                  <td data-row="16" data-col="1">RMSE</td>
+                  <td data-row="16" data-col="2">0.47</td>
+                  <td data-row="16" data-col="3">0.47</td>
+                </tr>
+                <tr>
+                  <td data-row="17" data-col="1">Std.Errors</td>
+                  <td data-row="17" data-col="2">Classical</td>
+                  <td data-row="17" data-col="3">HC3</td>
+                </tr>
+        </tbody>
+      </table>
+    </div>
+<!-- hack to avoid NA insertion in last line -->
+</div>
+</div>
+<p>The coefficients are exactly the same (as they should); only the standard errors change very slightly. The substantive conclusions are robust to this correction. Note that it never hurts to use robust SEs, even if the model is homoskedastic, because they are valid in both cases. So it is a good idea to use robust SEs by default.</p>
+</section>
+<section id="section-2" class="level3">
+<h3 class="anchored" data-anchor-id="section-2">3</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>pred_probs <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit_lpm)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(pred_probs <span class="sc">&lt;</span> <span class="dv">0</span> <span class="sc">|</span> pred_probs <span class="sc">&gt;</span> <span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 1 × 1
-  n_out_of_range
-           &lt;int&gt;
-1              0</code></pre>
+<pre><code>[1] 0</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># None of the observations have predicted probabilities outside the</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="co"># range 0 to 1. In practice, this is very often the case, even though</span></span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co"># the linear probability model does not guarantee it in general.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+<p>None of the observations have predicted probabilities outside the range 0 to 1. In practice, this is very often the case, even though the linear probability model does not guarantee it in general.</p>
 </section>
-<section id="logistic-regression-log-odds-1" class="level3">
-<h3 class="anchored" data-anchor-id="logistic-regression-log-odds-1">4. Logistic regression: log odds</h3>
+<section id="section-3" class="level3">
+<h3 class="anchored" data-anchor-id="section-3">4</h3>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>fit_logit <span class="ot">&lt;-</span> <span class="fu">glm</span>(work <span class="sc">~</span> age <span class="sc">+</span> edu <span class="sc">+</span> exp, <span class="at">data =</span> unemploy, <span class="at">family =</span> binomial)</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit_logit)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>fit_logit <span class="ot">&lt;-</span> <span class="fu">glm</span>(work <span class="sc">~</span> age <span class="sc">+</span> edu <span class="sc">+</span> exp, <span class="at">data =</span> unemploy, <span class="at">family =</span> binomial)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit_logit)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -603,44 +800,140 @@ AIC: 312.44
 
 Number of Fisher Scoring iterations: 4</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># If age increases by one year, the log odds of re-employment</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="co"># significantly go down by 0.143.</span></span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="co"># If education increases, the log odds of re-employment significantly</span></span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="co"># increase by 0.259.</span></span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="co"># If the number of previous unemployment spells is higher, the log odds</span></span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="co"># of re-employment do not decrease significantly at the 5% level, but do</span></span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="co"># decrease significantly at the 7.4% level (by 0.216).</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-</section>
-<section id="odds-ratios-1" class="level3">
-<h3 class="anchored" data-anchor-id="odds-ratios-1">5. Odds ratios</h3>
+<ol type="a">
+<li><p>Logg odds: If age increases by one year, the log odds of re-employment significantly go down by 0.143. If education increases, the log odds of re-employment significantly increase by 0.259. If the number of previous unemployment spells is higher, the log odds of re-employment do not decrease significantly at the 5% level, but do decrease significantly at the 7.4% level (by 0.216).</p></li>
+<li><p>Odds ratios. We need to exponentiate the coefficients:</p></li>
+</ol>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">exp</span>(<span class="fu">coef</span>(fit_logit))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Solution 1:</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">exp</span>(<span class="fu">coef</span>(fit_logit))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>(Intercept)         age         edu         exp 
 702.4906694   0.8666365   1.2952779   0.8053685 </code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The odds of getting a job within a year (the probability of getting a</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="co"># job divided by the probability of not getting a job) change by</span></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="co"># (exp(b) - 1) * 100% for a one-unit increase in x:</span></span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="co">#   - the odds increase by (exp(0.259) - 1) * 100 = 29.5% for one unit</span></span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="co">#     of education</span></span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="co">#   - the odds change by (exp(-0.143) - 1) * 100 = -13.3%, i.e. decrease</span></span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="co">#     by 13.3%, for each year older</span></span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="co">#   - the odds decrease by about 19.5% for each previous unemployment</span></span>
-<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a><span class="co">#     spell (exp(-0.216))</span></span>
-<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
-<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a><span class="co"># The advantage of the odds ratio interpretation is that it applies</span></span>
-<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a><span class="co"># exactly for every subject, irrespective of the value of the focal</span></span>
-<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a><span class="co"># variable and of the values of the other predictors -- unlike a</span></span>
-<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a><span class="co"># marginal effect, which depends on the specific values of all</span></span>
-<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a><span class="co"># predictors.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Solution 2</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">modelsummary</span>(fit_logit, <span class="at">exponentiate =</span> <span class="cn">TRUE</span>, <span class="at">stars =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<script src="https://cdn.jsdelivr.net/gh/vincentarelbundock/tinytable@main/inst/tinytable.js"></script>
+
+    <script>
+      // Create table-specific functions using external factory
+      const tableFns_9nvjjylrtpte3hid4wz5 = TinyTable.createTableFunctions("tinytable_9nvjjylrtpte3hid4wz5");
+      // tinytable span after
+      window.addEventListener('load', function () {
+          var cellsToStyle = [
+            // tinytable style arrays after
+          { positions: [ { i: '14', j: 2 } ], css_id: 'tinytable_css_9g39mgo2wae33hzgdvzd',}, 
+          { positions: [ { i: '8', j: 2 } ], css_id: 'tinytable_css_9jvfxxyw2n4e6dn2royy',}, 
+          { positions: [ { i: '1', j: 2 }, { i: '2', j: 2 }, { i: '3', j: 2 }, { i: '4', j: 2 }, { i: '5', j: 2 }, { i: '6', j: 2 }, { i: '7', j: 2 }, { i: '9', j: 2 }, { i: '10', j: 2 }, { i: '11', j: 2 }, { i: '12', j: 2 }, { i: '13', j: 2 } ], css_id: 'tinytable_css_f9oqf5wr2p66gl60cdki',}, 
+          { positions: [ { i: '0', j: 2 } ], css_id: 'tinytable_css_nupqypwn6i8c4niapnpk',}, 
+          { positions: [ { i: '14', j: 1 } ], css_id: 'tinytable_css_imxwlre5oluvz1x842mg',}, 
+          { positions: [ { i: '8', j: 1 } ], css_id: 'tinytable_css_ajtnqtyim7bgn1szhn2m',}, 
+          { positions: [ { i: '1', j: 1 }, { i: '2', j: 1 }, { i: '3', j: 1 }, { i: '4', j: 1 }, { i: '5', j: 1 }, { i: '6', j: 1 }, { i: '7', j: 1 }, { i: '9', j: 1 }, { i: '10', j: 1 }, { i: '11', j: 1 }, { i: '12', j: 1 }, { i: '13', j: 1 } ], css_id: 'tinytable_css_d9ggv1utagozeuiibfrq',}, 
+          { positions: [ { i: '0', j: 1 } ], css_id: 'tinytable_css_gsnjfrcnwnfcawclnknz',}, 
+          ];
+
+          // Loop over the arrays to style the cells
+          cellsToStyle.forEach(function (group) {
+              group.positions.forEach(function (cell) {
+                  tableFns_9nvjjylrtpte3hid4wz5.styleCell(cell.i, cell.j, group.css_id);
+              });
+          });
+      });
+    </script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/vincentarelbundock/tinytable@main/inst/tinytable.css">
+    <style>
+    /* tinytable css entries after */
+    #tinytable_9nvjjylrtpte3hid4wz5 td.tinytable_css_9g39mgo2wae33hzgdvzd, #tinytable_9nvjjylrtpte3hid4wz5 th.tinytable_css_9g39mgo2wae33hzgdvzd {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.08em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --line-type-bottom: solid; --line-type-left: solid; --line-type-right: solid; --line-type-top: solid; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: center }
+    #tinytable_9nvjjylrtpte3hid4wz5 td.tinytable_css_9jvfxxyw2n4e6dn2royy, #tinytable_9nvjjylrtpte3hid4wz5 th.tinytable_css_9jvfxxyw2n4e6dn2royy {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --line-type-bottom: solid; --line-type-left: solid; --line-type-right: solid; --line-type-top: solid; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: center }
+    #tinytable_9nvjjylrtpte3hid4wz5 td.tinytable_css_f9oqf5wr2p66gl60cdki, #tinytable_9nvjjylrtpte3hid4wz5 th.tinytable_css_f9oqf5wr2p66gl60cdki { text-align: center }
+    #tinytable_9nvjjylrtpte3hid4wz5 td.tinytable_css_nupqypwn6i8c4niapnpk, #tinytable_9nvjjylrtpte3hid4wz5 th.tinytable_css_nupqypwn6i8c4niapnpk {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 1; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.08em; --line-type-bottom: solid; --line-type-left: solid; --line-type-right: solid; --line-type-top: solid; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: center }
+    #tinytable_9nvjjylrtpte3hid4wz5 td.tinytable_css_imxwlre5oluvz1x842mg, #tinytable_9nvjjylrtpte3hid4wz5 th.tinytable_css_imxwlre5oluvz1x842mg {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.08em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --line-type-bottom: solid; --line-type-left: solid; --line-type-right: solid; --line-type-top: solid; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
+    #tinytable_9nvjjylrtpte3hid4wz5 td.tinytable_css_ajtnqtyim7bgn1szhn2m, #tinytable_9nvjjylrtpte3hid4wz5 th.tinytable_css_ajtnqtyim7bgn1szhn2m {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --line-type-bottom: solid; --line-type-left: solid; --line-type-right: solid; --line-type-top: solid; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
+    #tinytable_9nvjjylrtpte3hid4wz5 td.tinytable_css_d9ggv1utagozeuiibfrq, #tinytable_9nvjjylrtpte3hid4wz5 th.tinytable_css_d9ggv1utagozeuiibfrq { text-align: left }
+    #tinytable_9nvjjylrtpte3hid4wz5 td.tinytable_css_gsnjfrcnwnfcawclnknz, #tinytable_9nvjjylrtpte3hid4wz5 th.tinytable_css_gsnjfrcnwnfcawclnknz {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 1; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.08em; --line-type-bottom: solid; --line-type-left: solid; --line-type-right: solid; --line-type-top: solid; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
+    </style>
+    <div class="container">
+      <table class="tinytable" id="tinytable_9nvjjylrtpte3hid4wz5" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing="true">
+        
+        <thead>
+              <tr>
+                <th scope="col" data-row="0" data-col="1"> </th>
+                <th scope="col" data-row="0" data-col="2">(1)</th>
+              </tr>
+        </thead>
+        <tfoot><tr><td colspan="2">+ p &lt; 0.1, * p &lt; 0.05, ** p &lt; 0.01, *** p &lt; 0.001</td></tr></tfoot>
+        <tbody>
+                <tr>
+                  <td data-row="1" data-col="1">(Intercept)</td>
+                  <td data-row="1" data-col="2">702.491***</td>
+                </tr>
+                <tr>
+                  <td data-row="2" data-col="1"></td>
+                  <td data-row="2" data-col="2">(1083.773)</td>
+                </tr>
+                <tr>
+                  <td data-row="3" data-col="1">age</td>
+                  <td data-row="3" data-col="2">0.867***</td>
+                </tr>
+                <tr>
+                  <td data-row="4" data-col="1"></td>
+                  <td data-row="4" data-col="2">(0.027)</td>
+                </tr>
+                <tr>
+                  <td data-row="5" data-col="1">edu</td>
+                  <td data-row="5" data-col="2">1.295*</td>
+                </tr>
+                <tr>
+                  <td data-row="6" data-col="1"></td>
+                  <td data-row="6" data-col="2">(0.156)</td>
+                </tr>
+                <tr>
+                  <td data-row="7" data-col="1">exp</td>
+                  <td data-row="7" data-col="2">0.805+</td>
+                </tr>
+                <tr>
+                  <td data-row="8" data-col="1"></td>
+                  <td data-row="8" data-col="2">(0.097)</td>
+                </tr>
+                <tr>
+                  <td data-row="9" data-col="1">Num.Obs.</td>
+                  <td data-row="9" data-col="2">242</td>
+                </tr>
+                <tr>
+                  <td data-row="10" data-col="1">AIC</td>
+                  <td data-row="10" data-col="2">312.4</td>
+                </tr>
+                <tr>
+                  <td data-row="11" data-col="1">BIC</td>
+                  <td data-row="11" data-col="2">326.4</td>
+                </tr>
+                <tr>
+                  <td data-row="12" data-col="1">Log.Lik.</td>
+                  <td data-row="12" data-col="2">-152.218</td>
+                </tr>
+                <tr>
+                  <td data-row="13" data-col="1">F</td>
+                  <td data-row="13" data-col="2">8.794</td>
+                </tr>
+                <tr>
+                  <td data-row="14" data-col="1">RMSE</td>
+                  <td data-row="14" data-col="2">0.47</td>
+                </tr>
+        </tbody>
+      </table>
+    </div>
+<!-- hack to avoid NA insertion in last line -->
 </div>
-</section>
-<section id="average-marginal-effects-1" class="level3">
-<h3 class="anchored" data-anchor-id="average-marginal-effects-1">6. Average marginal effects</h3>
+</div>
+<p>The odds of getting a job within a year (the probability of getting a job divided by the probability of not getting a job) change by (exp(b) - 1) * 100% for a one-unit increase in x: - the odds increase by (exp(0.259) - 1) * 100 = 29.5% for one unit of education - the odds change by (exp(-0.143) - 1) * 100 = -13.3%, i.e.&nbsp;decrease by 13.3%, for each year older - the odds decrease by about 19.5% for each previous unemployment spell (exp(-0.216)) The advantage of the odds ratio interpretation is that it applies exactly for every subject, irrespective of the value of the focal variable and of the values of the other predictors – unlike a marginal effect, which depends on the specific values of all predictors.</p>
+<ol start="3" type="a">
+<li>Marginal effects</li>
+</ol>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">avg_slopes</span>(fit_logit)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">avg_slopes</span>(fit_logit)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
  Term Estimate Std. Error     z Pr(&gt;|z|)    S    2.5 %   97.5 %
@@ -651,23 +944,157 @@ Number of Fisher Scoring iterations: 4</code></pre>
 Type: response
 Comparison: dY/dX</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># variable | coefficient (log odds) |  odds ratio | average marginal effect</span></span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="co"># ---------+-------------------------+-------------+--------------------------</span></span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="co">#      age |          -0.143         |    0.867    |        -0.031</span></span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="co">#      edu |           0.259         |    1.295    |         0.057</span></span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="co">#      exp |          -0.216         |    0.805    |        -0.0475</span></span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
-<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a><span class="co"># With each year of age, the probability of re-employment decreases on</span></span>
-<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a><span class="co"># average by about 3.1 percentage points. The effects of the other</span></span>
-<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a><span class="co"># predictors follow similarly. These average marginal effects are very</span></span>
-<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a><span class="co"># close to the coefficients of the linear probability model in question</span></span>
-<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. In practice, this is very often the case.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>With each year of age, the probability of re-employment decreases on average by about 3.1 percentage points. The effects of the other predictors follow similarly. These average marginal effects are very close to the coefficients of the linear probability model in question 1. In practice, this is very often the case.</p>
+<p>We can even compare the average marginal effects to the coefficients of the linear probability model side by side usign <code>modelsummary()</code>:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">modelsummary</span>(<span class="fu">list</span>(<span class="st">"LPM"</span><span class="ot">=</span> fit_lpm, </span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"Logit - Marginal Effects"</span> <span class="ot">=</span> <span class="fu">avg_slopes</span>(fit_logit)), </span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>              <span class="at">stars =</span> <span class="cn">TRUE</span>) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<script src="https://cdn.jsdelivr.net/gh/vincentarelbundock/tinytable@main/inst/tinytable.js"></script>
+
+    <script>
+      // Create table-specific functions using external factory
+      const tableFns_t8v5h4jaeepg74bcc1d4 = TinyTable.createTableFunctions("tinytable_t8v5h4jaeepg74bcc1d4");
+      // tinytable span after
+      window.addEventListener('load', function () {
+          var cellsToStyle = [
+            // tinytable style arrays after
+          { positions: [ { i: '16', j: 2 }, { i: '16', j: 3 } ], css_id: 'tinytable_css_aq5t4gur4hwl0ngbx1fq',}, 
+          { positions: [ { i: '8', j: 2 }, { i: '8', j: 3 } ], css_id: 'tinytable_css_j987pjm37wpdsomyz2sa',}, 
+          { positions: [ { i: '1', j: 2 }, { i: '2', j: 2 }, { i: '3', j: 2 }, { i: '4', j: 2 }, { i: '5', j: 2 }, { i: '6', j: 2 }, { i: '7', j: 2 }, { i: '9', j: 2 }, { i: '10', j: 2 }, { i: '11', j: 2 }, { i: '12', j: 2 }, { i: '13', j: 2 }, { i: '14', j: 2 }, { i: '15', j: 2 }, { i: '1', j: 3 }, { i: '2', j: 3 }, { i: '3', j: 3 }, { i: '4', j: 3 }, { i: '5', j: 3 }, { i: '6', j: 3 }, { i: '7', j: 3 }, { i: '9', j: 3 }, { i: '10', j: 3 }, { i: '11', j: 3 }, { i: '12', j: 3 }, { i: '13', j: 3 }, { i: '14', j: 3 }, { i: '15', j: 3 } ], css_id: 'tinytable_css_rmnyky9c352l0odimnms',}, 
+          { positions: [ { i: '0', j: 2 }, { i: '0', j: 3 } ], css_id: 'tinytable_css_y6ccaxa255p6k0e0dt64',}, 
+          { positions: [ { i: '16', j: 1 } ], css_id: 'tinytable_css_iduuufyrng55z5f3w3kt',}, 
+          { positions: [ { i: '8', j: 1 } ], css_id: 'tinytable_css_0h7qz2dvzmpwl7f4n290',}, 
+          { positions: [ { i: '1', j: 1 }, { i: '2', j: 1 }, { i: '3', j: 1 }, { i: '4', j: 1 }, { i: '5', j: 1 }, { i: '6', j: 1 }, { i: '7', j: 1 }, { i: '9', j: 1 }, { i: '10', j: 1 }, { i: '11', j: 1 }, { i: '12', j: 1 }, { i: '13', j: 1 }, { i: '14', j: 1 }, { i: '15', j: 1 } ], css_id: 'tinytable_css_jjjdnyhrq5fw0ehke5av',}, 
+          { positions: [ { i: '0', j: 1 } ], css_id: 'tinytable_css_s1fyaw9wbbzhqh8jf8t9',}, 
+          ];
+
+          // Loop over the arrays to style the cells
+          cellsToStyle.forEach(function (group) {
+              group.positions.forEach(function (cell) {
+                  tableFns_t8v5h4jaeepg74bcc1d4.styleCell(cell.i, cell.j, group.css_id);
+              });
+          });
+      });
+    </script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/vincentarelbundock/tinytable@main/inst/tinytable.css">
+    <style>
+    /* tinytable css entries after */
+    #tinytable_t8v5h4jaeepg74bcc1d4 td.tinytable_css_aq5t4gur4hwl0ngbx1fq, #tinytable_t8v5h4jaeepg74bcc1d4 th.tinytable_css_aq5t4gur4hwl0ngbx1fq {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.08em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --line-type-bottom: solid; --line-type-left: solid; --line-type-right: solid; --line-type-top: solid; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: center }
+    #tinytable_t8v5h4jaeepg74bcc1d4 td.tinytable_css_j987pjm37wpdsomyz2sa, #tinytable_t8v5h4jaeepg74bcc1d4 th.tinytable_css_j987pjm37wpdsomyz2sa {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --line-type-bottom: solid; --line-type-left: solid; --line-type-right: solid; --line-type-top: solid; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: center }
+    #tinytable_t8v5h4jaeepg74bcc1d4 td.tinytable_css_rmnyky9c352l0odimnms, #tinytable_t8v5h4jaeepg74bcc1d4 th.tinytable_css_rmnyky9c352l0odimnms { text-align: center }
+    #tinytable_t8v5h4jaeepg74bcc1d4 td.tinytable_css_y6ccaxa255p6k0e0dt64, #tinytable_t8v5h4jaeepg74bcc1d4 th.tinytable_css_y6ccaxa255p6k0e0dt64 {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 1; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.08em; --line-type-bottom: solid; --line-type-left: solid; --line-type-right: solid; --line-type-top: solid; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: center }
+    #tinytable_t8v5h4jaeepg74bcc1d4 td.tinytable_css_iduuufyrng55z5f3w3kt, #tinytable_t8v5h4jaeepg74bcc1d4 th.tinytable_css_iduuufyrng55z5f3w3kt {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.08em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --line-type-bottom: solid; --line-type-left: solid; --line-type-right: solid; --line-type-top: solid; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
+    #tinytable_t8v5h4jaeepg74bcc1d4 td.tinytable_css_0h7qz2dvzmpwl7f4n290, #tinytable_t8v5h4jaeepg74bcc1d4 th.tinytable_css_0h7qz2dvzmpwl7f4n290 {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --line-type-bottom: solid; --line-type-left: solid; --line-type-right: solid; --line-type-top: solid; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
+    #tinytable_t8v5h4jaeepg74bcc1d4 td.tinytable_css_jjjdnyhrq5fw0ehke5av, #tinytable_t8v5h4jaeepg74bcc1d4 th.tinytable_css_jjjdnyhrq5fw0ehke5av { text-align: left }
+    #tinytable_t8v5h4jaeepg74bcc1d4 td.tinytable_css_s1fyaw9wbbzhqh8jf8t9, #tinytable_t8v5h4jaeepg74bcc1d4 th.tinytable_css_s1fyaw9wbbzhqh8jf8t9 {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 1; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.08em; --line-type-bottom: solid; --line-type-left: solid; --line-type-right: solid; --line-type-top: solid; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
+    </style>
+    <div class="container">
+      <table class="tinytable" id="tinytable_t8v5h4jaeepg74bcc1d4" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing="true">
+        
+        <thead>
+              <tr>
+                <th scope="col" data-row="0" data-col="1"> </th>
+                <th scope="col" data-row="0" data-col="2">LPM</th>
+                <th scope="col" data-row="0" data-col="3">Logit - Marginal Effects</th>
+              </tr>
+        </thead>
+        <tfoot><tr><td colspan="3">+ p &lt; 0.1, * p &lt; 0.05, ** p &lt; 0.01, *** p &lt; 0.001</td></tr></tfoot>
+        <tbody>
+                <tr>
+                  <td data-row="1" data-col="1">(Intercept)</td>
+                  <td data-row="1" data-col="2">1.992***</td>
+                  <td data-row="1" data-col="3"></td>
+                </tr>
+                <tr>
+                  <td data-row="2" data-col="1"></td>
+                  <td data-row="2" data-col="2">(0.331)</td>
+                  <td data-row="2" data-col="3"></td>
+                </tr>
+                <tr>
+                  <td data-row="3" data-col="1">age</td>
+                  <td data-row="3" data-col="2">-0.033***</td>
+                  <td data-row="3" data-col="3">-0.031***</td>
+                </tr>
+                <tr>
+                  <td data-row="4" data-col="1"></td>
+                  <td data-row="4" data-col="2">(0.007)</td>
+                  <td data-row="4" data-col="3">(0.006)</td>
+                </tr>
+                <tr>
+                  <td data-row="5" data-col="1">edu</td>
+                  <td data-row="5" data-col="2">0.056*</td>
+                  <td data-row="5" data-col="3">0.057*</td>
+                </tr>
+                <tr>
+                  <td data-row="6" data-col="1"></td>
+                  <td data-row="6" data-col="2">(0.026)</td>
+                  <td data-row="6" data-col="3">(0.026)</td>
+                </tr>
+                <tr>
+                  <td data-row="7" data-col="1">exp</td>
+                  <td data-row="7" data-col="2">-0.048+</td>
+                  <td data-row="7" data-col="3">-0.048+</td>
+                </tr>
+                <tr>
+                  <td data-row="8" data-col="1"></td>
+                  <td data-row="8" data-col="2">(0.027)</td>
+                  <td data-row="8" data-col="3">(0.026)</td>
+                </tr>
+                <tr>
+                  <td data-row="9" data-col="1">Num.Obs.</td>
+                  <td data-row="9" data-col="2">242</td>
+                  <td data-row="9" data-col="3">242</td>
+                </tr>
+                <tr>
+                  <td data-row="10" data-col="1">R2</td>
+                  <td data-row="10" data-col="2">0.121</td>
+                  <td data-row="10" data-col="3"></td>
+                </tr>
+                <tr>
+                  <td data-row="11" data-col="1">R2 Adj.</td>
+                  <td data-row="11" data-col="2">0.110</td>
+                  <td data-row="11" data-col="3"></td>
+                </tr>
+                <tr>
+                  <td data-row="12" data-col="1">AIC</td>
+                  <td data-row="12" data-col="2">329.9</td>
+                  <td data-row="12" data-col="3">312.4</td>
+                </tr>
+                <tr>
+                  <td data-row="13" data-col="1">BIC</td>
+                  <td data-row="13" data-col="2">347.3</td>
+                  <td data-row="13" data-col="3">326.4</td>
+                </tr>
+                <tr>
+                  <td data-row="14" data-col="1">Log.Lik.</td>
+                  <td data-row="14" data-col="2">-159.948</td>
+                  <td data-row="14" data-col="3">-152.218</td>
+                </tr>
+                <tr>
+                  <td data-row="15" data-col="1">F</td>
+                  <td data-row="15" data-col="2">10.888</td>
+                  <td data-row="15" data-col="3">8.794</td>
+                </tr>
+                <tr>
+                  <td data-row="16" data-col="1">RMSE</td>
+                  <td data-row="16" data-col="2">0.47</td>
+                  <td data-row="16" data-col="3">0.47</td>
+                </tr>
+        </tbody>
+      </table>
+    </div>
+<!-- hack to avoid NA insertion in last line -->
+</div>
 </div>
 </section>
-<section id="marginal-effect-at-chosen-values-1" class="level3">
-<h3 class="anchored" data-anchor-id="marginal-effect-at-chosen-values-1">7. Marginal effect at chosen values</h3>
+<section id="section-4" class="level3">
+<h3 class="anchored" data-anchor-id="section-4">7</h3>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">slopes</span>(fit_logit, <span class="at">variables =</span> <span class="st">"age"</span>, <span class="at">newdata =</span> <span class="fu">datagrid</span>(<span class="at">edu =</span> <span class="dv">1</span>, <span class="at">exp =</span> <span class="dv">3</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">slopes</span>(fit_logit, <span class="at">variables =</span> <span class="st">"age"</span>, <span class="at">newdata =</span> <span class="fu">datagrid</span>(<span class="at">edu =</span> <span class="dv">1</span>, <span class="at">exp =</span> <span class="dv">3</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
  edu exp Estimate Std. Error     z Pr(&gt;|z|)    S   2.5 %  97.5 %
@@ -677,16 +1104,13 @@ Term: age
 Type: response
 Comparison: dY/dX</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># For the lowest educated people with the largest number of prior</span></span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="co"># unemployment spells, a one-year increase in age is associated with a</span></span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="co"># significant decrease in the probability of re-employment of about</span></span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 3.0 percentage points.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+<p>For the lowest educated people with the largest number of prior unemployment spells, a one-year increase in age is associated with a significant decrease in the probability of re-employment of about 3.0 percentage points.</p>
 </section>
-<section id="marginal-effect-at-the-means-1" class="level3">
-<h3 class="anchored" data-anchor-id="marginal-effect-at-the-means-1">8. Marginal effect at the means</h3>
+<section id="section-5" class="level3">
+<h3 class="anchored" data-anchor-id="section-5">8</h3>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">slopes</span>(fit_logit, <span class="at">variables =</span> <span class="st">"age"</span>, <span class="at">newdata =</span> <span class="st">"mean"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">slopes</span>(fit_logit, <span class="at">variables =</span> <span class="st">"age"</span>, <span class="at">newdata =</span> <span class="st">"mean"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
  Estimate Std. Error     z Pr(&gt;|z|)    S   2.5 %  97.5 %
@@ -696,43 +1120,30 @@ Term: age
 Type: response
 Comparison: dY/dX</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># For a person with average education and an average number of prior</span></span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="co"># unemployment spells, a one-year increase in age is associated with a</span></span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="co"># significant decrease in the probability of re-employment of about</span></span>
-<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 3.6 percentage points. This differs from the average marginal effect</span></span>
-<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="co"># in question 6, because there we averaged the marginal effect over all</span></span>
-<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a><span class="co"># observed combinations of education and prior unemployment spells,</span></span>
-<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a><span class="co"># rather than evaluating the effect once at the mean values of these</span></span>
-<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a><span class="co"># predictors.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+<p>For a person with average education and an average number of prior unemployment spells, a one-year increase in age is associated with a significant decrease in the probability of re-employment of about 3.6 percentage points. This differs from the average marginal effect in question 4c because there we averaged the marginal effect over all observed combinations of education and prior unemployment spells, rather than evaluating the effect once at the mean values of these predictors.</p>
 </section>
-<section id="does-social-capital-contribute-1" class="level3">
-<h3 class="anchored" data-anchor-id="does-social-capital-contribute-1">9. Does social capital contribute?</h3>
+<section id="section-6" class="level3">
+<h3 class="anchored" data-anchor-id="section-6">7.</h3>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>fit_hc <span class="ot">&lt;-</span> <span class="fu">glm</span>(work <span class="sc">~</span> age <span class="sc">+</span> edu <span class="sc">+</span> exp, <span class="at">data =</span> unemploy, <span class="at">family =</span> binomial)</span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>fit_hsc <span class="ot">&lt;-</span> <span class="fu">glm</span>(work <span class="sc">~</span> age <span class="sc">+</span> edu <span class="sc">+</span> exp <span class="sc">+</span> scweak <span class="sc">+</span> scmedium <span class="sc">+</span> scstrong,</span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>                <span class="at">data =</span> unemploy, <span class="at">family =</span> binomial)</span>
-<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Wald test on relevance of social capital</span></span>
-<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a><span class="fu">linearHypothesis</span>(fit_hsc, <span class="fu">c</span>(<span class="st">"scweak = 0"</span>, <span class="st">"scmedium = 0"</span>, <span class="st">"scstrong = 0"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>fit_soccap <span class="ot">&lt;-</span> <span class="fu">glm</span>(work <span class="sc">~</span> age <span class="sc">+</span> edu <span class="sc">+</span> exp <span class="sc">+</span> scweak <span class="sc">+</span> scmedium <span class="sc">+</span> scstrong,</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>                <span class="at">data =</span> unemploy, <span class="at">family =</span> binomial)</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Wald test </span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="fu">hypotheses</span>(fit_soccap, <span class="at">joint =</span> <span class="fu">c</span>(<span class="st">"scweak"</span>, <span class="st">"scmedium"</span>, <span class="st">"scstrong"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
-Linear hypothesis test:
+
+Joint hypothesis test:
 scweak = 0
 scmedium = 0
 scstrong = 0
-
-Model 1: restricted model
-Model 2: work ~ age + edu + exp + scweak + scmedium + scstrong
-
-  Res.Df Df  Chisq Pr(&gt;Chisq)  
-1    238                       
-2    235  3 7.3409    0.06179 .
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+ 
+    F Pr(&gt;|F|) Df 1 Df 2
+ 2.45   0.0645    3  235</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Likelihood ratio test on relevance of social capital</span></span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="fu">lrtest</span>(fit_hc, fit_hsc)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Likelihood ratio test </span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">lrtest</span>(fit_logit, fit_soccap)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Likelihood ratio test
 
@@ -744,74 +1155,191 @@ Model 2: work ~ age + edu + exp + scweak + scmedium + scstrong
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># We find weak evidence that social capital affects re-employment,</span></span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="co"># controlling for human capital (LR chi2(3) = 7.6, p = 0.053). The Wald</span></span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="co"># test gives a similar conclusion.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-</section>
-<section id="are-the-three-forms-of-social-capital-equal-1" class="level3">
-<h3 class="anchored" data-anchor-id="are-the-three-forms-of-social-capital-equal-1">10. Are the three forms of social capital equal?</h3>
+<p>At a 5% significance level,there is no evidence that social capital affects re-employment, controlling for human capital.</p>
+<p>Are the effects of <code>scweak</code> and <code>scstrong</code> different?</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">linearHypothesis</span>(fit_hsc, <span class="fu">c</span>(<span class="st">"scweak = scmedium"</span>, <span class="st">"scmedium = scstrong"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hypotheses</span>(fit_soccap, <span class="st">"scweak = scstrong"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
-Linear hypothesis test:
-scweak - scmedium = 0
-scmedium - scstrong = 0
-
-Model 1: restricted model
-Model 2: work ~ age + edu + exp + scweak + scmedium + scstrong
-
-  Res.Df Df  Chisq Pr(&gt;Chisq)  
-1    237                       
-2    235  2 6.1095    0.04713 *
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+      Hypothesis Estimate Std. Error    z Pr(&gt;|z|)   S  2.5 % 97.5 %
+ scweak=scstrong    0.485      0.197 2.47   0.0137 6.2 0.0994   0.87</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co"># We can reject the null hypothesis that, controlling for human capital,</span></span>
-<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="co"># the three forms of social capital affect re-employment to the same</span></span>
-<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="co"># degree (chi2(2) = 6.11, p = 0.047).</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+<p>We have evidence that the effects of <code>scweak</code> and <code>scstrong</code> are indeed different.</p>
 </section>
-<section id="logit-versus-probit-1" class="level3">
-<h3 class="anchored" data-anchor-id="logit-versus-probit-1">11. Logit versus probit</h3>
+<section id="section-7" class="level3">
+<h3 class="anchored" data-anchor-id="section-7">8</h3>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>fit_probit <span class="ot">&lt;-</span> <span class="fu">glm</span>(work <span class="sc">~</span> age <span class="sc">+</span> edu <span class="sc">+</span> exp, <span class="at">data =</span> unemploy, <span class="at">family =</span> <span class="fu">binomial</span>(<span class="at">link =</span> <span class="st">"probit"</span>))</span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit_probit)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-Call:
-glm(formula = work ~ age + edu + exp, family = binomial(link = "probit"), 
-    data = unemploy)
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>fit_probit <span class="ot">&lt;-</span> <span class="fu">glm</span>(work <span class="sc">~</span> age <span class="sc">+</span> edu <span class="sc">+</span> exp, <span class="at">data =</span> unemploy, <span class="at">family =</span> <span class="fu">binomial</span>(<span class="at">link =</span> <span class="st">"probit"</span>))</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="fu">modelsummary</span>(<span class="fu">list</span>(<span class="st">"LPM"</span><span class="ot">=</span> fit_lpm, </span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"Logit - Marginal Effects"</span> <span class="ot">=</span> <span class="fu">avg_slopes</span>(fit_logit), </span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"Probit"</span> <span class="ot">=</span> fit_probit),</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>              <span class="at">stars =</span> <span class="cn">TRUE</span>) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<script src="https://cdn.jsdelivr.net/gh/vincentarelbundock/tinytable@main/inst/tinytable.js"></script>
 
-Coefficients:
-            Estimate Std. Error z value Pr(&gt;|z|)    
-(Intercept)  3.98340    0.92838   4.291 1.78e-05 ***
-age         -0.08693    0.01875  -4.636 3.55e-06 ***
-edu          0.15507    0.07270   2.133   0.0329 *  
-exp         -0.13167    0.07380  -1.784   0.0744 .  
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    <script>
+      // Create table-specific functions using external factory
+      const tableFns_jtb0b9jrrlc9v6t6arsa = TinyTable.createTableFunctions("tinytable_jtb0b9jrrlc9v6t6arsa");
+      // tinytable span after
+      window.addEventListener('load', function () {
+          var cellsToStyle = [
+            // tinytable style arrays after
+          { positions: [ { i: '16', j: 2 }, { i: '16', j: 3 }, { i: '16', j: 4 } ], css_id: 'tinytable_css_13jn79z6v76cvp626cd7',}, 
+          { positions: [ { i: '8', j: 2 }, { i: '8', j: 3 }, { i: '8', j: 4 } ], css_id: 'tinytable_css_r4eagfyh5n64vagzouj0',}, 
+          { positions: [ { i: '1', j: 2 }, { i: '2', j: 2 }, { i: '3', j: 2 }, { i: '4', j: 2 }, { i: '5', j: 2 }, { i: '6', j: 2 }, { i: '7', j: 2 }, { i: '9', j: 2 }, { i: '10', j: 2 }, { i: '11', j: 2 }, { i: '12', j: 2 }, { i: '13', j: 2 }, { i: '14', j: 2 }, { i: '15', j: 2 }, { i: '1', j: 3 }, { i: '2', j: 3 }, { i: '3', j: 3 }, { i: '4', j: 3 }, { i: '5', j: 3 }, { i: '6', j: 3 }, { i: '7', j: 3 }, { i: '9', j: 3 }, { i: '10', j: 3 }, { i: '11', j: 3 }, { i: '12', j: 3 }, { i: '13', j: 3 }, { i: '14', j: 3 }, { i: '15', j: 3 }, { i: '1', j: 4 }, { i: '2', j: 4 }, { i: '3', j: 4 }, { i: '4', j: 4 }, { i: '5', j: 4 }, { i: '6', j: 4 }, { i: '7', j: 4 }, { i: '9', j: 4 }, { i: '10', j: 4 }, { i: '11', j: 4 }, { i: '12', j: 4 }, { i: '13', j: 4 }, { i: '14', j: 4 }, { i: '15', j: 4 } ], css_id: 'tinytable_css_yhx2iclrml1hxj2v4l1c',}, 
+          { positions: [ { i: '0', j: 2 }, { i: '0', j: 3 }, { i: '0', j: 4 } ], css_id: 'tinytable_css_eq0etuh5cppd2r4ivbhr',}, 
+          { positions: [ { i: '16', j: 1 } ], css_id: 'tinytable_css_lfrevw3szgk32awgcc9b',}, 
+          { positions: [ { i: '8', j: 1 } ], css_id: 'tinytable_css_wsku3glyrppuzwna9ujz',}, 
+          { positions: [ { i: '1', j: 1 }, { i: '2', j: 1 }, { i: '3', j: 1 }, { i: '4', j: 1 }, { i: '5', j: 1 }, { i: '6', j: 1 }, { i: '7', j: 1 }, { i: '9', j: 1 }, { i: '10', j: 1 }, { i: '11', j: 1 }, { i: '12', j: 1 }, { i: '13', j: 1 }, { i: '14', j: 1 }, { i: '15', j: 1 } ], css_id: 'tinytable_css_0yvb23n5eceohr2sxe08',}, 
+          { positions: [ { i: '0', j: 1 } ], css_id: 'tinytable_css_kafc9n40fvd2v9i3m9tm',}, 
+          ];
 
-(Dispersion parameter for binomial family taken to be 1)
+          // Loop over the arrays to style the cells
+          cellsToStyle.forEach(function (group) {
+              group.positions.forEach(function (cell) {
+                  tableFns_jtb0b9jrrlc9v6t6arsa.styleCell(cell.i, cell.j, group.css_id);
+              });
+          });
+      });
+    </script>
 
-    Null deviance: 335.22  on 241  degrees of freedom
-Residual deviance: 304.66  on 238  degrees of freedom
-AIC: 312.66
-
-Number of Fisher Scoring iterations: 4</code></pre>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/vincentarelbundock/tinytable@main/inst/tinytable.css">
+    <style>
+    /* tinytable css entries after */
+    #tinytable_jtb0b9jrrlc9v6t6arsa td.tinytable_css_13jn79z6v76cvp626cd7, #tinytable_jtb0b9jrrlc9v6t6arsa th.tinytable_css_13jn79z6v76cvp626cd7 {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.08em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --line-type-bottom: solid; --line-type-left: solid; --line-type-right: solid; --line-type-top: solid; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: center }
+    #tinytable_jtb0b9jrrlc9v6t6arsa td.tinytable_css_r4eagfyh5n64vagzouj0, #tinytable_jtb0b9jrrlc9v6t6arsa th.tinytable_css_r4eagfyh5n64vagzouj0 {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --line-type-bottom: solid; --line-type-left: solid; --line-type-right: solid; --line-type-top: solid; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: center }
+    #tinytable_jtb0b9jrrlc9v6t6arsa td.tinytable_css_yhx2iclrml1hxj2v4l1c, #tinytable_jtb0b9jrrlc9v6t6arsa th.tinytable_css_yhx2iclrml1hxj2v4l1c { text-align: center }
+    #tinytable_jtb0b9jrrlc9v6t6arsa td.tinytable_css_eq0etuh5cppd2r4ivbhr, #tinytable_jtb0b9jrrlc9v6t6arsa th.tinytable_css_eq0etuh5cppd2r4ivbhr {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 1; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.08em; --line-type-bottom: solid; --line-type-left: solid; --line-type-right: solid; --line-type-top: solid; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: center }
+    #tinytable_jtb0b9jrrlc9v6t6arsa td.tinytable_css_lfrevw3szgk32awgcc9b, #tinytable_jtb0b9jrrlc9v6t6arsa th.tinytable_css_lfrevw3szgk32awgcc9b {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.08em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --line-type-bottom: solid; --line-type-left: solid; --line-type-right: solid; --line-type-top: solid; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
+    #tinytable_jtb0b9jrrlc9v6t6arsa td.tinytable_css_wsku3glyrppuzwna9ujz, #tinytable_jtb0b9jrrlc9v6t6arsa th.tinytable_css_wsku3glyrppuzwna9ujz {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --line-type-bottom: solid; --line-type-left: solid; --line-type-right: solid; --line-type-top: solid; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
+    #tinytable_jtb0b9jrrlc9v6t6arsa td.tinytable_css_0yvb23n5eceohr2sxe08, #tinytable_jtb0b9jrrlc9v6t6arsa th.tinytable_css_0yvb23n5eceohr2sxe08 { text-align: left }
+    #tinytable_jtb0b9jrrlc9v6t6arsa td.tinytable_css_kafc9n40fvd2v9i3m9tm, #tinytable_jtb0b9jrrlc9v6t6arsa th.tinytable_css_kafc9n40fvd2v9i3m9tm {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 1; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.08em; --line-type-bottom: solid; --line-type-left: solid; --line-type-right: solid; --line-type-top: solid; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
+    </style>
+    <div class="container">
+      <table class="tinytable" id="tinytable_jtb0b9jrrlc9v6t6arsa" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing="true">
+        
+        <thead>
+              <tr>
+                <th scope="col" data-row="0" data-col="1"> </th>
+                <th scope="col" data-row="0" data-col="2">LPM</th>
+                <th scope="col" data-row="0" data-col="3">Logit - Marginal Effects</th>
+                <th scope="col" data-row="0" data-col="4">Probit</th>
+              </tr>
+        </thead>
+        <tfoot><tr><td colspan="4">+ p &lt; 0.1, * p &lt; 0.05, ** p &lt; 0.01, *** p &lt; 0.001</td></tr></tfoot>
+        <tbody>
+                <tr>
+                  <td data-row="1" data-col="1">(Intercept)</td>
+                  <td data-row="1" data-col="2">1.992***</td>
+                  <td data-row="1" data-col="3"></td>
+                  <td data-row="1" data-col="4">3.983***</td>
+                </tr>
+                <tr>
+                  <td data-row="2" data-col="1"></td>
+                  <td data-row="2" data-col="2">(0.331)</td>
+                  <td data-row="2" data-col="3"></td>
+                  <td data-row="2" data-col="4">(0.928)</td>
+                </tr>
+                <tr>
+                  <td data-row="3" data-col="1">age</td>
+                  <td data-row="3" data-col="2">-0.033***</td>
+                  <td data-row="3" data-col="3">-0.031***</td>
+                  <td data-row="3" data-col="4">-0.087***</td>
+                </tr>
+                <tr>
+                  <td data-row="4" data-col="1"></td>
+                  <td data-row="4" data-col="2">(0.007)</td>
+                  <td data-row="4" data-col="3">(0.006)</td>
+                  <td data-row="4" data-col="4">(0.019)</td>
+                </tr>
+                <tr>
+                  <td data-row="5" data-col="1">edu</td>
+                  <td data-row="5" data-col="2">0.056*</td>
+                  <td data-row="5" data-col="3">0.057*</td>
+                  <td data-row="5" data-col="4">0.155*</td>
+                </tr>
+                <tr>
+                  <td data-row="6" data-col="1"></td>
+                  <td data-row="6" data-col="2">(0.026)</td>
+                  <td data-row="6" data-col="3">(0.026)</td>
+                  <td data-row="6" data-col="4">(0.073)</td>
+                </tr>
+                <tr>
+                  <td data-row="7" data-col="1">exp</td>
+                  <td data-row="7" data-col="2">-0.048+</td>
+                  <td data-row="7" data-col="3">-0.048+</td>
+                  <td data-row="7" data-col="4">-0.132+</td>
+                </tr>
+                <tr>
+                  <td data-row="8" data-col="1"></td>
+                  <td data-row="8" data-col="2">(0.027)</td>
+                  <td data-row="8" data-col="3">(0.026)</td>
+                  <td data-row="8" data-col="4">(0.074)</td>
+                </tr>
+                <tr>
+                  <td data-row="9" data-col="1">Num.Obs.</td>
+                  <td data-row="9" data-col="2">242</td>
+                  <td data-row="9" data-col="3">242</td>
+                  <td data-row="9" data-col="4">242</td>
+                </tr>
+                <tr>
+                  <td data-row="10" data-col="1">R2</td>
+                  <td data-row="10" data-col="2">0.121</td>
+                  <td data-row="10" data-col="3"></td>
+                  <td data-row="10" data-col="4"></td>
+                </tr>
+                <tr>
+                  <td data-row="11" data-col="1">R2 Adj.</td>
+                  <td data-row="11" data-col="2">0.110</td>
+                  <td data-row="11" data-col="3"></td>
+                  <td data-row="11" data-col="4"></td>
+                </tr>
+                <tr>
+                  <td data-row="12" data-col="1">AIC</td>
+                  <td data-row="12" data-col="2">329.9</td>
+                  <td data-row="12" data-col="3">312.4</td>
+                  <td data-row="12" data-col="4">312.7</td>
+                </tr>
+                <tr>
+                  <td data-row="13" data-col="1">BIC</td>
+                  <td data-row="13" data-col="2">347.3</td>
+                  <td data-row="13" data-col="3">326.4</td>
+                  <td data-row="13" data-col="4">326.6</td>
+                </tr>
+                <tr>
+                  <td data-row="14" data-col="1">Log.Lik.</td>
+                  <td data-row="14" data-col="2">-159.948</td>
+                  <td data-row="14" data-col="3">-152.218</td>
+                  <td data-row="14" data-col="4">-152.330</td>
+                </tr>
+                <tr>
+                  <td data-row="15" data-col="1">F</td>
+                  <td data-row="15" data-col="2">10.888</td>
+                  <td data-row="15" data-col="3">8.794</td>
+                  <td data-row="15" data-col="4">9.331</td>
+                </tr>
+                <tr>
+                  <td data-row="16" data-col="1">RMSE</td>
+                  <td data-row="16" data-col="2">0.47</td>
+                  <td data-row="16" data-col="3">0.47</td>
+                  <td data-row="16" data-col="4">0.47</td>
+                </tr>
+        </tbody>
+      </table>
+    </div>
+<!-- hack to avoid NA insertion in last line -->
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The probit coefficients are smaller in absolute size than the logit</span></span>
-<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="co"># coefficients (as expected, since the two models are scaled</span></span>
-<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a><span class="co"># differently), but the signs, significance, and substantive</span></span>
-<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a><span class="co"># conclusions are the same. Indeed, conclusions from the linear</span></span>
-<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a><span class="co"># probability model, the logit model, and the probit model are very</span></span>
-<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a><span class="co"># often similar in practice, even though the models differ in their</span></span>
-<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a><span class="co"># assumptions and in how coefficients are scaled.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+<p>The coefficients are larger, but the conclusions are the same. Indeed, the conclusions between the three models are very often very similar.</p>
 
 
 </section>
+</div>
+</div>
+</div>
 </section>
 
 </main> <!-- /main -->
