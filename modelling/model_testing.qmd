@@ -47,11 +47,13 @@ library(car)
 library(lmtest)
 library(modelsummary)
 library(marginaleffects)
-
-sesam <- read_dta("data/sesam.dta")
 ```
 
 ### sesam
+
+```{r}
+sesam <- read_dta("data/sesam.dta")
+```
 
 #### 1
 
@@ -81,9 +83,14 @@ We conclude that the full model fits significantly better than the restricted mo
 
 We can of course informally compare the coefficients for prenumb in the two separate models for males and females, but this does not give us a formal test of whether the difference is significant. We should simply fit a model with an interaction between prenumb and sex, controlling for age. 
 ```{r}
+# Creating a numeric female dummy just for cleaner labels in the regression table
+# You should get the same results using, e.g., factor(sex)
+sesam <- sesam |> 
+           mutate(female = as.numeric(sex==2))
+
 fit_male <- lm(postnumb ~ prenumb + age, data = sesam |> filter(sex == 1))
 fit_female <- lm(postnumb ~ prenumb + age, data = sesam |> filter(sex == 2))
-fit_interaction <- lm(postnumb ~ prenumb * factor(sex) + age, data = sesam)
+fit_interaction <- lm(postnumb ~ prenumb * female + age, data = sesam)
 
 modelsummary(list("Males" = fit_male, "Females" = fit_female, "Interaction" = fit_interaction), stars = TRUE)
 ```
@@ -101,31 +108,36 @@ library(suest)
 
 combined <- suest(fit_male, fit_female, model_names = c("Male", "Female"))
 effects <- avg_comparisons(combined, variables = "prenumb")
+effects
+
 hypotheses(effects, hypothesis = difference ~ pairwise)
 ```
 
-We conclude the same thing with this method: the different between the effect of prenumb on postnumb for boys and girls is not significant at the 5% level.
+Note that the estimate (0.224) is the difference between the coefficients of prenumb estimated separately for females (0.897) and males (.674). The difference is deemed not significant at the 5% level. We conclude the same thing with this method as with the interaction coefficient shown above: the effect of prenumb on postnumb does not significantly differ between boys and girls.
+
+Bonus: Also note that the difference between coefficients estimated with different models (0.224) is not identical to the the interaction coefficient in the pooled model (0.208), even though they are supposed to measure the same thing ("by how much the effect of prenumb differs between males and females"). Change the interaction model above to also include an interaction term between sex and age, see what happens with the sex*prenumb coefficient, and reflect 
 :::
 
 
 ### donations
 
 Prepare data:
- ```{r}
- donations <- read_dta("data/donations.dta")
 
- donations <- donations |>
-  mutate(
-    religion = na_if(religion, 6),
-    religion = factor(religion,
-                      levels = 1:5,
-                      labels = c("none", "catholic", "reformed",
-                                "rereformed", "islam")),
-    old = age > 40,
-    propdon = (donation / 12) / inc,
-    percdon = propdon * 100
-  )
- ```
+```{r}
+donations <- read_dta("data/donations.dta")
+
+donations <- donations |>
+mutate(
+  religion = na_if(religion, 6),
+  religion = factor(religion,
+                    levels = 1:5,
+                    labels = c("none", "catholic", "reformed",
+                              "rereformed", "islam")),
+  old = age > 40,
+  propdon = (donation / 12) / inc,
+  percdon = propdon * 100
+)
+```
 
 #### 3
 

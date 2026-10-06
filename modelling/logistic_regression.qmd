@@ -131,14 +131,14 @@ modelsummary(list("LPM"= fit_lpm,
               stars = TRUE) 
 ```
 
-### 7
+### 5
 ```{r}
 slopes(fit_logit, variables = "age", newdata = datagrid(edu = 1, exp = 3))
 ```
 
 For the lowest educated people with the largest number of prior unemployment spells, a one-year increase in age is associated with a significant decrease in the probability of re-employment of about 3.0 percentage points.
 
-### 8
+### 6
 
 ```{r}
 slopes(fit_logit, variables = "age", newdata = "mean")
@@ -147,7 +147,7 @@ slopes(fit_logit, variables = "age", newdata = "mean")
 For a person with average education and an average number of prior unemployment spells, a one-year increase in age is associated with a significant decrease in the probability of re-employment of about 3.6 percentage points. This differs from the average marginal effect in question 4c because there we averaged the marginal effect over all observed combinations of education and prior unemployment spells, rather than evaluating the effect once at the mean values of these predictors.
 
 
-### 7.
+### 7
 
 ```{r}
 fit_soccap <- glm(work ~ age + edu + exp + scweak + scmedium + scstrong,
