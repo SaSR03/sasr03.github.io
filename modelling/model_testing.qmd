@@ -92,7 +92,7 @@ fit_male <- lm(postnumb ~ prenumb + age, data = sesam |> filter(sex == 1))
 fit_female <- lm(postnumb ~ prenumb + age, data = sesam |> filter(sex == 2))
 fit_interaction <- lm(postnumb ~ prenumb * female + age, data = sesam)
 
-modelsummary(list("Males" = fit_male, "Females" = fit_female, "Interaction" = fit_interaction), stars = TRUE)
+modelsummary(list("Boys" = fit_male, "Girls" = fit_female, "Pooled" = fit_interaction), stars = TRUE)
 ```
 
 The interaction coefficient is not significant at the 5% level, so we conclude that there is no evidence that the effect of prenumb on postnumb differs between boys and girls.
@@ -115,7 +115,7 @@ hypotheses(effects, hypothesis = difference ~ pairwise)
 
 Note that the estimate (0.224) is the difference between the coefficients of prenumb estimated separately for females (0.897) and males (.674). The difference is deemed not significant at the 5% level. We conclude the same thing with this method as with the interaction coefficient shown above: the effect of prenumb on postnumb does not significantly differ between boys and girls.
 
-Bonus: Also note that the difference between coefficients estimated with different models (0.224) is not identical to the the interaction coefficient in the pooled model (0.208), even though they are supposed to measure the same thing ("by how much the effect of prenumb differs between males and females"). Change the interaction model above to also include an interaction term between sex and age, see what happens with the sex*prenumb coefficient, and reflect 
+Bonus: Also note that the difference between coefficients estimated with different models (0.224) is not identical to the the interaction coefficient in the pooled model (0.208), even though they are supposed to measure the same thing ("by how much the effect of prenumb differs between males and females"). Change the interaction model above to also include an interaction term between sex and age, and look again at the the sex*prenumb coefficient. What happened? Why?
 :::
 
 
