@@ -33,13 +33,13 @@ jobs:
             any::survminer
             any::brant
             any::marginaleffects
-            any::sandwich
             any::skimr
             any::survminer
             any::psych
             any::labelled
             any::parameters
             any::modelsummary
+            any::sandwich
             tdmize/suest
 
       - name: Set up Quarto

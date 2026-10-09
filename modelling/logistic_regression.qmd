@@ -11,7 +11,7 @@ Use the dataset `unemploy`. Construct the outcome `work`, coded 1 (or TRUE) if `
 1. Fit a linear probability model of `work` on `age`, `edu`, and `exp` and interpret all 
 coefficients. 
 
-2. Compute heteroskedasticity-consistent (robust) standard errors for the previous models. You can do that using `modelsummary(your_model_object, vcov = "robust")`. Are the substantive conclusions affected?
+2. Compute heteroskedasticity-consistent (robust) standard errors for the previous models. You can do that using `modelsummary(your_model_object, vcov = "robust")`. (You also need the package `sandwich` installed for this to work). Are the substantive conclusions affected? 
 
 3. Obtain the predicted probabilities from the linear probability model (use the `predict()` from base R, or the values from `your_model_object$fitted.values`). Count how many predicted probabilities fall outside the range 0 to 1. 
 
@@ -39,7 +39,6 @@ coefficients.
 ::: {.callout-note appearance="simple" collapse=true}
 ## See answers
 
-
 ```{r setup-logistic}
 library(tidyverse)
 library(haven)
@@ -63,6 +62,8 @@ summary(fit_lpm)
 If age increases by one year, the probability of re-employment significantly decreases by 3.25 percentage points. If education increases, the probability of re-employment significantly increases by 5.6 percentage points per unit of education. If the number of previous unemployment spells (exp) is higher, the probability of re-employment does not decrease significantly at the 5% level, but does decrease significantly at the 7.7% level (by about 4.8 percentage points per additional spell).
 
 ### 2
+
+Note: the `sandwich` package must be installed to compute robust SEs, but you do need to load it. 
 
 Model with robust SEs:
 ```{r}
