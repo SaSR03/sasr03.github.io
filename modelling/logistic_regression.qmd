@@ -19,7 +19,7 @@ coefficients.
 4. Fit a logistic regression of `work` on `age`, `edu`, and `exp`. (Use `glm`, which has the basically the same syntax as `lm()`. But you should specify the argument `family = binomial()`.) Interpret each coefficient:
   a. in terms of log-odds
   b. in terms of odds-ratios/odds
-  c. in terms of marginal effects (on the probability scale). You can compute marginal effects using `marginaleffects::avg_slopes()`.  Compare these effects, and the substantive conclusions they imply, to the coefficients of the linear probability model from question 1.
+  c. in terms of average marginal effects (on the probability scale). You can compute marginal effects using `marginaleffects::avg_slopes()`.  Compare these effects, and the substantive conclusions they imply, to the coefficients of the linear probability model from question 1.
 
 5. Compute the marginal effect of `age` for a person with the lowest education level (`edu = 1`) and the largest number of prior unemployment spells (`exp = 3`). Use `marginaleffects::slopes()` with the `newdata` argument to specify the values of `edu` and `exp` (see example [here](https://marginaleffects.com/chapters/slopes.html#adjustment-variables)). Interpret this effect.
 
