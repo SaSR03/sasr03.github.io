@@ -31,6 +31,24 @@ coefficients.
 
 8. Fit a probit regression of `work` on `age`, `edu`, and `exp`. (The code is almost the same as for the logit model, but with `family = binomial(link = "probit")`) Compare the estimates of this model with the estimates of the linear probability model question 1 and the average marginal effects using the logistic regression model estimated in 4c. What do you find? 
 
+### Latent interpretation
+
+Use the dataset `donations.dta`: 
+
+a. Construct the variable `donated` given value of 1 if a person donated more than 1, and 0 otherwise. 
+
+b. Fit a linear probability model to determine whether donations depend on age, education, and gender. Use the newly created variable as the outcome. Choose the proper standard errors and motivate why you chose for these standard errors. Interpret all the coefficients.
+
+c. Now fit a logistic regression model and interpret the coefficients in four ways: 3 manifest, and 1 latent. Use the type ofstandard errors chosen in b throughout the assignment. 
+  - Tip: the `vcov`argument in `marginaleffects::avg_slopes()` works the same as in `modelsummary()`. 
+
+d. Compute and interpret the McKelvey measure of explained variance. 
+
+e. Test the following hypotheses. Give a latent and one manifest interpretation of the coefficients. Think carefully about which manifest interpretation you should use if you want to interpret the magnitudes of the coefficients. 
+  1. The effect of social integration on donating is larger for women than for men. 
+  2. The effect of the number of years of education on donating differs for men and women.  
+  3. Life events have a bigger impact on donating of women than on men.
+  - Tip: use `marginaleffects::slopes()` (instead of `avg_slopes()`) to compute the marginal effects of the focal variable for men and women separately. Test the difference in these marginal effects using the argument `hypothesis`. See [example](https://marginaleffects.com/chapters/interactions.html#is-the-effect-of-x-on-y-moderated-by-m-2).
 
 ::: {.content-visible when-format="html"}
 
@@ -45,13 +63,14 @@ library(haven)
 library(modelsummary)
 library(lmtest)
 library(marginaleffects)
+```
 
+```{r}
 unemploy <- read_dta("data/unemploy.dta")
 
 unemploy <- unemploy |>
   mutate(work = studytim < 53)
 ```
-
 ### 1
 
 ```{r}
@@ -183,6 +202,182 @@ modelsummary(list("LPM"= fit_lpm,
 ```
 
 The coefficients are larger, but the conclusions are the same. Indeed, the conclusions between the three models are very often very similar.
+
+### 9
+
+
+#### a.
+```{r}
+donations <- read_dta("data/donations.dta")
+
+donations <- donations |> 
+              mutate(donated = as.numeric(donation > 1)) # there are no missings 
+```
+
+
+#### b.
+We use robust standard errors because the linear probability model is by definition heteroscedastic. As such, the assumption of homoscedasticity is violated.
+   
+```{r}
+fit_don_lpm <- lm(donated ~ age + edu + male, data = donations)
+
+modelsummary(fit_don_lpm, vcov = "robust", stars = TRUE)
+```
+
+If age increases by one year, the probability of donating significantly 
+increases by 1 percentage point. If years of education increase by 1 year, the probability of donating significantly increases by 2.8 percentage points. Males donate 9.5 percentage points significantly more than females. If you are female with 0 years of education and 0 years old, the probability of donating is -0.46. Evidently, the interpretation of the constant makes no sense.
+
+#### c.
+```{r}
+fit_don_logit <- glm(donated ~ age + edu + male, family = binomial, data = donations)
+```
+
+
+Manifest interpretation in log-odds:
+```{r}
+modelsummary(fit_don_logit, vcov = "robust", stars = TRUE)
+```
+If age increases by one year, the log odds of donating significantly increase by 0.046. If years of education increase by 1 year, the log odds of donating significantly increase by 0.136. The log odds of donating are 0.464 significantly higher for males than females. If you are female with 0 years of education and 0 years old, the log odds of donating are -4.611.
+
+Manifest interpretation in odds ratio:
+```{r}
+modelsummary(fit_don_logit, vcov = "robust", stars = TRUE, exponentiate = TRUE)
+```
+If age increases by one year, the odds of donating significantly increase by 4.7%.
+If years of education increase by 1 year, the odds of donating significantly increase by 14.6%. The odds of donating are 59% significantly higher for males than females. The constant here are the baseline odds, and has no real interpretation.
+
+
+Manifest interpretation in predicted probabilities (average marginal effects):
+```{r}
+avg_slopes(fit_don_logit, vcov = "robust")
+```
+If age increases by one year, the probability of donating significantly increases by 0.94 percentage points. If years of education increase by 1 year, the probability of donating significantly increases by 2.8 percentage points. Males donate 9.5 percentage points significantly more than females. Note that these conclusions are virtually the same as the conclusions using a linear probability model.
+
+
+For the latent interpretation, we can look at the original coefficients again:
+```{r}
+modelsummary(fit_don_logit, vcov = "robust", stars = TRUE)
+```
+If age increases by one year, the net utility of donating versus not donating significantly increases by 0.046. If years of education increase by 1 year, the net utility of donating versus not donating significantly increases by 0.136. The net utility of donating versus not donating is 0.464 significantly higher  for males than females. If you are female with 0 years of education and 0 years old, the net utility of donating versus not donating is -4.611.
+
+#### d. 
+McKelvey measure of explained variance
+```{r}
+logit_pred <- predict(fit_don_logit)
+
+# The exact formula is slightly different, but below is a good enough approximation
+var_pred <- var(logit_pred)
+var_pred/(var_pred + pi^2/3) # could also approximate pi^2/3 with 3.29
+```
+The model explains 11% of the (latent) variance.
+
+
+#### e
+
+**e.1. The effect of social integration on donating is larger for women than for men.**
+```{r}
+fit_don_logit_sex <- glm(donated ~ male*socint, family = binomial, data = donations)
+```
+
+Latent interpretation:
+```{r}
+modelsummary(fit_don_logit_sex, vcov = "robust", stars = TRUE)
+```
+The interaction is negative and significant, so the effect of social integration is indeed larger for women than for men. Keep in mind that we do not interpret the size of the coefficients when including interaction terms, because of the scaling. We only interpret the sign. For the magnitude, we would need to correct for scaling.
+
+
+Manifest interpretation:
+```{r}
+slopes(fit_don_logit_sex, 
+        vcov = "robust", 
+        variables = "socint", 
+        newdata = datagrid(male = 0:1))
+```
+The code above computes the marginal effect of social integration on donating for men and women separately. 
+We take the marginal effects to get rid of the scaling so we can interpret the magnitude of the effects. The effect is indeed larger for females than for males. Specifically, if you are female the effect of social intergration on the probability to donate is 0.107, whereas the effect is 0.012 for males.
+
+We can test whether these effects are significantly different with the argument `hypothesis`:
+```{r}
+slopes(fit_don_logit_sex, 
+        vcov = "robust", 
+        variables = "socint", 
+        newdata = datagrid(male = 0:1),
+        hypothesis = "b1 - b2 = 0")
+```
+
+The difference (0.107 - 0.012 = 0.095) is not significant at the 5% level, so on the probability scale we cannot conclude that the effect of social integration on donating is significantly larger for women than for men.
+
+
+::: {.callout-tip collapse=true} 
+### Details on marginal effects
+
+Above we used slopes with `newdata = datagrid(male = 0:1)`, which means basically "create a new dataset with one case for with male = 0 and one case with male = 1, and compute the marginal effect of social integration for both cases". If we instead use the argument `by = "male"` we get the following:
+```{r}
+slopes(fit_don_logit_sex, 
+        vcov = "robust", 
+        variables = "socint", 
+        by = "male")
+```
+Note that the results very similar but not exactly the same. `newdata = datagrid(male = 0:1)` computes marginal effects at hypothetical cases. `by = "male"` computes average marginal effects using the the actual data, i.e., it computes the marginal effect for each observed case and then averages these effects for males and females separately. In this case, the results are very similar because the distribution of social integration is very similar for males and females. But in general, these two approaches can give different results.
+
+Be assured that you will not be the first person to get confused by this. 
+:::
+
+
+**e.2. The effect of the number of years of education on donating differs for men and women.**
+```{r}
+fit_don_logit_edu <- glm(donated ~ male*edu, family = binomial, data = donations)
+```
+
+Latent interpretation:
+```{r}
+modelsummary(fit_don_logit_edu, vcov = "robust", stars = TRUE)
+```
+The interaction is not significant, so there is no evidence that the effect of education on donating differs by gender.
+
+
+Manifest interpretation:
+```{r}
+slopes(fit_don_logit_edu, 
+        vcov = "robust", 
+        variables = "edu", 
+        newdata = datagrid(male = 0:1))
+
+slopes(fit_don_logit_edu, 
+        vcov = "robust", 
+        variables = "edu", 
+        newdata = datagrid(male = 0:1),
+        hypothesis = "b1 - b2 = 0")
+```
+Although the effect is larger for females than for males, it is not significantly larger.
+
+
+**e.3. Life events have a bigger impact on donating of women than on men.**
+
+```{r}
+fit_don_logit_life <- glm(donated ~ male*lifevent, family = binomial, data = donations)
+```
+
+Latent interpretation:
+```{r}
+modelsummary(fit_don_logit_life, vcov = "robust", stars = TRUE)
+```
+The interaction is insignificant, so there is no evidence that the effect of having experienced a serious health problem on donating is greater for women than for men. Keep in mind that we do not interpret the size of the coefficients when including interaction terms, because of the scaling. We only interpret the sign. For the magnitude, we would need to correct for scaling.
+
+Manifest interpretation:
+```{r}
+slopes(fit_don_logit_life, 
+        vcov = "robust", 
+        variables = "lifevent", 
+        newdata = datagrid(male = 0:1))
+
+slopes(fit_don_logit_life, 
+        vcov = "robust", 
+        variables = "lifevent", 
+        newdata = datagrid(male = 0:1),
+        hypothesis = "b1 - b2 = 0")
+```
+Although the effect is larger for males than for females, it is not significantly larger.
 
 :::
 :::
