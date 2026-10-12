@@ -39,20 +39,20 @@ We consider voting behavior using the dataset `hin95_voting`. For
 3. Refit the same empty model using category "social liberal" as the base category instead. How are intercepts now interpreted? What does it mean that the intercept/constant for social democratic is not significant?   
 
 4. Create a dummy variable `female`. Recode `religion` into a new variable `rel4` with four categories (1: nonreligious; 2: catholic; 3: protestant (reformed, rereformed); 4: other; the rest missing). Fit a multinomial logistic regression for voting (`party6`) with predictors `education` (trated as continuous), `rel4` (categorical), and `female`, using category "christian democratic" as the base category for `party6`. 
-  a. What is the odds ratio for voting strictly religious  rather than Christian democratic for one additional unit of education? 
-  b. What is the odds-ratio for voting strictly religious rather than Christian democratic for non-religious people versus protestants. Youy might need to change the reference category for `rel4`.
+   a. What is the odds ratio for voting strictly religious  rather than Christian democratic for one additional unit of education? 
+   b. What is the odds-ratio for voting strictly religious rather than Christian democratic for non-religious people versus protestants. Youy might need to change the reference category for `rel4`.
 
 5. Using the same model from 4a, compute and interpret the average marginal effects of:
-  a. `education` and `female` on the probability to vote social democratic. 
-  b. being catholic versus non-religious on the probability to vote christian democratic.
+   a. `education` and `female` on the probability to vote social democratic. 
+   b. being catholic versus non-religious on the probability to vote christian democratic.
 
 6. Recode `education` into a variable `edu4` with four levels (1 to 1; 2 and 3 to 2; 4, 5 and 6 to 3; 7, 8 and 9 to 4; other values to missing). Treat as a categorical variable. 
-  a. Fit a multinomial model of `party6` on `edu4` and `rel4`, using "left" as the base category.
-  b. Refit the model adding the interaction between `edu4` and `rel4`. Test whether this interaction significantly improves the fit, using a likelihood ratio test comparing the two models. Is there evidence for an interaction between education and religion on party choice?
-  c. We claim that the second model that you just fitted is actually saturated: the predicted probabilities for each combination of categories of `edu4` and `rel4` exactly matches the observed fractions for these combinations (considering only nonmissing values). Check this by looking at a few combinations of `edu4` and `rel4`:
-    - Predicted probabilities: `predict(model_6b, newdata = data.frame(rel4 = "protestant", edu4 = "3"), type="probs")`
-    - Observed fractions: `hin95_voting  |> filter(rel4=="protestant", edu4=="3", !is.na(party6))  |> janitor::tabyl(party6)`
-    - You might need to run `options(scipen=999)` so that small fractions are not displayed in scientific notation. 
+   a. Fit a multinomial model of `party6` on `edu4` and `rel4`, using "left" as the base category.
+   b. Refit the model adding the interaction between `edu4` and `rel4`. Test whether this interaction significantly improves the fit, using a likelihood ratio test comparing the two models. Is there evidence for an interaction between education and religion on party choice?
+   c. We claim that the second model that you just fitted is actually saturated: the predicted probabilities for each combination of categories of `edu4` and `rel4` exactly matches the observed fractions for these combinations (considering only nonmissing values). Check this by looking at a few combinations of `edu4` and `rel4`:
+      - Predicted probabilities: `predict(model_6b, newdata = data.frame(rel4 = "protestant", edu4 = "3"), type="probs")`
+      - Observed fractions: `hin95_voting  |> filter(rel4=="protestant", edu4=="3", !is.na(party6))  |> janitor::tabyl(party6)`
+      - You might need to run `options(scipen=999)` so that small fractions are not displayed in scientific notation. 
 
 
 ::: {.content-visible when-format="html"}

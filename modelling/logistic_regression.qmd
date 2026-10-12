@@ -15,40 +15,33 @@ coefficients.
 
 3. Obtain the predicted probabilities from the linear probability model (use the `predict()` from base R, or the values from `your_model_object$fitted.values`). Count how many predicted probabilities fall outside the range 0 to 1. 
 
-
 4. Fit a logistic regression of `work` on `age`, `edu`, and `exp`. (Use `glm`, which has the basically the same syntax as `lm()`. But you should specify the argument `family = binomial()`.) Interpret each coefficient:
-  a. in terms of log-odds
-  b. in terms of odds-ratios/odds
-  c. in terms of average marginal effects (on the probability scale). You can compute marginal effects using `marginaleffects::avg_slopes()`.  Compare these effects, and the substantive conclusions they imply, to the coefficients of the linear probability model from question 1.
+   a. in terms of log-odds
+   b. in terms of odds-ratios/odds
+   c. in terms of average marginal effects (on the probability scale). You can compute marginal effects using `marginaleffects::avg_slopes()`.  Compare these effects, and the substantive conclusions they imply, to the coefficients of the linear probability model from question 1.
 
 5. Compute the marginal effect of `age` for a person with the lowest education level (`edu = 1`) and the largest number of prior unemployment spells (`exp = 3`). Use `marginaleffects::slopes()` with the `newdata` argument to specify the values of `edu` and `exp` (see example [here](https://marginaleffects.com/chapters/slopes.html#adjustment-variables)). Interpret this effect.
 
 6. Compute the marginal effect of `age` at the means of `edu` and `exp`. (Use `newdata = "mean"` in `marginaleffects::slopes()`.) Compare this to the average marginal effect of `age` found in question 4c. Why can these two values differ?
 
 7. The dataset comprises measures for three forms of social recourses (strong, medium, and weak ties): `scweak`, `scmedium`, and `scstrong`. Fit a logit model of `work` on `age`, `edu`, `exp`, and the three social capital measures.
-  a. Test, using a Wald test and a likelihood ratio test, whether social capital as a set significantly contributes to explaining re-employment.
-  b. Test whether the coefficients for `scweak` and `scstrong` are different. (Hint: use `marginaleffects::hypotheses()`)
+   a. Test, using a Wald test and a likelihood ratio test, whether social capital as a set significantly contributes to explaining re-employment.
+   b. Test whether the coefficients for `scweak` and `scstrong` are different. (Hint: use `marginaleffects::hypotheses()`)
 
 8. Fit a probit regression of `work` on `age`, `edu`, and `exp`. (The code is almost the same as for the logit model, but with `family = binomial(link = "probit")`) Compare the estimates of this model with the estimates of the linear probability model question 1 and the average marginal effects using the logistic regression model estimated in 4c. What do you find? 
 
-### Latent interpretation
-
-Use the dataset `donations.dta`: 
-
-a. Construct the variable `donated` given value of 1 if a person donated more than 1, and 0 otherwise. 
-
-b. Fit a linear probability model to determine whether donations depend on age, education, and gender. Use the newly created variable as the outcome. Choose the proper standard errors and motivate why you chose for these standard errors. Interpret all the coefficients.
-
-c. Now fit a logistic regression model and interpret the coefficients in four ways: 3 manifest, and 1 latent. Use the type ofstandard errors chosen in b throughout the assignment. 
-  - Tip: the `vcov`argument in `marginaleffects::avg_slopes()` works the same as in `modelsummary()`. 
-
-d. Compute and interpret the McKelvey measure of explained variance. 
-
-e. Test the following hypotheses. Give a latent and one manifest interpretation of the coefficients. Think carefully about which manifest interpretation you should use if you want to interpret the magnitudes of the coefficients. 
-  1. The effect of social integration on donating is larger for women than for men. 
-  2. The effect of the number of years of education on donating differs for men and women.  
-  3. Life events have a bigger impact on donating of women than on men.
-  - Tip: use `marginaleffects::slopes()` (instead of `avg_slopes()`) to compute the marginal effects of the focal variable for men and women separately. Test the difference in these marginal effects using the argument `hypothesis`. See [example](https://marginaleffects.com/chapters/interactions.html#is-the-effect-of-x-on-y-moderated-by-m-2).
+9. Use the dataset `donations.dta`: 
+   a. Construct the variable `donated` given value of 1 if a person donated more than 1, and 0 otherwise. 
+   b. Fit a linear probability model to determine whether donations depend on age, education, and gender. Use the newly created variable as the outcome. Choose the proper standard errors and motivate why you chose for these standard errors. Interpret all the coefficients.
+   c. Now fit a logistic regression model and interpret the coefficients in four ways: 3 manifest, and 1 latent. Use the type ofstandard errors chosen in b throughout the assignment. 
+     - Tip: the `vcov`argument in `marginaleffects::avg_slopes()` works the same as in `modelsummary()`.    
+   d. Compute and interpret the McKelvey measure of explained variance. 
+   e. Test the following hypotheses. Give a latent and one manifest interpretation of the coefficients. Think carefully about which manifest interpretation you should use if you want to interpret the magnitudes of the coefficients. 
+      1. The effect of social integration on donating is larger for women than for men. 
+      2. The effect of the number of years of education on donating differs for men and women.  
+      3. Life events have a bigger impact on donating of women than on men.
+      
+      Tip: use `marginaleffects::slopes()` (instead of `avg_slopes()`) to compute the marginal effects of the focal variable for men and women separately. Test the difference in these marginal effects using the argument `hypothesis`. See [example](https://marginaleffects.com/chapters/interactions.html#is-the-effect-of-x-on-y-moderated-by-m-2).
 
 ::: {.content-visible when-format="html"}
 
