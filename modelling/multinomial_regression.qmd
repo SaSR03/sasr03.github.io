@@ -8,7 +8,7 @@ title: Multinomial logistic regression
 Code tips:
 - Use `multinom()` from the `nnet` package to fit multinomial logistic regression models.
 - Use `relevel()` to set the reference category for factor (i.e. categorical) variables.
-- To correctly display a multinomial model in `modelsummary()`, you have to specify the `shape` argument. We suggest the following: `shape = term + statistic ~ response`. This rearranges the table so that each response category is displayed in a separate column. You might also try other shapes, such as `term + response ~ statistic`. Whats looks best will depend on the number of response categories, number of predictors in your model, and whether you are displaying more than one model in the same table.
+- To correctly display a multinomial model in `modelsummary()`, you have to specify the `shape` argument. We suggest the following: `shape = term + statistic ~ response`. This rearranges the table so that each response category is displayed in a separate column. You might also try other shapes, such as `term + response ~ statistic`. What looks best will depend on the number of response categories, number of predictors in your model, and whether you are displaying more than one model in the same table. By default, `modelsummary()` does not display significance stars or p-values. You can add them using the arguments `stars = TRUE` and `statistic = c("std.error", "p.value")`, respectively. 
 
 
 ## Assignments
@@ -69,7 +69,7 @@ library(nnet)
 library(lmtest)
 library(marginaleffects)
 library(modelsummary)
-
+options(scipen=999) # avoid scientific notation 
 
 hin95_voting <- read_dta("data/hin95_voting.dta")
 ```
@@ -147,7 +147,8 @@ hin95_voting |>
 
 fit_q4 <- multinom(relevel(party6, ref = "christian democratic") ~ education + rel4 + female, data = hin95_voting)
 
-modelsummary(fit_q4, shape = term + statistic ~ response, stars = TRUE, exponentiate = TRUE)
+# Also show p-values
+modelsummary(fit_q4, shape = term + statistic ~ response, stars = TRUE, exponentiate = TRUE, statistic = c("std.error", "p.value"))
 ```
 
 a.
