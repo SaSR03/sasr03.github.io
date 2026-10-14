@@ -4,16 +4,18 @@ title: Multinomial logistic regression
 
 <!-- TODO: add question to check whether IIA holds. Dropped because we have to test package suest -->
 
+Tips:
 
-Code tips:
 - Use `multinom()` from the `nnet` package to fit multinomial logistic regression models.
+
 - Use `relevel()` to set the reference category for factor (i.e. categorical) variables.
+
 - To correctly display a multinomial model in `modelsummary()`, you have to specify the `shape` argument. We suggest the following: `shape = term + statistic ~ response`. This rearranges the table so that each response category is displayed in a separate column. You might also try other shapes, such as `term + response ~ statistic`. What looks best will depend on the number of response categories, number of predictors in your model, and whether you are displaying more than one model in the same table. By default, `modelsummary()` does not display significance stars or p-values. You can add them using the arguments `stars = TRUE` and `statistic = c("std.error", "p.value")`, respectively. 
 
 
 ## Assignments
 
-We consider voting behavior using the dataset `hin95_voting`. For
+We consider voting behavior using the dataset `hin95_voting`. 
 
 1. Recode the variable `party` into a new variable `party6` with the following six categories (excluding 3 parties, mainly due to limited support). This variable will be the dependent variable throughout.
 
