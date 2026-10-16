@@ -23,20 +23,10 @@ Use the dataset `hin95_voting`.
 
 4. Fit a new model that expands the model fitted in question 1 by adding a squared term for `chfreq`. Use a likelihood ratio test to test the linearity of association between church attendance and voting intention.
 
-<!-- 
-### Interactions
+5. Fit a model with an interaction between `female` and `chfreq` (in addition to the main effects of `education`, `age`, `female`, and `chfreq`). Is there evidence that the effect of church attendance on voting intention differs between men and women? 
 
-7. Fit a model with an interaction between `female` and `chfreq` (in addition to the main effects of `education`, `age`, `female`, and `chfreq`). Is there evidence that the effect of church attendance on voting intention differs between men and women? Report the implied effect of `chfreq` separately for men and for women.
+6. Test the proportional odds (parallel lines) assumption for the model estimated in question 1. Use `brant::brant()` or `car::poTest()`. Is the assumption supported by the data?
 
-8. Confirm your conclusion from the previous question with a likelihood ratio test comparing the model with and without the interaction term.
-
-### Explained variance
-
-9. Compute a pseudo-$R^2$ for the latent variable underlying `vote`, using the variance of the fitted linear predictor and the fixed error variance of the ordered logit model ($\pi^2/3$).
-
-### Proportional odds assumption
-
-10. Test the proportional odds (parallel lines) assumption for the model of `vote` on `education`, `age`, `female`, and `chfreq`. Is the assumption supported by the data? What would this mean for the interpretation of the model if the assumption were rejected? -->
 
 ::: {.content-visible when-format="html"}
 
@@ -52,7 +42,7 @@ library(MASS)
 library(modelsummary)
 library(lmtest)
 library(marginaleffects)
-#library(brant)
+library(brant)
 
 hin95_voting <- read_dta("data/hin95_voting.dta")
 ```
@@ -153,87 +143,42 @@ lrtest(fit, fit_quadratic)
 The quadratic specification does not significantly improves the fit over the linear
 specification of chfreq, so treating chfreq as linear is an adequate simplification.
 
+### 5.
+
+```{r}
+fit_interaction <- polr(vote ~ education + age + female * chfreq,
+                        data = hin95_voting, Hess = TRUE)
+
+modelsummary(fit_interaction, stars = TRUE)
+```
+
+No support for an interaction between religiosity and gender. 
+
+### 6.
+ 
+```{r}
+brant(fit)
+```
+The assumption is not supported by the data, so we must reject it. 
+
+`car::poTest()` gives the same results, plus the coefficients we would obtain if we estimated separate binary logistic model:
+
+```{r}
+car::poTest(fit)
+```
+
 <!-- 
 
-### Interactions
-
-#### 7. An interaction between `female` and `chfreq`
-
+Pseudo-R2
 ```{r}
-#fit_interaction <- polr(vote ~ education + age + female * chfreq,
-#                         data = hin95_voting_complete, Hess = TRUE)
-# summary(fit_interaction)
-
-# No support for an interaction between religiosity and gender
-# (Wald z = -0.25, p = 0.801).
-#
-# Effect of chfreq on the latent vote variable:
-#   = b_chfreq                          for males
-#   = b_chfreq + b_female:chfreq        for females
-#
-# The effect of church attendance on voting intention is essentially the
-# same for men and women.
-```
-
-```{r}
-# b <- coef(fit_interaction)
-
-# b["chfreq"]
-# b["chfreq"] + b["female:chfreq"]
-# the implied effect of chfreq for men and for women
-```
-
-#### 8. The same conclusion from a likelihood ratio test
-
-```{r}
-# fit_no_interaction <- polr(vote ~ education + age + female + chfreq,
-#                             data = hin95_voting_complete, Hess = TRUE)
-
-# lrtest(fit_interaction, fit_no_interaction)
-
-# The likelihood ratio test confirms the Wald test: there is no evidence
-# that the effect of chfreq on vote differs between men and women.
-```
-
-### Explained variance
-
-#### 9. A pseudo-$R^2$ for the latent variable
-
-```{r}
-# fit_r2 <- polr(vote ~ education + age + female + chfreq,
-#                data = hin95_voting_complete, Hess = TRUE)
-
-# # The linear predictor (fitted latent variable, without the error term)
 # X <- model.matrix(fit_r2)[, -1]
 # lp <- as.vector(X %*% coef(fit_r2))
 
 # var_lp <- var(lp)
 # r2 <- var_lp / (var_lp + pi^2 / 3)
 # r2
-
-# R2 = variance(model) / (variance(model) + variance(error)), where
-# variance(error) = pi^2/3 = 3.29 by definition for the ordered logit
-# model. This gives a pseudo-R-squared describing the proportion of
-# variance explained in the latent (underlying continuous) voting
-# intention variable.
 ```
 
-### Proportional odds assumption
-
-#### 10. The Brant test
-
-```{r}
-# brant(fit_r2)
-
-# The Brant test rejects the proportional odds (parallel lines)
-# assumption for at least one of the predictors. If this assumption is
-# rejected, the effect of that predictor is not the same across all
-# cutpoints of vote, and the ordered logit coefficients should be
-# interpreted with caution -- a model that relaxes the proportional odds
-# assumption (e.g. a generalized/partial proportional odds model) may be
-# more appropriate, though such extensions are beyond the scope of this
-# course.
-``` 
  -->
 
 
