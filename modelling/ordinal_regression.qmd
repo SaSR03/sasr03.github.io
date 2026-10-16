@@ -22,6 +22,7 @@ Use the dataset `hin95_voting`.
 3. Fit a model without `chfreq`, and compare it to the full model with `chfreq` using a likelihood ratio test. Do you get an error if you attempt it directly? This is because there are missing values in `chfreq`. After fixing the issue and using the same sample for the two models, what do you conclude from the test?
 
 4. Fit a new model that expands the model fitted in question 1 by adding a squared term for `chfreq`. Use a likelihood ratio test to test the linearity of association between church attendance and voting intention.
+
 <!-- 
 ### Interactions
 
@@ -153,14 +154,15 @@ The quadratic specification does not significantly improves the fit over the lin
 specification of chfreq, so treating chfreq as linear is an adequate simplification.
 
 <!-- 
+
 ### Interactions
 
 #### 7. An interaction between `female` and `chfreq`
 
 ```{r}
-fit_interaction <- polr(vote ~ education + age + female * chfreq,
-                         data = hin95_voting_complete, Hess = TRUE)
-summary(fit_interaction)
+#fit_interaction <- polr(vote ~ education + age + female * chfreq,
+#                         data = hin95_voting_complete, Hess = TRUE)
+# summary(fit_interaction)
 
 # No support for an interaction between religiosity and gender
 # (Wald z = -0.25, p = 0.801).
@@ -174,20 +176,20 @@ summary(fit_interaction)
 ```
 
 ```{r}
-b <- coef(fit_interaction)
+# b <- coef(fit_interaction)
 
-b["chfreq"]
-b["chfreq"] + b["female:chfreq"]
+# b["chfreq"]
+# b["chfreq"] + b["female:chfreq"]
 # the implied effect of chfreq for men and for women
 ```
 
 #### 8. The same conclusion from a likelihood ratio test
 
 ```{r}
-fit_no_interaction <- polr(vote ~ education + age + female + chfreq,
-                            data = hin95_voting_complete, Hess = TRUE)
+# fit_no_interaction <- polr(vote ~ education + age + female + chfreq,
+#                             data = hin95_voting_complete, Hess = TRUE)
 
-lrtest(fit_interaction, fit_no_interaction)
+# lrtest(fit_interaction, fit_no_interaction)
 
 # The likelihood ratio test confirms the Wald test: there is no evidence
 # that the effect of chfreq on vote differs between men and women.
@@ -198,16 +200,16 @@ lrtest(fit_interaction, fit_no_interaction)
 #### 9. A pseudo-$R^2$ for the latent variable
 
 ```{r}
-fit_r2 <- polr(vote ~ education + age + female + chfreq,
-               data = hin95_voting_complete, Hess = TRUE)
+# fit_r2 <- polr(vote ~ education + age + female + chfreq,
+#                data = hin95_voting_complete, Hess = TRUE)
 
-# The linear predictor (fitted latent variable, without the error term)
-X <- model.matrix(fit_r2)[, -1]
-lp <- as.vector(X %*% coef(fit_r2))
+# # The linear predictor (fitted latent variable, without the error term)
+# X <- model.matrix(fit_r2)[, -1]
+# lp <- as.vector(X %*% coef(fit_r2))
 
-var_lp <- var(lp)
-r2 <- var_lp / (var_lp + pi^2 / 3)
-r2
+# var_lp <- var(lp)
+# r2 <- var_lp / (var_lp + pi^2 / 3)
+# r2
 
 # R2 = variance(model) / (variance(model) + variance(error)), where
 # variance(error) = pi^2/3 = 3.29 by definition for the ordered logit
@@ -221,7 +223,7 @@ r2
 #### 10. The Brant test
 
 ```{r}
-brant(fit_r2)
+# brant(fit_r2)
 
 # The Brant test rejects the proportional odds (parallel lines)
 # assumption for at least one of the predictors. If this assumption is
@@ -231,7 +233,9 @@ brant(fit_r2)
 # assumption (e.g. a generalized/partial proportional odds model) may be
 # more appropriate, though such extensions are beyond the scope of this
 # course.
-``` -->
+``` 
+ -->
+
 
 :::
 :::
