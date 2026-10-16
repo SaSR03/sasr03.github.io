@@ -261,6 +261,9 @@ logit_pred <- predict(fit_don_logit)
 # The exact formula is slightly different, but below is a good enough approximation
 var_pred <- var(logit_pred)
 var_pred/(var_pred + pi^2/3) # could also approximate pi^2/3 with 3.29
+
+# To get the precise measure (not run on the website)
+# performance::r2_mckelvey(fit_don_logit)
 ```
 The model explains 11% of the (latent) variance.
 
