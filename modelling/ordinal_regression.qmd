@@ -2,30 +2,27 @@
 title: Ordinal logistic regression
 ---
 
+- Use the function `polr()` from the package `MASS` to estimate ordinal logistic models. We recommend using the argument `Hess = TRUE`, so that the model object stores all the necessary information for later tasks (e.g. estimating marginal effects). 
+    - Note:  the `MASS` package has a function `select()`, so if you load it after `dplyr` or `tidyverse`, `MASS::select()` will mask `dplyr::select()`. This might not be relevant in this assignment, but it a common source of errors when using the two packages in the same session. 
+
+
 ## Assignments
 
 Use the dataset `hin95_voting`.
 
-### Fitting the model and interpreting coefficients
+1. Construct `age`, in years, from `birthdate` (where the last two digits are the birth year). Note that survey was collected in 1995. Construct a dummy `female`, and a new variable `chfreq` based on `church` (church-attendance frequency) but measuring the total number of visits per year (so "never" equals 0, "1/week" equals 52, etc; check the labels of `church`). Fit an ordered logistic regression of `vote` (voting intention, an ordinal variable; make sure to convert it to an ordered factor) on `education`, `age`, `female`, and `chfreq`. Interpret the coefficient for `chfreq` as:
+    a. An effect on the latent voting-intention variable
+    b. Manifest interpretation in log odds
+    c. Manifest interpretation in odds ratio
+    d. Manifest interpretation in average marginal effects
 
-1. Construct `age` (from `birthdate`), a dummy `female`, and a recoded church-attendance frequency `chfreq` (visits per year). Fit an ordered logistic regression of `vote` (voting intention, an ordinal variable) on `education`, `age`, `female`, and `chfreq`. Interpret the coefficient for `chfreq` as an effect on the latent voting-intention variable, and as a change in log odds.
 
-2. Exponentiate the coefficient for `chfreq` to obtain an odds ratio. Interpret this odds ratio.
+2. Obtain predicted probabilities for each of the four response categories, for the respondent with `irespnr==1000`. (Use `type = "probs"` in `predict()`). Check that they sum to one.
 
-3. Compute the average marginal effects of all predictors. Interpret the marginal effect of `chfreq` on each of the four response categories of `vote`. Why is it not surprising that some of these marginal effects are positive and others negative?
+3. Fit a model without `chfreq`, and compare it to the full model with `chfreq` using a likelihood ratio test. Do you get an error if you attempt it directly? This is because there are missing values in `chfreq`. After fixing the issue and using the same sample for the two models, what do you conclude from the test?
 
-### Predicted probabilities
-
-4. Obtain predicted probabilities for each of the four response categories, for every subject. Verify, for one particular subject, that these probabilities sum to 1 (within rounding error).
-
-### Testing a hypothesis on religion
-
-5. Fit a restricted ordinal model without `chfreq`, and compare it to the full model with `chfreq` using a likelihood ratio test. What happens if you attempt this directly, without first checking the two models are based on the same sample? Explain why this happens, and how to fix it. After fixing the sample issue, what do you conclude about the relationship between church attendance frequency and voting intention?
-
-### Checking linearity
-
-6. Fit three models: (a) `chfreq` entered linearly, (b) `chfreq` entered as a fully flexible categorical predictor, and (c) `chfreq` entered with both a linear and a quadratic term. Compare (a) to (b), and (a) to (c), using likelihood ratio tests. Is there evidence that the linear specification is inadequate?
-
+4. Fit a new model that expands the model fitted in question 1 by adding a squared term for `chfreq`. Use a likelihood ratio test to test the linearity of association between church attendance and voting intention.
+<!-- 
 ### Interactions
 
 7. Fit a model with an interaction between `female` and `chfreq` (in addition to the main effects of `education`, `age`, `female`, and `chfreq`). Is there evidence that the effect of church attendance on voting intention differs between men and women? Report the implied effect of `chfreq` separately for men and for women.
@@ -38,169 +35,115 @@ Use the dataset `hin95_voting`.
 
 ### Proportional odds assumption
 
-10. Test the proportional odds (parallel lines) assumption for the model of `vote` on `education`, `age`, `female`, and `chfreq`. Is the assumption supported by the data? What would this mean for the interpretation of the model if the assumption were rejected?
+10. Test the proportional odds (parallel lines) assumption for the model of `vote` on `education`, `age`, `female`, and `chfreq`. Is the assumption supported by the data? What would this mean for the interpretation of the model if the assumption were rejected? -->
+
+::: {.content-visible when-format="html"}
 
 ## Answers
 
-Make sure this file is in the same R Project as the `data` folder. Use relative file paths, not full paths to your computer.
+::: {.callout-note appearance="simple" collapse=true}
+## See answers
 
 ```{r setup-ordinal}
 library(tidyverse)
 library(haven)
 library(MASS)
+library(modelsummary)
 library(lmtest)
 library(marginaleffects)
-library(brant)
+#library(brant)
 
 hin95_voting <- read_dta("data/hin95_voting.dta")
+```
 
+
+#### 1. 
+
+```{r}
 hin95_voting <- hin95_voting |>
   mutate(
     age = 95 - birthdate %% 100,
     female = as.integer(sex == 2),
-    chfreq = case_match(
+    chfreq = recode_values(
       church,
       1 ~ 0,
       2 ~ 1,
       3 ~ 12,
       4 ~ 52,
-      .default = NA_real_
     ),
     vote = factor(vote, ordered = TRUE)
   )
-```
 
-### Fitting the model and interpreting coefficients
-
-#### 1. The ordered logit model
-
-```{r}
 fit <- polr(vote ~ education + age + female + chfreq, data = hin95_voting, Hess = TRUE)
-summary(fit)
-
-# (Latent) voting intention increases with religiosity: for each
-# additional church visit per year, the latent voting-intention variable
-# increases by about 0.011 units, holding education, age, and gender
-# constant.
-#
-# Equivalently: if church attendance frequency goes up by 1, the log
-# odds of being in a higher (more likely to vote) response category
-# rather than a lower one increase by 0.011, holding the other
-# predictors constant, and this applies uniformly across all cutpoints
-# under the proportional odds assumption.
 ```
 
-#### 2. The odds ratio for `chfreq`
-
+a. 
 ```{r}
-exp(coef(fit))
+modelsummary(fit, stars = TRUE)
+```
+(Latent) voting intention increases with religiosity: for each additional church visit per year, the latent voting-intention variable increases by about 0.011 units, holding education, age, and gender constant. 
 
-# If church attendance frequency goes up by 1, the odds of being in a
-# higher rather than a lower response category of vote increase by
-# about 1.13%, holding education, age, and gender constant.
+b. 
+Equivalently: if church attendance frequency goes up by 1, the log odds of being in a higher (more likely to vote) response category rather than a lower one increase by 0.011, holding the other predictors constant, and this applies uniformly across all cutpoints under the proportional odds assumption.
+
+c.
+```{r}
+modelsummary(fit, stars = TRUE, exponentiate = TRUE)
+```
+If church attendance frequency goes up by 1, the odds of being in a higher rather than a lower response category of vote increase by about 1.1%, holding education, age, and gender constant.
+
+d.
+```{r}
+avg_slopes(fit, variables = "chfreq")
 ```
 
-#### 3. Average marginal effects
+If church attendance frequency goes up by 1:
+
+    - the probability of "certainly voting" increases by about
+    0.25 percentage points
+    - the probability of "probably voting" decreases by about
+    0.1 percentage points
+    - the probability of "probably not voting" decreases by about 0.08 percentage points
+    - the probability of "certainly not voting" decreases by about
+    0.06 percentage points
+
+
+#### 2.
 
 ```{r}
-avg_slopes(fit)
+pred_probs <- predict(fit, type = "probs", newdata = filter(hin95_voting, irespnr==1000))
 
-# If church attendance frequency goes up by 1:
-#   - the probability of "certainly voting" increases by about
-#     0.2 percentage points
-#   - the probability of "probably voting" decreases by about
-#     0.1 percentage points
-#   - the probability of "probably not voting" decreases by about
-#     0.08 percentage points
-#   - the probability of "certainly not voting" decreases by about
-#     0.06 percentage points
-#
-# This pattern is not surprising: an increase in the latent
-# voting-intention variable shifts probability mass away from the lower
-# (less likely to vote) categories toward the higher (more likely to
-# vote) category. Because probabilities across all categories must sum
-# to 1, some marginal effects are necessarily negative while others are
-# positive.
+pred_probs
+
+sum(pred_probs)
 ```
 
-### Predicted probabilities
-
-#### 4. Predicted probabilities per response category
+### 3.
 
 ```{r}
-pred_probs <- predict(fit, type = "probs")
+fit_restricted <- polr(vote ~ education + age + female, data = hin95_voting, Hess = TRUE)
 
-nrow(hin95_voting)
-nrow(pred_probs)
-
-# polr() drops every case with a missing value on one of the predictors,
-# so there are fewer predictions than rows in the dataset. The row names
-# of the prediction matrix tell us which rows the model actually used.
-
-hin95_voting_pred <- hin95_voting |>
-  slice(as.integer(rownames(pred_probs))) |>
-  bind_cols(as_tibble(pred_probs) |> rename_with(~ paste0("pr", seq_along(.))))
-
-hin95_voting_pred |>
-  filter(irespnr == 1000) |>
-  dplyr::select(starts_with("pr"))
-
-hin95_voting_pred |>
-  filter(irespnr == 1000) |>
-  dplyr::select(starts_with("pr")) |>
-  rowSums()
-
-# The predicted probabilities sum to 1 for each subject (within
-# rounding error). Only cases without missing values on any of the
-# predictors receive a prediction.
+lrtest(fit, fit_restricted)
 ```
 
-### Testing a hypothesis on religion
-
-#### 5. A likelihood ratio test on matching samples
+The problem is that there are missings in `chfreq`, so the full model includes fewer observations than the restricted model. We can re-fit the restricted model while keeping only the observations with nonmissing `chfreq`:
 
 ```{r}
-fit_a <- polr(vote ~ education + age + female + chfreq, data = hin95_voting, Hess = TRUE)
-fit_b <- polr(vote ~ education + age + female, data = hin95_voting, Hess = TRUE)
+fit_restricted <- polr(vote ~ education + age + female, data = filter(hin95_voting, !is.na(chfreq)), Hess = TRUE)
 
-# This comparison is not valid:
-# tryCatch(lrtest(fit_a, fit_b), error = function(e) e)
-
-# lrtest refuses (or gives a misleading result) if attempted directly,
-# because the two models are fit to different samples: fit_a excludes
-# cases with a missing value on chfreq, while fit_b does not. A valid
-# likelihood ratio test requires both models to be fit to exactly the
-# same set of observations.
-
-hin95_voting_complete <- hin95_voting |>
-  filter(!is.na(chfreq))
-
-fit_b_matched <- polr(vote ~ education + age + female, data = hin95_voting_complete, Hess = TRUE)
-fit_a_matched <- polr(vote ~ education + age + female + chfreq, data = hin95_voting_complete, Hess = TRUE)
-
-lrtest(fit_a_matched, fit_b_matched)
-
-# After matching the samples, we conclude that the higher the
-# religiosity (church attendance frequency), the higher the voting
-# intention (LR chi2(1) = 23.27, p < 0.0001).
+lrtest(fit, fit_restricted)
 ```
 
-### Checking linearity
+After matching the samples, we conclude that the different between models is statistically significant (LR chi2(1) = 23.27, p < 0.0001). Thus, religiosity (church attendance frequency) does help predict voting intention. 
 
-#### 6. Linear, flexible, and quadratic specifications
+
+### 4.
 
 ```{r}
-fit_linear <- polr(vote ~ education + age + female + chfreq,
-                    data = hin95_voting_complete, Hess = TRUE)
-
-fit_flexible <- polr(vote ~ education + age + female + factor(chfreq),
-                      data = hin95_voting_complete, Hess = TRUE)
-
 fit_quadratic <- polr(vote ~ education + age + female + chfreq + I(chfreq^2),
                        data = hin95_voting_complete, Hess = TRUE)
 
-lrtest(fit_linear, fit_flexible)
-lrtest(fit_linear, fit_quadratic)
+lrtest(fit, fit_quadratic)
 
 # Neither the fully flexible specification nor the quadratic
 # specification significantly improves the fit over the linear
@@ -208,6 +151,8 @@ lrtest(fit_linear, fit_quadratic)
 # simplification.
 ```
 
+
+<!-- 
 ### Interactions
 
 #### 7. An interaction between `female` and `chfreq`
@@ -286,4 +231,7 @@ brant(fit_r2)
 # assumption (e.g. a generalized/partial proportional odds model) may be
 # more appropriate, though such extensions are beyond the scope of this
 # course.
-```
+``` -->
+
+:::
+:::
