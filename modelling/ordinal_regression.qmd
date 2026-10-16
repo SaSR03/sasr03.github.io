@@ -90,13 +90,10 @@ avg_slopes(fit, variables = "chfreq")
 
 If church attendance frequency goes up by 1:
 
-    - the probability of "certainly voting" increases by about
-    0.25 percentage points
-    - the probability of "probably voting" decreases by about
-    0.1 percentage points
-    - the probability of "probably not voting" decreases by about 0.08 percentage points
-    - the probability of "certainly not voting" decreases by about
-    0.06 percentage points
+- the probability of "certainly voting" increases by about 0.25 percentage points
+- the probability of "probably voting" decreases by about 0.1 percentage points
+- the probability of "probably not voting" decreases by about 0.08 percentage points
+- the probability of "certainly not voting" decreases by about 0.06 percentage points
 
 
 #### 2.
