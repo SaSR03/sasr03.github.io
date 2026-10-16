@@ -123,7 +123,11 @@ sum(pred_probs)
 ```{r}
 fit_restricted <- polr(vote ~ education + age + female, data = hin95_voting, Hess = TRUE)
 
-lrtest(fit, fit_restricted)
+# Not run in the site, but try it yourself
+# lrtest(fit, fit_restricted) 
+
+#>  Error in `lrtest.default()`:
+#>  ! models were not all fitted to the same size of dataset
 ```
 
 The problem is that there are missings in `chfreq`, so the full model includes fewer observations than the restricted model. We can re-fit the restricted model while keeping only the observations with nonmissing `chfreq`:
@@ -140,17 +144,13 @@ After matching the samples, we conclude that the different between models is sta
 ### 4.
 
 ```{r}
-fit_quadratic <- polr(vote ~ education + age + female + chfreq + I(chfreq^2),
-                       data = hin95_voting_complete, Hess = TRUE)
+fit_quadratic <- polr(vote ~ education + age + female + chfreq + I(chfreq^2), data = hin95_voting, Hess = TRUE)
 
 lrtest(fit, fit_quadratic)
-
-# Neither the fully flexible specification nor the quadratic
-# specification significantly improves the fit over the linear
-# specification of chfreq, so treating chfreq as linear is an adequate
-# simplification.
 ```
 
+The quadratic specification does not significantly improves the fit over the linear
+specification of chfreq, so treating chfreq as linear is an adequate simplification.
 
 <!-- 
 ### Interactions
