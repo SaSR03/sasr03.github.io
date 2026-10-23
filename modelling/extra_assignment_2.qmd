@@ -14,7 +14,7 @@ b. Write down the fitted regression equation.
 
 c. Interpret the sign, magnitude and significance of the estimated coefficient(s), including the constant. Is the interpretation of the constant useful, and why? 
 
-d. Test whether people with university education watch significantly more TV than people with higher vocational education. 
+d. Test whether people with university education ("wo") watch significantly more TV than people with higher vocational education ("hbo"). 
 
 e. Assess the model fit with the F-test and the R². 
 
@@ -56,3 +56,280 @@ g. Interpret the effect of age on government spending in this new model.
 h. Continue with this model. Calculate and discuss the age and the corresponding attitude on government spending at which the attitude on government spending is minimal or maximal as a function of age.
 
 i. Give a plot of predicted `govspend` vs age, and for the effect of age on `govspend` vs age, using the same model as in the previous question. Use the age range 18 to 70. 
+
+::: {.content-visible when-format="html"}
+
+## Answers
+
+::: {.callout-note appearance="simple" collapse=true}
+## See answers
+
+```{r}
+library(tidyverse)
+library(haven)
+library(lmtest)
+library(marginaleffects)
+library(modelsummary)
+library(car)
+options(scipen = 999)
+```
+
+## Assignment B1: Media Consumption
+
+```{r}
+mediacons <- read_dta("data/mediacons.dta")
+```
+
+### 1. Simple linear regression analysis
+
+#### a. 
+
+```{r}
+# Convert educ to categorical
+mediacons <- mediacons |>
+  mutate(educ = as_factor(educ))
+
+fit_tvtime_educ <- lm(tvtime ~ educ, data = mediacons)
+modelsummary(fit_tvtime_educ, stars = TRUE)
+```
+
+#### b.
+
+$E(\text{tvtime}) = 161.14 + 23.25 * \text{educhbo} + 6.66 * \text{educwo}$
+
+
+#### c.
+
+People with vocational education or below (the reference category, mbo) watch, on average, 161.14 minutes of TV. Interpretation of the constant is useful, as it reflects the expected value for a well defined, real group.  
+
+People with higher vocational education (hbo) watch, on average, 23.25 more minutes of TV per day than people with mbo education; this difference is significant at the 5% level. People with university education (wo) watch, on average, 6.66 more minutes of TV per day than people with mbo education; this difference is also significant at the 5% level. 
+the mbo-hbo difference.
+
+#### d.
+
+```{r}
+avg_comparisons(fit_tvtime_educ, variables = list(educ = "pairwise"))
+
+# Or, less efficient, refit with a different reference level
+mediacons_hbo_ref <- mediacons |>
+                      mutate(educ = relevel(educ, ref = "hbo"))
+
+fit_tvtime_hbo_ref <- lm(tvtime ~ educ, data = mediacons_hbo_ref)
+modelsummary(fit_tvtime_hbo_ref, stars=TRUE)
+```
+
+People with university education watch 16.59 minutes significantly less TV than people with higher vocational education.
+
+#### e.
+
+22.35% of the variance in `tvtime`` is explained by education.
+
+The F-test is shown in the default summary (`modelsummary` only shows the F statistic, not its test):
+```{r}
+summary(fit_tvtime_educ)
+```
+
+F-test shows that education dummies are jointly not zero.
+
+
+### 2. Multiple linear regression analysis
+
+#### a.
+```{r}
+fit_tvtime_multi <- lm(tvtime ~ educ + age + soccap, data = mediacons)
+modelsummary(fit_tvtime_multi, stars=TRUE)
+```
+
+#### b.
+
+People with vocational education who are 0 years old and have no friends are predicted to watch 120.58 minutes of TV on average. This is not substantively meaningful, so interpretation of the constant is not useful.
+
+The hbo and wo effects are essentially unchanged from the simple model in 1a, and remain significant. Controlling for age and social capital, people with higher vocational education watch 22.79 minutes and people with university education 6.06 significantly more TV on average than people with vocational education. 
+
+Each extra year of age is associated with a significant increase of 0.74 minutes of daily TV watching, controlling for education and social capital.
+
+Social capital (soccap) is not a significant predictor of TV watching time once education and age are controlled for.
+
+#### c.
+
+```{r}
+anova(fit_tvtime_educ, fit_tvtime_multi)
+
+# Or:
+lrtest(fit_tvtime_educ, fit_tvtime_multi)
+```
+
+Adding age and soccap as a set significantly improves the fit of the model.
+
+#### d.
+```{r}
+predict(
+  fit_tvtime_multi,
+  newdata = data.frame(
+    educ = factor("wo"),
+    age = 25,
+    soccap = 8
+  )
+)
+```
+
+A 25-year-old university-educated (wo) person with 8 close friends is predicted to watch about 145.4 minutes of TV on a  weekday.
+
+
+## Assignment B2: Welfare Attitudes 
+
+```{r}
+attitude_welfare <- read_dta("data/attitude_welfare.dta")
+```
+
+### a. 
+
+```{r}
+fit_m1 <- lm(govspend ~ age + polor + gender, data = attitude_welfare)
+fit_m2 <- lm(govspend ~ age + polor + gender + age:polor, data = attitude_welfare)
+
+modelsummary(list(fit_m1, fit_m2), stars = TRUE)
+```
+
+In the model with the interaction term, the effect of political orientation (polor) on attitudes towards government spending is $-0.494 + 0.0111 * \text{age}$.
+
+Wald test and a likelihood ratio tests:
+```{r}
+anova(fit_m1, fit_m2)
+
+# Or:
+lrtest(fit_m1, fit_m2)
+```
+
+Both the Wald test and the likelihood ratio test confiram that the interaction between age and polor is highly significant, supporting the moderation hypothesis. 
+
+```{r}
+avg_slopes(fit_m2, variables = "polor")
+```
+
+Averaged over the sample, the average marginal effect of polor is 0.108: on average, a one-unit increase on the polor scale (towards the left) is associated with a 0.108-point higher govspend score. Because the true effect varies strongly with age, this single average number hides of what is actually going on. See the age-specific effects in item d) below. 
+
+### b. 
+
+`Intercept`: Female respondents aged 0 with a political orientation of 0 on average have attitudes toward government spending of 60.935. This is not a useful interpretation as value 0 falls outside the scale of political orientation and as this reflects the political orientation of babies.
+
+`age`: For respondents with a political orientation of 0 (falling outside a scale ranging from 1 for 'right' and 40 for 'left') the effect of age on attitudes toward government spending is -0.047: i.e., if age increases by one year, attitudes toward government spending decrease by 0.047, irrespective of gender. However, this effect is not significant at the 5% level, so we cannot reject the null hypothesis
+
+`polor`: For respondents aged 0 the effect of political orientation on attitudes toward government spending is -0.494: i.e., if  political orientation increases by one unit (becoming more left-wing oriented), attitudes toward government spending significantly decrease by 0.494, irrespective of gender.
+
+`gender`: Men are 0.643 more against government spending than women, irrespective of age and political orientation. However, this difference is not significant, so we cannot reject the null hypothesis.
+
+`age:polor`: for each additional point on the polor scale (towards the left), the effect of age on govspend increases by 0.0111; equivalently, for each extra year of age, the effect of polor on govspend increases by 0.0111. This is the moderation effect itself.
+
+
+### c.
+
+R-squared = 0.216: the model (age, polor, gender, and their interaction) explains about 21.6% of the variance in govspend.
+
+Adjusted R-squared = 0.213, very slightly lower. 
+
+R-squared always increases (or stays the same) when a predictor is added, even a useless one, because it never penalizes model complexity. Adjusted R-squared corrects for the number of predictors in the model, so it can decrease if an added predictor does not improve the fit enough to justify the extra parameter.
+
+### d.
+
+```{r}
+slopes(fit_m2, variables = "polor", newdata = datagrid(age = c(20, 40, 60)))
+```
+
+### e. 
+
+```{r}
+fit_gender <- lm(govspend ~ age * gender + polor, data = attitude_welfare)
+modelsummary(fit_gender, stars = TRUE)
+```
+
+```{r}
+b_gender <- coef(fit_gender)
+
+# effect of age for women (gender = 0):
+b_gender["age"]
+
+# effect of age for men (gender = 1):
+b_gender["age"] + b_gender["age:gender"]
+```
+
+```{r}
+linearHypothesis(fit_gender, "age = 0")
+linearHypothesis(fit_gender, "age + age:gender = 0")
+linearHypothesis(fit_gender, "age:gender = 0")
+```
+
+Controlling for polor, the effect of age on govspend is 0.173 for women and 0.175 for men, virtually identical. Both effects are individually significant: for both genders, older respondents are significantly more in favor of government spending.
+
+The hypothesis that these two effects are equal to each other cannot be rejected: there is no evidence that the effect of age on attitudes towards government spending differs between men and women. This matches the non-significant age:gender interaction
+term in the `modelsummary()` output above.
+
+### f. 
+```{r}
+fit_age_sq <- lm(govspend ~ age + I(age^2) + polor, data = attitude_welfare)
+modelsummary(fit_age_sq, stars = TRUE)
+```
+
+Interaction term is not significant. Wald test and likelihhod tests would also confirm it. So there is no evidence that the effect of age varies with age.
+
+### g.
+
+Since the model included a non-linear parameter for age, we can compute the average marginal effects to obtain an overall effect:
+```{r}
+avg_slopes(fit_age_sq, variable = "age") 
+```
+
+Note that this effect is significant. Each year of age is predicted to increase `govspend` by 0.175. This is virtually the same effect that we obtain if we run the model without the quadratic term:
+
+```{r}
+lm(govspend ~ age  + polor, data = attitude_welfare) |> 
+  modelsummary(starts = TRUE)
+```
+
+### h. 
+
+```{r}
+b_age_sq <- coef(fit_age_sq)
+
+turning_point <- -b_age_sq["age"] / (2 * b_age_sq["I(age^2)"])
+turning_point
+
+range(attitude_welfare$age)
+
+sum(attitude_welfare$age <= turning_point)
+```
+
+Mechanically, the turning point of the fitted curve is at age = -41.7, which is both negative and far outside the observed range of age. 
+
+Combined with the finding in f) that the squared term is not significant, this turning point should not be interpreted: it is a mathematical property of a curve that the data do not actually support. 
+
+### i. 
+
+Note that the question did not specify a value for `polor`, but a reasonable choice is usign its mean.
+```{r}
+# predicted vs age
+pred_govspend <- predict(fit_age_sq, newdata = data.frame(age  = 18:70, polor =  mean(attitude_welfare$polor)))
+
+# quick plot using base R
+plot(18:70, pred_govspend)
+
+# ggplot 
+data.frame(age = 18:70, pred_govspend) |> 
+  ggplot(aes(x = age, y = pred_govspend)) +
+  geom_point() +
+  geom_line() +
+  theme_minimal()
+
+
+# effect of age vs age
+age_effects <- slopes(fit_age_sq, variables = "age", newdata = data.frame(age  = 18:70, polor =  mean(attitude_welfare$polor)))
+
+age_effects |> 
+  ggplot(aes(x = age, y = estimate, ymax = conf.high, ymin = conf.low)) +
+  geom_ribbon(alpha = 0.3) + # it's a good idea to include the standard error
+  geom_line() +
+  theme_minimal()
+```
+
+:::
+:::
