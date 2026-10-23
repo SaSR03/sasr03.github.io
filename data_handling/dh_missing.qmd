@@ -152,7 +152,6 @@ data |>
 library(tidyverse)
 library(haven)
 library(skimr)
-library(visdat)
 
 hin95_educ <- read_dta("data/hin95_educ.dta")
 hin95 <- read_dta("data/hin95.dta")
