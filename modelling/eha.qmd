@@ -44,6 +44,7 @@ library(haven)
 library(survival)
 library(survminer)
 library(modelsummary)
+options(scipen = 999)
 
 hschool <- read_dta("data/hschool.dta")
 ```
@@ -73,7 +74,7 @@ fit_lm <- lm(time ~ sex + grades, data = hschool |> filter(died == 1))
 modelsummary(fit_lm, stars = TRUE)
 ```
 
-Women drop out about 0.075 months faster than males, but this is not significant.
+Women drop out about 0.075 months faster than men, but this is not significant.
 
 People with lower grades (higher values of grades, since 1 = high, 5 = low) drop out faster, but this is not significant either.
 
@@ -99,12 +100,7 @@ fit_cox
 
 Log hazard interpretation: Women have a 0.218 higher log hazard of dropping out than males (a shorter time to drop-out), but this is not significant. People with lower grades have a significantly higher log hazard of dropping out (a shorter time to drop-out).
 
-Hazard ratio interpretation:
-```{r}
-modelsummary(fit_cox, stars = TRUE, exponentiate = TRUE)
-```
-
-Women have a 24% higher hazard of dropping out than males, but this is not significant. The hazard of dropping out increases by 40.4% (significant) for each unit increase on the grades scale (i.e., each step toward lower grades). 
+Hazard ratio interpretation: Women have a 24% higher hazard of dropping out than males, but this is not significant. The hazard of dropping out increases by 40.4% (significant) for each unit increase on the grades scale (i.e., each step toward lower grades). 
 
 ### 6
 
