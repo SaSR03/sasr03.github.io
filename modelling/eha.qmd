@@ -2,57 +2,54 @@
 title: Event history analysis
 ---
 
+
+See slides for code examples. 
+
+
 ## Assignments
 
-Use the dataset `hschool`. The variables are: `caseid` (case identifier), `time` (time in months until school drop-out, or censoring), `died` (event indicator: 1 = dropped out, 0 = censored), `sex` (0 = male, 1 = female), `grades` (1 = high grades, 5 = low grades), `parttime` (1 = part-time student), `mrg` (month of marriage, coded as $12 \times (\text{year} - 1980) + \text{month}$; 99 = never married), and `stm` (month of college entry, coded the same way).
-
-### Data description
+Use the dataset `hschool`. The variables are: `caseid` (observation identifier), `time` (time in months until school drop-out, or censoring), `died`[^1] (event indicator: 1 = dropped out, 0 = censored), `sex` (0 = male, 1 = female), `grades` (1 = high grades, 5 = low grades), `parttime` (1 = part-time student), `mrg` (month of marriage, coded as $12 \times (\text{year} - 1980) + \text{month}$; 99 = never married), and `stm` (month of college entry, coded the same way).
 
 1. How many students were married before entering college (i.e., `mrg` occurred before `stm`)?
 
 2. How many students got married during college (i.e., `mrg` fell between `stm` and `stm + time`)?
 
-### Linear regression on duration
+3. We are interested in the effect of `sex` and `grades` on the time until school drop-out. Fit a linear regression of `time` on `sex` and `grades`, making sure you correctly restrict the sample to only those subjects for whom drop-out actually occurred. Interpret all coefficients, including the intercept. (Note the coding of `grades`)
 
-3. We are interested in the effect of `sex` and `grades` on the time until school drop-out. Fit a linear regression of `time` on `sex` and `grades`, making sure you correctly restrict the sample to only those subjects for whom drop-out actually occurred. Interpret all coefficients, including the intercept — and note anything odd or hard to interpret about the intercept.
+4. Plot the non-parametric Kaplan-Meier survival curves for the event of dropping out. What proportion of students, approximately, dropped out by 20 months? 
 
-### Cox proportional hazards model
+5. Fit a Cox proportional hazards model of drop-out on `sex` and `grades`. Interpret each coefficient (a) as an effect on the log hazard, and (b) as a hazard ratio.
 
-4. Fit a Cox proportional hazards model of drop-out on `sex` and `grades`. Interpret each coefficient (a) as an effect on the log hazard, and (b) as a hazard ratio.
-
-5. Compare the statistical significance of `sex` and `grades` in the Cox model to their significance in the linear regression from question 3. Are the conclusions the same? If not, why is this not a contradiction?
-
-### Plotting the process
-
-6. Plot the hazard function, the cumulative hazard function, and the survival function implied by the Cox model.
-
-### Testing the proportional hazards assumption
+6. Plot the hazard function implied by the Cox model,stratified by `sex` and considering the overall average value of `grades`.
 
 7. Test the proportional hazards assumption for the Cox model of question 4. Does the assumption hold?
 
-### BONUS: discrete-time analysis
+8. BONUS: Construct a person-period file from `hschool`: one row per subject per month at risk, with an event indicator equal to 1 only in the month drop-out actually occurred (0 in all other months, including for censored subjects). Fit a discrete-time event history model using logistic regression of the event indicator on `sex` and `grades`. Enter duration effects as a single linear term. What do you conclude, and how does this compare to the conclusions from the Cox model?
 
-8. Construct a person-period file from `hschool`: one row per subject per month at risk, with an event indicator equal to 1 only in the month drop-out actually occurred (0 in all other months, including for censored subjects). Fit a discrete-time event history model using logistic regression of the event indicator on `sex` and `grades`. What do you conclude, and how does this compare to the conclusions from the Cox model?
+[^1]: We know, that's a weird name in this context.
+
+
+::: {.content-visible when-format="html"}
 
 ## Answers
 
-Make sure this file is in the same R Project as the `data` folder. Use relative file paths, not full paths to your computer.
+::: {.callout-note appearance="simple" collapse=true}
+## See answers
+
 
 ```{r setup-eha}
+library(biostat3) # loaded first to avoid conflict with dplyr::select. 
 library(tidyverse)
 library(haven)
 library(survival)
 library(survminer)
+library(modelsummary)
 
 hschool <- read_dta("data/hschool.dta")
-
-hschool <- hschool |>
-  mutate(female = sex)
 ```
 
-### Data description
 
-#### 1. Married before entering college
+### 1
 
 ```{r}
 hschool |>
@@ -60,151 +57,90 @@ hschool |>
   nrow()
 ```
 
-#### 2. Married during college
+### 2
 
 ```{r}
 hschool |>
-  filter(mrg >= stm, mrg <= stm + time) |>
+  filter(between(mrg, stm, stm + time)) |>
   nrow()
 ```
 
-### Linear regression on duration
 
-#### 3. A linear regression on completed durations
+### 3
 
 ```{r}
 fit_lm <- lm(time ~ sex + grades, data = hschool |> filter(died == 1))
-summary(fit_lm)
-
-# Females drop out about 0.075 months faster than males, but this is
-# not significant.
-# People with lower grades (higher values of grades, since 1 = high,
-# 5 = low) drop out faster, but this is not significant either.
-# Males (sex = 0) with the highest grades (grades = 0, which is outside
-# the actual scale of 1-5 and should ideally be recentered) are
-# predicted to drop out at 18.55 months. Because grades = 0 does not
-# occur in the data, this intercept is not substantively meaningful as
-# it stands.
+modelsummary(fit_lm, stars = TRUE)
 ```
 
-### Cox proportional hazards model
+Women drop out about 0.075 months faster than males, but this is not significant.
 
-#### 4. The Cox model
+People with lower grades (higher values of grades, since 1 = high, 5 = low) drop out faster, but this is not significant either.
+
+Men (sex = 0) with the highest grades (grades = 0, which is outside the actual scale of 1-5 and should ideally be recentered) are predicted to drop out at 18.55 months. Because grades = 0 does not occur in the data, this intercept is not substantively meaningful as it stands.
+
+### 4
+
+```{r}
+surv <- survfit(Surv(time, died) ~ 1,  
+                data = hschool)
+
+ggsurvplot(surv)
+```
+
+About 25% of students dropped out by 20 months.
+
+### 5
 
 ```{r}
 fit_cox <- coxph(Surv(time, died) ~ sex + grades, data = hschool)
-summary(fit_cox)
-
-# Log hazard interpretation:
-# Females have a 0.240 higher log hazard of dropping out than males (a
-# shorter time to drop-out), but this is not significant.
-# People with lower grades have a significantly higher log hazard of
-# dropping out (a shorter time to drop-out).
-#
-# Hazard ratio interpretation (exp(coef), shown directly in the
-# summary() output):
-# Females have a 27% higher hazard of dropping out than males, but this
-# is not significant.
-# People with lower grades have a 39.73% significantly higher hazard of
-# dropping out for each unit increase on the grades scale (i.e., each
-# step toward lower grades).
+fit_cox
 ```
 
-#### 5. Comparing the two models
+Log hazard interpretation: Women have a 0.218 higher log hazard of dropping out than males (a shorter time to drop-out), but this is not significant. People with lower grades have a significantly higher log hazard of dropping out (a shorter time to drop-out).
+
+Hazard ratio interpretation:
+```{r}
+modelsummary(fit_cox, stars = TRUE, exponentiate = TRUE)
+```
+
+Women have a 24% higher hazard of dropping out than males, but this is not significant. The hazard of dropping out increases by 40.4% (significant) for each unit increase on the grades scale (i.e., each step toward lower grades). 
+
+### 6
 
 ```{r}
-# The significance of the predictors is not the same between the linear
-# regression (question 3) and the Cox regression (question 4): grades is
-# significant in the Cox model but not in the linear regression. This is
-# not a contradiction. The linear regression restricts the sample to
-# completed durations only and assumes normally distributed, constant-
-# variance residuals on the raw time scale -- assumptions that are
-# typically violated for duration data. The Cox model instead uses all
-# subjects (including censored ones) and does not require these
-# distributional assumptions, which is why it can detect an effect the
-# linear model misses.
+base_hazard <- biostat3::coxphHaz(fit_cox, 
+                                  newdata = data.frame(sex = c(0, 1), 
+                                                       grades = mean(hschool$grades)))
+plot(base_hazard)
 ```
 
-```{r}
-hschool |>
-  count(died)
-# how many cases the linear regression discards as censored
-```
-
-### Plotting the process
-
-#### 6. Hazard, cumulative hazard, and survival
-
-```{r}
-fit_surv <- survfit(fit_cox)
-
-# Cumulative hazard
-plot(fit_surv, fun = "cumhaz", xlab = "Time (months)", ylab = "Cumulative hazard")
-
-# Survival function
-plot(fit_surv, xlab = "Time (months)", ylab = "Survival probability")
-
-# Using survminer for nicer plots, including an approximate hazard shape
-# via the cumulative hazard and survival curves:
-ggsurvplot(fit_surv, data = hschool, fun = "cumhaz")
-ggsurvplot(fit_surv, data = hschool)
-
-# Note: a smoothed hazard function itself (as opposed to the cumulative
-# hazard) is not directly returned by survfit(); it can be approximated
-# with a kernel-smoothed estimate, e.g. using the muhaz package, if a
-# separate plot of the hazard function itself (rather than the
-# cumulative hazard) is required.
-```
-
-### Testing the proportional hazards assumption
-
-#### 7. The Schoenfeld residual test
+### 7
 
 ```{r}
 cox.zph(fit_cox)
-
-# The test does not reject the proportional hazards assumption at
-# conventional significance levels: the proportional hazards assumption
-# appears to hold for this model.
 ```
 
-### BONUS: discrete-time analysis
+The test does not reject the proportional hazards assumption at conventional significance levels: the proportional hazards assumption appears to hold for this model.
 
-#### 8. A person-period file and a discrete-time model
+### 8
 
 ```{r}
-# Method 1: expand the data manually to one row per subject per month
 person_period <- hschool |>
-  dplyr::select(caseid, time, sex, grades, died) |>
-  rowwise() |>
-  mutate(period = list(seq_len(time))) |>
-  unnest(period) |>
-  ungroup() |>
-  rename(end_time = time) |>
-  mutate(
-    time = period,
-    died = if_else(died == 1 & time != end_time, 0L, as.integer(died))
-  ) |>
-  dplyr::select(caseid, time, end_time, sex, grades, died)
+  select(caseid, time, sex, grades, died) |> 
+  uncount(weights = time + 1) |> # must add 1 because time starts at 0
+  mutate(period = row_number()-1,
+         event = if_else(died==1 & period==max(period), 1, 0), 
+         .by = caseid)
 
-fit_discrete <- glm(died ~ sex + grades, data = person_period, family = binomial)
-summary(fit_discrete)
+fit_discrete <- glm(event ~ sex + grades + period, data = person_period, family = binomial)
 
-# The discrete-time logistic model leads to the same substantive
-# conclusion as the Cox model: grades significantly predicts drop-out
-# (lower grades associated with higher risk of dropping out in a given
-# month), while sex does not significantly predict drop-out. This
-# confirms that the Cox model's conclusions are not an artifact of the
-# continuous-time approach; a discrete-time formulation using ordinary
-# logistic regression on the person-period file gives essentially the
-# same answer.
+modelsummary(list("Cox"= fit_cox, "Logit" = fit_discrete), 
+             stars = TRUE)
 ```
 
-```{r}
-nrow(hschool)
-nrow(person_period)
-sum(person_period$died)
-sum(hschool$died)
-# one row per subject per month at risk; the number of events is
-# unchanged, since each subject can drop out only once
-```
+Conclusions are pretty much the same as for the Cox model.
+
+
+:::
+:::

@@ -34,7 +34,7 @@ jobs:
             any::brant
             any::marginaleffects
             any::skimr
-            any::survminer
+            any::biostat3
             any::psych
             any::labelled
             any::parameters
