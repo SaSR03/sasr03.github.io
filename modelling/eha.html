@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.10.19">
+<meta name="generator" content="quarto-1.11.9">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -73,14 +73,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <meta name="quarto:offset" content="../">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/scrollable-regions/scrollable-regions.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-63b5708e65d6cd79cd7618c58d0c21e7.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-60a28a6e58c4296c0bb11f8f5d7a34cd.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-a1db900fac0021101f6e85d48396b11a.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -141,19 +142,18 @@ window.Quarto = {
 
 </head>
 
-<body class="nav-sidebar floating nav-fixed quarto-light">
+<body class="nav-sidebar floating nav-fixed quarto-light"><a id="quarto-skip-link" class="visually-hidden-focusable" href="#quarto-document-content">Skip to main content</a>
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark" aria-label="Site">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">SaSR03</span>
     </a>
   </div>
-            <div id="quarto-search" class="" title="Search"></div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
@@ -166,15 +166,16 @@ window.Quarto = {
           </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
 </div>
+            <div id="quarto-search" class="" title="Search"></div>
       </div> <!-- /container-fluid -->
     </nav>
-  <nav class="quarto-secondary-nav">
+  <nav class="quarto-secondary-nav" aria-label="Toolbar">
     <div class="container-fluid d-flex">
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../modelling/regression.html">Modelling (Assignments)</a></li><li class="breadcrumb-item"><a href="../modelling/eha.html">Event history analysis</a></li></ol></nav>
-        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        <nav class="quarto-page-breadcrumbs" aria-label="Breadcrumbs"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../modelling/regression.html">Modelling (Assignments)</a></li><li class="breadcrumb-item"><a href="../modelling/eha.html">Event history analysis</a></li></ol></nav>
+        <a class="flex-grow-1" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
   </nav>
@@ -182,18 +183,15 @@ window.Quarto = {
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto" aria-label="Section">
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
- <span class="menu-text">Data Handling</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
+            <button type="button" class="sidebar-item-text sidebar-item-toggle sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-controls="quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text" id="quarto-sidebar-section-1-label">Data Handling</span><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
       </div>
-      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-1" aria-labelledby="quarto-sidebar-section-1-label" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../data_handling/dh_summary.html" class="sidebar-item-text sidebar-link">
@@ -258,13 +256,10 @@ window.Quarto = {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
- <span class="menu-text">Modelling (Assignments)</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
+            <button type="button" class="sidebar-item-text sidebar-item-toggle sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-controls="quarto-sidebar-section-2" aria-expanded="true">
+ <span class="menu-text" id="quarto-sidebar-section-2-label">Modelling (Assignments)</span><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
       </div>
-      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-2" aria-labelledby="quarto-sidebar-section-2-label" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../modelling/regression.html" class="sidebar-item-text sidebar-link">
@@ -311,13 +306,10 @@ window.Quarto = {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
- <span class="menu-text">Extra assignments</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
+            <button type="button" class="sidebar-item-text sidebar-item-toggle sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-controls="quarto-sidebar-section-3" aria-expanded="true">
+ <span class="menu-text" id="quarto-sidebar-section-3-label">Extra assignments</span><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
       </div>
-      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-3" aria-labelledby="quarto-sidebar-section-3-label" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../data_handling/extra_assignment_1.html" class="sidebar-item-text sidebar-link">
@@ -334,13 +326,10 @@ window.Quarto = {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
- <span class="menu-text">Miscellaneous</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
+            <button type="button" class="sidebar-item-text sidebar-item-toggle sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-controls="quarto-sidebar-section-4" aria-expanded="true">
+ <span class="menu-text" id="quarto-sidebar-section-4-label">Miscellaneous</span><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
       </div>
-      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-4" aria-labelledby="quarto-sidebar-section-4-label" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../miscellaneous/ggplot.html" class="sidebar-item-text sidebar-link">
@@ -373,35 +362,19 @@ window.Quarto = {
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
+        <nav id="TOC" role="doc-toc" aria-labelledby="toc-title" class="toc-active">
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#assignments" id="toc-assignments" class="nav-link active" data-scroll-target="#assignments">Assignments</a>
-  <ul class="collapse">
-  <li><a href="#data-description" id="toc-data-description" class="nav-link" data-scroll-target="#data-description">Data description</a></li>
-  <li><a href="#linear-regression-on-duration" id="toc-linear-regression-on-duration" class="nav-link" data-scroll-target="#linear-regression-on-duration">Linear regression on duration</a></li>
-  <li><a href="#cox-proportional-hazards-model" id="toc-cox-proportional-hazards-model" class="nav-link" data-scroll-target="#cox-proportional-hazards-model">Cox proportional hazards model</a></li>
-  <li><a href="#plotting-the-process" id="toc-plotting-the-process" class="nav-link" data-scroll-target="#plotting-the-process">Plotting the process</a></li>
-  <li><a href="#testing-the-proportional-hazards-assumption" id="toc-testing-the-proportional-hazards-assumption" class="nav-link" data-scroll-target="#testing-the-proportional-hazards-assumption">Testing the proportional hazards assumption</a></li>
-  <li><a href="#bonus-discrete-time-analysis" id="toc-bonus-discrete-time-analysis" class="nav-link" data-scroll-target="#bonus-discrete-time-analysis">BONUS: discrete-time analysis</a></li>
-  </ul></li>
-  <li><a href="#answers" id="toc-answers" class="nav-link" data-scroll-target="#answers">Answers</a>
-  <ul class="collapse">
-  <li><a href="#data-description-1" id="toc-data-description-1" class="nav-link" data-scroll-target="#data-description-1">Data description</a></li>
-  <li><a href="#linear-regression-on-duration-1" id="toc-linear-regression-on-duration-1" class="nav-link" data-scroll-target="#linear-regression-on-duration-1">Linear regression on duration</a></li>
-  <li><a href="#cox-proportional-hazards-model-1" id="toc-cox-proportional-hazards-model-1" class="nav-link" data-scroll-target="#cox-proportional-hazards-model-1">Cox proportional hazards model</a></li>
-  <li><a href="#plotting-the-process-1" id="toc-plotting-the-process-1" class="nav-link" data-scroll-target="#plotting-the-process-1">Plotting the process</a></li>
-  <li><a href="#testing-the-proportional-hazards-assumption-1" id="toc-testing-the-proportional-hazards-assumption-1" class="nav-link" data-scroll-target="#testing-the-proportional-hazards-assumption-1">Testing the proportional hazards assumption</a></li>
-  <li><a href="#bonus-discrete-time-analysis-1" id="toc-bonus-discrete-time-analysis-1" class="nav-link" data-scroll-target="#bonus-discrete-time-analysis-1">BONUS: discrete-time analysis</a></li>
-  </ul></li>
+  <li><a href="#assignments" id="toc-assignments" class="nav-link active" data-scroll-target="#assignments">Assignments</a></li>
+  <li><a href="#answers" id="toc-answers" class="nav-link" data-scroll-target="#answers">Answers</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content" id="quarto-document-content" tabindex="-1">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../modelling/regression.html">Modelling (Assignments)</a></li><li class="breadcrumb-item"><a href="../modelling/eha.html">Event history analysis</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="Breadcrumbs"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../modelling/regression.html">Modelling (Assignments)</a></li><li class="breadcrumb-item"><a href="../modelling/eha.html">Event history analysis</a></li></ol></nav>
 <div class="quarto-title">
 <h1 class="title">Event history analysis</h1>
 </div>
@@ -420,68 +393,72 @@ window.Quarto = {
 </header>
 
 
+<p>See slides for code examples.</p>
 <section id="assignments" class="level2">
 <h2 class="anchored" data-anchor-id="assignments">Assignments</h2>
-<p>Use the dataset <code>hschool</code>. The variables are: <code>caseid</code> (case identifier), <code>time</code> (time in months until school drop-out, or censoring), <code>died</code> (event indicator: 1 = dropped out, 0 = censored), <code>sex</code> (0 = male, 1 = female), <code>grades</code> (1 = high grades, 5 = low grades), <code>parttime</code> (1 = part-time student), <code>mrg</code> (month of marriage, coded as <span class="math inline">\(12 \times (\text{year} - 1980) + \text{month}\)</span>; 99 = never married), and <code>stm</code> (month of college entry, coded the same way).</p>
-<section id="data-description" class="level3">
-<h3 class="anchored" data-anchor-id="data-description">Data description</h3>
+<p>Use the dataset <code>hschool</code>. The variables are: <code>caseid</code> (observation identifier), <code>time</code> (time in months until school drop-out, or censoring), <code>died</code><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> (event indicator: 1 = dropped out, 0 = censored), <code>sex</code> (0 = male, 1 = female), <code>grades</code> (1 = high grades, 5 = low grades), <code>parttime</code> (1 = part-time student), <code>mrg</code> (month of marriage, coded as <span class="math inline">\(12 \times (\text{year} - 1980) + \text{month}\)</span>; 99 = never married), and <code>stm</code> (month of college entry, coded the same way).</p>
 <ol type="1">
 <li><p>How many students were married before entering college (i.e., <code>mrg</code> occurred before <code>stm</code>)?</p></li>
 <li><p>How many students got married during college (i.e., <code>mrg</code> fell between <code>stm</code> and <code>stm + time</code>)?</p></li>
-</ol>
-</section>
-<section id="linear-regression-on-duration" class="level3">
-<h3 class="anchored" data-anchor-id="linear-regression-on-duration">Linear regression on duration</h3>
-<ol start="3" type="1">
-<li>We are interested in the effect of <code>sex</code> and <code>grades</code> on the time until school drop-out. Fit a linear regression of <code>time</code> on <code>sex</code> and <code>grades</code>, making sure you correctly restrict the sample to only those subjects for whom drop-out actually occurred. Interpret all coefficients, including the intercept — and note anything odd or hard to interpret about the intercept.</li>
-</ol>
-</section>
-<section id="cox-proportional-hazards-model" class="level3">
-<h3 class="anchored" data-anchor-id="cox-proportional-hazards-model">Cox proportional hazards model</h3>
-<ol start="4" type="1">
+<li><p>We are interested in the effect of <code>sex</code> and <code>grades</code> on the time until school drop-out. Fit a linear regression of <code>time</code> on <code>sex</code> and <code>grades</code>, making sure you correctly restrict the sample to only those subjects for whom drop-out actually occurred. Interpret all coefficients, including the intercept. (Note the coding of <code>grades</code>)</p></li>
+<li><p>Plot the non-parametric Kaplan-Meier survival curves for the event of dropping out. What proportion of students, approximately, dropped out by 20 months?</p></li>
 <li><p>Fit a Cox proportional hazards model of drop-out on <code>sex</code> and <code>grades</code>. Interpret each coefficient (a) as an effect on the log hazard, and (b) as a hazard ratio.</p></li>
-<li><p>Compare the statistical significance of <code>sex</code> and <code>grades</code> in the Cox model to their significance in the linear regression from question 3. Are the conclusions the same? If not, why is this not a contradiction?</p></li>
+<li><p>Plot the hazard function implied by the Cox model,stratified by <code>sex</code> and considering the overall average value of <code>grades</code>.</p></li>
+<li><p>Test the proportional hazards assumption for the Cox model of question 4. Does the assumption hold?</p></li>
+<li><p>BONUS: Construct a person-period file from <code>hschool</code>: one row per subject per month at risk, with an event indicator equal to 1 only in the month drop-out actually occurred (0 in all other months, including for censored subjects). Fit a discrete-time event history model using logistic regression of the event indicator on <code>sex</code> and <code>grades</code>. Enter duration effects as a single linear term. What do you conclude, and how does this compare to the conclusions from the Cox model?</p></li>
 </ol>
-</section>
-<section id="plotting-the-process" class="level3">
-<h3 class="anchored" data-anchor-id="plotting-the-process">Plotting the process</h3>
-<ol start="6" type="1">
-<li>Plot the hazard function, the cumulative hazard function, and the survival function implied by the Cox model.</li>
-</ol>
-</section>
-<section id="testing-the-proportional-hazards-assumption" class="level3">
-<h3 class="anchored" data-anchor-id="testing-the-proportional-hazards-assumption">Testing the proportional hazards assumption</h3>
-<ol start="7" type="1">
-<li>Test the proportional hazards assumption for the Cox model of question 4. Does the assumption hold?</li>
-</ol>
-</section>
-<section id="bonus-discrete-time-analysis" class="level3">
-<h3 class="anchored" data-anchor-id="bonus-discrete-time-analysis">BONUS: discrete-time analysis</h3>
-<ol start="8" type="1">
-<li>Construct a person-period file from <code>hschool</code>: one row per subject per month at risk, with an event indicator equal to 1 only in the month drop-out actually occurred (0 in all other months, including for censored subjects). Fit a discrete-time event history model using logistic regression of the event indicator on <code>sex</code> and <code>grades</code>. What do you conclude, and how does this compare to the conclusions from the Cox model?</li>
-</ol>
-</section>
 </section>
 <section id="answers" class="level2">
 <h2 class="anchored" data-anchor-id="answers">Answers</h2>
-<p>Make sure this file is in the same R Project as the <code>data</code> folder. Use relative file paths, not full paths to your computer.</p>
+<div class="callout callout-style-simple callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>See answers
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(biostat3) <span class="co"># loaded first to avoid conflict with dplyr::select. </span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: survival</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: MASS</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'biostat3'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:survival':
+
+    colon</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
 ✔ dplyr     1.2.1     ✔ readr     2.2.0
 ✔ forcats   1.0.1     ✔ stringr   1.6.0
 ✔ ggplot2   4.0.3     ✔ tibble    3.3.1
 ✔ lubridate 1.9.5     ✔ tidyr     1.3.2
-✔ purrr     1.2.2     
-── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-✖ dplyr::filter() masks stats::filter()
-✖ dplyr::lag()    masks stats::lag()
+✔ purrr     1.2.2     </code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter()   masks stats::filter()
+✖ dplyr::lag()      masks stats::lag()
+✖ dplyr::select()   masks MASS::select()
+✖ lubridate::year() masks biostat3::year()
 ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(survival)</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(survminer)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(survival)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(survminer)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Loading required package: ggpubr
 
@@ -491,157 +468,292 @@ The following object is masked from 'package:survival':
 
     myeloma</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>hschool <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(<span class="st">"data/hschool.dta"</span>)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>hschool <span class="ot">&lt;-</span> hschool <span class="sc">|&gt;</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">female =</span> sex)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(modelsummary)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>hschool <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(<span class="st">"data/hschool.dta"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<section id="data-description-1" class="level3">
-<h3 class="anchored" data-anchor-id="data-description-1">Data description</h3>
-<section id="married-before-entering-college" class="level4">
-<h4 class="anchored" data-anchor-id="married-before-entering-college">1. Married before entering college</h4>
+<section id="section" class="level3">
+<h3 class="anchored" data-anchor-id="section">1</h3>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>hschool <span class="sc">|&gt;</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(mrg <span class="sc">&lt;</span> stm) <span class="sc">|&gt;</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nrow</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>hschool <span class="sc">|&gt;</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(mrg <span class="sc">&lt;</span> stm) <span class="sc">|&gt;</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nrow</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 4</code></pre>
 </div>
 </div>
 </section>
-<section id="married-during-college" class="level4">
-<h4 class="anchored" data-anchor-id="married-during-college">2. Married during college</h4>
+<section id="section-1" class="level3">
+<h3 class="anchored" data-anchor-id="section-1">2</h3>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>hschool <span class="sc">|&gt;</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(mrg <span class="sc">&gt;=</span> stm, mrg <span class="sc">&lt;=</span> stm <span class="sc">+</span> time) <span class="sc">|&gt;</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nrow</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>hschool <span class="sc">|&gt;</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">between</span>(mrg, stm, stm <span class="sc">+</span> time)) <span class="sc">|&gt;</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nrow</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 10</code></pre>
 </div>
 </div>
 </section>
-</section>
-<section id="linear-regression-on-duration-1" class="level3">
-<h3 class="anchored" data-anchor-id="linear-regression-on-duration-1">Linear regression on duration</h3>
-<section id="a-linear-regression-on-completed-durations" class="level4">
-<h4 class="anchored" data-anchor-id="a-linear-regression-on-completed-durations">3. A linear regression on completed durations</h4>
+<section id="section-2" class="level3">
+<h3 class="anchored" data-anchor-id="section-2">3</h3>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>fit_lm <span class="ot">&lt;-</span> <span class="fu">lm</span>(time <span class="sc">~</span> sex <span class="sc">+</span> grades, <span class="at">data =</span> hschool <span class="sc">|&gt;</span> <span class="fu">filter</span>(died <span class="sc">==</span> <span class="dv">1</span>))</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit_lm)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-Call:
-lm(formula = time ~ sex + grades, data = filter(hschool, died == 
-    1))
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>fit_lm <span class="ot">&lt;-</span> <span class="fu">lm</span>(time <span class="sc">~</span> sex <span class="sc">+</span> grades, <span class="at">data =</span> hschool <span class="sc">|&gt;</span> <span class="fu">filter</span>(died <span class="sc">==</span> <span class="dv">1</span>))</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">modelsummary</span>(fit_lm, <span class="at">stars =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<script src="https://cdn.jsdelivr.net/gh/vincentarelbundock/tinytable@main/inst/tinytable.js"></script>
 
-Residuals:
-    Min      1Q  Median      3Q     Max 
--15.078  -9.379  -4.579   7.134  29.472 
+    <script>
+      // Create table-specific functions using external factory
+      const tableFns_f13klws6ux0982hruh9x = TinyTable.createTableFunctions("tinytable_f13klws6ux0982hruh9x");
+      // tinytable span after
+      window.addEventListener('load', function () {
+          var cellsToStyle = [
+            // tinytable style arrays after
+          { positions: [ { i: '14', j: 2 } ], css_id: 'tinytable_css_1gvnryekodn7qqr9mybe',}, 
+          { positions: [ { i: '6', j: 2 } ], css_id: 'tinytable_css_vck31egkxx4g14m7xjgg',}, 
+          { positions: [ { i: '1', j: 2 }, { i: '2', j: 2 }, { i: '3', j: 2 }, { i: '4', j: 2 }, { i: '5', j: 2 }, { i: '7', j: 2 }, { i: '8', j: 2 }, { i: '9', j: 2 }, { i: '10', j: 2 }, { i: '11', j: 2 }, { i: '12', j: 2 }, { i: '13', j: 2 } ], css_id: 'tinytable_css_yazh2s4n9odhj9k0ap0s',}, 
+          { positions: [ { i: '0', j: 2 } ], css_id: 'tinytable_css_58spau4brkqwewhvsmjv',}, 
+          { positions: [ { i: '14', j: 1 } ], css_id: 'tinytable_css_dij7v0w6cn86htz0ayel',}, 
+          { positions: [ { i: '6', j: 1 } ], css_id: 'tinytable_css_20d8e3dz4dxnax1226df',}, 
+          { positions: [ { i: '1', j: 1 }, { i: '2', j: 1 }, { i: '3', j: 1 }, { i: '4', j: 1 }, { i: '5', j: 1 }, { i: '7', j: 1 }, { i: '8', j: 1 }, { i: '9', j: 1 }, { i: '10', j: 1 }, { i: '11', j: 1 }, { i: '12', j: 1 }, { i: '13', j: 1 } ], css_id: 'tinytable_css_uo0m7x98sm4jzyae11kv',}, 
+          { positions: [ { i: '0', j: 1 } ], css_id: 'tinytable_css_m43xags6f3btrijgmayw',}, 
+          ];
 
-Coefficients:
-            Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept) 18.55328    3.13639   5.915 4.27e-08 ***
-sex         -0.07509    2.39191  -0.031    0.975    
-grades      -1.47489    0.96507  -1.528    0.129    
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+          // Loop over the arrays to style the cells
+          cellsToStyle.forEach(function (group) {
+              group.positions.forEach(function (cell) {
+                  tableFns_f13klws6ux0982hruh9x.styleCell(cell.i, cell.j, group.css_id);
+              });
+          });
+      });
+    </script>
 
-Residual standard error: 12.03 on 104 degrees of freedom
-Multiple R-squared:  0.02206,   Adjusted R-squared:  0.003258 
-F-statistic: 1.173 on 2 and 104 DF,  p-value: 0.3134</code></pre>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/vincentarelbundock/tinytable@main/inst/tinytable.css">
+    <style>
+    /* tinytable css entries after */
+    #tinytable_f13klws6ux0982hruh9x td.tinytable_css_1gvnryekodn7qqr9mybe, #tinytable_f13klws6ux0982hruh9x th.tinytable_css_1gvnryekodn7qqr9mybe {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.08em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --line-type-bottom: solid; --line-type-left: solid; --line-type-right: solid; --line-type-top: solid; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: center }
+    #tinytable_f13klws6ux0982hruh9x td.tinytable_css_vck31egkxx4g14m7xjgg, #tinytable_f13klws6ux0982hruh9x th.tinytable_css_vck31egkxx4g14m7xjgg {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --line-type-bottom: solid; --line-type-left: solid; --line-type-right: solid; --line-type-top: solid; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: center }
+    #tinytable_f13klws6ux0982hruh9x td.tinytable_css_yazh2s4n9odhj9k0ap0s, #tinytable_f13klws6ux0982hruh9x th.tinytable_css_yazh2s4n9odhj9k0ap0s { text-align: center }
+    #tinytable_f13klws6ux0982hruh9x td.tinytable_css_58spau4brkqwewhvsmjv, #tinytable_f13klws6ux0982hruh9x th.tinytable_css_58spau4brkqwewhvsmjv {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 1; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.08em; --line-type-bottom: solid; --line-type-left: solid; --line-type-right: solid; --line-type-top: solid; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: center }
+    #tinytable_f13klws6ux0982hruh9x td.tinytable_css_dij7v0w6cn86htz0ayel, #tinytable_f13klws6ux0982hruh9x th.tinytable_css_dij7v0w6cn86htz0ayel {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.08em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --line-type-bottom: solid; --line-type-left: solid; --line-type-right: solid; --line-type-top: solid; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
+    #tinytable_f13klws6ux0982hruh9x td.tinytable_css_20d8e3dz4dxnax1226df, #tinytable_f13klws6ux0982hruh9x th.tinytable_css_20d8e3dz4dxnax1226df {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --line-type-bottom: solid; --line-type-left: solid; --line-type-right: solid; --line-type-top: solid; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
+    #tinytable_f13klws6ux0982hruh9x td.tinytable_css_uo0m7x98sm4jzyae11kv, #tinytable_f13klws6ux0982hruh9x th.tinytable_css_uo0m7x98sm4jzyae11kv { text-align: left }
+    #tinytable_f13klws6ux0982hruh9x td.tinytable_css_m43xags6f3btrijgmayw, #tinytable_f13klws6ux0982hruh9x th.tinytable_css_m43xags6f3btrijgmayw {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 1; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.08em; --line-type-bottom: solid; --line-type-left: solid; --line-type-right: solid; --line-type-top: solid; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
+    </style>
+    <div class="container">
+      <table class="tinytable" id="tinytable_f13klws6ux0982hruh9x" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing="true">
+        
+        <thead>
+              <tr>
+                <th scope="col" data-row="0" data-col="1"> </th>
+                <th scope="col" data-row="0" data-col="2">(1)</th>
+              </tr>
+        </thead>
+        <tfoot><tr><td colspan="2">+ p &lt; 0.1, * p &lt; 0.05, ** p &lt; 0.01, *** p &lt; 0.001</td></tr></tfoot>
+        <tbody>
+                <tr>
+                  <td data-row="1" data-col="1">(Intercept)</td>
+                  <td data-row="1" data-col="2">18.553***</td>
+                </tr>
+                <tr>
+                  <td data-row="2" data-col="1"></td>
+                  <td data-row="2" data-col="2">(3.136)</td>
+                </tr>
+                <tr>
+                  <td data-row="3" data-col="1">sex</td>
+                  <td data-row="3" data-col="2">-0.075</td>
+                </tr>
+                <tr>
+                  <td data-row="4" data-col="1"></td>
+                  <td data-row="4" data-col="2">(2.392)</td>
+                </tr>
+                <tr>
+                  <td data-row="5" data-col="1">grades</td>
+                  <td data-row="5" data-col="2">-1.475</td>
+                </tr>
+                <tr>
+                  <td data-row="6" data-col="1"></td>
+                  <td data-row="6" data-col="2">(0.965)</td>
+                </tr>
+                <tr>
+                  <td data-row="7" data-col="1">Num.Obs.</td>
+                  <td data-row="7" data-col="2">107</td>
+                </tr>
+                <tr>
+                  <td data-row="8" data-col="1">R2</td>
+                  <td data-row="8" data-col="2">0.022</td>
+                </tr>
+                <tr>
+                  <td data-row="9" data-col="1">R2 Adj.</td>
+                  <td data-row="9" data-col="2">0.003</td>
+                </tr>
+                <tr>
+                  <td data-row="10" data-col="1">AIC</td>
+                  <td data-row="10" data-col="2">841.0</td>
+                </tr>
+                <tr>
+                  <td data-row="11" data-col="1">BIC</td>
+                  <td data-row="11" data-col="2">851.7</td>
+                </tr>
+                <tr>
+                  <td data-row="12" data-col="1">Log.Lik.</td>
+                  <td data-row="12" data-col="2">-416.498</td>
+                </tr>
+                <tr>
+                  <td data-row="13" data-col="1">F</td>
+                  <td data-row="13" data-col="2">1.173</td>
+                </tr>
+                <tr>
+                  <td data-row="14" data-col="1">RMSE</td>
+                  <td data-row="14" data-col="2">11.86</td>
+                </tr>
+        </tbody>
+      </table>
+    </div>
+<!-- hack to avoid NA insertion in last line -->
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Females drop out about 0.075 months faster than males, but this is</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="co"># not significant.</span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co"># People with lower grades (higher values of grades, since 1 = high,</span></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 5 = low) drop out faster, but this is not significant either.</span></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Males (sex = 0) with the highest grades (grades = 0, which is outside</span></span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="co"># the actual scale of 1-5 and should ideally be recentered) are</span></span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="co"># predicted to drop out at 18.55 months. Because grades = 0 does not</span></span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="co"># occur in the data, this intercept is not substantively meaningful as</span></span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="co"># it stands.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+<p>Women drop out about 0.075 months faster than males, but this is not significant.</p>
+<p>People with lower grades (higher values of grades, since 1 = high, 5 = low) drop out faster, but this is not significant either.</p>
+<p>Men (sex = 0) with the highest grades (grades = 0, which is outside the actual scale of 1-5 and should ideally be recentered) are predicted to drop out at 18.55 months. Because grades = 0 does not occur in the data, this intercept is not substantively meaningful as it stands.</p>
 </section>
-</section>
-<section id="cox-proportional-hazards-model-1" class="level3">
-<h3 class="anchored" data-anchor-id="cox-proportional-hazards-model-1">Cox proportional hazards model</h3>
-<section id="the-cox-model" class="level4">
-<h4 class="anchored" data-anchor-id="the-cox-model">4. The Cox model</h4>
+<section id="section-3" class="level3">
+<h3 class="anchored" data-anchor-id="section-3">4</h3>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>fit_cox <span class="ot">&lt;-</span> <span class="fu">coxph</span>(<span class="fu">Surv</span>(time, died) <span class="sc">~</span> sex <span class="sc">+</span> grades, <span class="at">data =</span> hschool)</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit_cox)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>surv <span class="ot">&lt;-</span> <span class="fu">survfit</span>(<span class="fu">Surv</span>(time, died) <span class="sc">~</span> <span class="dv">1</span>,  </span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>                <span class="at">data =</span> hschool)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsurvplot</span>(surv)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="eha_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>About 25% of students dropped out by 20 months.</p>
+</section>
+<section id="section-4" class="level3">
+<h3 class="anchored" data-anchor-id="section-4">5</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>fit_cox <span class="ot">&lt;-</span> <span class="fu">coxph</span>(<span class="fu">Surv</span>(time, died) <span class="sc">~</span> sex <span class="sc">+</span> grades, <span class="at">data =</span> hschool)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>fit_cox</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Call:
 coxph(formula = Surv(time, died) ~ sex + grades, data = hschool)
 
-  n= 265, number of events= 107 
+          coef exp(coef) se(coef)     z        p
+sex    0.21833   1.24400  0.19851 1.100    0.271
+grades 0.33965   1.40446  0.08536 3.979 6.92e-05
 
-          coef exp(coef) se(coef)     z Pr(&gt;|z|)    
-sex    0.21833   1.24400  0.19851 1.100    0.271    
-grades 0.33965   1.40446  0.08536 3.979 6.92e-05 ***
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+Likelihood ratio test=16.06  on 2 df, p=0.0003256
+n= 265, number of events= 107 </code></pre>
+</div>
+</div>
+<p>Log hazard interpretation: Women have a 0.218 higher log hazard of dropping out than males (a shorter time to drop-out), but this is not significant. People with lower grades have a significantly higher log hazard of dropping out (a shorter time to drop-out).</p>
+<p>Hazard ratio interpretation:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">modelsummary</span>(fit_cox, <span class="at">stars =</span> <span class="cn">TRUE</span>, <span class="at">exponentiate =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<script src="https://cdn.jsdelivr.net/gh/vincentarelbundock/tinytable@main/inst/tinytable.js"></script>
 
-       exp(coef) exp(-coef) lower .95 upper .95
-sex        1.244     0.8039     0.843     1.836
-grades     1.404     0.7120     1.188     1.660
+    <script>
+      // Create table-specific functions using external factory
+      const tableFns_65mepx0n22inpebz5zrc = TinyTable.createTableFunctions("tinytable_65mepx0n22inpebz5zrc");
+      // tinytable span after
+      window.addEventListener('load', function () {
+          var cellsToStyle = [
+            // tinytable style arrays after
+          { positions: [ { i: '8', j: 2 } ], css_id: 'tinytable_css_wdgfg6imify1jvym8igi',}, 
+          { positions: [ { i: '4', j: 2 } ], css_id: 'tinytable_css_8cd53jgfzhii4ubtwv0x',}, 
+          { positions: [ { i: '1', j: 2 }, { i: '2', j: 2 }, { i: '3', j: 2 }, { i: '5', j: 2 }, { i: '6', j: 2 }, { i: '7', j: 2 } ], css_id: 'tinytable_css_09n0gyvlis1k606i2ptz',}, 
+          { positions: [ { i: '0', j: 2 } ], css_id: 'tinytable_css_b1q3g4kbdppfu3h95hde',}, 
+          { positions: [ { i: '8', j: 1 } ], css_id: 'tinytable_css_oqcp0t46d8ydgegazib3',}, 
+          { positions: [ { i: '4', j: 1 } ], css_id: 'tinytable_css_1l67xyqb854d2k5s51y4',}, 
+          { positions: [ { i: '1', j: 1 }, { i: '2', j: 1 }, { i: '3', j: 1 }, { i: '5', j: 1 }, { i: '6', j: 1 }, { i: '7', j: 1 } ], css_id: 'tinytable_css_xezm085x3wtviz95q76k',}, 
+          { positions: [ { i: '0', j: 1 } ], css_id: 'tinytable_css_oq5b1llgs3xitqqfkvrk',}, 
+          ];
 
-Concordance= 0.606  (se = 0.028 )
-Likelihood ratio test= 16.06  on 2 df,   p=3e-04
-Wald test            = 16.55  on 2 df,   p=3e-04
-Score (logrank) test = 16.95  on 2 df,   p=2e-04</code></pre>
+          // Loop over the arrays to style the cells
+          cellsToStyle.forEach(function (group) {
+              group.positions.forEach(function (cell) {
+                  tableFns_65mepx0n22inpebz5zrc.styleCell(cell.i, cell.j, group.css_id);
+              });
+          });
+      });
+    </script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/vincentarelbundock/tinytable@main/inst/tinytable.css">
+    <style>
+    /* tinytable css entries after */
+    #tinytable_65mepx0n22inpebz5zrc td.tinytable_css_wdgfg6imify1jvym8igi, #tinytable_65mepx0n22inpebz5zrc th.tinytable_css_wdgfg6imify1jvym8igi {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.08em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --line-type-bottom: solid; --line-type-left: solid; --line-type-right: solid; --line-type-top: solid; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: center }
+    #tinytable_65mepx0n22inpebz5zrc td.tinytable_css_8cd53jgfzhii4ubtwv0x, #tinytable_65mepx0n22inpebz5zrc th.tinytable_css_8cd53jgfzhii4ubtwv0x {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --line-type-bottom: solid; --line-type-left: solid; --line-type-right: solid; --line-type-top: solid; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: center }
+    #tinytable_65mepx0n22inpebz5zrc td.tinytable_css_09n0gyvlis1k606i2ptz, #tinytable_65mepx0n22inpebz5zrc th.tinytable_css_09n0gyvlis1k606i2ptz { text-align: center }
+    #tinytable_65mepx0n22inpebz5zrc td.tinytable_css_b1q3g4kbdppfu3h95hde, #tinytable_65mepx0n22inpebz5zrc th.tinytable_css_b1q3g4kbdppfu3h95hde {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 1; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.08em; --line-type-bottom: solid; --line-type-left: solid; --line-type-right: solid; --line-type-top: solid; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: center }
+    #tinytable_65mepx0n22inpebz5zrc td.tinytable_css_oqcp0t46d8ydgegazib3, #tinytable_65mepx0n22inpebz5zrc th.tinytable_css_oqcp0t46d8ydgegazib3 {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.08em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --line-type-bottom: solid; --line-type-left: solid; --line-type-right: solid; --line-type-top: solid; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
+    #tinytable_65mepx0n22inpebz5zrc td.tinytable_css_1l67xyqb854d2k5s51y4, #tinytable_65mepx0n22inpebz5zrc th.tinytable_css_1l67xyqb854d2k5s51y4 {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --line-type-bottom: solid; --line-type-left: solid; --line-type-right: solid; --line-type-top: solid; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
+    #tinytable_65mepx0n22inpebz5zrc td.tinytable_css_xezm085x3wtviz95q76k, #tinytable_65mepx0n22inpebz5zrc th.tinytable_css_xezm085x3wtviz95q76k { text-align: left }
+    #tinytable_65mepx0n22inpebz5zrc td.tinytable_css_oq5b1llgs3xitqqfkvrk, #tinytable_65mepx0n22inpebz5zrc th.tinytable_css_oq5b1llgs3xitqqfkvrk {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 1; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.08em; --line-type-bottom: solid; --line-type-left: solid; --line-type-right: solid; --line-type-top: solid; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
+    </style>
+    <div class="container">
+      <table class="tinytable" id="tinytable_65mepx0n22inpebz5zrc" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing="true">
+        
+        <thead>
+              <tr>
+                <th scope="col" data-row="0" data-col="1"> </th>
+                <th scope="col" data-row="0" data-col="2">(1)</th>
+              </tr>
+        </thead>
+        <tfoot><tr><td colspan="2">+ p &lt; 0.1, * p &lt; 0.05, ** p &lt; 0.01, *** p &lt; 0.001</td></tr></tfoot>
+        <tbody>
+                <tr>
+                  <td data-row="1" data-col="1">sex</td>
+                  <td data-row="1" data-col="2">1.244</td>
+                </tr>
+                <tr>
+                  <td data-row="2" data-col="1"></td>
+                  <td data-row="2" data-col="2">(0.247)</td>
+                </tr>
+                <tr>
+                  <td data-row="3" data-col="1">grades</td>
+                  <td data-row="3" data-col="2">1.404***</td>
+                </tr>
+                <tr>
+                  <td data-row="4" data-col="1"></td>
+                  <td data-row="4" data-col="2">(0.120)</td>
+                </tr>
+                <tr>
+                  <td data-row="5" data-col="1">Num.Obs.</td>
+                  <td data-row="5" data-col="2">265</td>
+                </tr>
+                <tr>
+                  <td data-row="6" data-col="1">AIC</td>
+                  <td data-row="6" data-col="2">1119.7</td>
+                </tr>
+                <tr>
+                  <td data-row="7" data-col="1">BIC</td>
+                  <td data-row="7" data-col="2">1126.8</td>
+                </tr>
+                <tr>
+                  <td data-row="8" data-col="1">RMSE</td>
+                  <td data-row="8" data-col="2">0.63</td>
+                </tr>
+        </tbody>
+      </table>
+    </div>
+<!-- hack to avoid NA insertion in last line -->
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Log hazard interpretation:</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Females have a 0.240 higher log hazard of dropping out than males (a</span></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="co"># shorter time to drop-out), but this is not significant.</span></span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co"># People with lower grades have a significantly higher log hazard of</span></span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="co"># dropping out (a shorter time to drop-out).</span></span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Hazard ratio interpretation (exp(coef), shown directly in the</span></span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="co"># summary() output):</span></span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Females have a 27% higher hazard of dropping out than males, but this</span></span>
-<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="co"># is not significant.</span></span>
-<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="co"># People with lower grades have a 39.73% significantly higher hazard of</span></span>
-<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a><span class="co"># dropping out for each unit increase on the grades scale (i.e., each</span></span>
-<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a><span class="co"># step toward lower grades).</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+<p>Women have a 24% higher hazard of dropping out than males, but this is not significant. The hazard of dropping out increases by 40.4% (significant) for each unit increase on the grades scale (i.e., each step toward lower grades).</p>
 </section>
-<section id="comparing-the-two-models" class="level4">
-<h4 class="anchored" data-anchor-id="comparing-the-two-models">5. Comparing the two models</h4>
+<section id="section-5" class="level3">
+<h3 class="anchored" data-anchor-id="section-5">6</h3>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The significance of the predictors is not the same between the linear</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="co"># regression (question 3) and the Cox regression (question 4): grades is</span></span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co"># significant in the Cox model but not in the linear regression. This is</span></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="co"># not a contradiction. The linear regression restricts the sample to</span></span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="co"># completed durations only and assumes normally distributed, constant-</span></span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="co"># variance residuals on the raw time scale -- assumptions that are</span></span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="co"># typically violated for duration data. The Cox model instead uses all</span></span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="co"># subjects (including censored ones) and does not require these</span></span>
-<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="co"># distributional assumptions, which is why it can detect an effect the</span></span>
-<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="co"># linear model misses.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>hschool <span class="sc">|&gt;</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(died)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 2 × 2
-   died     n
-  &lt;dbl&gt; &lt;int&gt;
-1     0   158
-2     1   107</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># how many cases the linear regression discards as censored</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-</section>
-</section>
-<section id="plotting-the-process-1" class="level3">
-<h3 class="anchored" data-anchor-id="plotting-the-process-1">Plotting the process</h3>
-<section id="hazard-cumulative-hazard-and-survival" class="level4">
-<h4 class="anchored" data-anchor-id="hazard-cumulative-hazard-and-survival">6. Hazard, cumulative hazard, and survival</h4>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>fit_surv <span class="ot">&lt;-</span> <span class="fu">survfit</span>(fit_cox)</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Cumulative hazard</span></span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fit_surv, <span class="at">fun =</span> <span class="st">"cumhaz"</span>, <span class="at">xlab =</span> <span class="st">"Time (months)"</span>, <span class="at">ylab =</span> <span class="st">"Cumulative hazard"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>base_hazard <span class="ot">&lt;-</span> biostat3<span class="sc">::</span><span class="fu">coxphHaz</span>(fit_cox, </span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">newdata =</span> <span class="fu">data.frame</span>(<span class="at">sex =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), </span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>                                                       <span class="at">grades =</span> <span class="fu">mean</span>(hschool<span class="sc">$</span>grades)))</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(base_hazard)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -649,137 +761,180 @@ Score (logrank) test = 16.95  on 2 df,   p=2e-04</code></pre>
 </figure>
 </div>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Survival function</span></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fit_surv, <span class="at">xlab =</span> <span class="st">"Time (months)"</span>, <span class="at">ylab =</span> <span class="st">"Survival probability"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="eha_files/figure-html/unnamed-chunk-7-2.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Using survminer for nicer plots, including an approximate hazard shape</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="co"># via the cumulative hazard and survival curves:</span></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsurvplot</span>(fit_surv, <span class="at">data =</span> hschool, <span class="at">fun =</span> <span class="st">"cumhaz"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="eha_files/figure-html/unnamed-chunk-7-3.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsurvplot</span>(fit_surv, <span class="at">data =</span> hschool)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="eha_files/figure-html/unnamed-chunk-7-4.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Note: a smoothed hazard function itself (as opposed to the cumulative</span></span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="co"># hazard) is not directly returned by survfit(); it can be approximated</span></span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="co"># with a kernel-smoothed estimate, e.g. using the muhaz package, if a</span></span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="co"># separate plot of the hazard function itself (rather than the</span></span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="co"># cumulative hazard) is required.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
-</section>
-<section id="testing-the-proportional-hazards-assumption-1" class="level3">
-<h3 class="anchored" data-anchor-id="testing-the-proportional-hazards-assumption-1">Testing the proportional hazards assumption</h3>
-<section id="the-schoenfeld-residual-test" class="level4">
-<h4 class="anchored" data-anchor-id="the-schoenfeld-residual-test">7. The Schoenfeld residual test</h4>
+<section id="section-6" class="level3">
+<h3 class="anchored" data-anchor-id="section-6">7</h3>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cox.zph</span>(fit_cox)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cox.zph</span>(fit_cox)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>        chisq df    p
 sex    0.0862  1 0.77
 grades 0.7561  1 0.38
 GLOBAL 0.8253  2 0.66</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The test does not reject the proportional hazards assumption at</span></span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="co"># conventional significance levels: the proportional hazards assumption</span></span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="co"># appears to hold for this model.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+<p>The test does not reject the proportional hazards assumption at conventional significance levels: the proportional hazards assumption appears to hold for this model.</p>
 </section>
-</section>
-<section id="bonus-discrete-time-analysis-1" class="level3">
-<h3 class="anchored" data-anchor-id="bonus-discrete-time-analysis-1">BONUS: discrete-time analysis</h3>
-<section id="a-person-period-file-and-a-discrete-time-model" class="level4">
-<h4 class="anchored" data-anchor-id="a-person-period-file-and-a-discrete-time-model">8. A person-period file and a discrete-time model</h4>
+<section id="section-7" class="level3">
+<h3 class="anchored" data-anchor-id="section-7">8</h3>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Method 1: expand the data manually to one row per subject per month</span></span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>person_period <span class="ot">&lt;-</span> hschool <span class="sc">|&gt;</span></span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(caseid, time, sex, grades, died) <span class="sc">|&gt;</span></span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rowwise</span>() <span class="sc">|&gt;</span></span>
-<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">period =</span> <span class="fu">list</span>(<span class="fu">seq_len</span>(time))) <span class="sc">|&gt;</span></span>
-<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(period) <span class="sc">|&gt;</span></span>
-<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">|&gt;</span></span>
-<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">end_time =</span> time) <span class="sc">|&gt;</span></span>
-<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">time =</span> period,</span>
-<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">died =</span> <span class="fu">if_else</span>(died <span class="sc">==</span> <span class="dv">1</span> <span class="sc">&amp;</span> time <span class="sc">!=</span> end_time, <span class="dv">0</span>L, <span class="fu">as.integer</span>(died))</span>
-<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(caseid, time, end_time, sex, grades, died)</span>
-<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a>fit_discrete <span class="ot">&lt;-</span> <span class="fu">glm</span>(died <span class="sc">~</span> sex <span class="sc">+</span> grades, <span class="at">data =</span> person_period, <span class="at">family =</span> binomial)</span>
-<span id="cb28-16"><a href="#cb28-16" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit_discrete)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-Call:
-glm(formula = died ~ sex + grades, family = binomial, data = person_period)
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>person_period <span class="ot">&lt;-</span> hschool <span class="sc">|&gt;</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(caseid, time, sex, grades, died) <span class="sc">|&gt;</span> </span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">uncount</span>(<span class="at">weights =</span> time <span class="sc">+</span> <span class="dv">1</span>) <span class="sc">|&gt;</span> <span class="co"># must add 1 because time starts at 0</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">period =</span> <span class="fu">row_number</span>()<span class="sc">-</span><span class="dv">1</span>,</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">event =</span> <span class="fu">if_else</span>(died<span class="sc">==</span><span class="dv">1</span> <span class="sc">&amp;</span> period<span class="sc">==</span><span class="fu">max</span>(period), <span class="dv">1</span>, <span class="dv">0</span>), </span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">.by =</span> caseid)</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>fit_discrete <span class="ot">&lt;-</span> <span class="fu">glm</span>(event <span class="sc">~</span> sex <span class="sc">+</span> grades <span class="sc">+</span> period, <span class="at">data =</span> person_period, <span class="at">family =</span> binomial)</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a><span class="fu">modelsummary</span>(<span class="fu">list</span>(<span class="st">"Cox"</span><span class="ot">=</span> fit_cox, <span class="st">"Logit"</span> <span class="ot">=</span> fit_discrete), </span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>             <span class="at">stars =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<script src="https://cdn.jsdelivr.net/gh/vincentarelbundock/tinytable@main/inst/tinytable.js"></script>
 
-Coefficients:
-            Estimate Std. Error z value Pr(&gt;|z|)    
-(Intercept) -5.28343    0.27359 -19.311  &lt; 2e-16 ***
-sex          0.26622    0.20145   1.321    0.186    
-grades       0.35547    0.08689   4.091  4.3e-05 ***
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    <script>
+      // Create table-specific functions using external factory
+      const tableFns_fonwg1xkm7j7rbut9ing = TinyTable.createTableFunctions("tinytable_fonwg1xkm7j7rbut9ing");
+      // tinytable span after
+      window.addEventListener('load', function () {
+          var cellsToStyle = [
+            // tinytable style arrays after
+          { positions: [ { i: '14', j: 2 }, { i: '14', j: 3 } ], css_id: 'tinytable_css_wn01thpaugz0n4xp1rve',}, 
+          { positions: [ { i: '8', j: 2 }, { i: '8', j: 3 } ], css_id: 'tinytable_css_o4a4pdvocnrgxv7uvqjs',}, 
+          { positions: [ { i: '1', j: 2 }, { i: '2', j: 2 }, { i: '3', j: 2 }, { i: '4', j: 2 }, { i: '5', j: 2 }, { i: '6', j: 2 }, { i: '7', j: 2 }, { i: '9', j: 2 }, { i: '10', j: 2 }, { i: '11', j: 2 }, { i: '12', j: 2 }, { i: '13', j: 2 }, { i: '1', j: 3 }, { i: '2', j: 3 }, { i: '3', j: 3 }, { i: '4', j: 3 }, { i: '5', j: 3 }, { i: '6', j: 3 }, { i: '7', j: 3 }, { i: '9', j: 3 }, { i: '10', j: 3 }, { i: '11', j: 3 }, { i: '12', j: 3 }, { i: '13', j: 3 } ], css_id: 'tinytable_css_3eekqezlhz58ctruforc',}, 
+          { positions: [ { i: '0', j: 2 }, { i: '0', j: 3 } ], css_id: 'tinytable_css_2e033edw4dij204pq1pq',}, 
+          { positions: [ { i: '14', j: 1 } ], css_id: 'tinytable_css_h66l5p6xnnnakzvn41av',}, 
+          { positions: [ { i: '8', j: 1 } ], css_id: 'tinytable_css_2yzgw3epn56kmt50zzgd',}, 
+          { positions: [ { i: '1', j: 1 }, { i: '2', j: 1 }, { i: '3', j: 1 }, { i: '4', j: 1 }, { i: '5', j: 1 }, { i: '6', j: 1 }, { i: '7', j: 1 }, { i: '9', j: 1 }, { i: '10', j: 1 }, { i: '11', j: 1 }, { i: '12', j: 1 }, { i: '13', j: 1 } ], css_id: 'tinytable_css_oa05av8aogrkvtkz2rf2',}, 
+          { positions: [ { i: '0', j: 1 } ], css_id: 'tinytable_css_grd026kvdsosczvkdz9r',}, 
+          ];
 
-(Dispersion parameter for binomial family taken to be 1)
+          // Loop over the arrays to style the cells
+          cellsToStyle.forEach(function (group) {
+              group.positions.forEach(function (cell) {
+                  tableFns_fonwg1xkm7j7rbut9ing.styleCell(cell.i, cell.j, group.css_id);
+              });
+          });
+      });
+    </script>
 
-    Null deviance: 1129.5  on 8085  degrees of freedom
-Residual deviance: 1112.2  on 8083  degrees of freedom
-AIC: 1118.2
-
-Number of Fisher Scoring iterations: 7</code></pre>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/vincentarelbundock/tinytable@main/inst/tinytable.css">
+    <style>
+    /* tinytable css entries after */
+    #tinytable_fonwg1xkm7j7rbut9ing td.tinytable_css_wn01thpaugz0n4xp1rve, #tinytable_fonwg1xkm7j7rbut9ing th.tinytable_css_wn01thpaugz0n4xp1rve {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.08em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --line-type-bottom: solid; --line-type-left: solid; --line-type-right: solid; --line-type-top: solid; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: center }
+    #tinytable_fonwg1xkm7j7rbut9ing td.tinytable_css_o4a4pdvocnrgxv7uvqjs, #tinytable_fonwg1xkm7j7rbut9ing th.tinytable_css_o4a4pdvocnrgxv7uvqjs {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --line-type-bottom: solid; --line-type-left: solid; --line-type-right: solid; --line-type-top: solid; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: center }
+    #tinytable_fonwg1xkm7j7rbut9ing td.tinytable_css_3eekqezlhz58ctruforc, #tinytable_fonwg1xkm7j7rbut9ing th.tinytable_css_3eekqezlhz58ctruforc { text-align: center }
+    #tinytable_fonwg1xkm7j7rbut9ing td.tinytable_css_2e033edw4dij204pq1pq, #tinytable_fonwg1xkm7j7rbut9ing th.tinytable_css_2e033edw4dij204pq1pq {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 1; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.08em; --line-type-bottom: solid; --line-type-left: solid; --line-type-right: solid; --line-type-top: solid; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: center }
+    #tinytable_fonwg1xkm7j7rbut9ing td.tinytable_css_h66l5p6xnnnakzvn41av, #tinytable_fonwg1xkm7j7rbut9ing th.tinytable_css_h66l5p6xnnnakzvn41av {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.08em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --line-type-bottom: solid; --line-type-left: solid; --line-type-right: solid; --line-type-top: solid; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
+    #tinytable_fonwg1xkm7j7rbut9ing td.tinytable_css_2yzgw3epn56kmt50zzgd, #tinytable_fonwg1xkm7j7rbut9ing th.tinytable_css_2yzgw3epn56kmt50zzgd {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --line-type-bottom: solid; --line-type-left: solid; --line-type-right: solid; --line-type-top: solid; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
+    #tinytable_fonwg1xkm7j7rbut9ing td.tinytable_css_oa05av8aogrkvtkz2rf2, #tinytable_fonwg1xkm7j7rbut9ing th.tinytable_css_oa05av8aogrkvtkz2rf2 { text-align: left }
+    #tinytable_fonwg1xkm7j7rbut9ing td.tinytable_css_grd026kvdsosczvkdz9r, #tinytable_fonwg1xkm7j7rbut9ing th.tinytable_css_grd026kvdsosczvkdz9r {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 1; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.08em; --line-type-bottom: solid; --line-type-left: solid; --line-type-right: solid; --line-type-top: solid; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
+    </style>
+    <div class="container">
+      <table class="tinytable" id="tinytable_fonwg1xkm7j7rbut9ing" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing="true">
+        
+        <thead>
+              <tr>
+                <th scope="col" data-row="0" data-col="1"> </th>
+                <th scope="col" data-row="0" data-col="2">Cox</th>
+                <th scope="col" data-row="0" data-col="3">Logit</th>
+              </tr>
+        </thead>
+        <tfoot><tr><td colspan="3">+ p &lt; 0.1, * p &lt; 0.05, ** p &lt; 0.01, *** p &lt; 0.001</td></tr></tfoot>
+        <tbody>
+                <tr>
+                  <td data-row="1" data-col="1">sex</td>
+                  <td data-row="1" data-col="2">0.218</td>
+                  <td data-row="1" data-col="3">0.230</td>
+                </tr>
+                <tr>
+                  <td data-row="2" data-col="1"></td>
+                  <td data-row="2" data-col="2">(0.199)</td>
+                  <td data-row="2" data-col="3">(0.200)</td>
+                </tr>
+                <tr>
+                  <td data-row="3" data-col="1">grades</td>
+                  <td data-row="3" data-col="2">0.340***</td>
+                  <td data-row="3" data-col="3">0.333***</td>
+                </tr>
+                <tr>
+                  <td data-row="4" data-col="1"></td>
+                  <td data-row="4" data-col="2">(0.085)</td>
+                  <td data-row="4" data-col="3">(0.086)</td>
+                </tr>
+                <tr>
+                  <td data-row="5" data-col="1">(Intercept)</td>
+                  <td data-row="5" data-col="2"></td>
+                  <td data-row="5" data-col="3">-4.792***</td>
+                </tr>
+                <tr>
+                  <td data-row="6" data-col="1"></td>
+                  <td data-row="6" data-col="2"></td>
+                  <td data-row="6" data-col="3">(0.305)</td>
+                </tr>
+                <tr>
+                  <td data-row="7" data-col="1">period</td>
+                  <td data-row="7" data-col="2"></td>
+                  <td data-row="7" data-col="3">-0.026**</td>
+                </tr>
+                <tr>
+                  <td data-row="8" data-col="1"></td>
+                  <td data-row="8" data-col="2"></td>
+                  <td data-row="8" data-col="3">(0.008)</td>
+                </tr>
+                <tr>
+                  <td data-row="9" data-col="1">Num.Obs.</td>
+                  <td data-row="9" data-col="2">265</td>
+                  <td data-row="9" data-col="3">8351</td>
+                </tr>
+                <tr>
+                  <td data-row="10" data-col="1">AIC</td>
+                  <td data-row="10" data-col="2">1119.7</td>
+                  <td data-row="10" data-col="3">1125.8</td>
+                </tr>
+                <tr>
+                  <td data-row="11" data-col="1">BIC</td>
+                  <td data-row="11" data-col="2">1126.8</td>
+                  <td data-row="11" data-col="3">1153.9</td>
+                </tr>
+                <tr>
+                  <td data-row="12" data-col="1">Log.Lik.</td>
+                  <td data-row="12" data-col="2"></td>
+                  <td data-row="12" data-col="3">-558.877</td>
+                </tr>
+                <tr>
+                  <td data-row="13" data-col="1">F</td>
+                  <td data-row="13" data-col="2"></td>
+                  <td data-row="13" data-col="3">9.153</td>
+                </tr>
+                <tr>
+                  <td data-row="14" data-col="1">RMSE</td>
+                  <td data-row="14" data-col="2">0.63</td>
+                  <td data-row="14" data-col="3">0.11</td>
+                </tr>
+        </tbody>
+      </table>
+    </div>
+<!-- hack to avoid NA insertion in last line -->
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The discrete-time logistic model leads to the same substantive</span></span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="co"># conclusion as the Cox model: grades significantly predicts drop-out</span></span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="co"># (lower grades associated with higher risk of dropping out in a given</span></span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="co"># month), while sex does not significantly predict drop-out. This</span></span>
-<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><span class="co"># confirms that the Cox model's conclusions are not an artifact of the</span></span>
-<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a><span class="co"># continuous-time approach; a discrete-time formulation using ordinary</span></span>
-<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a><span class="co"># logistic regression on the person-period file gives essentially the</span></span>
-<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a><span class="co"># same answer.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(hschool)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 265</code></pre>
+<p>Conclusions are pretty much the same as for the Cox model.</p>
+</section>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(person_period)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 8086</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(person_period<span class="sc">$</span>died)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 106</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(hschool<span class="sc">$</span>died)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 107</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co"># one row per subject per month at risk; the number of events is</span></span>
-<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="co"># unchanged, since each subject can drop out only once</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 
 
 </section>
-</section>
-</section>
 
-</main> <!-- /main -->
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>We know, that’s a weird name in this context.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
@@ -858,7 +1013,8 @@ Number of Fisher Scoring iterations: 7</code></pre>
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }
       // Inspect non-navigation links and adorn them if external
-     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      window.quartoDecorateExternalLinks = function (root) {
+     var links = (root || window.document).querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
       for (var i=0; i<links.length; i++) {
         const link = links[i];
         if (!isInternal(link.href)) {
@@ -867,8 +1023,69 @@ Number of Fisher Scoring iterations: 7</code></pre>
           if (link.dataset.originalHref !== undefined) {
             link.href = link.dataset.originalHref;
           }
+          if (!link.classList.contains('no-external-icon')) {
+          }
         }
       }
+      };
+      window.quartoDecorateExternalLinks(window.document);
+    // Esc closes the popup (WCAG 1.4.13) and focus leaving both trigger and
+    // popup closes it (WCAG 2.4.11); tippy handles neither for interactive popups.
+    const hideOnEscAndFocusOut = {
+      name: 'hideOnEscAndFocusOut',
+      defaultValue: true,
+      fn(instance) {
+        const dismiss = () => {
+          // A show scheduled by the trigger delay would otherwise reopen it
+          instance.clearDelayTimeouts();
+          instance.hide();
+        };
+        const onKeyDown = (event) => {
+          if (event.key !== 'Escape') {
+            return;
+          }
+          // Keep Esc from also reaching page handlers (e.g. reveal.js overview),
+          // except an open reveal.js slide menu, which Esc should close too.
+          // The menu handles keys only when its keyboard option is on.
+          const menuHandlesEsc = window.Reveal?.getPlugin?.('menu')?.isOpen() &&
+            window.Reveal.getConfig().menu?.keyboard !== false;
+          if (!menuHandlesEsc) {
+            event.stopPropagation();
+          }
+          if (instance.popper.contains(window.document.activeElement)) {
+            // Disabled while refocusing so the focus trigger does not reopen it
+            instance.disable();
+            instance.reference.focus();
+            instance.enable();
+          }
+          dismiss();
+        };
+        const onFocusOut = (event) => {
+          const target = event.relatedTarget;
+          if (target && !instance.reference.contains(target) &&
+              !instance.popper.contains(target)) {
+            dismiss();
+          }
+        };
+        // On the trigger too: a click trigger (code-annotations: select) has no
+        // blur handling. Attached for the instance's lifetime so leaving the
+        // trigger also cancels a show still pending on the trigger delay.
+        instance.reference.addEventListener('focusout', onFocusOut);
+        return {
+          onShow() {
+            window.document.addEventListener('keydown', onKeyDown, true);
+            instance.popper.addEventListener('focusout', onFocusOut);
+          },
+          onHide() {
+            window.document.removeEventListener('keydown', onKeyDown, true);
+            instance.popper.removeEventListener('focusout', onFocusOut);
+          },
+          onDestroy() {
+            instance.reference.removeEventListener('focusout', onFocusOut);
+          },
+        };
+      },
+    };
     function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
       const config = {
         allowHTML: true,
@@ -882,6 +1099,7 @@ Number of Fisher Scoring iterations: 7</code></pre>
         interactiveBorder: 10,
         theme: 'quarto',
         placement: 'bottom-start',
+        plugins: [hideOnEscAndFocusOut],
       };
       if (contentFn) {
         config.content = contentFn;
@@ -1044,44 +1262,54 @@ Number of Fisher Scoring iterations: 7</code></pre>
           const lineIds = lines.map((line) => {
             return targetCell + "-" + line;
           })
-          let top = null;
-          let height = null;
-          let parent = null;
+          // Each band is positioned against its own containing block, which is
+          // not the offsetParent of the lines, so place it from client rects.
+          const placeBand = (band, firstEl, lastEl, codeBlock) => {
+            const container = band.offsetParent;
+            if (container === null) {
+              return;
+            }
+            const containerRect = container.getBoundingClientRect();
+            // Reveal.js scales slides with a transform, so convert client
+            // pixels back to the CSS pixels of the container.
+            const scale = containerRect.height / container.offsetHeight || 1;
+            const firstRect = firstEl.getBoundingClientRect();
+            const lastRect = lastEl.getBoundingClientRect();
+            const top = (firstRect.top - containerRect.top) / scale - container.clientTop + container.scrollTop;
+            const height = (lastRect.bottom - firstRect.top) / scale;
+            band.style.top = top - 2 + "px";
+            band.style.height = height + 4 + "px";
+            if (codeBlock) {
+              // Without the copy button wrapper, the containing block is wider
+              // than the code block, so span the code block explicitly.
+              const blockRect = codeBlock.getBoundingClientRect();
+              band.style.left = (blockRect.left - containerRect.left) / scale - container.clientLeft + container.scrollLeft + "px";
+              band.style.width = blockRect.width / scale + "px";
+            }
+          };
           if (lineIds.length > 0) {
-              //compute the position of the single el (top and bottom and make a div)
-              const el = window.document.getElementById(lineIds[0]);
-              top = el.offsetTop;
-              height = el.offsetHeight;
-              parent = el.parentElement.parentElement;
-            if (lineIds.length > 1) {
-              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
-              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
-              height = bottom - top;
+            const el = window.document.getElementById(lineIds[0]);
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const parent = el.parentElement.parentElement;
+            // cook up a div (if necessary) and position it
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
             }
-            if (top !== null && height !== null && parent !== null) {
-              // cook up a div (if necessary) and position it 
-              let div = window.document.getElementById("code-annotation-line-highlight");
-              if (div === null) {
-                div = window.document.createElement("div");
-                div.setAttribute("id", "code-annotation-line-highlight");
-                div.style.position = 'absolute';
-                parent.appendChild(div);
-              }
-              div.style.top = top - 2 + "px";
-              div.style.height = height + 4 + "px";
-              div.style.left = 0;
-              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
-              if (gutterDiv === null) {
-                gutterDiv = window.document.createElement("div");
-                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
-                gutterDiv.style.position = 'absolute';
-                const codeCell = window.document.getElementById(targetCell);
-                const gutter = codeCell.querySelector('.code-annotation-gutter');
-                gutter.appendChild(gutterDiv);
-              }
-              gutterDiv.style.top = top - 2 + "px";
-              gutterDiv.style.height = height + 4 + "px";
+            placeBand(div, el, lastEl, parent.closest("div.sourceCode") || parent);
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
             }
+            placeBand(gutterDiv, el, lastEl);
             selectedAnnoteEl = annoteEl;
           }
         };
@@ -1179,6 +1407,9 @@ Number of Fisher Scoring iterations: 7</code></pre>
       }
     }
   });
+  </script>
+  <script type="application/javascript">
+  window.quartoScrollableRegionsLabels = {"code":"Scrollable code","output":"Scrollable output"};
   </script>
 </div> <!-- /content -->
 
